@@ -1,10 +1,18 @@
 import React from "react";
+import "./Home.css"; // Import styles
 
 const Home = () => {
   return (
-    <main>
-      <h1>Bienvenido a la Página Principal</h1>
-      <p>El contenido de la aplicación irá aquí.</p>
+    <main className="home-container">
+      <section className="search-bar">
+        <p>Search bar placeholder</p>
+      </section>
+      <section className="categories">
+        <p>Categories placeholder</p>
+      </section>
+      <section className="suggestions">
+        <p>Suggestions placeholder</p>
+      </section>
     </main>
   );
 };

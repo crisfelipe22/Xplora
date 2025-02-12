@@ -1,0 +1,29 @@
+.home-container {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  overflow: auto;
+  width: 100%;
+  color: black;
+}
+
+.search-bar, .categories, .suggestions {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-bar {
+  background: #f3f3f3;
+  height: 80px;
+}
+
+.categories {
+  background: #e6e6e6;
+  flex: 1;
+}
+
+.suggestions {
+  background: #d9d9d9;
+  flex: 1;
+}
