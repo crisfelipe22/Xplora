@@ -22,34 +22,42 @@ const AddProductForm = () => {
 
     const handleUploadImagenes = (e) =>{
         const archivos = Array.from(e.target.files)
-        setProduct({...product, imagenes: archivos})
+        setProduct({...product, imagenes:[...product.imagenes, archivos] })
+        console.log(product.imagenes)
     }
 
     const validaciones = () =>{
-        let errores = {}
+        let erroresObj = {}
         if(product.nombre.trim().length<3){
-            errores.nombre = 'El nombre del producto es obligatorio y debe tener mínimo 3 carácteres';
+            erroresObj.nombre = 'El nombre del producto es obligatorio y debe tener mínimo 3 carácteres';
         } if(product.descripcion.trim().length < 10){
-            errores.descripcion = 'La descripción del producto es obligatoria y debe tener mínimo 10 carácteres';
+            erroresObj.descripcion = 'La descripción del producto es obligatoria y debe tener mínimo 10 carácteres';
         } if(!product.precio.trim()){
-            errores.precio = 'El precio es obligatorio';
+            erroresObj.precio = 'El precio es obligatorio';
         } if(isNaN(Number(product.precio))){
-            errores.precio = 'El precio debe ser un número';
+            erroresObj.precio = 'El precio debe ser un número';
         } if(!product.ubicacion.trim()){
-            errores.ubicacion = 'La ubicación es obligatoria';
+            erroresObj.ubicacion = 'La ubicación es obligatoria';
         } if(product.imagenes.length === 0){
-            errores.imagenes = 'Se debe incluir al menos una imagen del producto';
+            erroresObj.imagenes = 'Se debe incluir al menos una imagen del producto';
         }
 
-        setErrores(errores)
-        //return Object.keys(errores).length > 0
+        setErrores(erroresObj)
+        return Object.keys(erroresObj).length === 0;
     }
+    
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        //if (validaciones) return;
-        //sino llamada a POST
-        //setExito true (mensaje exito)
+        if (validaciones()){
+            console.log("Formulario exitoso, producto subido", product)
+            setExito(true); //(mensaje exito)
+            //llamada a POST
+        } else {
+            console.log("no se puede enviar el formulario",errores)
+            setExito(false);
+            return;
+        }
     }
 
     
@@ -110,6 +118,10 @@ const AddProductForm = () => {
 
                 <Button type="submit" variant="contained" color="primary">
                     Añadir Producto
+                </Button>
+
+                <Button variant="outlined" color="secondary" onClick={() => setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })}>
+                    Cancelar
                 </Button>
             </Box>
         </Container>
