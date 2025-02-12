@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { TextField, Button, Typography, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Box } from "@mui/material";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -54,6 +54,67 @@ const AddProductForm = () => {
 
     
     return (
-        <h1>HOLA</h1>
+        <Container maxWidth='sm'>
+            <Typography variant="h4" gutterBottom>
+                Nuevo Producto
+            </Typography>
+
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            
+                <TextField
+                    label="Nombre"
+                    name="nombre"
+                    value={product.nombre}
+                    onChange={handleChange}
+                    error={!!errores.nombre}
+                    helperText={errores.nombre}
+                    fullWidth
+                />
+
+                <TextField
+                    label="Descripción"
+                    name="descripcion"
+                    value={product.descripcion}
+                    onChange={handleChange}
+                    error={!!errores.descripcion}
+                    helperText={errores.descripcion}
+                    multiline
+                    rows={3}
+                    fullWidth
+                />
+
+                <TextField
+                    label="Precio"
+                    name="precio"
+                    value={product.precio}
+                    onChange={handleChange}
+                    error={!!errores.precio}
+                    helperText={errores.precio}
+                    fullWidth
+                />
+
+                <TextField
+                    label="Ubicación"
+                    name="ubicacion"
+                    value={product.ubicacion}
+                    onChange={handleChange}
+                    error={!!errores.ubicacion}
+                    helperText={errores.ubicacion}
+                    fullWidth
+                />
+
+                <Button variant="contained" component="label">
+                    Subir Imágenes
+                    <input type="file" multiple hidden onChange={handleUploadImagenes} />
+                </Button>
+
+                <Button type="submit" variant="contained" color="primary">
+                    Añadir Producto
+                </Button>
+            </Box>
+        </Container>
+        
     );
 };
+
+export default AddProductForm;
