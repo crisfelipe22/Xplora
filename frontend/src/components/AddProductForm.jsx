@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -39,6 +39,10 @@ const AddProductForm = () => {
         setProduct({...product, imagenes: imagenesSubir})
     }
 
+    const resetState = () =>{
+        setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })
+    }
+
     const validaciones = () =>{
         let erroresObj = {}
         if(product.nombre.trim().length<3){
@@ -66,9 +70,13 @@ const AddProductForm = () => {
             console.log("Formulario exitoso, producto subido", product)
             setExito(true); //(mensaje exito)
             //llamada a POST
+            setTimeout(() => {
+                setExito(false);
+            }, 3000);
+            resetState()
+            console.log(exito)
         } else {
             console.log("no se puede enviar el formulario",errores)
-            setExito(false);
             return;
         }
     }
@@ -134,7 +142,6 @@ const AddProductForm = () => {
                         <input type="file" multiple hidden onChange={handleUploadImagenes} />
                     </Button>
 
-                    {/* Lista de imágenes subidas */}
                     {product.imagenes.length > 0 && (
                         <List>
                         {product.imagenes.map((img, index) => (
@@ -152,13 +159,14 @@ const AddProductForm = () => {
                     )}
                 </Box>
 
-                <Button variant="outlined" color="secondary" onClick={() => setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })}>
+                <Button variant="outlined" color="secondary" onClick={() => resetState()}>
                     Cancelar
                 </Button>
 
                 <Button type="submit" variant="contained" color="primary">
                     Añadir Producto
                 </Button>
+                {exito && <Alert severity="success">¡Producto agregado con éxito!</Alert>}
             </Box>
         </Container>
         
