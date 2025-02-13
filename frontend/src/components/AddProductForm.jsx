@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -64,17 +65,29 @@ const AddProductForm = () => {
     }
     
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async (e) =>{
         e.preventDefault()
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", product)
-            setExito(true); //(mensaje exito)
             //llamada a POST
-            setTimeout(() => {
-                setExito(false);
-            }, 3000);
-            resetState()
-            console.log(exito)
+            try {
+                const response = await axios.post("API", product, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+            
+                console.log("Producto agregado:", response.data);
+                resetState()
+                setExito(true)
+            
+                setTimeout(() => {
+                    setExito(false);
+                }, 3000);
+            } catch (error) {
+                console.error("Error al enviar el producto:", error);
+            }
+            
         } else {
             console.log("no se puede enviar el formulario",errores)
             return;
