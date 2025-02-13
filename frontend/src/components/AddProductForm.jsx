@@ -1,10 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import styles from "../styles/AddProductForm.module.css"
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -96,90 +97,106 @@ const AddProductForm = () => {
 
     
     return (
-        <Container maxWidth='sm'>
-            <Typography variant="h4" gutterBottom>
+        <Container className={styles.container}>
+            <Typography variant="h4" gutterBottom className={styles.titulo}>
                 Nuevo Producto
             </Typography>
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Box component="form" className={styles.form} onSubmit={handleSubmit}>
             
-                <TextField
-                    label="Nombre"
-                    name="nombre"
-                    value={product.nombre}
-                    onChange={handleChange}
-                    error={!!errores.nombre}
-                    helperText={errores.nombre}
-                    fullWidth
-                />
+                <Box className={styles.seccion}>
+                    <Typography variant="h6" gutterBottom>
+                        Descripción del producto
+                    </Typography>
 
-                <TextField
-                    label="Descripción"
-                    name="descripcion"
-                    value={product.descripcion}
-                    onChange={handleChange}
-                    error={!!errores.descripcion}
-                    helperText={errores.descripcion}
-                    multiline
-                    rows={3}
-                    fullWidth
-                />
+                    <TextField
+                        label="Nombre"
+                        name="nombre"
+                        value={product.nombre}
+                        onChange={handleChange}
+                        error={!!errores.nombre}
+                        helperText={errores.nombre}
+                        fullWidth
+                    />
 
-                <TextField
-                    label="Precio"
-                    name="precio"
-                    value={product.precio}
-                    onChange={handleChange}
-                    error={!!errores.precio}
-                    helperText={errores.precio}
-                    fullWidth
-                />
+                    <TextField
+                        label="Descripción"
+                        name="descripcion"
+                        value={product.descripcion}
+                        onChange={handleChange}
+                        error={!!errores.descripcion}
+                        helperText={errores.descripcion}
+                        multiline
+                        rows={3}
+                        fullWidth
+                    />
 
-                <TextField
-                    label="Ubicación"
-                    name="ubicacion"
-                    value={product.ubicacion}
-                    onChange={handleChange}
-                    error={!!errores.ubicacion}
-                    helperText={errores.ubicacion}
-                    fullWidth
-                />
+                    <TextField
+                        label="Precio"
+                        name="precio"
+                        value={product.precio}
+                        onChange={handleChange}
+                        error={!!errores.precio}
+                        helperText={errores.precio}
+                        fullWidth
+                    />
 
-                <Box sx={{ border: "1px dashed #ccc", padding: 2, borderRadius: 2 }}>
+                    <TextField
+                        label="Ubicación"
+                        name="ubicacion"
+                        value={product.ubicacion}
+                        onChange={handleChange}
+                        error={!!errores.ubicacion}
+                        helperText={errores.ubicacion}
+                        fullWidth
+                    />
+                </Box>
+
+                <Box className={styles.seccion}>
                     <Typography variant="h6" gutterBottom>
                         Subir Imágenes
                     </Typography>
 
-                    <Button variant="contained" component="label" startIcon={<UploadFileIcon />}>
-                        Seleccionar archivos
-                        <input type="file" multiple hidden onChange={handleUploadImagenes} />
-                    </Button>
+                    <Box className={styles.subirImg}>
+                
+                        <UploadFileIcon color="primary" fontSize="large" />
+                        <Typography variant="body2" color="primary">
+                            <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
+                        </Typography>
+                        <Typography variant="caption">
+                            SVG, PNG, JPG o GIF (max. 3MB)
+                        </Typography>
+                        <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
 
-                    {product.imagenes.length > 0 && (
-                        <List>
-                        {product.imagenes.map((img, index) => (
-                            <ListItem key={index} 
-                            secondaryAction={
-                                <IconButton edge="end" onClick={() => eliminarImagen(index)} >
-                                <DeleteIcon color="error" />
-                                </IconButton>
-                            }
-                            >
-                            <ListItemText primary={img.nombre} />
-                            </ListItem>
-                        ))}
-                        </List>
-                    )}
+                        {product.imagenes.length > 0 && (
+                            <List className={styles.listaImg}>
+                            {product.imagenes.map((img, index) => (
+                                <ListItem key={index} 
+                                    secondaryAction={
+                                        <IconButton edge="end" onClick={() => eliminarImagen(index)} >
+                                        <DeleteIcon color="error" />
+                                        </IconButton>
+                                    }
+                                    >
+                                    <ListItemText primary={img.nombre} />
+                                    {img.status === "loading" && <LinearProgress />}
+                                </ListItem>
+                            ))}
+                            </List>
+                        )}
+                    </Box>
                 </Box>
 
-                <Button variant="outlined" color="secondary" onClick={() => resetState()}>
-                    Cancelar
-                </Button>
+                <Box className={styles.botones}>
+                    <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
+                        Cancelar
+                    </Button>
 
-                <Button type="submit" variant="contained" color="primary">
-                    Añadir Producto
-                </Button>
-                {exito && <Alert severity="success">¡Producto agregado con éxito!</Alert>}
+                    <Button className={styles.botonAgregar} type="submit" variant="contained" color="primary">
+                        Añadir Producto
+                    </Button>
+                    {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto agregado con éxito!</Alert>}
+                </Box>
             </Box>
         </Container>
         
