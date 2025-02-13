@@ -1,7 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText} from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -21,9 +23,20 @@ const AddProductForm = () => {
     }  
 
     const handleUploadImagenes = (e) =>{
+        if (!e.target.files || e.target.files.length === 0) return;
         const archivos = Array.from(e.target.files)
-        setProduct({...product, imagenes:[...product.imagenes, archivos] })
+        const imagenesSubir = archivos.map((archivo) =>({
+            archivo,
+            nombre: archivo.name,
+            url: URL.createObjectURL(archivo)
+        }))
+        setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
         console.log(product.imagenes)
+    }
+
+    const eliminarImagen = index =>{
+        const imagenesSubir = product.imagenes.filter((_,i) => i !==index)
+        setProduct({...product, imagenes: imagenesSubir})
     }
 
     const validaciones = () =>{
@@ -111,17 +124,40 @@ const AddProductForm = () => {
                     fullWidth
                 />
 
-                <Button variant="contained" component="label">
-                    Subir Imágenes
-                    <input type="file" multiple hidden onChange={handleUploadImagenes} />
+                <Box sx={{ border: "1px dashed #ccc", padding: 2, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom>
+                        Subir Imágenes
+                    </Typography>
+
+                    <Button variant="contained" component="label" startIcon={<UploadFileIcon />}>
+                        Seleccionar archivos
+                        <input type="file" multiple hidden onChange={handleUploadImagenes} />
+                    </Button>
+
+                    {/* Lista de imágenes subidas */}
+                    {product.imagenes.length > 0 && (
+                        <List>
+                        {product.imagenes.map((img, index) => (
+                            <ListItem key={index} 
+                            secondaryAction={
+                                <IconButton edge="end" onClick={() => eliminarImagen(index)} >
+                                <DeleteIcon color="error" />
+                                </IconButton>
+                            }
+                            >
+                            <ListItemText primary={img.nombre} />
+                            </ListItem>
+                        ))}
+                        </List>
+                    )}
+                </Box>
+
+                <Button variant="outlined" color="secondary" onClick={() => setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })}>
+                    Cancelar
                 </Button>
 
                 <Button type="submit" variant="contained" color="primary">
                     Añadir Producto
-                </Button>
-
-                <Button variant="outlined" color="secondary" onClick={() => setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })}>
-                    Cancelar
                 </Button>
             </Box>
         </Container>
