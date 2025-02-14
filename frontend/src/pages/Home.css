@@ -1,3 +1,11 @@
+body {
+  margin: 0;
+  display: block;
+  place-items: unset;
+  min-width: 320px;
+  min-height: none;
+}
+
 .home-container {
   margin-top: 60px;
   display: flex;
