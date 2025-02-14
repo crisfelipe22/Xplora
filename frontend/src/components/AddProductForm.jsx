@@ -160,7 +160,7 @@ const AddProductForm = () => {
                         fullWidth
                     />
 
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className={styles.textField}>
                         <InputLabel id="categoria-label">Categoría</InputLabel>
                         <Select
                             name="categoria"

@@ -34,6 +34,17 @@
     margin-bottom: 12px;
 }
 
+.textField{
+    border-radius: 4px !important;
+    border: 1px solid #7c3aed !important; 
+    margin-top: 3% !important;
+}
+
+.textField:hover{
+    border-color: #7c3aed !important; 
+    border-width: 2px !important;
+}
+
 .subirImg{
     border: 2px dashed #ccc;
     padding: 24px;
