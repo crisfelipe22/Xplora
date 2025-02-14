@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -13,11 +13,13 @@ const AddProductForm = () => {
         descripcion: '',
         precio: '',
         ubicacion: '',
+        categoria: '',
         imagenes: []
     })
 
     const [errores, setErrores] = useState({})
     const [exito, setExito] = useState(false)
+    const categorias = ['Bienestar y relajación', 'Aventura y deporte', 'Estadía', 'Gastronomía']
 
     const handleChange = (e) => {
         const {name, value} = e.target
@@ -42,7 +44,7 @@ const AddProductForm = () => {
     }
 
     const resetState = () =>{
-        setProduct({ nombre: "", descripcion: "", precio: "", ubicacion: "", imagenes: [] })
+        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', categoria: '', imagenes: [] })
     }
 
     const validaciones = () =>{
@@ -116,7 +118,7 @@ const AddProductForm = () => {
                         Descripción del producto
                     </Typography>
 
-                    <TextField
+                    <TextField className={styles.textField}
                         label="Nombre"
                         name="nombre"
                         value={product.nombre}
@@ -126,7 +128,7 @@ const AddProductForm = () => {
                         fullWidth
                     />
 
-                    <TextField
+                    <TextField className={styles.textField}
                         label="Descripción"
                         name="descripcion"
                         value={product.descripcion}
@@ -138,7 +140,7 @@ const AddProductForm = () => {
                         fullWidth
                     />
 
-                    <TextField
+                    <TextField className={styles.textField}
                         label="Precio"
                         name="precio"
                         value={product.precio}
@@ -148,7 +150,7 @@ const AddProductForm = () => {
                         fullWidth
                     />
 
-                    <TextField
+                    <TextField className={styles.textField}
                         label="Ubicación"
                         name="ubicacion"
                         value={product.ubicacion}
@@ -157,6 +159,21 @@ const AddProductForm = () => {
                         helperText={errores.ubicacion}
                         fullWidth
                     />
+
+                    <FormControl fullWidth>
+                        <InputLabel id="categoria-label">Categoría</InputLabel>
+                        <Select
+                            name="categoria"
+                            labelId="categoria-label"
+                            value={product.categoria}
+                            onChange={handleChange}>
+                            {categorias.map((cat) => (
+                                <MenuItem key={cat} value={cat}>
+                                    {cat}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Box>
 
                 <Box className={styles.seccion}>
