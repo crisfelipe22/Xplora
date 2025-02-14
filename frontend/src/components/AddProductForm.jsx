@@ -64,15 +64,22 @@ const AddProductForm = () => {
         setErrores(erroresObj)
         return Object.keys(erroresObj).length === 0;
     }
+
+    const productFormatoEnvio = {
+        ...product,
+        precio: Number(product.precio), 
+        imagenes:product.imagenes.map(img => img.url).join(','), 
+    };
     
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", product)
+            console.log(productFormatoEnvio)
             //llamada a POST
             try {
-                const response = await axios.post("API", product, {
+                const response = await axios.post("API", productFormatoEnvio, {
                     headers: {
                         "Content-Type": "application/json"
                     }
@@ -105,7 +112,7 @@ const AddProductForm = () => {
             <Box component="form" className={styles.form} onSubmit={handleSubmit}>
             
                 <Box className={styles.seccion}>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography className={styles.h6} variant="h6" gutterBottom>
                         Descripción del producto
                     </Typography>
 
@@ -153,7 +160,7 @@ const AddProductForm = () => {
                 </Box>
 
                 <Box className={styles.seccion}>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography className={styles.h6} variant="h6" gutterBottom>
                         Subir Imágenes
                     </Typography>
 
@@ -188,13 +195,14 @@ const AddProductForm = () => {
                 </Box>
 
                 <Box className={styles.botones}>
+                    <Button className={styles.botonAgregar} type="submit" variant="contained">
+                        Añadir Producto
+                    </Button>
+
                     <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
                         Cancelar
                     </Button>
 
-                    <Button className={styles.botonAgregar} type="submit" variant="contained" color="primary">
-                        Añadir Producto
-                    </Button>
                     {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto agregado con éxito!</Alert>}
                 </Box>
             </Box>
