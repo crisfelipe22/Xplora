@@ -1,4 +1,4 @@
-package main.java.com.backend.exceptions;
+package com.backend.exceptions;
 
 public class Exception {
     

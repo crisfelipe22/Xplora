@@ -1,4 +1,4 @@
-package main.java.com.backend.controller;
+package com.backend.controller;
 
 public class Controller {
     
