@@ -26,46 +26,6 @@ const AddProductForm = () => {
         setProduct({...product, [name]: value})
     }  
 
-    const handleUploadImagenes = async(e) =>{
-        if (!e.target.files || e.target.files.length === 0) return;
-        const archivos = Array.from(e.target.files)
-
-        const imagenesSubir = archivos.map((archivo) =>({
-            archivo,
-            nombre: archivo.name,
-            status:'loading',
-            url: null
-        }))
-        setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
-        console.log(product.imagenes)
-        
-        for(const img of imagenesSubir){
-            const resultado = await subirImagenAlServidor(img.archivo)
-
-            setProduct({...product, imagenes:[...product.imagenes.map((imagen) =>{
-                if(imagen.nombre === img.nombre){
-                    return{
-                        ...imagen,
-                        status: resultado.success ? 'completado' : 'fallido',
-                        url: resultado.success ? resultado.url : null,
-                    }
-                }
-                return imagen;
-            })]})
-
-        }
-
-    }
-
-    const eliminarImagen = index =>{
-        const imagenesSubir = product.imagenes.filter((_,i) => i !==index)
-        setProduct({...product, imagenes: imagenesSubir})
-    }
-
-    const resetState = () =>{
-        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', categoria: '', imagenes: [] })
-    }
-
     const validaciones = () =>{
         let erroresObj = {}
         if(product.nombre.trim().length<3){
@@ -88,6 +48,47 @@ const AddProductForm = () => {
         return Object.keys(erroresObj).length === 0;
     }
 
+    const handleUploadImagenes = async(e) =>{
+        if (!e.target.files || e.target.files.length === 0) return;
+        const archivos = Array.from(e.target.files)
+
+        let imagenesSubir = archivos.map((archivo) =>({
+            archivo,
+            nombre: archivo.name,
+            status:'cargando',
+            url: null
+        }))
+        setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
+        console.log(product.imagenes)
+        
+        const imagenesSubidas = await Promise.all(
+            imagenesSubir.map(async (img) => {
+                const resultado = await subirImagenAlServidor(img.archivo);
+                return {
+                    ...img,
+                    status: resultado.success ? 'completado' : 'fallido',
+                    url: resultado.success ? resultado.url : null,
+                };
+            })
+        );
+        setProduct({
+            ...product,
+            imagenes: [...product.imagenes.map((imagen) =>
+                imagenesSubidas.find((img =>
+                    img.nombre === imagen.nombre || imagen
+                )))]
+        });
+    }
+
+    const eliminarImagen = index =>{
+        const imagenesSubir = product.imagenes.filter((_,i) => i !==index)
+        setProduct({...product, imagenes: imagenesSubir})
+    }
+
+    const resetState = () =>{
+        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', categoria: '', imagenes: [] })
+    }
+
     const productFormatoEnvio = {
         ...product,
         precio: Number(product.precio), 
@@ -96,23 +97,22 @@ const AddProductForm = () => {
     
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
-        formData.append("imagen", archivo); // "imagen" debe coincidir con el nombre esperado por backend
+        formData.append("imagen", archivo);
     
         try {
             const response = await axios.post("URL", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-                onUploadProgress: (progressEvent) => {
-                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                },
             });
     
-            return { 
-                success: true, 
-                url: response.data.url
-            };
+            if (response.data && response.data.url) {
+                return { success: true, url: response.data.url };
+            } else {
+                throw new Error("No se recibió una URL válida del servidor");
+            }
         } catch (error) {
+            console.error("Error al subir la imagen:", error);
             return { success: false };
         }
     };
