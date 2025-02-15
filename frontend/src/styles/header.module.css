@@ -20,7 +20,7 @@
 }
 
 /* Izquierda: Logo y Slogan */
-.header__left {
+.header__brand {
   display: flex;
   align-items: center;
 }
@@ -97,7 +97,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: "Anta";
-  font-size: 20px;
+  font-size: 72px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
