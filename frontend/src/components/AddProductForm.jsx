@@ -26,16 +26,35 @@ const AddProductForm = () => {
         setProduct({...product, [name]: value})
     }  
 
-    const handleUploadImagenes = (e) =>{
+    const handleUploadImagenes = async(e) =>{
         if (!e.target.files || e.target.files.length === 0) return;
         const archivos = Array.from(e.target.files)
+
         const imagenesSubir = archivos.map((archivo) =>({
             archivo,
             nombre: archivo.name,
-            url: URL.createObjectURL(archivo)
+            status:'loading',
+            url: null
         }))
         setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
         console.log(product.imagenes)
+        
+        for(const img of imagenesSubir){
+            const resultado = await subirImagenAlServidor(img.archivo)
+
+            setProduct({...product, imagenes:[...product.imagenes.map((imagen) =>{
+                if(imagen.nombre === img.nombre){
+                    return{
+                        ...imagen,
+                        status: resultado.success ? 'completado' : 'fallido',
+                        url: resultado.success ? resultado.url : null,
+                    }
+                }
+                return imagen;
+            })]})
+
+        }
+
     }
 
     const eliminarImagen = index =>{
@@ -75,12 +94,33 @@ const AddProductForm = () => {
         imagenes:product.imagenes.map(img => img.url).join(','), 
     };
     
+    const subirImagenAlServidor = async (archivo) => {
+        const formData = new FormData();
+        formData.append("imagen", archivo); // "imagen" debe coincidir con el nombre esperado por backend
+    
+        try {
+            const response = await axios.post("URL", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                },
+            });
+    
+            return { 
+                success: true, 
+                url: response.data.url
+            };
+        } catch (error) {
+            return { success: false };
+        }
+    };
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
         if (validaciones()){
-            console.log("Formulario exitoso, producto subido", product)
-            console.log(productFormatoEnvio)
+            console.log("Formulario exitoso, producto subido", productFormatoEnvio)
             //llamada a POST
             try {
                 const response = await axios.post("API", productFormatoEnvio, {
@@ -193,16 +233,17 @@ const AddProductForm = () => {
                         Subir Imágenes
                     </Typography>
 
-                    <Box className={styles.subirImg}>
-                
-                        <UploadFileIcon color="primary" fontSize="large" />
-                        <Typography variant="body2" color="primary">
-                            <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
-                        </Typography>
-                        <Typography variant="caption">
-                            SVG, PNG, JPG o GIF (max. 3MB)
-                        </Typography>
-                        <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                    <Box >
+                        <Box className={styles.subirImg}>
+                            <UploadFileIcon  className={styles.iconImg} fontSize="large" />
+                            <Typography variant="body2" >
+                                <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
+                            </Typography>
+                            <Typography variant="caption">
+                                SVG, PNG, JPG o GIF (max. 3MB)
+                            </Typography>
+                            <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                        </Box>
 
                         {product.imagenes.length > 0 && (
                             <List className={styles.listaImg}>
@@ -213,8 +254,8 @@ const AddProductForm = () => {
                                             <DeleteIcon color="error" />
                                         </IconButton>
                                     }>
-                                    <ListItemText primary={img.nombre} 
-                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'loading' ? 'Cargando...': 'Completado'}  `}  />
+                                    <ListItemText  className={styles.listaItemText} primary={img.nombre} 
+                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'loading' ? 'Cargando...': img.status === 'complete' ? 'Completado' : 'Fallido'}  `}  />
                                     {img.status === "loading" && <LinearProgress />}
                                 </ListItem>
                             ))}

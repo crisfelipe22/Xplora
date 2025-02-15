@@ -7,14 +7,11 @@
 }
 
 .titulo{
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 10%;
     display: flex;
 }
 
 .form{
-    margin: 5%;
+    margin: 1%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
@@ -38,6 +35,15 @@
     border-radius: 4px !important;
     border: 1px solid #7c3aed !important; 
     margin-top: 3% !important;
+    
+}
+
+.textField > label{
+    transform: translate(14px, -12px) scale(1) !important;
+    background-color: #f5f0ff;
+    color: black;
+    padding: 0 4px;
+    font-size: 14px;
 }
 
 .textField:hover{
@@ -46,11 +52,41 @@
 }
 
 .subirImg{
-    border: 2px dashed #ccc;
-    padding: 24px;
+    border: 2px dashed gray;
     border-radius: 8px;
+    padding: 1.5rem;
     text-align: center;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.subirImg:hover {
+    background-color: rgba(25, 118, 210, 0.1);
+}
+
+.subirImg label {
+    color: #6239E6;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.iconImg{
+    color: #6239E6;
+}
+
+.listaItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e0e0e0; 
+}
+
+.listaItemText{
+    flex: 1;
+    margin-left: 1rem;
 }
 
 .listaImg, .mensajeExito{
