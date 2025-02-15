@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -61,6 +61,8 @@ const AddProductForm = () => {
             erroresObj.ubicacion = 'La ubicación es obligatoria';
         } if(product.imagenes.length === 0){
             erroresObj.imagenes = 'Se debe incluir al menos una imagen del producto';
+        } if (product.categoria === ''){
+            erroresObj.categoria = 'Se debe escoger una categoría';
         }
 
         setErrores(erroresObj)
@@ -148,6 +150,11 @@ const AddProductForm = () => {
                         error={!!errores.precio}
                         helperText={errores.precio}
                         fullWidth
+                        slotProps={{
+                            input: {
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                            },
+                        }}
                     />
 
                     <TextField className={styles.textField}
@@ -166,9 +173,14 @@ const AddProductForm = () => {
                             name="categoria"
                             labelId="categoria-label"
                             value={product.categoria}
+                            displayEmpty
                             onChange={handleChange}>
+
+                            <MenuItem value="" disabled>
+                                Elige una categoría
+                            </MenuItem>
                             {categorias.map((cat) => (
-                                <MenuItem key={cat} value={cat}>
+                                <MenuItem key={cat} value={cat} >
                                     {cat}
                                 </MenuItem>
                             ))}
@@ -195,14 +207,14 @@ const AddProductForm = () => {
                         {product.imagenes.length > 0 && (
                             <List className={styles.listaImg}>
                             {product.imagenes.map((img, index) => (
-                                <ListItem key={index} 
+                                <ListItem key={index} className={styles.listaItem}
                                     secondaryAction={
                                         <IconButton edge="end" onClick={() => eliminarImagen(index)} >
-                                        <DeleteIcon color="error" />
+                                            <DeleteIcon color="error" />
                                         </IconButton>
-                                    }
-                                    >
-                                    <ListItemText primary={img.nombre} />
+                                    }>
+                                    <ListItemText primary={img.nombre} 
+                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'loading' ? 'Cargando...': 'Completado'}  `}  />
                                     {img.status === "loading" && <LinearProgress />}
                                 </ListItem>
                             ))}
