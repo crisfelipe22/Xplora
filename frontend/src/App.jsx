@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
-import Home from "./pages/Home"; // Página principal
-import Admin from "./components/AddProductForm"; // Página principal
+import Home from "./pages/Home"; 
+import Admin from "./components/AddProductForm"; 
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
   return (
     <>
+      <CssBaseline />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
