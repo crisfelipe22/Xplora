@@ -38,11 +38,6 @@
   margin-right: 10px;
 }
 
-.header__slogan {
-  font-size: 18px;
-  font-weight: bold;
-}
-
 /* Derecha: Botones */
 .header__right {
   display: flex;
@@ -97,7 +92,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: "Anta";
-  font-size: 72px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

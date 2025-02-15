@@ -6,8 +6,8 @@
   left: 0;
   width: 100%;
   background-color: #F2EFFD;
-  color: gray;
-  padding: 16px;
+  color: #808080;
+  padding: 16px 24px;
   text-align: left;
 }
 
@@ -15,13 +15,14 @@
 .footer__brand {
   display: flex;
   align-items: center;
+  margin-bottom:10px;
 }
 
 .footer__logo {
   display: flex;
   align-items: center;
   text-decoration: none;
-  margin-right: 16px;
+  margin-right: 10px;
 }
 
 .footer__logo-img {
@@ -36,7 +37,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: "Anta";
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
