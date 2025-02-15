@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Button from '@mui/material/Button';
 import "../styles/header.css"; 
 
 const Header = () => {
@@ -14,12 +15,12 @@ const Header = () => {
         </Link>
       </div>
       <div className="header__right">
-        <button className="header__button">
+        <Button variant="text" className="header__button">
           CREAR CUENTA
-          </button>
-        <button className="header__button header__button--login">
+          </Button>
+        <Button variant="contained" color="primary" className="header__button header__button--login">
           INICIAR SESIÓN
-        </button>
+        </Button>
       </div>
     </header>
   );
