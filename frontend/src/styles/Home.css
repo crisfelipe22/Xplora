@@ -7,10 +7,10 @@ body {
 }
 
 .home-container {
-  margin-top: 60px;
+  padding-top: 60px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
+  height: calc(100vh);
   overflow: auto;
   width: 100%;
   color: black;
