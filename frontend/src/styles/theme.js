@@ -9,6 +9,13 @@ const theme = createTheme({
       main: '#6239E6',
     },
   },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 744,
+      desktop: 1440,
+    },
+  },
 });
 
 export default theme;
