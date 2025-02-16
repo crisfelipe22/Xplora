@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #F2EFFD;
+  color: #808080;
+  padding: 16px;
+  text-align: center;
+}
+
+/* Izquierda: Logo y Slogan */
+.footer__brand {
+  display: flex;
+  align-items: center;
+  margin-bottom:10px;
+  text-decoration: none;
+}
+
+.footer__logo {
+  display: none;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.footer__logo > img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.footer__slogan {
+  background: var(--Logo-gradient, linear-gradient(270deg, #D52835 0%, #87408F 87.4%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: "Anta";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 3px;
+}
+
+.footer__disclaimer {
+  text-align: center;
+  width: 100%;
+}
