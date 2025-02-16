@@ -40,4 +40,15 @@ public class PaqueteExperienciaController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/aleatorios")
+    public ResponseEntity<List<PaqueteExperiencia>> obtenerPaquetesAleatorios(
+            @RequestParam(name = "cantidad", defaultValue = "10", required = false) int cantidad) {
+        try {
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
+            return new ResponseEntity<>(paquetes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
