@@ -11,7 +11,7 @@ public class PaqueteExperiencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPaqueteExperiencia;
+    private Long id_paquete_experiencia;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
@@ -23,7 +23,7 @@ public class PaqueteExperiencia {
     private String ubicacion;
     private String imagen;
     private String duracion;
-    private Date fechaExperiencia;
+    private Date fecha_experiencia;
 
 
     public PaqueteExperiencia() {
@@ -32,11 +32,11 @@ public class PaqueteExperiencia {
     // Getters y Setters
     // Getters y Setters
     public Long getIdPaqueteExperiencia() {
-        return idPaqueteExperiencia;
+        return id_paquete_experiencia;
     }
 
-    public void setIdPaqueteExperiencia(Long idPaqueteExperiencia) {
-        this.idPaqueteExperiencia = idPaqueteExperiencia;
+    public void setIdPaqueteExperiencia(Long id_paquete_experiencia) {
+        this.id_paquete_experiencia = id_paquete_experiencia;
     }
 
     public Categoria getCategoria() {
@@ -96,11 +96,11 @@ public class PaqueteExperiencia {
     }
 
     public Date getFechaExperiencia() {
-        return fechaExperiencia;
+        return fecha_experiencia;
     }
 
     public void setFechaExperiencia(Date fechaExperiencia) {
-        this.fechaExperiencia = fechaExperiencia;
+        this.fecha_experiencia = fechaExperiencia;
     }
 }
 

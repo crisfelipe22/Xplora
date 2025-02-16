@@ -10,7 +10,7 @@ public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRol;
+    private Long id_rol;
 
     @Column(nullable = false, length = 45)
     private String nombre;
