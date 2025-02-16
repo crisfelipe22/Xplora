@@ -1,0 +1,30 @@
+.sidebar{
+    width: 240px;
+}
+
+
+.logo{
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.adminContainer{
+    display: flex;
+    height: 100vh;
+}
+
+.content{
+    flex-grow: 1;
+    padding: 24px;
+    background-color: #f9f9f9;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
