@@ -3,27 +3,19 @@ package com.backend.entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 
-import java.util.List;
-
 @Entity
 @Table(name = "categoria")
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categoria")
     private Long idCategoria;
 
-    @Column(nullable = false, length = 45, unique = true)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    @Column(nullable = false)
-    private String descripcion;
-
-    @OneToMany(mappedBy = "categoria")
-    private List<PaqueteExperiencia> paqueteExperiencias;
-
-    // Getters y Setters
-
+    // Getters y setters
     public Long getIdCategoria() {
         return idCategoria;
     }
@@ -38,21 +30,5 @@ public class Categoria {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public List<PaqueteExperiencia> getPaqueteExperiencias() {
-        return paqueteExperiencias;
-    }
-
-    public void setPaqueteExperiencias(List<PaqueteExperiencia> paqueteExperiencias) {
-        this.paqueteExperiencias = paqueteExperiencias;
     }
 }

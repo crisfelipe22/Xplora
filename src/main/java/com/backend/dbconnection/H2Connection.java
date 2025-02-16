@@ -15,14 +15,19 @@ public class H2Connection {
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/xplora;INIT=RUNSCRIPT FROM 'statement.sql'", "sa", "sa");
+            System.out.println("Conexión establecida correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error general: " + e.getMessage());
+
         } finally {
             try {
                 connection.close();
             } catch (Exception ex) {
                 ex.printStackTrace();
+                System.err.println("Error general: " + ex.getMessage());
+
             }
         }
 
