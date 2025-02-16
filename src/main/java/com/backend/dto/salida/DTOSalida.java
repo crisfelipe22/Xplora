@@ -1,4 +1,4 @@
-package main.java.com.backend.dto.salida;
+package com.backend.dto.salida;
 
 public class DTOSalida {
     
