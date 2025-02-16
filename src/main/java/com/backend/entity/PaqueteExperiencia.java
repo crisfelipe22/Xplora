@@ -1,5 +1,7 @@
 package com.backend.entity;
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+
 
 import java.util.Date;
 

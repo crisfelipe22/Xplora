@@ -1,6 +1,8 @@
 package com.backend.entity;
 import jakarta.persistence.*;
 import java.util.Date;
+import jakarta.persistence.Entity;
+
 
 @Entity
 @Table(name = "usuario")
