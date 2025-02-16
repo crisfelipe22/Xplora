@@ -52,7 +52,7 @@ const AddProductForm = () => {
         if (!e.target.files || e.target.files.length === 0) return;
         const archivos = Array.from(e.target.files)
 
-        let imagenesSubir = archivos.map((archivo) =>({
+        const imagenesSubir = archivos.map((archivo) =>({
             archivo,
             nombre: archivo.name,
             status:'cargando',
@@ -71,13 +71,12 @@ const AddProductForm = () => {
                 };
             })
         );
-        setProduct({
-            ...product,
-            imagenes: [...product.imagenes.map((imagen) =>
-                imagenesSubidas.find((img =>
-                    img.nombre === imagen.nombre || imagen
-                )))]
-        });
+        setProduct((prev) => ({
+            ...prev,
+            imagenes: prev.imagenes.map((imagen) =>
+                imagenesSubidas.find((img) => img.nombre === imagen.nombre) || imagen
+            ),
+        }));
     }
 
     const eliminarImagen = index =>{
@@ -92,22 +91,24 @@ const AddProductForm = () => {
     const productFormatoEnvio = {
         ...product,
         precio: Number(product.precio), 
-        imagenes:product.imagenes.map(img => img.url).join(','), 
+        imagenes: product.imagenes
+        .filter((img) => img.status === "completado" && img.url)
+        .map((img) => img.url).join(','), 
     };
     
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
-        formData.append("imagen", archivo);
+        formData.append("image", archivo);
     
         try {
-            const response = await axios.post("URL", formData, {
+            const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
     
-            if (response.data && response.data.url) {
-                return { success: true, url: response.data.url };
+            if (response.data && response.data.data.url) {
+                return { success: true, url: response.data.data.url };
             } else {
                 throw new Error("No se recibió una URL válida del servidor");
             }
@@ -255,7 +256,7 @@ const AddProductForm = () => {
                                         </IconButton>
                                     }>
                                     <ListItemText  className={styles.listaItemText} primary={img.nombre} 
-                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'loading' ? 'Cargando...': img.status === 'complete' ? 'Completado' : 'Fallido'}  `}  />
+                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'cargando' ? 'Cargando...': img.status === 'completado' ? 'Completado' : 'Fallido'}  `}  />
                                     {img.status === "loading" && <LinearProgress />}
                                 </ListItem>
                             ))}
