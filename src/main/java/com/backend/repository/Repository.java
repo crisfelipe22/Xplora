@@ -1,4 +1,4 @@
-package main.java.com.backend.repository;
+package com.backend.repository;
 
 public class Repository {
     
