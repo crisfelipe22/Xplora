@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/paquete-experiencia")
 public class PaqueteExperienciaController {
@@ -14,12 +16,6 @@ public class PaqueteExperienciaController {
     @Autowired
     private PaqueteExperienciaService paqueteExperienciaService;
 
-    /**
-     * Endpoint para agregar un nuevo paquete de experiencia
-     *
-     * @param paqueteExperiencia Paquete de experiencia a agregar
-     * @return ResponseEntity con el paquete agregado o un mensaje de error
-     */
     @PostMapping
     public ResponseEntity<?> agregarPaqueteExperiencia(@RequestBody PaqueteExperiencia paqueteExperiencia) {
         try {
@@ -32,6 +28,16 @@ public class PaqueteExperienciaController {
         } catch (Exception e) {
             // Para otros errores generales
             return new ResponseEntity<>("Ocurrió un error al agregar el paquete de experiencia", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PaqueteExperiencia>> obtenerTodosLosPaquetes() {
+        try {
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaService.obtenerTodosLosPaquetes();
+            return new ResponseEntity<>(paquetes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

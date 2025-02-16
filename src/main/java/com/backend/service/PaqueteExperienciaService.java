@@ -7,6 +7,8 @@ import com.backend.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,12 +20,6 @@ public class PaqueteExperienciaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    /**
-     * Método para agregar un paquete de experiencia
-     *
-     * @param paqueteExperiencia Paquete de experiencia con los datos a agregar
-     * @return Paquete de experiencia agregado
-     */
     @Transactional
     public PaqueteExperiencia agregarPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia) {
         // Verificar si el nombre ya existe en la base de datos
@@ -43,5 +39,9 @@ public class PaqueteExperienciaService {
 
         // Guardar el paquete de experiencia en la base de datos
         return paqueteExperienciaRepository.save(paqueteExperiencia);
+    }
+
+    public List<PaqueteExperiencia> obtenerTodosLosPaquetes() {
+        return paqueteExperienciaRepository.findAll();
     }
 }
