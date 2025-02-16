@@ -244,7 +244,7 @@ const AddProductForm = () => {
 
                     <Box >
                         <Box className={styles.subirImg}>
-                            <UploadFileIcon  className={styles.iconImg} fontSize="large" />
+                            <UploadFileIcon  className={styles.iconImg} fontSize="small" />
                             <Typography variant="body2" >
                                 <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
                             </Typography>
@@ -260,21 +260,21 @@ const AddProductForm = () => {
                                 <ListItem key={index} className={styles.listaItem}
                                     secondaryAction={
                                         <IconButton edge="end" onClick={() => eliminarImagen(index)} >
-                                            <DeleteIcon color="error" />
+                                            <DeleteIcon  fontSize="small"/>
                                         </IconButton>
                                     }>
-                                    <UploadFileIcon fontSize="small" />
+                                    <UploadFileIcon className={styles.iconUpload} fontSize="small" />
 
                                     <ListItemText  className={styles.listaItemText} primary={img.nombre} 
                                         secondary={
-                                            <span className={styles.textoEstado}>
-                                                <span>{Math.round(img.archivo.size / 1024)}kb • </span>
+                                            <span className={styles.imgText}>
+                                                <span >{Math.round(img.archivo.size / 1024)}kb • </span>
                                                 <span>{img.status}</span>
 
                                                 {img.status === "Cargando" && (
                                                     <LinearProgress 
                                                         className={styles.barraProgreso}
-                                                        variant="indeterminate"  // O "determinate" si tienes % exacto
+                                                        variant="indeterminate" 
                                                     />
                                                 )}
                                             </span>

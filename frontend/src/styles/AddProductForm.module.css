@@ -89,8 +89,19 @@
     margin-left: 1rem;
 }
 
+.imgText, .listaItemText span {
+    font-size: small !important;
+    overflow-wrap: break-word; 
+    white-space: normal; 
+    max-width: 300px;
+}
+
 .listaImg, .mensajeExito{
     margin-top: 16px;
+}
+
+.iconUpload{
+    color: #7B3FF6 !important;
 }
 
 .botones{
