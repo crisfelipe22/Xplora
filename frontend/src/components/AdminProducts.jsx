@@ -11,7 +11,7 @@ const AdminProduct = () => {
             <SidebarAdmin />
             <div className={styles.content}>
                 <div className={styles.header}>
-                    <h2>Productos</h2>
+                    <h2>Lista de productos</h2>
                     <Link to= "/admin/productos/nuevo-producto">
                         <Button
                             variant="contained"

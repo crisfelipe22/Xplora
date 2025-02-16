@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home"; 
 import Admin from './pages/Admin';
 import Products from './pages/Products';
+import AddProduct from './pages/AddProduct';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/productos" element={<Products />} />
+        <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
       </Routes>
     </>
   );
