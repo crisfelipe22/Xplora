@@ -1,47 +1,58 @@
+
+
+.panel{
+    display: flex;
+    flex-direction: column;
+    min-height: '100vh';
+    width: '100%';
+}
+
+.sidebarBox{
+    display: flex;
+    flex-grow: 1;
+    width: '100%';
+}
+
 .sidebar{
     width: 240px;
+    flex-shrink: 0;
 }
 
 .header {
-    background-color: #f4f0fc;
-    color: #000;
-    box-shadow: none;
-}
-
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-}
-
-.logoContainer {
+    padding: 16px 32px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    height: 64px;
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 35px;
-    margin-right: 10px;
+.panelTitle {
+    color: #1a237e;
+    font-weight: 600
 }
 
-.title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+.menuList{
+    padding: 8px; /*borrar*/
 }
 
-.adminContainer{
-    display: flex;
-    height: 100vh;
+.menuItem {
+    margin: 4px 0 !important;
 }
 
-.content{
-    flex-grow: 1;
-    padding: 24px;
-    background-color: #f9f9f9;
+.menuItem:hover {
+    background-color: rgba(25, 118, 210, 0.08);
 }
 
+.menuIcon {
+    color: black;
+    min-width: 40px;
+}
 
+.menuText {
+    color: black;
+}
 
-/*
-            */
+.menuText span{
+    font-size: small;
+}
