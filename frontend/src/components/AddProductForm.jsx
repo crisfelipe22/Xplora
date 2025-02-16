@@ -55,7 +55,7 @@ const AddProductForm = () => {
         const imagenesSubir = archivos.map((archivo) =>({
             archivo,
             nombre: archivo.name,
-            status:'cargando',
+            status:'Cargando',
             url: null
         }))
         setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
@@ -66,7 +66,7 @@ const AddProductForm = () => {
                 const resultado = await subirImagenAlServidor(img.archivo);
                 return {
                     ...img,
-                    status: resultado.success ? 'completado' : 'fallido',
+                    status: resultado.success ? 'Completado' : 'Fallido',
                     url: resultado.success ? resultado.url : null,
                 };
             })
@@ -92,14 +92,14 @@ const AddProductForm = () => {
         ...product,
         precio: Number(product.precio), 
         imagenes: product.imagenes
-        .filter((img) => img.status === "completado" && img.url)
+        .filter((img) => img.status === "Completado" && img.url)
         .map((img) => img.url).join(','), 
     };
     
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
         formData.append("image", archivo);
-    
+        //para la API, la respuesta es response.data.data.url (no response.data.url)
         try {
             const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
                 headers: {
@@ -122,6 +122,14 @@ const AddProductForm = () => {
         e.preventDefault()
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", productFormatoEnvio)
+            //Borrar esto cuando se tenga endpoint bbdd
+            resetState()
+            setExito(true)
+            setTimeout(() => {
+                setExito(false);
+            }, 3000);
+            //borrar hasta aquí
+
             //llamada a POST
             try {
                 const response = await axios.post("API", productFormatoEnvio, {
@@ -255,9 +263,24 @@ const AddProductForm = () => {
                                             <DeleteIcon color="error" />
                                         </IconButton>
                                     }>
+                                    <UploadFileIcon fontSize="small" />
+
                                     <ListItemText  className={styles.listaItemText} primary={img.nombre} 
-                                    secondary={`${img.archivo.size}kb  •  ${img.status === 'cargando' ? 'Cargando...': img.status === 'completado' ? 'Completado' : 'Fallido'}  `}  />
-                                    {img.status === "loading" && <LinearProgress />}
+                                        secondary={
+                                            <span className={styles.textoEstado}>
+                                                <span>{Math.round(img.archivo.size / 1024)}kb • </span>
+                                                <span>{img.status}</span>
+
+                                                {img.status === "Cargando" && (
+                                                    <LinearProgress 
+                                                        className={styles.barraProgreso}
+                                                        variant="indeterminate"  // O "determinate" si tienes % exacto
+                                                    />
+                                                )}
+                                            </span>
+                                        } 
+                                    />
+                                    
                                 </ListItem>
                             ))}
                             </List>
