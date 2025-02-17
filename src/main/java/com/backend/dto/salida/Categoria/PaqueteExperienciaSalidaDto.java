@@ -1,50 +1,34 @@
-package com.backend.entity;
-import jakarta.persistence.*;
-import jakarta.persistence.Entity;
-
+package com.backend.dto.salida.Categoria;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "paquete_experiencia")
-public class PaqueteExperiencia {
+public class PaqueteExperienciaSalidaDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPaqueteExperiencia;
-
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Categoria categoria;
-    @Column(nullable = false)
     private String nombre;
+
     private String descripcion;
+
     private double precio;
+
     private String ubicacion;
-    private String imagen;
+    private String imagenUrl;
     private String duracion;
+
     private Date fechaExperiencia;
 
-
-    public PaqueteExperiencia() {
-    }
-
-    // Getters y Setters
-    // Getters y Setters
-    public Long getIdPaqueteExperiencia() {
-        return idPaqueteExperiencia;
-    }
-
-    public void setIdPaqueteExperiencia(Long idPaqueteExperiencia) {
+    public PaqueteExperienciaSalidaDto(Long idPaqueteExperiencia, String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, String duracion, Date fechaExperiencia) {
         this.idPaqueteExperiencia = idPaqueteExperiencia;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.ubicacion = ubicacion;
+        this.imagenUrl = imagenUrl;
+        this.duracion = duracion;
+        this.fechaExperiencia = fechaExperiencia;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public PaqueteExperienciaSalidaDto() {
     }
 
     public String getNombre() {
@@ -79,12 +63,12 @@ public class PaqueteExperiencia {
         this.ubicacion = ubicacion;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public String getDuracion() {
@@ -103,4 +87,3 @@ public class PaqueteExperiencia {
         this.fechaExperiencia = fechaExperiencia;
     }
 }
-

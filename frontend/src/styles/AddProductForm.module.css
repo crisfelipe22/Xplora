@@ -1,0 +1,89 @@
+.container{
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.titulo{
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 10%;
+    display: flex;
+}
+
+.form{
+    margin: 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.seccion{
+    padding: 16px;
+    background-color: #f5f0ff;
+    border-radius: 4px;
+    height: 100%;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.h6{
+    text-align: left; 
+    margin-bottom: 12px;
+}
+
+.textField{
+    border-radius: 4px !important;
+    border: 1px solid #7c3aed !important; 
+    margin-top: 3% !important;
+}
+
+.textField:hover{
+    border-color: #7c3aed !important; 
+    border-width: 2px !important;
+}
+
+.subirImg{
+    border: 2px dashed #ccc;
+    padding: 24px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.listaImg, .mensajeExito{
+    margin-top: 16px;
+}
+
+.botones{
+    grid-column: 2;
+    display: flex;
+    margin-top: 40px;
+    gap: 16px;
+}
+
+.botonCancelar{
+    color: #7B3FF6 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.botonCancelar:hover{
+    background-color: #f5e6ff !important;
+}
+
+.botonAgregar{
+    background-color: #6239E6 !important;
+    color: white !important;
+    border-radius: 6px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    border: none !important;
+    padding: 8px 16px !important;
+}
+
+.botonAgregar:hover{
+    background-color: #125a9e !important;
+}
