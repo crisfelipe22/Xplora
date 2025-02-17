@@ -6,6 +6,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
+import SidebarAdmin from "./SidebarAdmin";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -157,150 +158,165 @@ const AddProductForm = () => {
 
     
     return (
-        <Container className={styles.container}>
-            <Typography variant="h4" gutterBottom className={styles.titulo}>
-                Nuevo Producto
-            </Typography>
-
-            <Box component="form" className={styles.form} onSubmit={handleSubmit}>
+        <Box className={styles.contenedorPrincipal}> 
+            <SidebarAdmin/>
             
-                <Box className={styles.seccion}>
-                    <Typography className={styles.h6} variant="h6" gutterBottom>
-                        Descripción del producto
+            <Box className={styles.contenido}>
+                <Box className={styles.titleLista}>
+                    <Typography variant="h4" className={styles.titleListaProductos}>
+                        Lista de Productos
                     </Typography>
-
-                    <TextField className={styles.textField}
-                        label="Nombre"
-                        name="nombre"
-                        value={product.nombre}
-                        onChange={handleChange}
-                        error={!!errores.nombre}
-                        helperText={errores.nombre}
-                        fullWidth
-                    />
-
-                    <TextField className={styles.textField}
-                        label="Descripción"
-                        name="descripcion"
-                        value={product.descripcion}
-                        onChange={handleChange}
-                        error={!!errores.descripcion}
-                        helperText={errores.descripcion}
-                        multiline
-                        rows={3}
-                        fullWidth
-                    />
-
-                    <TextField className={styles.textField}
-                        label="Precio"
-                        name="precio"
-                        value={product.precio}
-                        onChange={handleChange}
-                        error={!!errores.precio}
-                        helperText={errores.precio}
-                        fullWidth
-                        slotProps={{
-                            input: {
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                            },
-                        }}
-                    />
-
-                    <TextField className={styles.textField}
-                        label="Ubicación"
-                        name="ubicacion"
-                        value={product.ubicacion}
-                        onChange={handleChange}
-                        error={!!errores.ubicacion}
-                        helperText={errores.ubicacion}
-                        fullWidth
-                    />
-
-                    <FormControl fullWidth className={styles.textField}>
-                        <InputLabel id="categoria-label">Categoría</InputLabel>
-                        <Select
-                            name="categoria"
-                            labelId="categoria-label"
-                            value={product.categoria}
-                            displayEmpty
-                            onChange={handleChange}>
-
-                            <MenuItem value="" disabled>
-                                Elige una categoría
-                            </MenuItem>
-                            {categorias.map((cat) => (
-                                <MenuItem key={cat} value={cat} >
-                                    {cat}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
                 </Box>
-
-                <Box className={styles.seccion}>
-                    <Typography className={styles.h6} variant="h6" gutterBottom>
-                        Subir Imágenes
+                <Box className={styles.titleProduct}>
+                    <Typography variant="h4" className={styles.titleProducts}>
+                        Nuevo producto
                     </Typography>
+                </Box>
+                
+                <Container className={styles.container}>
+                    
+                    <Box component="form" className={styles.form} onSubmit={handleSubmit}>
+                    
+                        <Box className={styles.seccion}>
+                            <Typography className={styles.h6} variant="h6" gutterBottom>
+                                Descripción del producto
+                            </Typography>
 
-                    <Box >
-                        <Box className={styles.subirImg}>
-                            <UploadFileIcon  className={styles.iconImg} fontSize="small" />
-                            <Typography variant="body2" >
-                                <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
-                            </Typography>
-                            <Typography variant="caption">
-                                SVG, PNG, JPG o GIF (max. 3MB)
-                            </Typography>
-                            <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                            <TextField className={styles.textField}
+                                label="Nombre"
+                                name="nombre"
+                                value={product.nombre}
+                                onChange={handleChange}
+                                error={!!errores.nombre}
+                                helperText={errores.nombre}
+                                fullWidth
+                            />
+
+                            <TextField className={styles.textField}
+                                label="Descripción"
+                                name="descripcion"
+                                value={product.descripcion}
+                                onChange={handleChange}
+                                error={!!errores.descripcion}
+                                helperText={errores.descripcion}
+                                multiline
+                                rows={3}
+                                fullWidth
+                            />
+
+                            <TextField className={styles.textField}
+                                label="Precio"
+                                name="precio"
+                                value={product.precio}
+                                onChange={handleChange}
+                                error={!!errores.precio}
+                                helperText={errores.precio}
+                                fullWidth
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    },
+                                }}
+                            />
+
+                            <TextField className={styles.textField}
+                                label="Ubicación"
+                                name="ubicacion"
+                                value={product.ubicacion}
+                                onChange={handleChange}
+                                error={!!errores.ubicacion}
+                                helperText={errores.ubicacion}
+                                fullWidth
+                            />
+
+                            <FormControl fullWidth className={styles.textField}>
+                                <InputLabel id="categoria-label">Categoría</InputLabel>
+                                <Select
+                                    name="categoria"
+                                    labelId="categoria-label"
+                                    value={product.categoria}
+                                    displayEmpty
+                                    onChange={handleChange}>
+
+                                    <MenuItem value="" disabled>
+                                        Elige una categoría
+                                    </MenuItem>
+                                    {categorias.map((cat) => (
+                                        <MenuItem key={cat} value={cat} >
+                                            {cat}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Box>
 
-                        {product.imagenes.length > 0 && (
-                            <List className={styles.listaImg}>
-                            {product.imagenes.map((img, index) => (
-                                <ListItem key={index} className={styles.listaItem}
-                                    secondaryAction={
-                                        <IconButton edge="end" onClick={() => eliminarImagen(index)} >
-                                            <DeleteIcon  fontSize="small"/>
-                                        </IconButton>
-                                    }>
-                                    <UploadFileIcon className={styles.iconUpload} fontSize="small" />
+                        <Box className={styles.seccion}>
+                            <Typography className={styles.h6} variant="h6" gutterBottom>
+                                Subir Imágenes
+                            </Typography>
 
-                                    <ListItemText  className={styles.listaItemText} primary={img.nombre} 
-                                        secondary={
-                                            <span className={styles.imgText}>
-                                                <span >{Math.round(img.archivo.size / 1024)}kb • </span>
-                                                <span>{img.status}</span>
+                            <Box >
+                                <Box className={styles.subirImg}>
+                                    <UploadFileIcon  className={styles.iconImg} fontSize="small" />
+                                    <Typography variant="body2" >
+                                        <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
+                                    </Typography>
+                                    <Typography variant="caption">
+                                        SVG, PNG, JPG o GIF (max. 3MB)
+                                    </Typography>
+                                    <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                                </Box>
 
-                                                {img.status === "Cargando" && (
-                                                    <LinearProgress 
-                                                        className={styles.barraProgreso}
-                                                        variant="indeterminate" 
-                                                    />
-                                                )}
-                                            </span>
-                                        } 
-                                    />
-                                    
-                                </ListItem>
-                            ))}
-                            </List>
-                        )}
+                                {product.imagenes.length > 0 && (
+                                    <List className={styles.listaImg}>
+                                    {product.imagenes.map((img, index) => (
+                                        <ListItem key={index} className={styles.listaItem}
+                                            secondaryAction={
+                                                <IconButton edge="end" onClick={() => eliminarImagen(index)} >
+                                                    <DeleteIcon  fontSize="small"/>
+                                                </IconButton>
+                                            }>
+                                            <UploadFileIcon className={styles.iconUpload} fontSize="small" />
+
+                                            <ListItemText  className={styles.listaItemText} primary={img.nombre} 
+                                                secondary={
+                                                    <span className={styles.imgText}>
+                                                        <span >{Math.round(img.archivo.size / 1024)}kb • </span>
+                                                        <span>{img.status}</span>
+
+                                                        {img.status === "Cargando" && (
+                                                            <LinearProgress 
+                                                                className={styles.barraProgreso}
+                                                                variant="indeterminate" 
+                                                            />
+                                                        )}
+                                                    </span>
+                                                } 
+                                            />
+                                            
+                                        </ListItem>
+                                    ))}
+                                    </List>
+                                )}
+                            </Box>
+                        </Box>
+
+                        <Box className={styles.botones}>
+                            <Button className={styles.botonAgregar} type="submit" variant="contained">
+                                Añadir Producto
+                            </Button>
+
+                            <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
+                                Cancelar
+                            </Button>
+
+                            {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto agregado con éxito!</Alert>}
+                        </Box>
                     </Box>
-                </Box>
-
-                <Box className={styles.botones}>
-                    <Button className={styles.botonAgregar} type="submit" variant="contained">
-                        Añadir Producto
-                    </Button>
-
-                    <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
-                        Cancelar
-                    </Button>
-
-                    {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto agregado con éxito!</Alert>}
-                </Box>
+                </Container>
             </Box>
-        </Container>
+
+        </Box>
         
     );
 };
