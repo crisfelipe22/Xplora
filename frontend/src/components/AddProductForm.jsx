@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
+import AdminLayout from "./AdminLayout";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -158,6 +159,7 @@ const AddProductForm = () => {
 
     
     return (
+    <AdminLayout>
         <Box className={styles.contenedorPrincipal}> 
             <SidebarAdmin/>
             
@@ -172,7 +174,7 @@ const AddProductForm = () => {
                         Nuevo producto
                     </Typography>
                 </Box>
-                
+
                 <Container className={styles.container}>
                     
                     <Box component="form" className={styles.form} onSubmit={handleSubmit}>
@@ -317,7 +319,7 @@ const AddProductForm = () => {
             </Box>
 
         </Box>
-        
+    </AdminLayout>  
     );
 };
 

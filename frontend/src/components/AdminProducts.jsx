@@ -4,6 +4,7 @@ import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHea
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import { Link } from 'react-router-dom';
+import AdminLayout from "./AdminLayout";
 
 
 const AdminProduct = () => {
@@ -15,7 +16,8 @@ const AdminProduct = () => {
     ]
     
     return (
-        <Box  className={styles.container}>
+        <AdminLayout>
+            <Box  className={styles.container}>
             <SidebarAdmin />
             <Box className={styles.productContainer}>
                 <Box className={styles.titleLista}>
@@ -75,6 +77,7 @@ const AdminProduct = () => {
         </Box>
         
         
+        </AdminLayout>
     );
 };
 
