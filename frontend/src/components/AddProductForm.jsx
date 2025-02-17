@@ -21,7 +21,30 @@ const AddProductForm = () => {
 
     const [errores, setErrores] = useState({})
     const [exito, setExito] = useState(false)
-    const categorias = ['Bienestar y relajación', 'Aventura y deporte', 'Estadía', 'Gastronomía']
+
+    const categorias = [{
+        "idCategoria": 1,
+        "nombre": "Aventura y deporte"
+        }, 
+        {"idCategoria": 2,
+        "nombre": 'Bienestar y relajación' }  ]
+    //HABRÍA QUE RECIBIR LAS CATEGORÍAS CON UN ENDPOINT
+    /*
+    const [categorias, setCategorias] = useState([]);
+
+    useEffect(() => {
+        const obtenerCategorias = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/api/categorias");
+                setCategorias(response.data); 
+            } catch (error) {
+                console.error("Error al obtener las categorías:", error);
+            }
+        };
+
+        obtenerCategorias();
+    }, []);
+    */
 
     const handleChange = (e) => {
         const {name, value} = e.target
@@ -34,10 +57,14 @@ const AddProductForm = () => {
             erroresObj.nombre = 'El nombre del producto es obligatorio y debe tener mínimo 3 carácteres';
         } if(product.descripcion.trim().length < 10){
             erroresObj.descripcion = 'La descripción del producto es obligatoria y debe tener mínimo 10 carácteres';
-        } if(!product.precio.trim()){
+        } if (!product.precio.trim()) {
             erroresObj.precio = 'El precio es obligatorio';
-        } if(isNaN(Number(product.precio))){
+        } else if (isNaN(Number(product.precio))) {
             erroresObj.precio = 'El precio debe ser un número';
+        } else if (Number(product.precio) < 0) { 
+            erroresObj.precio = 'El precio no puede ser negativo';
+        } if(isNaN(Number(product.precio))){
+            erroresObj.precio = 'El precio debe ser un número ';
         } if(!product.ubicacion.trim()){
             erroresObj.ubicacion = 'La ubicación es obligatoria';
         } if(product.imagenes.length === 0){
@@ -134,7 +161,7 @@ const AddProductForm = () => {
 
             //llamada a POST
             try {
-                const response = await axios.post("API", productFormatoEnvio, {
+                const response = await axios.post('http://localhost:8080/api/paquete-experiencia', productFormatoEnvio, {
                     headers: {
                         "Content-Type": "application/json"
                     }
@@ -244,8 +271,8 @@ const AddProductForm = () => {
                                         Elige una categoría
                                     </MenuItem>
                                     {categorias.map((cat) => (
-                                        <MenuItem key={cat} value={cat} >
-                                            {cat}
+                                        <MenuItem key={cat.idCategoria} value={cat.idCategoria} >
+                                            {cat.nombre}
                                         </MenuItem>
                                     ))}
                                 </Select>
