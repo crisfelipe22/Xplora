@@ -1,21 +1,34 @@
 
 import styles from "../styles/AdminPanel.module.css";
-import { Link } from 'react-router-dom';
+import SidebarAdmin from "../components/SidebarAdmin";
+import {Box, Typography} from "@mui/material";
+
 
 const AdminPanel = () => {
 
     return (
-        <div className={styles.adminContainer}>
-            <div >
-                    
-                <Link to= "/admin">
-                    <h2>Inicio</h2>
-                </Link>
-                    
-            </div>
-                {/* Aquí iría la lista de productos */}
+        <Box className={styles.container}>
+
+            <SidebarAdmin />
+            <Box className={styles.adminContainer} >
+                <Box className={styles.titleInicio}>
+                    <Typography variant="h4" className={styles.titleAdmin}>
+                        Inicio
+                    </Typography>
+
+                    <Box className={styles.contenido}>
+                        <Typography variant="h5" className={styles.welcomeTitle}>
+                            Bienvenido al Panel de Administración
+                        </Typography>
+                        <Typography variant="body1" className={styles.welcomeText}>
+                            Administra productos y configura la tienda desde aquí.
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
+
+        </Box>
         
-        </div>
     );
 };
 
