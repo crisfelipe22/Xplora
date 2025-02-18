@@ -12,7 +12,7 @@ public class Pedido {
     private Long id_pedido;
 
     @ManyToOne
-    @JoinColumn(name = "paquete_experiencia_id")
+    @JoinColumn(name = "id_paquete_experiencia")
     private PaqueteExperiencia paquete_experiencia;
 
     private String estado;

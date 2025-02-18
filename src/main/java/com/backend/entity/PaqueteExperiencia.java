@@ -14,7 +14,7 @@ public class PaqueteExperiencia {
     private Long id_paquete_experiencia;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
+    @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
     @Column(nullable = false)
     private String nombre;
@@ -25,18 +25,39 @@ public class PaqueteExperiencia {
     private String duracion;
     private Date fecha_experiencia;
 
+    public PaqueteExperiencia(Long id_paquete_experiencia, Categoria categoria, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia) {
+        this.id_paquete_experiencia = id_paquete_experiencia;
+        this.categoria = categoria;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.ubicacion = ubicacion;
+        this.imagen = imagen;
+        this.duracion = duracion;
+        this.fecha_experiencia = fecha_experiencia;
+    }
 
     public PaqueteExperiencia() {
     }
 
     // Getters y Setters
     // Getters y Setters
-    public Long getIdPaqueteExperiencia() {
+
+
+    public Long getId_paquete_experiencia() {
         return id_paquete_experiencia;
     }
 
-    public void setIdPaqueteExperiencia(Long id_paquete_experiencia) {
+    public Date getFecha_experiencia() {
+        return fecha_experiencia;
+    }
+
+    public void setId_paquete_experiencia(Long id_paquete_experiencia) {
         this.id_paquete_experiencia = id_paquete_experiencia;
+    }
+
+    public void setFecha_experiencia(Date fecha_experiencia) {
+        this.fecha_experiencia = fecha_experiencia;
     }
 
     public Categoria getCategoria() {
@@ -93,14 +114,6 @@ public class PaqueteExperiencia {
 
     public void setDuracion(String duracion) {
         this.duracion = duracion;
-    }
-
-    public Date getFechaExperiencia() {
-        return fecha_experiencia;
-    }
-
-    public void setFechaExperiencia(Date fechaExperiencia) {
-        this.fecha_experiencia = fechaExperiencia;
     }
 }
 

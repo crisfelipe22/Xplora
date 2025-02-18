@@ -10,18 +10,18 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria")
-    private Long idCategoria;
+    private Long id_categoria;
 
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
     // Getters y setters
     public Long getIdCategoria() {
-        return idCategoria;
+        return id_categoria;
     }
 
     public void setIdCategoria(Long idCategoria) {
-        this.idCategoria = idCategoria;
+        this.id_categoria = id_categoria;
     }
 
     public String getNombre() {

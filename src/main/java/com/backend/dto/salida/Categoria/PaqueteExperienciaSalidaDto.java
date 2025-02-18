@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class PaqueteExperienciaSalidaDto {
 
-    private Long idPaqueteExperiencia;
+    private Long id_paquete_experiencia;
     private String nombre;
 
     private String descripcion;
@@ -12,18 +12,18 @@ public class PaqueteExperienciaSalidaDto {
     private double precio;
 
     private String ubicacion;
-    private String imagenUrl;
+    private String imagen;
     private String duracion;
 
     private Date fechaExperiencia;
 
-    public PaqueteExperienciaSalidaDto(Long idPaqueteExperiencia, String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, String duracion, Date fechaExperiencia) {
-        this.idPaqueteExperiencia = idPaqueteExperiencia;
+    public PaqueteExperienciaSalidaDto(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fechaExperiencia) {
+        this.id_paquete_experiencia = id_paquete_experiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.ubicacion = ubicacion;
-        this.imagenUrl = imagenUrl;
+        this.imagen = imagen;
         this.duracion = duracion;
         this.fechaExperiencia = fechaExperiencia;
     }
@@ -63,12 +63,12 @@ public class PaqueteExperienciaSalidaDto {
         this.ubicacion = ubicacion;
     }
 
-    public String getImagenUrl() {
-        return imagenUrl;
+    public String getImagen() {
+        return imagen;
     }
 
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public String getDuracion() {
