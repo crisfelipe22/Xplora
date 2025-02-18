@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import "../styles/Home.css"; // Import styles
+import CardRecomendaciones from "../components/CardRecomendaciones";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       </section>
       <section className="suggestions">
         <p>Suggestions placeholder</p>
+        <CardRecomendaciones />
       </section>
     </main>
   );
