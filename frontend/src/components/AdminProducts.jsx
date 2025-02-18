@@ -14,7 +14,24 @@ const AdminProduct = () => {
         {id: 2, nombre: 'Noche en el hotel Tequendama'},
         {id: 3, nombre: 'Desayuno sorpresa'}
     ]
-    
+    //llamado GET
+    /*
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/api/paquete-experiencia");
+                setProducts(response.data);
+            } catch (error) {
+                console.error("Error al obtener los productos:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+    */
+
     return (
         <AdminLayout>
             <Box  className={styles.container}>
