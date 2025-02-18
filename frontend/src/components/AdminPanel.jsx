@@ -6,7 +6,7 @@ import AdminLayout from "./AdminLayout";
 
 
 const AdminPanel = () => {
-
+        
     return (
         <AdminLayout>
             <Box className={styles.container}>
