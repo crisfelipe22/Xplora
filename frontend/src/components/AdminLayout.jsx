@@ -3,7 +3,7 @@ import { useMediaQuery, Box, Typography } from "@mui/material";
 import logoImg from "../assets/images/logoImg.png"
 
 const AdminLayout = ({ children }) => {
-    const isMobile = useMediaQuery("(max-width: 900px)");
+    const isMobile = useMediaQuery("(max-width: 1020px)");
 
     if (isMobile) {
         return (
