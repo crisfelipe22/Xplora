@@ -136,6 +136,89 @@ http://localhost:8080/api
 - 400 Bad Request: La categoría ya existe.
 - 500 Internal Server Error: Error en el servidor.
 
+#### Actualizar un Paquete de Experiencia
+
+- **Método:** PUT
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Permite actualizar un nuevo de experiencia.
+- **Request Body:**
+
+```json
+{
+  "id_categoria": 3,
+  "nombre": "Aventura prueba",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 270.00,
+  "ubicacion": "Bogotá. Colombia",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "7 dias",
+  "fecha_experiencia": "2025-03-15T10:00:00Z"
+}
+```
+
+**Respuesta Exitosa (202 Acepted):**
+```json
+{
+  "id_categoria": 3,
+  "nombre": "Aventura prueba",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 270.00,
+  "ubicacion": "Bogotá. Colombia",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "7 dias",
+  "fecha_experiencia": "2025-03-15T10:00:00Z"
+}
+```
+
+#### Obtener un paquete de Experiencia por id
+
+- **Método:** GET
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Devuelve el paquete de experiencia solicitado.
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_paquete_experiencia": 1,
+  "nombre": "Aventura en la Montaña 2",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 150.0,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_experiencia": "2025-03-15T10:00:00.000+00:00",
+  "id_categoria": 1
+}
+```
+
+#### Eliminar un paquete de Experiencia por id
+
+- **Método:** DELETE
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Devuelve el paquete de experiencia eliminado.
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_paquete_experiencia": 11,
+  "nombre": "Aventura en la Montaña 2",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 150.0,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_experiencia": "2025-03-15T10:00:00.000+00:00",
+  "id_categoria": 1
+}
+```
+
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
 ### Consideraciones Generales
 - Todas las fechas deben estar en formato ISO 8601 (YYYY-MM-DDTHH:MM:SSZ).
 - Precio debe ser un valor numérico positivo.

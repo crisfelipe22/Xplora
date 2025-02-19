@@ -15,9 +15,11 @@ public class PaqueteExperienciaSalidaDto {
     private String imagen;
     private String duracion;
 
-    private Date fechaExperiencia;
+    private Date fecha_experiencia;
 
-    public PaqueteExperienciaSalidaDto(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fechaExperiencia) {
+    private Long id_categoria;
+
+    public PaqueteExperienciaSalidaDto(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia, Long id_categoria) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -25,7 +27,8 @@ public class PaqueteExperienciaSalidaDto {
         this.ubicacion = ubicacion;
         this.imagen = imagen;
         this.duracion = duracion;
-        this.fechaExperiencia = fechaExperiencia;
+        this.fecha_experiencia = fecha_experiencia;
+        this.id_categoria = id_categoria;
     }
 
     public PaqueteExperienciaSalidaDto() {
@@ -79,11 +82,27 @@ public class PaqueteExperienciaSalidaDto {
         this.duracion = duracion;
     }
 
-    public Date getFechaExperiencia() {
-        return fechaExperiencia;
+    public Long getId_paquete_experiencia() {
+        return id_paquete_experiencia;
     }
 
-    public void setFechaExperiencia(Date fechaExperiencia) {
-        this.fechaExperiencia = fechaExperiencia;
+    public Date getFecha_experiencia() {
+        return fecha_experiencia;
+    }
+
+    public void setId_paquete_experiencia(Long id_paquete_experiencia) {
+        this.id_paquete_experiencia = id_paquete_experiencia;
+    }
+
+    public void setFecha_experiencia(Date fecha_experiencia) {
+        this.fecha_experiencia = fecha_experiencia;
+    }
+
+    public Long getId_categoria() {
+        return id_categoria;
+    }
+
+    public void setId_categoria(Long id_categoria) {
+        this.id_categoria = id_categoria;
     }
 }

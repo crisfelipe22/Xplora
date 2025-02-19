@@ -100,19 +100,19 @@ public class PaqueteExperienciaEntradaDto {
         this.imagen = imagen;
     }
 
-    public Date getFechaExperiencia() {
-        return fecha_experiencia;
-    }
-
-    public void setFechaExperiencia(Date fechaExperiencia) {
-        this.fecha_experiencia = fechaExperiencia;
-    }
-
     public String getDuracion() {
         return duracion;
     }
 
     public void setDuracion(String duracion) {
         this.duracion = duracion;
+    }
+
+    public Date getFecha_experiencia() {
+        return fecha_experiencia;
+    }
+
+    public void setFecha_experiencia(Date fecha_experiencia) {
+        this.fecha_experiencia = fecha_experiencia;
     }
 }
