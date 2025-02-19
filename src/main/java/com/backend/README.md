@@ -22,14 +22,14 @@ http://localhost:8080/api
 
 ```json
 {
-  "categoriaId": 1,
+  "id_categoria": 2,
   "nombre": "Aventura en la Montaña",
   "descripcion": "Un día completo de senderismo y escalada.",
   "precio": 150.00,
   "ubicacion": "Andes, Chile",
   "imagen": "https://example.com/imagen.jpg",
   "duracion": "8 horas",
-  "fechaExperiencia": "2025-03-15T10:00:00Z"
+  "fecha_experiencia": "2025-03-15T10:00:00Z"
 }
 ```
 
