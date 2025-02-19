@@ -1,0 +1,138 @@
+.container {
+    padding: 2rem;
+    margin-top: 65px;
+    min-height: 100vh;
+}
+
+.detalleSuperior {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tituloVolver {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.imagenContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.mainImage {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.imgContainer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.img:hover {
+    transform: scale(1.05);
+}
+
+.seeAllImages {
+    display: block;
+    margin-top: 1rem;
+    color: #1a237e;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.seeAllImages:hover {
+    color: #3f51b5;
+}
+
+.seccionRating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.chip {
+    background-color: #ff9800;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.rating {
+    color: #FFD700;
+}
+
+.detalleInferior {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.cardPrecio {
+    width: 250px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.datePicker {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.botonComprar {
+    margin-top: 15px;
+    background-color: #673ab7 !important;
+    color: white !important;
+    width: 100%;
+}
+
+.botonComprar:hover {
+    background-color: #512da8 !important;
+}
+
+.caracteristicas {
+    flex: 1;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+}
+
+.listIcon {
+    color: #4caf50;
+}
