@@ -1,109 +1,26 @@
--- -----------------------------------------------------
--- Schema Xplora_bd
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS Xplora_bd;
-SET SCHEMA Xplora_bd;
+use xplora_db;
 
--- -----------------------------------------------------
--- Table Categoria
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Categoria (
-  id_Categoria INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45)
-);
+INSERT INTO categoria (nombre) VALUES
+    ('Aventuras y deportes'),
+    ('Gastronomia'),
+    ('Estadias');
 
--- -----------------------------------------------------
--- Table PaqueteExperiencia
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS PaqueteExperiencia (
-  id_PaqueteExperiencia INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45) NOT NULL,
-  descripcion VARCHAR(45),
-  precio DECIMAL,
-  ubicacion VARCHAR(45),
-  imagen_url TEXT,
-  duracion TEXT,
-  fecha_experiencia TIMESTAMP,
-  PaqueteExperienciacol VARCHAR(45),
-  id_Categoria INT NOT NULL,
-  FOREIGN KEY (id_Categoria) REFERENCES Categoria (id_Categoria)
-);
+INSERT INTO paquete_experiencia (nombre, descripcion, precio, ubicacion, imagen, duracion, fecha_experiencia, id_categoria) VALUES
+    ('Rafting en el río', 'Aventura extrema en aguas rápidas', 150.00, 'Mendoza, Argentina', 'imagen1.jpg', '4 horas', NOW(), 1),
+    ('Cena gourmet', 'Experiencia culinaria exclusiva', 120.00, 'Buenos Aires, Argentina', 'imagen2.jpg', '3 horas', NOW(), 2),
+    ('Noche en cabaña', 'Escapada romántica en la montaña', 200.00, 'Bariloche, Argentina', 'imagen3.jpg', '1 noche', NOW(),  3);
 
--- -----------------------------------------------------
--- Table Pedido
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Pedido (
-  id_Pedido INT AUTO_INCREMENT PRIMARY KEY,
-  estado VARCHAR(45),
-  esRegalo BOOLEAN,
-  total DECIMAL,
-  id_PaqueteExperiencia INT NOT NULL,
-  FOREIGN KEY (id_PaqueteExperiencia) REFERENCES PaqueteExperiencia (id_PaqueteExperiencia)
-);
+INSERT INTO pedido (estado, es_regalo, total, id_paquete_experiencia) VALUES
+    ('Confirmado', FALSE, 150.00, 1),
+    ('Pendiente', TRUE, 120.00, 2),
+    ('Completado', FALSE, 200.00, 3);
 
--- -----------------------------------------------------
--- Table MetodoPago
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS MetodoPago (
-  id_MetodoPago INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45)
-);
+INSERT INTO metodo_pago (nombre) VALUES
+    ('Tarjeta de crédito'),
+    ('PayPal'),
+    ('Transferencia bancaria');
 
--- -----------------------------------------------------
--- Table Pago
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Pago (
-  id_Pago INT AUTO_INCREMENT PRIMARY KEY,
-  monto DECIMAL,
-  estado VARCHAR(45),
-  id_Pedido INT NOT NULL,
-  id_MetodoPago INT NOT NULL,
-  FOREIGN KEY (id_Pedido) REFERENCES Pedido (id_Pedido),
-  FOREIGN KEY (id_MetodoPago) REFERENCES MetodoPago (id_MetodoPago)
-);
-
--- -----------------------------------------------------
--- Table Rol
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Rol (
-  id_Rol INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45)
-);
-
--- -----------------------------------------------------
--- Table Usuario
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Usuario (
-  id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45),
-  email VARCHAR(45),
-  contrasenia VARCHAR(45),
-  telefono INT,
-  direccion VARCHAR(45),
-  fecha_registro TIMESTAMP,
-  id_Rol INT NOT NULL,
-  FOREIGN KEY (id_Rol) REFERENCES Rol (id_Rol)
-);
-
--- -----------------------------------------------------
--- Table Usuario_pedido
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Usuario_pedido (
-  id_Usuario_pedido INT AUTO_INCREMENT PRIMARY KEY,
-  fecha_pedido TIMESTAMP,
-  id_Usuario INT NOT NULL,
-  id_Pedido INT NOT NULL,
-  FOREIGN KEY (id_Usuario) REFERENCES Usuario (id_Usuario),
-  FOREIGN KEY (id_Pedido) REFERENCES Pedido (id_Pedido)
-);
-
--- -----------------------------------------------------
--- Table Regalo
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Regalo (
-  id_Regalo INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(45),
-  mensaje TEXT,
-  id_Pedido INT NOT NULL,
-  FOREIGN KEY (id_Pedido) REFERENCES Pedido (id_Pedido)
-);
+INSERT INTO pago (monto, estado, id_pedido, id_metodo_pago) VALUES
+    (150.00, 'Aprobado', 1, 1),
+    (120.00, 'Pendiente', 2, 2),
+    (200.00, 'Aprobado', 3, 3);

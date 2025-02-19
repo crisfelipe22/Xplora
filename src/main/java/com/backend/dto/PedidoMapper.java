@@ -11,7 +11,7 @@ public class PedidoMapper {
         PedidoSalidaDTO salidaDTO = new PedidoSalidaDTO();
         salidaDTO.setIdPedido(pedido.getIdPedido());
         if (pedido.getPaqueteExperiencia() != null) {
-            salidaDTO.setPaqueteExperienciaId(pedido.getPaqueteExperiencia().getIdPaqueteExperiencia());
+            salidaDTO.setPaqueteExperienciaId(pedido.getPaqueteExperiencia().getId_paquete_experiencia());
         }
         salidaDTO.setEsRegalo(pedido.isEsRegalo());
         salidaDTO.setTotal(pedido.getTotal());

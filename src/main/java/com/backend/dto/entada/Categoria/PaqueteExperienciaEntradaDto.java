@@ -1,6 +1,7 @@
 package com.backend.dto.entada.Categoria;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.util.Date;
@@ -15,8 +16,7 @@ public class PaqueteExperienciaEntradaDto {
     @Size(min = 3, max = 50, message = "La descripción debe tener entre 3 y 50 caracteres")
     private String descripcion;
 
-    @NotBlank(message="Debe indicar la descripción del paquete de experiencia")
-    @Size(min = 3, max = 50, message = "La descripción debe tener entre 3 y 50 caracteres")
+    @Positive(message = "El precio no puede ser nulo o menor a cero")
     private double precio;
 
     @NotBlank(message="Debe indicar la ubicación del paquete de experiencia")
@@ -24,23 +24,29 @@ public class PaqueteExperienciaEntradaDto {
     private String ubicacion;
 
     @NotBlank(message="Debe indicar de la imagen del paquete de experiencia")
-    private String imagenUrl;
+    private String imagen;
 
-    @NotNull(message = "Debe indicar la fecha de la experiencia")
-    @Future(message = "La fecha de la experiencia debe ser en el futuro")
-    private Date fechaExperiencia;
+    @FutureOrPresent(message = "La fecha no puede ser anterior al día de hoy")
+    @NotNull(message = "Debe especificarse la fecha de experiencia")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(description = "Formato valido: yyyy-MM-dd'T'HH:mm:ss")
+    private Date fecha_experiencia;
     @NotBlank(message = "Debe indicar la duración de la experiencia")
     @Pattern(regexp = "^[0-9]+\\s?(min|hora|horas|dia|dias)$", message = "La duración debe estar en un formato válido, por ejemplo: '30 min', '2 horas', '1 dia'")
     private String duracion;
 
-    public PaqueteExperienciaEntradaDto(String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, Date fechaExperiencia, String duracion) {
+    @Positive(message = "La categoria no puede ser nulo o menor a cero")
+    private Long id_categoria;
+
+    public PaqueteExperienciaEntradaDto(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_experiencia, String duracion, Long id_categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.ubicacion = ubicacion;
-        this.imagenUrl = imagenUrl;
-        this.fechaExperiencia = fechaExperiencia;
+        this.imagen = imagen;
+        this.fecha_experiencia = fecha_experiencia;
         this.duracion = duracion;
+        this.id_categoria = id_categoria;
     }
 
     public PaqueteExperienciaEntradaDto() {
@@ -66,6 +72,14 @@ public class PaqueteExperienciaEntradaDto {
         return precio;
     }
 
+    public Long getId_categoria() {
+        return id_categoria;
+    }
+
+    public void setId_categoria(Long id_categoria) {
+        this.id_categoria = id_categoria;
+    }
+
     public void setPrecio(double precio) {
         this.precio = precio;
     }
@@ -78,20 +92,20 @@ public class PaqueteExperienciaEntradaDto {
         this.ubicacion = ubicacion;
     }
 
-    public String getImagenUrl() {
-        return imagenUrl;
+    public String getImagen() {
+        return imagen;
     }
 
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public Date getFechaExperiencia() {
-        return fechaExperiencia;
+        return fecha_experiencia;
     }
 
     public void setFechaExperiencia(Date fechaExperiencia) {
-        this.fechaExperiencia = fechaExperiencia;
+        this.fecha_experiencia = fechaExperiencia;
     }
 
     public String getDuracion() {
