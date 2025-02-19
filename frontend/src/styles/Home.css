@@ -7,7 +7,10 @@ body {
 }
 
 .home-container {
-  margin-top: 64px;
+  padding-top: 64px ;
+  padding-bottom: 128px ;
+  padding-left: 15px;
+  padding-right: 15px;
   background: #FFF;
   display: flex;
   flex-direction: column;
@@ -16,7 +19,7 @@ body {
 }
 
 div.search-bar {
-  padding: 38px 62px 28px 15px;
+  padding: 38px 62px 28px 0px;
 }
 
 .search-bar p {

@@ -12,10 +12,14 @@ const Home = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
   
   return (
-    <Box className="home-container">
+    <Box className="home-container"
+      sx={{
+        paddingLeft: {tablet: "32px !important"},
+        paddingRight: {tablet: "32px !important"},
+      }}>
       <Container className="search-bar"
         sx={{
-          paddingLeft: {tablet: "32px !important"},
+          // paddingLeft: {tablet: "32px !important"},
           display: {desktop: "flex !important"},
           flexWrap: {desktop: "wrap"}
         }}
@@ -126,14 +130,14 @@ const Home = () => {
       <section className="categories">
         <p>Categories placeholder</p>
       </section>
-      {/* <section className="suggestions">
-        <Container>
+
+        {/* <Container> */}
+        <Container sx={{padding:"0px"}}>
           <Typography variant="h5" className="titulo-recomendados" >
             Lo que nuestros Xplorers recomiendan
           </Typography>
           <ProductoAleatorio />
         </Container>
-      </section> */}
     </Box>
   );
 };

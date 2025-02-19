@@ -1,6 +1,6 @@
 
 .gridContainer {
-    display: flex !important;
+    padding: 0px;
     justify-content: space-evenly;
 }
 
@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     height: 405px;
-    width: 420px;
+    /* width: 300px; */
     margin: 0 auto;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
