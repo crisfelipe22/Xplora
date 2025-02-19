@@ -1,5 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable no-unused-vars */
+
 import { useState } from "react"
 import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -15,18 +14,18 @@ const AddProductForm = () => {
         descripcion: '',
         precio: '',
         ubicacion: '',
-        categoria: '',
-        imagenes: []
+        id_categoria: '',
+        imagen: []
     })
 
     const [errores, setErrores] = useState({})
     const [exito, setExito] = useState(false)
 
     const categorias = [{
-        "idCategoria": 1,
+        "id_categoria": 1,
         "nombre": "Aventura y deporte"
         }, 
-        {"idCategoria": 2,
+        {"id_categoria": 2,
         "nombre": 'Bienestar y relajación' }  ]
     //HABRÍA QUE RECIBIR LAS CATEGORÍAS CON UN ENDPOINT
     /*
@@ -67,10 +66,10 @@ const AddProductForm = () => {
             erroresObj.precio = 'El precio debe ser un número ';
         } if(!product.ubicacion.trim()){
             erroresObj.ubicacion = 'La ubicación es obligatoria';
-        } if(product.imagenes.length === 0){
-            erroresObj.imagenes = 'Se debe incluir al menos una imagen del producto';
-        } if (product.categoria === ''){
-            erroresObj.categoria = 'Se debe escoger una categoría';
+        } if(product.imagen.length === 0){
+            erroresObj.imagen = 'Se debe incluir al menos una imagen del producto';
+        } if (product.id_categoria === ''){
+            erroresObj.id_categoria = 'Se debe escoger una categoría';
         }
 
         setErrores(erroresObj)
@@ -87,8 +86,8 @@ const AddProductForm = () => {
             status:'Cargando',
             url: null
         }))
-        setProduct({...product, imagenes:[...product.imagenes, ...imagenesSubir] })
-        console.log(product.imagenes)
+        setProduct({...product, imagen:[...product.imagen, ...imagenesSubir] })
+        console.log(product.imagen)
         
         const imagenesSubidas = await Promise.all(
             imagenesSubir.map(async (img) => {
@@ -102,26 +101,25 @@ const AddProductForm = () => {
         );
         setProduct((prev) => ({
             ...prev,
-            imagenes: prev.imagenes.map((imagen) =>
+            imagen: prev.imagen.map((imagen) =>
                 imagenesSubidas.find((img) => img.nombre === imagen.nombre) || imagen
             ),
         }));
     }
 
     const eliminarImagen = index =>{
-        const imagenesSubir = product.imagenes.filter((_,i) => i !==index)
-        setProduct({...product, imagenes: imagenesSubir})
+        const imagenesSubir = product.imagen.filter((_,i) => i !==index)
+        setProduct({...product, imagen: imagenesSubir})
     }
 
     const resetState = () =>{
-        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', categoria: '', imagenes: [] })
+        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', id_categoria: '', imagen: [] })
     }
 
     const productFormatoEnvio = {
         ...product,
         precio: Number(product.precio), 
-        imagenes: product.imagenes
-        .filter((img) => img.status === "Completado" && img.url)
+        imagen: product.imagen.filter((img) => img.status === "Completado" && img.url)
         .map((img) => img.url).join(','), 
     };
     
@@ -261,9 +259,9 @@ const AddProductForm = () => {
                             <FormControl fullWidth className={styles.textField}>
                                 <InputLabel id="categoria-label">Categoría</InputLabel>
                                 <Select
-                                    name="categoria"
+                                    name="id_categoria"
                                     labelId="categoria-label"
-                                    value={product.categoria}
+                                    value={product.id_categoria}
                                     displayEmpty
                                     onChange={handleChange}>
 
@@ -271,7 +269,7 @@ const AddProductForm = () => {
                                         Elige una categoría
                                     </MenuItem>
                                     {categorias.map((cat) => (
-                                        <MenuItem key={cat.idCategoria} value={cat.idCategoria} >
+                                        <MenuItem key={cat.id_categoria} value={cat.id_categoria} >
                                             {cat.nombre}
                                         </MenuItem>
                                     ))}
@@ -296,9 +294,9 @@ const AddProductForm = () => {
                                     <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
                                 </Box>
 
-                                {product.imagenes.length > 0 && (
+                                {product.imagen.length > 0 && (
                                     <List className={styles.listaImg}>
-                                    {product.imagenes.map((img, index) => (
+                                    {product.imagen.map((img, index) => (
                                         <ListItem key={index} className={styles.listaItem}
                                             secondaryAction={
                                                 <IconButton edge="end" onClick={() => eliminarImagen(index)} >
