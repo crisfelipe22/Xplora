@@ -6,7 +6,7 @@ import styles from "../styles/footer.module.css";
 const Footer = () => {
   return (
     <Box 
-      sx={{ textAlign: {desktop: "start" }}}
+      sx={{ textAlign: {desktop: "start" }, position: {desktop: "fixed" }}}
       className={styles.footer} 
       component='footer'
     >

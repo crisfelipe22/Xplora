@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home"; 
 import Admin from "./pages/Admin"; 
 import CssBaseline from '@mui/material/CssBaseline';
-import './App.css'
+// import './App.css'
 import { Route, Routes } from "react-router-dom";
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
