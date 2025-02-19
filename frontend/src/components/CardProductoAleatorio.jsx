@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Card, CardContent, Typography, CardMedia, Box} from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
+import { Card, CardContent, Typography, CardMedia, Rating, Chip} from '@mui/material';
 import styles from '../styles/ProductoAleatorio.module.css';
 
 const CardProductoAleatorio = ({product}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
     const imagenUrl =  imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
-    
+    //suponiendo raiting por ahora
+    const rating = product.rating ?? Math.floor(Math.random() * 5) + 1;
+
     return (
         <Card className={styles.card}>
             <CardMedia
@@ -16,9 +17,10 @@ const CardProductoAleatorio = ({product}) => {
                 height="200"
                 image={imagenUrl || 'nada'}
                 alt={product.nombre}
-                className={styles.cardImage}
+                className={styles.imagenProducto}
             />
-            <CardContent>
+            <CardContent className={styles.cardContent}>
+                <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
 
                 <Typography variant="h6" className={styles.nombreProducto}>
                     {product.nombre}
@@ -28,9 +30,7 @@ const CardProductoAleatorio = ({product}) => {
                     {product.descripcion}
                 </Typography>
 
-                <Typography variant="body2" className={styles.categoriaProducto}>
-                    {product.categoria.nombre}
-                </Typography>
+                <Chip label={product.categoria.nombre} className={styles.categoriaProducto} />
                 
             </CardContent>
         </Card>

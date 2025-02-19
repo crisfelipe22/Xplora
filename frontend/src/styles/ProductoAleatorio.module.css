@@ -1,11 +1,70 @@
+
+.gridContainer {
+    display: flex !important;
+    justify-content: space-evenly;
+}
+
+.card {
+    border-radius: 3px !important;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3) !important;
+    transition: transform 0.2s ease-in-out !important;
+    background-color: #f5f0ff !important;
+    display: flex;
+    flex-direction: column;
+    height: 405px;
+    width: 420px;
+    margin: 0 auto;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.cardContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1 !important;
+    overflow: hidden;
+}
+
+.imagenProducto {
+    object-fit: cover !important;
+    height: 200px !important;
+    width: 100% !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.rating {
+    font-size: larger !important;
+}
+
 .nombreProducto{
-    color: black;
+    font-weight: bold !important;
+    color: #05030D;
+    text-align: left;
 }
 
 .descripcionProducto{
-    color: black;
+    color: #666;
+    text-align: left;
+    margin: 5px 0 !important;
+    flex-grow: 1 !important;
+    overflow: hidden;
+    max-height: calc(1.4em* 3);
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
 }
 
 .categoriaProducto{
-    color: black;
+    background-color: #2E1F5E !important;
+    color: white !important;
+    font-size: 68% !important;
+    border-radius: 22px !important;
+    align-self: flex-start;
+    margin-top: auto;
 }

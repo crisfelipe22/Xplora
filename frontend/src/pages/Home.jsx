@@ -16,11 +16,11 @@ const Home = () => {
       </section>
       <section className="suggestions">
         <Container>
-          <Typography variant="h5" >
+          <Typography variant="h5" className="titulo-recomendados" >
             Lo que nuestros Xplorers recomiendan
           </Typography>
           <ProductoAleatorio />
-      </Container>
+        </Container>
       </section>
     </main>
   );
