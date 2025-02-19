@@ -14,14 +14,14 @@ const Home = () => {
       <section className="categories">
         <p>Categories placeholder</p>
       </section>
-      <section className="suggestions">
+      {/* <section className="suggestions">
         <Container>
           <Typography variant="h5" className="titulo-recomendados" >
             Lo que nuestros Xplorers recomiendan
           </Typography>
           <ProductoAleatorio />
         </Container>
-      </section>
+      </section> */}
     </main>
   );
 };
