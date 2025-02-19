@@ -9,6 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Route, Routes } from "react-router-dom";
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
+import DetalleProducto from "./pages/DetalleProducto";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/productos" element={<Products />} />
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
+        <Route path="/detalle-producto/:idPaqueteExperiencia" element={<DetalleProducto />} />
       </Routes>
       <Footer />
         

@@ -1,8 +1,10 @@
-import { Grid2, Box} from '@mui/material';
-import CardProductoAleatorio from './CardProductoAleatorio';
-import styles from "../styles/ProductoAleatorio.module.css";
+/* eslint-disable no-unused-vars */
+import { useParams } from 'react-router-dom';
+import { Typography, Chip, Container} from '@mui/material';
 
-const ProductoAleatorio = () => {
+const DetalleProducto = () =>{
+    const {idPaqueteExperiencia} = useParams()
+
     //Suponiendo el arreglo de objetos por ahora
     const productosAleatorios = [
         {
@@ -78,37 +80,22 @@ const ProductoAleatorio = () => {
             imagen: "https://i.pinimg.com/736x/57/cd/f6/57cdf643394476668c968abd0cd78b55.jpg",
         },
     ]
-    
-    //llamado GET productos aleatorios
-    /*
-    const [productosAleatorios, setProductosAleatorios] = useState([]);
+    const producto = productosAleatorios.find(p => p.idPaqueteExperiencia === parseInt(idPaqueteExperiencia));
+    if (!producto) {
+        return <div>Producto no encontrado</div>;
+    }
 
-    useEffect(() => {
-        const obtenerProductosAleatorios = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/api/paquete-experiencia/aleatorios?cantidad=6");
-            setProductosAleatorios(response.data);
-        } catch (error) {
-            console.error("Error obteniendo productos aleatorios:", error);
-        }
-        };
-
-        obtenerProductosAleatorios();
-    }, []);
-    */
-
+    //LLAMADO GET   
     return (
-        <Box className={styles.gridContainer}>
-            <Grid2 container spacing={4}  columns={12}>
-                {productosAleatorios.map((product) => (
-                    <Grid2 item size={{ mobile: 12, tablet: 6, desktop: 4 }} key={product.idPaqueteExperiencia}>
-                        <CardProductoAleatorio product={product} />
-                    </Grid2>
-                ))}
-            </Grid2>
-        </Box>
-
+        <Container>
+            <Typography variant="h4">{producto.nombre}</Typography>
+            <img src={producto.imagen} alt={producto.nombre} style={{ width: '100%' }} />
+            <Typography variant="h6">{producto.descripcion}</Typography>
+            <Typography variant="body1">Precio: ${producto.precio}</Typography>
+            <Typography variant="body2">Ubicación: {producto.ubicacion}</Typography>
+            <Chip label={producto.categoria.nombre} />
+        </Container>
     )
-}
+};
 
-export default ProductoAleatorio;
+export default DetalleProducto;
