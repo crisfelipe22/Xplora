@@ -1,4 +1,4 @@
-package com.backend.dto.salida.Categoria;
+package com.backend.dto;
 
 import com.backend.entity.PaqueteExperiencia;
 

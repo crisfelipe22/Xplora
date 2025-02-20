@@ -1,7 +1,7 @@
 package com.backend.controller;
 
-import com.backend.dto.entada.Categoria.PaqueteExperienciaEntradaDto;
-import com.backend.dto.salida.Categoria.PaqueteExperienciaSalidaDto;
+import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.PaqueteExperienciaService;
