@@ -7,12 +7,16 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
+import { useMediaQuery } from "@mui/material";
 
 const CardDetalleProducto = ({product}) =>{
     const [openGallery, setOpenGallery] = useState(false);
     const handleOpenGallery = () => setOpenGallery(true);
     const handleCloseGallery = () => setOpenGallery(false);
 
+    const isTablet = useMediaQuery("(max-width:900px)");
+    const isMobile = useMediaQuery("(max-width:412px)");
+    const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
 
     //caracteristicas provisorias
@@ -41,7 +45,7 @@ const CardDetalleProducto = ({product}) =>{
                 <div className={styles.imagenContainer}>
                     <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
                     <div className={styles.imgContainer}>
-                        {imagenArray.slice(1, 5).map((img, index) => (
+                        {imagenArray.slice(1, numImages).map((img, index) => (
                             <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
                         ))}
                     </div>
