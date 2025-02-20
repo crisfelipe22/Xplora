@@ -1,4 +1,4 @@
-package com.backend.dto.entada.Categoria;
+package com.backend.dto.entada;
 
 import com.backend.entity.PaqueteExperiencia;
 import io.swagger.v3.oas.annotations.media.Schema;
