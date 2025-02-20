@@ -121,6 +121,9 @@ const AddProductForm = () => {
         precio: Number(product.precio), 
         imagen: product.imagen.filter((img) => img.status === "Completado" && img.url)
         .map((img) => img.url).join(','), 
+        duracion: '30 min',
+        fecha_experiencia: "2026-02-19T12:00:00",
+        id_categoria: 1,
     };
     
     const subirImagenAlServidor = async (archivo) => {
@@ -150,11 +153,11 @@ const AddProductForm = () => {
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", productFormatoEnvio)
             //Borrar esto cuando se tenga endpoint bbdd
-            resetState()
-            setExito(true)
-            setTimeout(() => {
-                setExito(false);
-            }, 3000);
+            // resetState()
+            // setExito(true)
+            // setTimeout(() => {
+            //     setExito(false);
+            // }, 3000);
             //borrar hasta aquí
 
             //llamada a POST

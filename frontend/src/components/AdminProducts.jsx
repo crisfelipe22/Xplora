@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import {useState, useEffect, React} from 'react';
+import axios from 'axios';
 import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow } from "@mui/material";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
@@ -9,13 +10,13 @@ import AdminLayout from "./AdminLayout";
 
 const AdminProduct = () => {
     //Suponiendo el arreglo de objetos por ahora
-    const products = [
-        {id: 1, nombre: 'Cena para dos'},
-        {id: 2, nombre: 'Noche en el hotel Tequendama'},
-        {id: 3, nombre: 'Desayuno sorpresa'}
-    ]
+    // const products = [
+    //     {id: 1, nombre: 'Cena para dos'},
+    //     {id: 2, nombre: 'Noche en el hotel Tequendama'},
+    //     {id: 3, nombre: 'Desayuno sorpresa'}
+    // ]
     //llamado GET
-    /*
+    
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const AdminProduct = () => {
 
         fetchProducts();
     }, []);
-    */
+   
 
     return (
         <AdminLayout>
