@@ -73,11 +73,11 @@ public class GlobalExceptionHandler {
         return mensaje;
     }
 
-    @ExceptionHandler({Exception.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> manejarGeneralException(Exception exception) {
-        Map<String, String> mensaje = new HashMap<>();
-        mensaje.put("mensaje: ", "Ha ocurrido un error inesperado: " + exception.getMessage());
-        return mensaje;
-    }
+    // @ExceptionHandler({Exception.class})
+    // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    // public Map<String, String> manejarGeneralException(Exception exception) {
+    //     Map<String, String> mensaje = new HashMap<>();
+    //     mensaje.put("mensaje: ", "Ha ocurrido un error inesperado: " + exception.getMessage());
+    //     return mensaje;
+    // }
 }
