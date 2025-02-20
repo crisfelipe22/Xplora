@@ -162,7 +162,7 @@ const AddProductForm = () => {
 
             //llamada a POST
             try {
-                const response = await axios.post('http://localhost:8080/api/paquete-experiencia', productFormatoEnvio, {
+                const response = await axios.post('/api/paquete-experiencia', productFormatoEnvio, {
                     headers: {
                         "Content-Type": "application/json"
                     }

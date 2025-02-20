@@ -16,12 +16,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/paquete-experiencia")
+@CrossOrigin
 public class PaqueteExperienciaController {
 
     @Autowired
     private PaqueteExperienciaService paqueteExperienciaService;
 
     @PostMapping
+    // @CrossOrigin
     public ResponseEntity<PaqueteExperienciaSalidaDto> agregarPaqueteExperiencia(@RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
         PaqueteExperienciaSalidaDto nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperienciaEntradaDto);
         return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);

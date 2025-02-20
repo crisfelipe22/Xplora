@@ -22,7 +22,7 @@ const AdminProduct = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/paquete-experiencia");
+                const response = await axios.get("/api/paquete-experiencia");
                 setProducts(response.data);
             } catch (error) {
                 console.error("Error al obtener los productos:", error);
