@@ -9,11 +9,6 @@ const GaleriaImgProducto = ({ open, close, imagen }) => {
 
     const imagenArray = imagen ? imagen.split(',').map(url => url.trim()) : [];
 
-    //las imagenes pasan por parámetro desde detail
-    console.log(imagenArray)
-    console.log("tipo:" + typeof imagenArray)
-    console.log(imagenArray[0])
-
     return (
         <Dialog open={open} onClose={close}>
             <DialogContent>

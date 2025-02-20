@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Container, Grid2, Typography, Chip, List, ListItem, ListItemIcon, Card, CardContent, Button, Rating, TextField, IconButton } from '@mui/material';
+import { Container, Grid2, Typography, Chip, List, ListItem, ListItemIcon, Card, CardContent, Button, Rating, TextField, IconButton, Box } from '@mui/material';
 import styles from "../styles/DetalleProducto.module.css";
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -46,33 +46,34 @@ const CardDetalleProducto = ({product}) =>{
                         ))}
                     </div>
                 </div>
-                <Typography variant="body2" className={styles.seeAllImages} onClick={handleOpenGallery}>
-                        VER TODAS LAS IMÁGENES
-                </Typography>
+                <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
             </div>
 
-            <div className={styles.seccionRating}>
-                <Chip label={product.categoria.nombre} className={styles.chip} />
-                <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
-            </div>
+            <Box className={styles.contenedorDetalles}> 
+                <Box className={styles.contenedorDos}>
+                    <div className={styles.seccionRating}>
+                        <Chip label={product.categoria.nombre} className={styles.chip} />
+                        <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
+                    </div>    
+                    <List dense>
+                        {caracteristicas.map((item, index) => (
+                            <ListItem key={index} className={styles.listItem}>
+                                <ListItemIcon className={styles.listIcon}>
+                                    <CheckIcon fontSize="small" />
+                                </ListItemIcon>
+                                <Typography variant="body1">{item}</Typography>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>                 
 
-            <Card className={styles.cardPrecio}>
-                <Typography variant="h5" className={styles.price}>${product.precio.toLocaleString()}</Typography>
-                <TextField type="date" label="Elige fecha" className={styles.datePicker} />
-                <Button variant="contained" className={styles.botonComprar}>COMPRAR EXPERIENCIA</Button>
-            </Card>
-
-            <List dense>
-                {caracteristicas.map((item, index) => (
-                    <ListItem key={index} className={styles.listItem}>
-                        <ListItemIcon className={styles.listIcon}>
-                            <CheckIcon fontSize="small" />
-                        </ListItemIcon>
-                        <Typography variant="body1">{item}</Typography>
-                    </ListItem>
-                ))}
-            </List>
-
+                <Card className={styles.cardPrecio}>
+                    <Typography variant="h5" className={styles.precio}>${product.precio.toLocaleString()}</Typography>
+                    <TextField type="date" label="Elige fecha" className={styles.datePicker} />
+                    <Button variant="contained" className={styles.botonComprar}>COMPRAR EXPERIENCIA</Button>
+                    <Typography variant="h5" className={styles.preguntaRegalo}>¿TE HICIERON ESTE REGALO?</Typography>
+                </Card>
+            </Box>            
             <GaleriaImgProducto open={openGallery} close={handleCloseGallery} imagen={product.imagen}/>
         </Container>
     )
