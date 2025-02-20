@@ -6,13 +6,16 @@ import Home from "./pages/Home";
 import Admin from "./pages/Admin"; 
 import CssBaseline from '@mui/material/CssBaseline';
 // import './App.css'
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,  useLocation } from "react-router-dom";
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
 import DetalleProducto from "./pages/DetalleProducto";
 
 
 function App() {
+    const location = useLocation();
+    const esRutaAdmin = location.pathname.startsWith("/admin");
+
   return (
     <>
       <CssBaseline />
@@ -25,8 +28,8 @@ function App() {
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
         <Route path="/detalle-producto/:idPaqueteExperiencia" element={<DetalleProducto />} />
       </Routes>
-      <Footer />
-        
+      {!esRutaAdmin && <Footer />}
+      
     </>
   );
 }
