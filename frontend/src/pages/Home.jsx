@@ -4,7 +4,7 @@ import "../styles/Home.css"; // Import styles
 import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import BeachAccessFilled from '@mui/icons-material/BeachAccess';
 import CalendarTodayFilled from '@mui/icons-material/CalendarToday';
-import ProductoAleatorio from "../components/productoAleatorio";
+import ProductoAleatorio from "../components/ProductoAleatorio";
 
 
 const Home = () => {
