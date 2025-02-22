@@ -127,11 +127,7 @@ const Home = () => {
           </Button>
         </Box>
       </Container>
-      <section className="categories">
-        <p>Categories placeholder</p>
-      </section>
 
-        {/* <Container> */}
         <Container sx={{padding:"0px"}}>
           <Typography variant="h5" className="titulo-recomendados" >
             Lo que nuestros Xplorers recomiendan

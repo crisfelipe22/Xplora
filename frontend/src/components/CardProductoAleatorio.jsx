@@ -9,10 +9,10 @@ const CardProductoAleatorio = ({product}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
     const imagenUrl =  imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
     //suponiendo raiting por ahora
-    const rating = product.rating ?? Math.floor(Math.random() * 5) + 1;
+    const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
     return (
-        <Link to={ `/detalle-producto/${product.idPaqueteExperiencia}`} style={{ textDecoration: 'none' }}>
+        <Link to={ `/detalle-producto/${product.id_paquete_experiencia}`} style={{ textDecoration: 'none' }}>
             <Card className={styles.card}>
                 <CardMedia
                     component="img"

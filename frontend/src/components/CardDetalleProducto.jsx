@@ -30,13 +30,13 @@ const CardDetalleProducto = ({product}) =>{
         'Sesión de stand up de kayak en la laguna'
     ]
     //simulando raiting
-    const rating = product.rating ?? Math.floor(Math.random() * 5) + 1;
+    const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
     return (
         <Container className={styles.container}>
             <div className={styles.detalleSuperior}>
                 <div className={styles.tituloVolver}>
-                    <IconButton component={Link} to="/" className={styles.backButton}>
+                    <IconButton component={Link} to="/admin/productos" className={styles.backButton}>
                         <ArrowBackIcon /> VOLVER ATRÁS
                     </IconButton>
                     <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
@@ -56,7 +56,7 @@ const CardDetalleProducto = ({product}) =>{
             <Box className={styles.contenedorDetalles}> 
                 <Box className={styles.contenedorDos}>
                     <div className={styles.seccionRating}>
-                        <Chip label={product.categoria.nombre} className={styles.chip} />
+                        {/* <Chip label={product.categoria.nombre} className={styles.chip} /> */}
                         <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
                     </div>    
                     <List dense>

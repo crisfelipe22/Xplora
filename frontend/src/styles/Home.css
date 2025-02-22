@@ -25,7 +25,7 @@ div.search-bar {
 .search-bar p {
   color: #000;
   font-feature-settings: 'liga'off, 'clig'off;
-  font-family: var(--fontFamily, Roboto);
+  font-family: var(--fontFamily, "Roboto");
   font-size: 24px;
   font-style: normal;
   font-weight: var(--fontWeightMedium, 400);
@@ -58,7 +58,7 @@ div.search-bar {
   font-feature-settings: 'liga'off, 'clig'off;
 
   /* typography/overline */
-  font-family: var(--fontFamily, Roboto);
+  font-family: var(--fontFamily, "Roboto");
   font-size: var(--font-size-075-rem, 12px);
   font-style: normal;
   font-weight: var(--fontWeightRegular, 400);

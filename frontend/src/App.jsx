@@ -26,7 +26,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/productos" element={<Products />} />
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
-        <Route path="/detalle-producto/:idPaqueteExperiencia" element={<DetalleProducto />} />
+        <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
       
