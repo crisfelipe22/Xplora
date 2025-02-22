@@ -7,31 +7,92 @@ body {
 }
 
 .home-container {
-  padding-top: 60px;
+  padding-top: 64px ;
+  padding-bottom: 128px ;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: #FFF;
   display: flex;
   flex-direction: column;
-  height: calc(100vh);
   overflow: auto;
   width: 100%;
-  color: black;
 }
 
-.search-bar, .categories, .suggestions {
-  padding: 20px;
-  border-bottom: 1px solid #ddd;
+div.search-bar {
+  padding: 38px 62px 28px 0px;
 }
 
-.search-bar {
-  background: #f3f3f3;
-  height: 80px;
+.search-bar p {
+  color: #000;
+  font-feature-settings: 'liga'off, 'clig'off;
+  font-family: var(--fontFamily, "Roboto");
+  font-size: 24px;
+  font-style: normal;
+  font-weight: var(--fontWeightMedium, 400);
+  line-height: 136%;
+  /* 32.64px */
+  letter-spacing: 0.15px;
 }
 
-.categories {
-  background: #e6e6e6;
-  flex: 1;
+.image_list {
+  display: none;
+  height: 335px;
+  flex-basis: 60%; 
+  padding: 0px 50px; 
+  line-height: 0;
 }
 
-.suggestions {
-  background: #d9d9d9;
-  flex: 1;
+.image_list img {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.search-bar label {
+  color: var(--Primary, #6239E6);
+
+}
+
+.search-bar .subtext {
+  text-transform: uppercase;
+  color: var(--Primary, #6239E6);
+  font-feature-settings: 'liga'off, 'clig'off;
+
+  /* typography/overline */
+  font-family: var(--fontFamily, "Roboto");
+  font-size: var(--font-size-075-rem, 12px);
+  font-style: normal;
+  font-weight: var(--fontWeightRegular, 400);
+  /* line-height: 266%; */
+  /* 31.92px */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.search-bar .search-inputs {
+  /* margin:  */
+  color: var(--Primary, #6239E6);
+
+}
+
+form fieldset {
+  /* margin:  */
+  color: var(--Primary, #6239E6) !important;
+  border: 1px solid #6239E6 !important;
+  border-radius: 4px !important;
+}
+
+form input {
+  color: rgba(0, 0, 0, 0.38) !important;
+}
+
+form>button {
+  margin-top: 16px !important;
+  background-color: #6239E6 !important;
+}
+
+.titulo-recomendados {
+  font-size: 1.8rem !important;
+  color: #333;
+  text-align: left;
+  margin-bottom: 20px !important;
 }

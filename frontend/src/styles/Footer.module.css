@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Anta&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  /* position: fixed; */
+  /* bottom: 0; */
+  /* left: 0; */
   width: 100%;
   background-color: #F2EFFD;
   color: #808080;
@@ -15,7 +15,6 @@
 .footer__brand {
   display: flex;
   align-items: center;
-  margin-bottom:10px;
   text-decoration: none;
 }
 
@@ -45,6 +44,7 @@
 }
 
 .footer__disclaimer {
-  text-align: center;
-  width: 100%;
+  text-align: left;
+  align-self: center;
+  /* width: 100%; */
 }

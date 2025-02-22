@@ -1,7 +1,12 @@
 package com.backend.controller;
 
+import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
 import com.backend.entity.PaqueteExperiencia;
+import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.PaqueteExperienciaService;
+import jakarta.validation.Valid;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,25 +16,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/paquete-experiencia")
+@CrossOrigin
 public class PaqueteExperienciaController {
 
     @Autowired
     private PaqueteExperienciaService paqueteExperienciaService;
 
     @PostMapping
-    public ResponseEntity<?> agregarPaqueteExperiencia(@RequestBody PaqueteExperiencia paqueteExperiencia) {
-        try {
-            // Llamar al servicio para agregar el paquete de experiencia
-            PaqueteExperiencia nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperiencia);
-            return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            // En caso de error (por ejemplo, si el nombre ya está en uso)
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            // Para otros errores generales
-            return new ResponseEntity<>("Ocurrió un error al agregar el paquete de experiencia", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    // @CrossOrigin
+    public ResponseEntity<PaqueteExperienciaSalidaDto> agregarPaqueteExperiencia(@RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
+        PaqueteExperienciaSalidaDto nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperienciaEntradaDto);
+        return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PaqueteExperienciaSalidaDto> obtenerPaqueteExperienciaPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+        PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorId(id);
+        return new ResponseEntity<>(paqueteExperienciaSalidaDto, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PaqueteExperienciaSalidaDto> eliminarPaqueteExperiencia(@PathVariable(name = "id") Long id) throws ResourceNotFoundException, BadRequestException {
+        PaqueteExperienciaSalidaDto paqueteEliminado =paqueteExperienciaService.eliminarPaqueteExperiencia(id);
+        return new ResponseEntity<>(paqueteEliminado, HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PaqueteExperienciaSalidaDto> actualizarPaqueteExperiencia(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws ResourceNotFoundException, BadRequestException {
+        PaqueteExperienciaSalidaDto paqueteActualizado = paqueteExperienciaService.actualizarPaqueteExperiencia(id, paqueteExperienciaEntradaDto);
+        return new ResponseEntity<>(paqueteActualizado, HttpStatus.ACCEPTED);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<PaqueteExperiencia>> obtenerTodosLosPaquetes() {

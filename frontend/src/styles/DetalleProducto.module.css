@@ -1,0 +1,250 @@
+.container {
+    padding: 2rem;
+    margin-top: 50px;
+    min-height: 100vh;
+}
+
+.detalleSuperior {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tituloVolver {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.imagenContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.mainImage {
+    width: 50%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.imgContainer {
+    display: grid;
+    width: 50%;
+    height: 400px;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    padding-left: 1%;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    height: calc(400px / 2 - 5px)
+}
+
+.seeAllImages {
+    color: #7B3FF6 !important;
+    background: transparent !important;
+    border: 1px solid #7B3FF6 !important;
+    font-size: x-small !important;
+    font-weight: bold !important;
+    width: auto !important;
+    padding: 6px 12px !important;
+    margin-left: auto !important;
+}
+
+.seeAllImages:hover {
+    color: #3f51b5;
+}
+
+.backButton{
+    color: #6239E6 !important;
+    font-size: small !important;
+    border-radius: 2px !important;
+    font-weight: 500;
+}
+
+.backButton svg{
+    padding-right: 7%;
+}
+
+.seccionRating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}
+
+.chip {
+    background-color: #6239E6 !important;
+    color: white !important;
+}
+
+.rating {
+    font-size: large !important;
+    border-left: 1px solid #ccc;
+    margin-right: 10%;
+    padding-left: 2%;
+}
+
+.cardPrecio {
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !important;
+    background-color: #F2EFFD !important;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-around;
+    flex: 1;
+    max-width: 30%;
+    padding: 30px;
+    margin-top: 6%;
+    height: 350px;
+}
+
+.precio {
+    font-size: 1.8rem !important;
+    font-weight: 500 !important;
+    color: #333;
+    text-align: left;
+    margin-bottom: 5% !important;
+}
+
+.datePicker {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.botonComprar {
+    margin-top: 15px;
+    background-color: #6239E6 !important;
+    color: white !important;
+    width: 100%;
+    font-size: small !important;
+    padding: 10px 0% !important;
+}
+
+.botonComprar:hover {
+    background-color: #2E1F5E !important;
+}
+
+.caracteristicas {
+    flex: 1;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+}
+
+.listIcon {
+    color: #4caf50;
+}
+
+.contenedorDetalles{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+}
+
+.contenedorDos{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    max-width: 62%;
+}
+
+.datePicker > label{
+    transform: translate(14px, -12px) scale(1) !important;
+    background-color: #f5f0ff;
+    color: black;
+    padding: 0 4px;
+    font-size: 14px;
+}
+
+.datePicker:hover{
+    border-color: #7c3aed !important; 
+    border-width: 2px !important;
+}
+
+.preguntaRegalo{
+    font-size: small !important;
+    color: #2E1F5E !important;
+    font-weight: 600 !important;
+}
+
+@media (max-width: 900px) { 
+    .tituloVolver{
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .backButton{
+        margin-left: 80% !important;
+    }
+
+    .mainImage {
+        width: 60%;
+        height: 300px;
+    }
+
+    .imgContainer {
+        width: 40%;
+        height: 300px;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .img{
+        height: calc(300px / 2 - 5px)
+    }
+
+    .contenedorDetalles{
+        flex-direction: column;
+    }
+
+    .contenedorDos{
+        max-width: 100%;
+        margin-top: 3%;
+    }
+
+    .cardPrecio{
+        margin: 0 30%;
+        max-width: 100%;
+    }
+
+    .precio, .datePicker, .botonComprar{
+        margin-bottom: 10% !important;
+    }
+}
+
+@media (max-width: 900px){
+    .backButton{
+        margin-left: 65% !important;
+        font-size: xx-small !important;
+    }
+    .tituloVolver h3{
+        font-size: 1.5em;
+        gap: 0;
+    }
+    .mainImage {
+        width: 100%;
+        height: 100%;
+    }
+
+    .cardPrecio{
+        margin: 0 10%;
+    }
+}
