@@ -19,7 +19,7 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <Header />
+      {!esRutaAdmin && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
