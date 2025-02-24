@@ -23,7 +23,7 @@ Si no los tienes, descárgalos desde [aqui](https://nodejs.org/). Una vez esté 
 
 ### 2. MySQL
 
-La aplicación usa MySQL  como base de datos. Para comprobar si MySQL Server está instalado, ejecuta:
+La aplicación usa MySQL como base de datos. Para comprobar si MySQL está instalado, ejecuta:
 
 ```sh
 mysql --version
