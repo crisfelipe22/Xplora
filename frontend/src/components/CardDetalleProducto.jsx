@@ -56,7 +56,7 @@ const CardDetalleProducto = ({product}) =>{
             <Box className={styles.contenedorDetalles}> 
                 <Box className={styles.contenedorDos}>
                     <div className={styles.seccionRating}>
-                        {<Chip label={product.categoria.nombre} className={styles.chip} />}
+                        {/*<Chip label={product.categoria.nombre} className={styles.chip} />*/}
                         <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
                     </div>    
                     <List dense>
