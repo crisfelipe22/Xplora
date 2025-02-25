@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -21,29 +21,36 @@ const AddProductForm = () => {
     const [errores, setErrores] = useState({})
     const [exito, setExito] = useState(false)
 
-    const categorias = [{
+    /*const categorias = [{
         "id_categoria": 1,
         "nombre": "Aventura y deporte"
         }, 
         {"id_categoria": 2,
         "nombre": 'Bienestar y relajación' }  ]
+        */
     //HABRÍA QUE RECIBIR LAS CATEGORÍAS CON UN ENDPOINT
-    /*
     const [categorias, setCategorias] = useState([]);
 
     useEffect(() => {
         const obtenerCategorias = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/categorias");
-                setCategorias(response.data); 
+                const response = await axios.get("http://localhost:8080/api/categoria");
+                const categoriasTransformadas = response.data.map(cat => ({
+                    id_categoria: cat.idCategoria, // Cambia la propiedad
+                    nombre: cat.nombre
+                }));
+                setCategorias(categoriasTransformadas); 
+                console.log(response.data)
             } catch (error) {
                 console.error("Error al obtener las categorías:", error);
             }
         };
 
         obtenerCategorias();
+        
     }, []);
-    */
+
+ 
 
     const handleChange = (e) => {
         const {name, value} = e.target
@@ -123,7 +130,7 @@ const AddProductForm = () => {
         .map((img) => img.url).join(','), 
         duracion: '30 min',
         fecha_experiencia: "2026-02-19T12:00:00",
-        id_categoria: 1,
+        id_categoria: Number(product.id_categoria)
     };
     
     const subirImagenAlServidor = async (archivo) => {
