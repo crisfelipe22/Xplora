@@ -1,7 +1,9 @@
 package com.backend.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +16,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private boolean isApiRequest(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/");
+    }
+
     @ExceptionHandler({ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> manejarResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
@@ -75,9 +83,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> manejarGeneralException(Exception exception) {
-        Map<String, String> mensaje = new HashMap<>();
-        mensaje.put("mensaje: ", "Ha ocurrido un error inesperado: " + exception.getMessage());
-        return mensaje;
+    public ResponseEntity<?> manejarGeneralException(Exception exception, HttpServletRequest request) {
+        if (isApiRequest(request)) {
+            Map<String, String> mensaje = new HashMap<>();
+            mensaje.put("mensaje", "Ha ocurrido un error inesperado: " + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensaje);
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/error").build();
     }
+
 }

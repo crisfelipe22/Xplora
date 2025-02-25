@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class PaqueteExperienciaSalidaDto {
 
-    private Long id_paquete_experiencia;
+    private Long idPaqueteExperiencia;
     private String nombre;
 
     private String descripcion;
@@ -12,23 +12,20 @@ public class PaqueteExperienciaSalidaDto {
     private double precio;
 
     private String ubicacion;
-    private String imagen;
+    private String imagenUrl;
     private String duracion;
 
-    private Date fecha_experiencia;
+    private Date fechaExperiencia;
 
-    private Long id_categoria;
-
-    public PaqueteExperienciaSalidaDto(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia, Long id_categoria) {
-        this.id_paquete_experiencia = id_paquete_experiencia;
+    public PaqueteExperienciaSalidaDto(Long idPaqueteExperiencia, String nombre, String descripcion, double precio, String ubicacion, String imagenUrl, String duracion, Date fechaExperiencia) {
+        this.idPaqueteExperiencia = idPaqueteExperiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.ubicacion = ubicacion;
-        this.imagen = imagen;
+        this.imagenUrl = imagenUrl;
         this.duracion = duracion;
-        this.fecha_experiencia = fecha_experiencia;
-        this.id_categoria = id_categoria;
+        this.fechaExperiencia = fechaExperiencia;
     }
 
     public PaqueteExperienciaSalidaDto() {
@@ -66,12 +63,12 @@ public class PaqueteExperienciaSalidaDto {
         this.ubicacion = ubicacion;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public String getDuracion() {
@@ -82,27 +79,11 @@ public class PaqueteExperienciaSalidaDto {
         this.duracion = duracion;
     }
 
-    public Long getId_paquete_experiencia() {
-        return id_paquete_experiencia;
+    public Date getFechaExperiencia() {
+        return fechaExperiencia;
     }
 
-    public Date getFecha_experiencia() {
-        return fecha_experiencia;
-    }
-
-    public void setId_paquete_experiencia(Long id_paquete_experiencia) {
-        this.id_paquete_experiencia = id_paquete_experiencia;
-    }
-
-    public void setFecha_experiencia(Date fecha_experiencia) {
-        this.fecha_experiencia = fecha_experiencia;
-    }
-
-    public Long getId_categoria() {
-        return id_categoria;
-    }
-
-    public void setId_categoria(Long id_categoria) {
-        this.id_categoria = id_categoria;
+    public void setFechaExperiencia(Date fechaExperiencia) {
+        this.fechaExperiencia = fechaExperiencia;
     }
 }

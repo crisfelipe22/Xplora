@@ -1,17 +1,17 @@
 package com.backend.service;
 
-import com.backend.dto.entada.Categoria.PaqueteExperienciaEntradaDto;
-import com.backend.dto.salida.Categoria.PaqueteExperienciaSalidaDto;
+import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.entity.Categoria;
 import com.backend.exceptions.ConflictException;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.CategoriaRepository;
+import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ public class PaqueteExperienciaService {
     private static final Logger logger = LoggerFactory.getLogger(PaqueteExperienciaService.class);
 
     @Transactional
-    public PaqueteExperienciaSalidaDto agregarPaqueteExperiencia(PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
+    public PaqueteExperienciaSalidaDto agregarPaqueteExperiencia(@Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
         logger.info("Iniciando proceso para agregar un nuevo Paquete de Experiencia: {}", paqueteExperienciaEntradaDto.getNombre());
 
         PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto;

@@ -1,22 +1,35 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home"; 
-import Admin from "./components/AddProductForm"; 
+import Admin from "./pages/Admin"; 
 import CssBaseline from '@mui/material/CssBaseline';
+// import './App.css'
+import { Route, Routes,  useLocation } from "react-router-dom";
+import Products from './pages/Products';
+import AddProduct from './pages/AddProduct';
+import DetalleProducto from "./pages/DetalleProducto";
+
 
 function App() {
+    const location = useLocation();
+    const esRutaAdmin = location.pathname.startsWith("/admin");
+
   return (
     <>
       <CssBaseline />
-      <Header />
+      {!esRutaAdmin && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/productos" element={<Products />} />
+        <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
+        <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
       </Routes>
-      <Footer />
+      {!esRutaAdmin && <Footer />}
+      
     </>
   );
 }

@@ -1,7 +1,7 @@
 package com.backend.controller;
 
-import com.backend.dto.entada.Categoria.PaqueteExperienciaEntradaDto;
-import com.backend.dto.salida.Categoria.PaqueteExperienciaSalidaDto;
+import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.PaqueteExperienciaService;
@@ -16,12 +16,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/paquete-experiencia")
+@CrossOrigin
 public class PaqueteExperienciaController {
 
     @Autowired
     private PaqueteExperienciaService paqueteExperienciaService;
 
     @PostMapping
+    // @CrossOrigin
     public ResponseEntity<PaqueteExperienciaSalidaDto> agregarPaqueteExperiencia(@RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
         PaqueteExperienciaSalidaDto nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperienciaEntradaDto);
         return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);

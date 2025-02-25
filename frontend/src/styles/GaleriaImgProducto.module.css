@@ -1,0 +1,43 @@
+.galeria{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 50px;
+    
+}
+
+.contenedorImagen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.imagen {
+    width: 500px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 45px;
+}
+
+@media (max-width: 900px) {
+    .galeria {
+        grid-template-columns: 1fr;
+    }
+
+    .imagen{
+        width: 430px;
+        height: 340px;
+    }
+}
+
+@media (max-width: 412px) {
+    .galeria {
+        grid-template-columns: 1fr;
+    }
+
+    .imagen{
+        width: 250px;
+        height: 200px;
+    }
+}
+

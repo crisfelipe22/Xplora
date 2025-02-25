@@ -1,0 +1,89 @@
+.container{
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    width: 100vw;
+}
+
+.productContainer{
+    display: flex;
+    flex-grow: 1;
+    margin-top: 65px;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.titleLista{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.titleListaProductos{
+    color: #05030D;
+    font-size: small !important;
+    margin-bottom: 16px !important;
+}
+
+.titleProduct{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.botonAddProduct {
+    margin: 2% 0% 2% 70% !important;
+    background-color: #6239E6 !important;
+    color: white !important;
+    border-radius: 4px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    border: none !important;
+    padding: 6px 15px !important;
+}
+
+.botonAddProduct:hover{
+    background-color: #125a9e !important;
+}
+
+.tableContainer {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tableHeader {
+    font-weight: 600 !important;
+}
+
+.contenido{
+    border-radius: 8px;
+    background-color: #F2EFFD;
+}
+
+.botonEditar{
+    color: #7B3FF6 !important;
+    background: transparent !important;
+    border: 1px solid #7B3FF6 !important;
+    font-size: small !important;
+    font-weight: bold !important;
+    margin: 0 2% !important;
+}
+
+.botonEditar:hover{
+    background-color: #f5e6ff !important;
+}
+
+
+.botonEliminar{
+    color: #D32F2F !important;
+    background: transparent !important;
+    border: 1px solid #D32F2F !important;
+    font-size: small !important;
+    font-weight: bold !important;
+    margin: 0 2% !important;
+}
+
+.botonEliminar:hover{
+    background-color: #f5e6ff !important;
+}
