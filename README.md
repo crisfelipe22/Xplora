@@ -23,11 +23,13 @@ Si no los tienes, descárgalos desde [aqui](https://nodejs.org/). Una vez esté 
 
 ### 2. MySQL
 
-La aplicación usa MySQL como base de datos. Para comprobar si MySQL está instalado, ejecuta:
+La aplicación usa MySQL  como base de datos. Para comprobar si MySQL Server está instalado, ejecuta:
 
 ```sh
 mysql --version
 ```
+
+En caso de estar instalado, con este comando verás la versión. Para correr la aplicación usamos la versión 8.0
 
 Si no está instalado, sigue las instrucciones descritas [aqui](https://dev.mysql.com/downloads/installer/). Una vez esté lista la instalación agrega el programa a tu PATH 
 
@@ -101,6 +103,8 @@ cp -r dist/* ../src/main/resources/static/ # Pegar los archivos estáticos gener
 ```
 
 ## 3. Levantar el backend (Spring Boot)
+
+Asegúrate de que MySQL esté corriendo como servicio en tu equipo antes de iniciar la aplicación.
 
 Navega al directorio Xplora y ejecuta:
 
