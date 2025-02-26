@@ -5,32 +5,14 @@ import CardProductoAleatorio from './CardProductoAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
 
 const ProductoAleatorio = () => {
-  function shuffleExceptFirstTwo(array) {
-      array.sort((a, b) => a.id_paquete_experiencia - b.id_paquete_experiencia)
-      if (array.length <= 2) return array; // No need to shuffle if 2 or fewer elements
-
-      const fixedPart = array.slice(0, 2); // First two elements remain unchanged
-      const shufflePart = array.slice(2); // Elements to be shuffled
-
-      // Fisher-Yates shuffle for the remaining part
-      for (let i = shufflePart.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shufflePart[i], shufflePart[j]] = [shufflePart[j], shufflePart[i]];
-      }
-
-      // console.log([...fixedPart, ...shufflePart])
-      return [...fixedPart, ...shufflePart]; // Combine fixed and shuffled parts
-  }
-
     
     const [productosAleatorios, setProductosAleatorios] = useState([]);
 
     useEffect(() => {
         const obtenerProductosAleatorios = async () => {
         try {
-            const response = await axios.get("/api/paquete-experiencia/aleatorios?cantidad=12");
-            const shuffled = shuffleExceptFirstTwo(response.data)
-            setProductosAleatorios(shuffled);
+            const response = await axios.get("/api/paquete-experiencia/aleatorios?cantidad=6");
+            setProductosAleatorios(response.data);
         } catch (error) {
             console.error("Error obteniendo productos aleatorios:", error);
         }

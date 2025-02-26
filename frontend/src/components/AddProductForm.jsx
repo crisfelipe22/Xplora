@@ -21,14 +21,7 @@ const AddProductForm = () => {
     const [errores, setErrores] = useState({})
     const [exito, setExito] = useState(false)
 
-    /*const categorias = [{
-        "id_categoria": 1,
-        "nombre": "Aventura y deporte"
-        }, 
-        {"id_categoria": 2,
-        "nombre": 'Bienestar y relajación' }  ]
-        */
-    //HABRÍA QUE RECIBIR LAS CATEGORÍAS CON UN ENDPOINT
+
     const [categorias, setCategorias] = useState([]);
 
     useEffect(() => {
@@ -49,8 +42,6 @@ const AddProductForm = () => {
         obtenerCategorias();
         
     }, []);
-
- 
 
     const handleChange = (e) => {
         const {name, value} = e.target
@@ -159,13 +150,6 @@ const AddProductForm = () => {
         e.preventDefault()
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", productFormatoEnvio)
-            //Borrar esto cuando se tenga endpoint bbdd
-            // resetState()
-            // setExito(true)
-            // setTimeout(() => {
-            //     setExito(false);
-            // }, 3000);
-            //borrar hasta aquí
 
             //llamada a POST
             try {

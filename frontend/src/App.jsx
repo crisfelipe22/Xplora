@@ -10,6 +10,8 @@ import { Route, Routes,  useLocation } from "react-router-dom";
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
 import DetalleProducto from "./pages/DetalleProducto";
+import EditarProductoAdmin from "./pages/EditarProductoAdmin";
+
 
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
         <Route path="/admin/productos" element={<Products />} />
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
         <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
+        <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<EditarProductoAdmin />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
       
