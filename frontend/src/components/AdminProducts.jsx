@@ -9,24 +9,18 @@ import AdminLayout from "./AdminLayout";
 
 
 const AdminProduct = () => {
-    //Suponiendo el arreglo de objetos por ahora
-    // const products = [
-    //     {id: 1,id_paquete_experiencia: 1, nombre: 'Cena para dos'},
-    //     {id: 2,id_paquete_experiencia: 2, nombre: 'Noche en el hotel Tequendama'},
-    //     {id: 3,id_paquete_experiencia: 3, nombre: 'Desayuno sorpresa'}
-    // ]
     //llamado GET
 
     const handleDelete = (event) => {
-      const trElement = event.target.closest('tr');
-      const isConfirmed = window.confirm('¿Estás seguro de que quieres eliminar este registro?');
+        const trElement = event.target.closest('tr');
+        const isConfirmed = window.confirm('¿Estás seguro de que quieres eliminar este registro?');
 
-      if (isConfirmed) {
-        trElement.remove();
-      }
+        if (isConfirmed) {
+            trElement.remove();
+        }
     }
 
-    const handleEdit = () => {console.log("Editado")};
+    /*const handleEdit = () => {console.log("Editado")};*/
     
     const [products, setProducts] = useState([]);
 
@@ -42,7 +36,6 @@ const AdminProduct = () => {
 
         fetchProducts();
     }, []);
-   
 
     return (
         <AdminLayout>
@@ -88,16 +81,18 @@ const AdminProduct = () => {
                                         <TableCell>{product.nombre}</TableCell>
                                         <TableCell>
                                             <Link to={`/detalle-producto/${product.id_paquete_experiencia}`} underline="hover">
-                                              <Button variant="outlined" color="success">
-                                                  Ver
-                                              </Button>
+                                                <Button variant="outlined" color="success">
+                                                    Ver
+                                                </Button>
                                             </Link>
                                             <Button variant="outlined" className={styles.botonEliminar} onClick={handleDelete}>
                                                 Eliminar
                                             </Button>
-                                            <Button variant="outlined" className={styles.botonEditar} onClick={handleEdit}>
-                                                Editar
-                                            </Button>
+                                            <Link to={`/admin/productos/editar/${product.id_paquete_experiencia}`}  style={{ textDecoration: 'none' }}>
+                                                <Button variant="outlined" className={styles.botonEditar}>
+                                                    Editar
+                                                </Button>
+                                            </Link>
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -31,7 +31,6 @@ const DetalleProducto = () =>{
     if (!product) {
         return <div>Cargando...</div>;
     }
-   
 
     return (
         <CardDetalleProducto product={product} />
