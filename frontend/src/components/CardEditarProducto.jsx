@@ -4,7 +4,7 @@ import {React, useState, useEffect} from "react";
 import { useParams } from 'react-router-dom';
 import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
@@ -28,9 +28,10 @@ const CardEditarProducto = () =>{
                         throw new Error('Error al obtener el producto');
                     }
                     const data = await response.json();
-                    const imagenesArray = data.imagen ? data.imagen.split(",") : [];
+                    const imagenesArray = data.imagen ? data.imagen.split(",").map(url => ({ url, status: "Completado" })) : [];
+                    const precioString = data.precio.toString();
                 
-                    setProduct({ ...data, imagen: imagenesArray }) 
+                    setProduct({ ...data, precio: precioString, imagen: imagenesArray }) 
                 } catch (error) {
                     console.error('Hubo un problema con la solicitud de la API:', error);
                 }
@@ -162,6 +163,7 @@ const CardEditarProducto = () =>{
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("array imagen: "+ product.imagen)
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", productFormatoEnvio)
 
@@ -291,15 +293,28 @@ const CardEditarProducto = () =>{
                                         <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
                                     </Box>
 
-                                    {/*{product.imagen.length > 0 && (
-                                        
-                                    )}*/}
+                                    {product.imagen.length > 0 && (
+                                        <Box className={styles.imgPrevisualizar}>
+                                            {product.imagen.map((img, index) => (
+                                                <Box key={index} className={styles.imgBoxEditar}>
+                                                    <img src={img} alt={`Vista ${index + 1}`} className={styles.imgEditar} />
+                                                    <IconButton 
+                                                        className={styles.deleteIconEditar} 
+                                                        onClick={() => eliminarImagen(index)}
+                                                        size="small"
+                                                    >
+                                                        <CloseIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Box>
+                                            ))}
+                                        </Box>
+                                    )}
                                 </Box>
                             </Box>
 
                             <Box className={styles.botones}>
                                 <Button className={styles.botonAgregar} type="submit" variant="contained">
-                                    Editar Producto
+                                    Guardar Cambios
                                 </Button>
 
                                 <Button className={styles.botonCancelar} variant="outlined" color="secondary" >
