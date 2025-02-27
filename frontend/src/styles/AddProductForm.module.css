@@ -216,3 +216,10 @@
     font-size: 12px;
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
+
+.alertaExito {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 65px;
+}
