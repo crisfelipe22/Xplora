@@ -1,13 +1,11 @@
+
 # API de Paquetes de Experiencia
 
 Este documento describe los endpoints disponibles en la API
-## Base URL
 
+## Base URL
 La URL base para la API es:
 http://localhost:8080/api
-
-
----
 
 ## Endpoints
 
@@ -223,3 +221,107 @@ http://localhost:8080/api
 - Todas las fechas deben estar en formato ISO 8601 (YYYY-MM-DDTHH:MM:SSZ).
 - Precio debe ser un valor numérico positivo.
 - La ubicacion, imagen, duracion y descripcion son opcionales pero recomendados para una mejor experiencia del usuario.
+
+
+# API de Autenticación
+
+## Base URL
+
+La URL base para la API es:
+http://localhost:8080/api/auth
+
+## Endpoints
+
+### Registrar un usuario
+- **Método:** Post
+- **Endpoint:** `/registro`
+- **Descripción:** Permite crear una nueva cuenta de usuario en el sistema.
+- **Request Body:**
+
+```json
+{
+  "nombre": "Nombre Usuario",
+  "email": "usuario@ejemplo.com",
+  "contrasena": "Password123",
+  "telefono": 987654321,
+  "direccion": "Av. Ejemplo 123, Ciudad",
+  "id_rol": 1
+}
+```
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+  "mensaje": "Usuario registrado exitosamente",
+  "exito": true
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+
+
+### Inicio de Sesión
+- **Método:** Post
+- **Endpoint:** `/login`
+- **Descripción:** Permite a un usuario autenticarse y obtener un token JWT para acceder a recursos protegidos.
+- **Request Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "contrasena": "Password123"
+}
+```
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvQGVqZW1wbG8uY29tIiwiaWF0IjoxNzQwNjk4ODc5LCJleHAiOjE3NDA3ODUyNzl9.IHQTOlMxGoO-P8zFssBLVAoN42rztBUxOl5NaEdZgds",
+  "tipo": "Bearer",
+  "id": 2,
+  "nombre": "Nombre Usuario",
+  "email": "usuario@ejemplo.com",
+  "iniciales": "NU",
+  "rol": "Admin"
+}
+```
+**Errores Posibles:**
+
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- Credenciales inválidas: Cuando authenticationManager.authenticate() falla debido a credenciales incorrectas
+Spring Security normalmente lanza una BadCredentialsException
+- Usuario no encontrado: Cuando usuarioRepository.findByEmail() no encuentra el usuario después de la autenticación
+Tu código lanza un RuntimeException con el mensaje "Error: Usuario no encontrado."
+- Errores de validación: Cuando los campos no cumplen con las restricciones @NotBlank o @Email
+Spring Validation generaría errores de validación
+
+### Cierre de Sesión
+- **Método:** Post
+- **Endpoint:** `/logout`
+- **Headers:** `Authorization: Bearer {token}`
+- **Descripción:** Permite a un usuario cerrar su sesión.
+- **Request Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "contrasena": "Password123"
+}
+```
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "mensaje": "Sesión cerrada correctamente",
+  "exito": true
+}
+```
+**Errores Posibles:**
+
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+
+
+  **Notas:**
+- El token JWT generado tiene un tiempo de expiración.
+- Para acceder a recursos protegidos, se debe incluir el token en el header de autorización:
+CopyAuthorization: Bearer {token}
+- La seguridad está implementada mediante Spring Security y JWT.
