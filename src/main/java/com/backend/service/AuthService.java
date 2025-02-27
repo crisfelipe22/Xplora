@@ -55,6 +55,8 @@ public class AuthService {
         usuario.setDireccion(registroDTO.getDireccion());
         usuario.setFechaRegistro(new Date());
 
+        System.out.println("Guardando usuario: " + usuario); // 📌 Log antes de guardar
+
         // Buscar y asignar el rol
         Rol rol = rolRepository.findById(registroDTO.getRolId())
                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));

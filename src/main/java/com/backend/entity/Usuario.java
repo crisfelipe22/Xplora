@@ -41,8 +41,9 @@ public class Usuario {
     }
 
     // Constructor con campos
-    public Usuario(String nombre, String email, String contrasena, int telefono,
+    public Usuario(Long id_usuario, String nombre, String email, String contrasena, int telefono,
                    String direccion, Date fechaRegistro, Rol rol) {
+        this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.email = email;
         this.contrasena = contrasena;
