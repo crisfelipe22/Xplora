@@ -7,14 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WebController implements ErrorController {
     
     // Redirige todas las rutas que no tienen extensión de archivo al index
-    @RequestMapping(value = "/{path:[^\\.]*}")
+    @RequestMapping({"/{path:[^\\.]*}", "/error", "/admin/**", "/error", "detalle-producto/**"})
     public String redirect() {
-        return "forward:/index.html";
-    }
-    
-    // Maneja las rutas de error redirigiendo al index
-    @RequestMapping(value = "/error")
-    public String handleError() {
         return "forward:/index.html";
     }
 }

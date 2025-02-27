@@ -29,6 +29,8 @@ La aplicación usa MySQL como base de datos. Para comprobar si MySQL está insta
 mysql --version
 ```
 
+En caso de estar instalado, con este comando verás la versión. Para correr la aplicación usamos la versión 8.0
+
 Si no está instalado, sigue las instrucciones descritas [aqui](https://dev.mysql.com/downloads/installer/). Una vez esté lista la instalación agrega el programa a tu PATH 
 
 Asegúrate de que MySQL esté corriendo como servicio en tu equipo antes de iniciar la aplicación.
@@ -101,6 +103,8 @@ cp -r dist/* ../src/main/resources/static/ # Pegar los archivos estáticos gener
 ```
 
 ## 3. Levantar el backend (Spring Boot)
+
+Asegúrate de que MySQL esté corriendo como servicio en tu equipo antes de iniciar la aplicación.
 
 Navega al directorio Xplora y ejecuta:
 

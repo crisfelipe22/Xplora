@@ -11,6 +11,7 @@ const Header = () => {
       sx={{ padding: {tablet: "12px 24px" }}}
       className={styles.header}
       component="header"
+      data-testid="header"
     >
       <Link to="/" className={styles.header__brand}>
         <Box 
