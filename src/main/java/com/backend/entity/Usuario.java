@@ -4,8 +4,6 @@ import java.util.Date;
 import jakarta.persistence.Entity;
 
 
-import jakarta.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "usuario")
@@ -21,7 +19,7 @@ public class Usuario {
     @Column(nullable = false, length = 45, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false)
     private String contrasena;
 
     private int telefono;
@@ -33,7 +31,7 @@ public class Usuario {
     private Date fechaRegistro;
 
     @ManyToOne
-    @JoinColumn(name = "id_Rol", nullable = false)
+    @JoinColumn(name = "id_rol")
     private Rol rol;
 
     // Constructor vacío

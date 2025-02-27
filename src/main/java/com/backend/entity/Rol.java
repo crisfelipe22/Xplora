@@ -8,26 +8,19 @@ public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_Rol;
+    @Column(name="id_rol")
+    private Long id_rol;
 
-    @Column(length = 20)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    // Constructores
-    public Rol() {
-    }
-
-    public Rol(String nombre) {
-        this.nombre = nombre;
-    }
-
     // Getters y Setters
-    public Long getId_Rol() {
-        return id_Rol;
+    public Long getId_rol() {
+        return id_rol;
     }
 
-    public void setId_Rol(Long id_Rol) {
-        this.id_Rol = id_Rol;
+    public void setId_Rol(Long id_rol) {
+        this.id_rol = id_rol;
     }
 
     public String getNombre() {

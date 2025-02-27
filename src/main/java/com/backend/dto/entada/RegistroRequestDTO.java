@@ -28,7 +28,20 @@ public class RegistroRequestDTO {
     @Size(max = 100, message = "La dirección debe tener máximo 100 caracteres")
     private String direccion;
 
-    private Long rolId;
+    private Long id_rol;
+    
+        // Constructor con todos los atributos
+    public RegistroRequestDTO(String nombre, String email, String contrasena, int telefono, String direccion, Long id_rol) {
+      this.nombre = nombre;
+      this.email = email;
+      this.contrasena = contrasena;
+      this.telefono = telefono;
+      this.direccion = direccion;
+      this.id_rol = id_rol;
+    }
+
+    public RegistroRequestDTO() {
+    }
 
     // Getters y Setters
     public String getNombre() {
@@ -71,11 +84,11 @@ public class RegistroRequestDTO {
         this.direccion = direccion;
     }
 
-    public Long getRolId() {
-        return rolId;
+    public Long getId_rol() {
+        return id_rol;
     }
 
-    public void setRolId(Long rolId) {
-        this.rolId = rolId;
+    public void setId_Rol(Long id_rol) {
+        this.id_rol = id_rol;
     }
 }
