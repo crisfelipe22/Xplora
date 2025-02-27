@@ -69,8 +69,7 @@
 
 .textField{
     border-radius: 4px !important;
-    border: 1px solid #7c3aed !important; 
-    margin-top: 3% !important;
+    margin-top: 4% !important;
     
 }
 
@@ -169,4 +168,50 @@
 
 .botonAgregar:hover{
     background-color: #125a9e !important;
+}
+
+.imgPrevisualizar{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.imgBoxEditar{
+    position: relative;
+    display: inline-block;
+}
+
+.imgEditar{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.deleteIconEditar{
+    position: absolute !important;
+    top: 3px;
+    right: 4px;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    color: #ffffff !important;
+    padding: 4px !important;
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: blur(2px);
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.deleteIconEditar:hover {
+    background-color: rgba(220, 20, 60, 0.8) !important; /* Rojo oscuro */
+    transform: scale(1.1);
+}
+
+.deleteIconEditar svg{
+    font-size: 12px;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
