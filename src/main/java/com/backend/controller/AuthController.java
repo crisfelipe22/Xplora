@@ -6,24 +6,25 @@ import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
 import com.backend.service.AuthService;
 import jakarta.validation.Valid;
+
+import com.backend.exceptions.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class AuthController {
 
-    private final AuthService authService;
+    @Autowired
+    private AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    @PostMapping("/registro")
-    public ResponseEntity<MensajeResponseDTO> registrarUsuario(@Valid @RequestBody RegistroRequestDTO registroDTO) {
-        MensajeResponseDTO mensaje = authService.registrarUsuario(registroDTO);
-        return ResponseEntity.ok(mensaje);
+    @PostMapping("/registro") public ResponseEntity<MensajeResponseDTO> registrarUsuario(@RequestBody @Valid RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
+      MensajeResponseDTO mensaje = authService.registrarUsuario(registroDTO);
+      HttpStatus status = mensaje.isExito() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+      return new ResponseEntity<>(mensaje, status);
     }
 
     @PostMapping("/login")

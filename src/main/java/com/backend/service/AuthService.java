@@ -6,27 +6,38 @@ import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
 import com.backend.entity.Rol;
 import com.backend.entity.Usuario;
+import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.RolRepository;
 import com.backend.repository.UsuarioRepository;
 import com.backend.security.jwt.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 @Service
 public class AuthService {
 
+
+    @Autowired
     private final UsuarioRepository usuarioRepository;
+
+    @Autowired
     private final RolRepository rolRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public AuthService(UsuarioRepository usuarioRepository,
                        RolRepository rolRepository,
@@ -40,7 +51,13 @@ public class AuthService {
         this.jwtUtils = jwtUtils;
     }
 
-    public MensajeResponseDTO registrarUsuario(RegistroRequestDTO registroDTO) {
+    @Transactional
+    public MensajeResponseDTO registrarUsuario(RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
+      // Validar que el rol_id no sea nulo
+        if (registroDTO.getId_rol() == null) {
+          logger.error("El id_Rol es nulo en la solicitud");
+          return new MensajeResponseDTO("Error: El rol es requerido", false);
+        }
         // Verificar si el email ya existe
         if (usuarioRepository.existsByEmail(registroDTO.getEmail())) {
             return new MensajeResponseDTO("Error: El email ya está en uso", false);
@@ -55,15 +72,27 @@ public class AuthService {
         usuario.setDireccion(registroDTO.getDireccion());
         usuario.setFechaRegistro(new Date());
 
-        System.out.println("Guardando usuario: " + usuario); // 📌 Log antes de guardar
+        System.out.println("Guardando usuario: " + usuario.getNombre()); 
+        System.out.println("El rol_id es: " + registroDTO.getId_rol()); 
+        
+        
+        Rol rol = rolRepository.findById(registroDTO.getId_rol())
+                .orElseThrow(() -> {
+                    logger.error("Rol con ID {} no encontrado", registroDTO.getId_rol());
+                    return new ResourceNotFoundException("El Rol con ID " + registroDTO.getId_rol() + " no existe");
+                });
 
-        // Buscar y asignar el rol
-        Rol rol = rolRepository.findById(registroDTO.getRolId())
-                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
         usuario.setRol(rol);
+                      
+        System.out.println("Guardando usuario: " + usuario.getNombre()); 
 
         // Guardar en la base de datos
-        usuarioRepository.save(usuario);
+        try {
+          usuarioRepository.save(usuario);
+        } catch (Exception e) {
+          logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}",
+              usuario.getNombre(), e.getMessage(), e);
+        }
 
         return new MensajeResponseDTO("Usuario registrado exitosamente", true);
     }
