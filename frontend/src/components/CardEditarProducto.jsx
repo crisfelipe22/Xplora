@@ -4,7 +4,7 @@
 import {React, useState, useEffect} from "react";
 import { useNavigate } from "react-router";
 import { useParams } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
@@ -17,11 +17,18 @@ const CardEditarProducto = () =>{
     const {id_paquete_experiencia} = useParams()
     
     const [errores, setErrores] = useState({})
-    const [exito, setExito] = useState(false)
 
     const [product, setProduct] = useState()
     const [categorias, setCategorias] = useState([]);
     let navigate = useNavigate();
+
+    const [openAlertExito, setOpenAlertExito] = useState(false);
+
+    const handleCloseAlertExito = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertExito(false);
+    };
+
     //LLAMADO GET
     useEffect(() => {
             const fetchProductoEditar = async () => {
@@ -176,13 +183,11 @@ const CardEditarProducto = () =>{
 
             try {
                 await axios.put(`/api/paquete-experiencia/${id_paquete_experiencia}`, productFormatoEnvio);
-                    alert("Producto actualizado exitosamente");
-                    setExito(true)
+                    setOpenAlertExito(true)
                     setTimeout(() => {
-                        setExito(false);
+                        setOpenAlertExito(false)
                         navigate("/admin/productos")
                     }, 3000);
-                    // Redirige a la lista de productos
             } catch (error) {
                 console.error("Error al actualizar el producto:", error);
             }    
@@ -347,7 +352,16 @@ const CardEditarProducto = () =>{
                                     Cancelar
                                 </Button>
 
-                                {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto guardado con éxito!</Alert>}
+                                <Snackbar
+                                    open={openAlertExito}
+                                    autoHideDuration={3000}
+                                    onClose={handleCloseAlertExito}
+                                    anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                                >
+                                    <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
+                                        ¡Producto guardado con éxito!
+                                    </Alert>
+                                </Snackbar>
                             </Box>
                         </Box>
                     </Container>

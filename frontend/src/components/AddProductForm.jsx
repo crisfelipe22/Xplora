@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from "react"
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -19,8 +20,13 @@ const AddProductForm = () => {
     })
 
     const [errores, setErrores] = useState({})
-    const [exito, setExito] = useState(false)
-
+    const [openAlertExito, setOpenAlertExito] = useState(false);
+    let navigate = useNavigate();
+    
+    const handleCloseAlertExito = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertExito(false);
+    };
 
     const [categorias, setCategorias] = useState([]);
 
@@ -161,10 +167,11 @@ const AddProductForm = () => {
             
                 console.log("Producto agregado:", response.data);
                 resetState()
-                setExito(true)
+                setOpenAlertExito(true)
             
                 setTimeout(() => {
-                    setExito(false);
+                    setOpenAlertExito(false)
+                    navigate("/admin/productos")
                 }, 3000);
             } catch (error) {
                 console.error("Error al enviar el producto:", error);
@@ -331,7 +338,16 @@ const AddProductForm = () => {
                                 Cancelar
                             </Button>
 
-                            {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto agregado con éxito!</Alert>}
+                            <Snackbar
+                                open={openAlertExito}
+                                autoHideDuration={3000}
+                                onClose={handleCloseAlertExito}
+                                anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                            >
+                                <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
+                                    ¡Producto agregado con éxito!
+                                </Alert>
+                            </Snackbar>
                         </Box>
                     </Box>
                 </Container>
