@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {useState, useEffect, React} from 'react';
 import axios from 'axios';
-import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow } from "@mui/material";
+import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle,  } from "@mui/material";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import { Link } from 'react-router-dom';
@@ -10,18 +10,9 @@ import AdminLayout from "./AdminLayout";
 
 const AdminProduct = () => {
     //llamado GET
-
-    const handleDelete = (event) => {
-        const trElement = event.target.closest('tr');
-        const isConfirmed = window.confirm('¿Estás seguro de que quieres eliminar este registro?');
-
-        if (isConfirmed) {
-            trElement.remove();
-        }
-    }
-
-    /*const handleEdit = () => {console.log("Editado")};*/
-    
+    const [openDialog, setOpenDialog] = useState(false);
+    const [productAEliminar, setProductAEliminar] = useState(null);
+    const [openEliminadoExito, setOpenEliminadoExito] = useState(false);
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -33,9 +24,33 @@ const AdminProduct = () => {
                 console.error("Error al obtener los productos:", error);
             }
         };
+        
 
         fetchProducts();
     }, []);
+
+    const handleOpenDialog = (product) => {
+        setProductAEliminar(product);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleDelete = async () => {
+        if (!productAEliminar) return;
+
+        try {
+            await axios.delete(`/api/paquete-experiencia/${productAEliminar.id_paquete_experiencia}`);
+            setProducts(products.filter(p => p.id_paquete_experiencia !== productAEliminar.id_paquete_experiencia));
+            setOpenEliminadoExito(true);
+        } catch (error) {
+            console.error("Error al eliminar el producto:", error);
+        }
+
+        setOpenDialog(false);
+    };
 
     return (
         <AdminLayout>
@@ -85,7 +100,7 @@ const AdminProduct = () => {
                                                     Ver
                                                 </Button>
                                             </Link>
-                                            <Button variant="outlined" className={styles.botonEliminar} onClick={handleDelete}>
+                                            <Button variant="outlined" className={styles.botonEliminar} onClick={() => handleOpenDialog(product)}>
                                                 Eliminar
                                             </Button>
                                             <Link to={`/admin/productos/editar/${product.id_paquete_experiencia}`}  style={{ textDecoration: 'none' }}>
@@ -104,7 +119,26 @@ const AdminProduct = () => {
                 
             </Box>
         </Box>
-        
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>¿Eliminar producto?</DialogTitle>
+                <DialogContent>
+                    <p>¿Estás seguro de que deseas eliminar -- {productAEliminar?.nombre} -- ? Esta acción no se puede deshacer.</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">Cancelar</Button>
+                    <Button onClick={handleDelete} color="error">Eliminar</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* éxito */}
+            <Snackbar
+                open={openEliminadoExito}
+                autoHideDuration={3000}
+                onClose={() => setOpenEliminadoExito(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert severity="success">¡Producto eliminado con éxito!</Alert>
+            </Snackbar>
         
         </AdminLayout>
     );
