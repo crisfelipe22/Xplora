@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
 
 /* eslint-disable no-unused-vars */
 import {React, useState, useEffect} from "react";
+import { useNavigate } from "react-router";
 import { useParams } from 'react-router-dom';
 import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -19,6 +21,7 @@ const CardEditarProducto = () =>{
 
     const [product, setProduct] = useState()
     const [categorias, setCategorias] = useState([]);
+    let navigate = useNavigate();
     //LLAMADO GET
     useEffect(() => {
             const fetchProductoEditar = async () => {
@@ -159,6 +162,10 @@ const CardEditarProducto = () =>{
         id_categoria: Number(product.id_categoria)
     };
 
+    const handleCancel = () => {
+        navigate("/admin/productos");
+    };
+
     //LLAMADO PUT
     
     const handleSubmit = async (e) => {
@@ -167,14 +174,18 @@ const CardEditarProducto = () =>{
         if (validaciones()){
             console.log("Formulario exitoso, producto subido", productFormatoEnvio)
 
-            /*
             try {
                 await axios.put(`/api/paquete-experiencia/${id_paquete_experiencia}`, productFormatoEnvio);
                     alert("Producto actualizado exitosamente");
+                    setExito(true)
+                    setTimeout(() => {
+                        setExito(false);
+                        navigate("/admin/productos")
+                    }, 3000);
                     // Redirige a la lista de productos
             } catch (error) {
                 console.error("Error al actualizar el producto:", error);
-            }*/
+            }    
         } else {
             console.log("no se puede enviar el formulario",errores)
             return;
@@ -297,14 +308,29 @@ const CardEditarProducto = () =>{
                                         <Box className={styles.imgPrevisualizar}>
                                             {product.imagen.map((img, index) => (
                                                 <Box key={index} className={styles.imgBoxEditar}>
-                                                    <img src={img} alt={`Vista ${index + 1}`} className={styles.imgEditar} />
-                                                    <IconButton 
-                                                        className={styles.deleteIconEditar} 
-                                                        onClick={() => eliminarImagen(index)}
-                                                        size="small"
-                                                    >
-                                                        <CloseIcon fontSize="small" />
-                                                    </IconButton>
+                                                    {img.status === 'Cargando' ? (
+                                                        <Box className={styles.progressContainerEditar}>
+                                                            <LinearProgress 
+                                                            className={styles.barraProgreso}
+                                                            variant="indeterminate" 
+                                                            />
+                                                            <Typography variant="caption">Subiendo {img.progreso}</Typography>
+                                                        </Box>
+                                                    ): img.status === 'Fallido' ? (
+                                                        <span className={styles.imgText}>Error al subir</span>
+                                                    ) : (
+                                                        <Box>
+                                                            <img src={img.url} alt={`Vista ${index + 1}`} className={styles.imgEditar} />
+                                                            <IconButton 
+                                                                className={styles.deleteIconEditar} 
+                                                                onClick={() => eliminarImagen(index)}
+                                                                size="small"
+                                                            >
+                                                            <CloseIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </Box>
+                                                    )}
+                                                    
                                                 </Box>
                                             ))}
                                         </Box>
@@ -317,11 +343,11 @@ const CardEditarProducto = () =>{
                                     Guardar Cambios
                                 </Button>
 
-                                <Button className={styles.botonCancelar} variant="outlined" color="secondary" >
+                                <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={handleCancel} >
                                     Cancelar
                                 </Button>
 
-                                {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto modificado con éxito!</Alert>}
+                                {exito && <Alert severity="success" className={styles.mensajeExito}>¡Producto guardado con éxito!</Alert>}
                             </Box>
                         </Box>
                     </Container>
