@@ -34,9 +34,9 @@ http://localhost:8080/api
 **Respuesta Exitosa (201 Created):**
 ```json
 {
-"idPaqueteExperiencia": 5,
+"id_paquete_experiencia": 5,
 "categoria": {
-"idCategoria": 1,
+"id_categoria": 1,
 "nombre": "Aventura"
 },
 "nombre": "Aventura en la Montaña",
@@ -45,7 +45,7 @@ http://localhost:8080/api
 "ubicacion": "Andes, Chile",
 "imagen": "https://example.com/imagen.jpg",
 "duracion": "8 horas",
-"fechaExperiencia": "2025-03-15T10:00:00Z"
+"fecha_experiencia": "2025-03-15T10:00:00Z"
 }
 ```
 
@@ -66,9 +66,9 @@ http://localhost:8080/api
 
 [
 {
-"idPaqueteExperiencia": 5,
+"id_paquete_experiencia": 5,
 "categoria": {
-"idCategoria": 1,
+"id_categoria": 1,
 "nombre": "Aventura"
 },
 "nombre": "Aventura en la Montaña",
@@ -77,7 +77,7 @@ http://localhost:8080/api
 "ubicacion": "Andes, Chile",
 "imagen": "https://example.com/imagen.jpg",
 "duracion": "8 horas",
-"fechaExperiencia": "2025-03-15T10:00:00Z"
+"fecha_experiencia": "2025-03-15T10:00:00Z"
 }
 ]
 ```
@@ -91,18 +91,15 @@ http://localhost:8080/api
 ```json
 [
   {
-    "idPaqueteExperiencia": 3,
-    "categoria": {
-      "idCategoria": 2,
-      "nombre": "Relax"
-    },
+    "id_paquete_experiencia": 3,
+    "id_categoria": 2,
     "nombre": "Spa de Lujo",
     "descripcion": "Un día de relajación en un spa de 5 estrellas.",
     "precio": 200.00,
     "ubicacion": "Santiago, Chile",
     "imagen": "https://example.com/spa.jpg",
     "duracion": "5 horas",
-    "fechaExperiencia": "2025-04-10T14:00:00Z"
+    "fecha_experiencia": "2025-04-10T14:00:00Z"
   }
 ]
 ```
