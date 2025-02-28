@@ -59,10 +59,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth ->{
+                            auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia/**").permitAll();
+                            auth.requestMatchers(HttpMethod.POST, "/api/paquete-experiencia").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/paquete-experiencia/**").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.PUT, "/api/paquete-experiencia/**").hasRole("Administrador");
+                            auth.requestMatchers("/api/auth/**").permitAll()
+                                    .requestMatchers("/api/test/**").permitAll()
+                                    .anyRequest().authenticated();
+                        }
                 );
 
         http.authenticationProvider(authenticationProvider());
