@@ -1,8 +1,6 @@
 package com.backend.entity;
-import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "rol")
@@ -10,13 +8,26 @@ public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_rol")
     private Long id_rol;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    @OneToMany(mappedBy = "rol")
-    private List<Usuario> usuarios;
-
     // Getters y Setters
+    public Long getId_rol() {
+        return id_rol;
+    }
+
+    public void setId_Rol(Long id_rol) {
+        this.id_rol = id_rol;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
