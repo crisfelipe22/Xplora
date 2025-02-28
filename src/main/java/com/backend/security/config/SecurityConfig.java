@@ -59,9 +59,13 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .anyRequest().authenticated()
+                        auth.requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll() // Auth endpoints remain public
+                .requestMatchers("/api/test/**").permitAll() // Test endpoints remain public
+                .requestMatchers("/api/paquete-experiencia/**").permitAll() // Test endpoints remain public
+                .requestMatchers("/api/categoria/**").permitAll() // Test endpoints remain public
+                .requestMatchers("/api/**").authenticated() // All other API endpoints require auth
+                .anyRequest().permitAll() // Everything else is public
                 );
 
         http.authenticationProvider(authenticationProvider());
