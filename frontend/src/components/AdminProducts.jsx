@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {useState, useEffect, React} from 'react';
 import axios from 'axios';
-import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle,  } from "@mui/material";
+import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, TablePagination } from "@mui/material";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import { Link } from 'react-router-dom';
@@ -9,6 +9,9 @@ import AdminLayout from "./AdminLayout";
 
 
 const AdminProduct = () => {
+    const [pag, setPag] = useState(0);
+    const [columnPorPag, setColumnPorPag] = useState(5);
+
     //llamado GET
     const [openDialog, setOpenDialog] = useState(false);
     const [productAEliminar, setProductAEliminar] = useState(null);
@@ -90,7 +93,8 @@ const AdminProduct = () => {
                             </TableHead>
                             
                             <TableBody>
-                                {products.map((product) => (
+                                {products.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)                                
+                                .map((product) => (
                                     <TableRow key={product.id_paquete_experiencia} className={styles.tableRow}>
                                         <TableCell>{product.id_paquete_experiencia}</TableCell>
                                         <TableCell>{product.nombre}</TableCell>
@@ -114,6 +118,16 @@ const AdminProduct = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 15]}
+                        component="div"
+                        count={products.length}
+                        rowsPerPage={columnPorPag}
+                        page={pag}
+                        onPageChange={(event, newPage) => setPag(newPage)}
+                        onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
+                        labelRowsPerPage="Filas por página"
+                    />
 
                 </Box>
                 
