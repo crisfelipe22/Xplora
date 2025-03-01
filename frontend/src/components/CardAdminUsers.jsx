@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {useState, useEffect, React} from 'react';
-import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, TablePagination } from "@mui/material";
+import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, TablePagination, Select, MenuItem } from "@mui/material";
 import AdminLayout from "./AdminLayout";
-import { Link } from 'react-router-dom';
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 
@@ -10,18 +9,89 @@ const CardAdminUsers = () =>{
     const [pag, setPag] = useState(0);
     const [columnPorPag, setColumnPorPag] = useState(5);
 
-    const users = [
+    const [openDialog, setOpenDialog] = useState(false);
+    const [cambioRol, setCambioRol] = useState('');
+    const [usuarioSelect, setUsuarioSelect] = useState(null);
+
+    const [users, setUsers] = useState([
         {id: 1,
             nombre: 'Sara Mendoza',
             correo: 'sara@xplora.com',
-            rol: 'admin'
+            rol: 'Administrador'
         },
         {id: 2,
             nombre: 'Solymar Quiaro',
             correo: 'solymar@xplora.com',
-            rol: 'user'
-        }
-    ]
+            rol: 'Usuario'
+        },
+        {id: 3,
+            nombre: 'Sara Mendoza',
+            correo: 'sara@xplora.com',
+            rol: 'Administrador'
+        },
+        {id: 4,
+            nombre: 'Solymar Quiaro',
+            correo: 'solymar@xplora.com',
+            rol: 'Usuario'
+        },
+        {id: 5,
+            nombre: 'Sara Mendoza',
+            correo: 'sara@xplora.com',
+            rol: 'Administrador'
+        },
+        {id: 6,
+            nombre: 'Solymar Quiaro',
+            correo: 'solymar@xplora.com',
+            rol: 'Usuario'
+        },
+    ])
+
+    /*useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get("/api/usuarios");
+                setUsers(response.data);
+            } catch (error) {
+                console.error("Error al obtener los usuarios:", error);
+            }
+        };
+        
+
+        fetchUsers();
+    }, []);*/
+
+    const handleOpenDialog = (user, rol) => {
+        setCambioRol(rol);
+        setUsuarioSelect(user)
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setUsuarioSelect(null);
+    };
+
+    const handleChangeRol = async () =>{
+        if(!usuarioSelect) return;
+
+        setUsers(prevUsers =>
+            prevUsers.map(user => 
+                user.id === usuarioSelect.id ? { ...user, rol: cambioRol } : user
+        ));
+
+        setOpenDialog(false);
+
+        /*try {
+            await axios.put(`api/admin/${usuarioSelect.id}`, { rol: cambioRol });
+            
+            console.log(`Rol de ${usuarioSelect.nombre} actualizado a ${cambioRol}`);
+        } catch (error) {
+            console.error("Error al actualizar el rol", error);
+        }*/
+    }
+
+        
+
     return(
         <AdminLayout>
             <Box  className={styles.container}>
@@ -59,7 +129,14 @@ const CardAdminUsers = () =>{
                                         <TableCell>{user.nombre}</TableCell>
                                         <TableCell>{user.correo}</TableCell>
                                         <TableCell>
-
+                                            <Select
+                                                value={user.rol}
+                                                onChange={e => handleOpenDialog(user, e.target.value)}
+                                                className={styles.selectRol}
+                                            >
+                                                    <MenuItem value="Administrador">Administrador</MenuItem>
+                                                    <MenuItem value="Usuario">Usuario</MenuItem>
+                                            </Select>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -81,26 +158,16 @@ const CardAdminUsers = () =>{
                 
             </Box>
         </Box>
-            {/*<Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>¿Eliminar producto?</DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>¿Deseas guardar los cambios?</DialogTitle>
                 <DialogContent>
-                    <p>¿Estás seguro de que deseas eliminar -- {productAEliminar?.nombre} -- ? Esta acción no se puede deshacer.</p>
+                    <p>¿Estás seguro de que deseas cambiar el rol de <strong>{usuarioSelect?.nombre}</strong> a <strong>{cambioRol}</strong>  ? </p>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} color="primary">Cancelar</Button>
-                    <Button onClick={handleDelete} color="error">Eliminar</Button>
+                    <Button onClick={handleChangeRol} color="error">Confirmar</Button>
                 </DialogActions>
             </Dialog>
-
-            {éxito *
-            <Snackbar
-                open={openEliminadoExito}
-                autoHideDuration={3000}
-                onClose={() => setOpenEliminadoExito(false)}
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-                <Alert severity="success">¡Producto eliminado con éxito!</Alert>
-            </Snackbar>*/}
         
         </AdminLayout>
     )

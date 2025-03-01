@@ -88,3 +88,8 @@
 .botonEliminar:hover{
     background-color: #f5e6ff !important;
 }
+
+.selectRol {
+    width: 220px;
+    height: 40px;
+}
