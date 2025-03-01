@@ -228,7 +228,7 @@ const AddProductForm = () => {
                                 error={!!errores.descripcion}
                                 helperText={errores.descripcion}
                                 multiline
-                                rows={3}
+                                rows={2}
                                 fullWidth
                             />
 
