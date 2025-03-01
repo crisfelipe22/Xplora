@@ -71,6 +71,7 @@
     min-height: 100vh;
     background-color: #f8f9fa;
     width: 100vw;
+    height: calc(100vh - 65px);
 }
 
 .adminContainer {
