@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
 import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
+import AdminUsers from "./pages/AdminUsers";
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
         <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
         <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<EditarProductoAdmin />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
       
