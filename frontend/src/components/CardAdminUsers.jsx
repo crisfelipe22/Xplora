@@ -17,33 +17,43 @@ const CardAdminUsers = () =>{
         {id: 1,
             nombre: 'Sara Mendoza',
             correo: 'sara@xplora.com',
-            rol: 'Administrador'
+            id_rol: 1
         },
         {id: 2,
             nombre: 'Solymar Quiaro',
             correo: 'solymar@xplora.com',
-            rol: 'Usuario'
+            id_rol: 2
         },
         {id: 3,
             nombre: 'Sara Mendoza',
             correo: 'sara@xplora.com',
-            rol: 'Administrador'
+            id_rol: 2
         },
         {id: 4,
             nombre: 'Solymar Quiaro',
             correo: 'solymar@xplora.com',
-            rol: 'Usuario'
+            id_rol: 2
         },
         {id: 5,
             nombre: 'Sara Mendoza',
             correo: 'sara@xplora.com',
-            rol: 'Administrador'
+            id_rol: 2
         },
         {id: 6,
             nombre: 'Solymar Quiaro',
             correo: 'solymar@xplora.com',
-            rol: 'Usuario'
+            id_rol: 2
         },
+    ])
+    const [roles, setRoles] = useState([
+        {
+            id_rol: 1,
+            nombre: 'Administrador'
+        },
+        {
+            id_rol: 2,
+            nombre: 'Usuario'
+        }
     ])
 
     /*useEffect(() => {
@@ -55,13 +65,22 @@ const CardAdminUsers = () =>{
                 console.error("Error al obtener los usuarios:", error);
             }
         };
-        
 
+        const obtenerRoles= async () => {
+                try {
+                    const response = await axios.get("http://localhost:8080/api/roles");
+                    setRoles(response.data); 
+                    console.log(response.data)
+                } catch (error) {
+                    console.error("Error al obtener los roles:", error);
+                }
+        
+        obtenerRoles();
         fetchUsers();
     }, []);*/
 
-    const handleOpenDialog = (user, rol) => {
-        setCambioRol(rol);
+    const handleOpenDialog = (user, id_rol) => {
+        setCambioRol(id_rol);
         setUsuarioSelect(user)
         setOpenDialog(true);
     };
@@ -76,13 +95,13 @@ const CardAdminUsers = () =>{
 
         setUsers(prevUsers =>
             prevUsers.map(user => 
-                user.id === usuarioSelect.id ? { ...user, rol: cambioRol } : user
+                user.id === usuarioSelect.id ? { ...user, id_rol: cambioRol } : user
         ));
 
         setOpenDialog(false);
 
         /*try {
-            await axios.put(`api/admin/${usuarioSelect.id}`, { rol: cambioRol });
+            await axios.put(`api/admin/${usuarioSelect.id}`, { id_rol: cambioRol });
             
             console.log(`Rol de ${usuarioSelect.nombre} actualizado a ${cambioRol}`);
         } catch (error) {
@@ -116,7 +135,7 @@ const CardAdminUsers = () =>{
                                 <TableRow>
                                     <TableCell className={styles.tableHeader}>ID Usuario</TableCell>
                                     <TableCell className={styles.tableHeader}>Nombre</TableCell>
-                                    <TableCell className={styles.tableHeader}>Correo</TableCell>
+                                    <TableCell className={styles.tableHeader}>Correo Electrónico</TableCell>
                                     <TableCell className={styles.tableHeader}>Permisos</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -130,12 +149,17 @@ const CardAdminUsers = () =>{
                                         <TableCell>{user.correo}</TableCell>
                                         <TableCell>
                                             <Select
-                                                value={user.rol}
+                                                labelId="rol-label"
+                                                name="id_rol"
+                                                value={user.id_rol}
                                                 onChange={e => handleOpenDialog(user, e.target.value)}
                                                 className={styles.selectRol}
                                             >
-                                                    <MenuItem value="Administrador">Administrador</MenuItem>
-                                                    <MenuItem value="Usuario">Usuario</MenuItem>
+                                                {roles.map((rol) => (
+                                                    <MenuItem key={rol.id_rol} value={rol.id_rol} >
+                                                        {rol.nombre}
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                         </TableCell>
                                     </TableRow>
@@ -158,14 +182,14 @@ const CardAdminUsers = () =>{
                 
             </Box>
         </Box>
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>¿Deseas guardar los cambios?</DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog} >
+                <DialogTitle className={styles.tituloConfirmacion}>¿Deseas guardar los cambios?</DialogTitle>
                 <DialogContent>
-                    <p>¿Estás seguro de que deseas cambiar el rol de <strong>{usuarioSelect?.nombre}</strong> a <strong>{cambioRol}</strong>  ? </p>
+                    <p>¿Estás seguro de que deseas cambiar el rol de <strong>{usuarioSelect?.nombre}</strong> a <strong>{roles.find(rol => rol.id_rol === cambioRol)?.nombre || "Desconocido"}</strong>  ? </p>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">Cancelar</Button>
-                    <Button onClick={handleChangeRol} color="error">Confirmar</Button>
+                <DialogActions className={styles.botones}>
+                    <Button onClick={handleCloseDialog} className={styles.botonCancelarConfirmacion}>Cancelar</Button>
+                    <Button onClick={handleChangeRol} className={styles.botonAceptarConfirmacion}>Confirmar</Button>
                 </DialogActions>
             </Dialog>
         

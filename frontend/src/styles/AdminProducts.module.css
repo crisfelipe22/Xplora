@@ -93,3 +93,41 @@
     width: 220px;
     height: 40px;
 }
+
+.tituloConfirmacion{
+    display: flex;
+    justify-content: center;
+    color: #05030D;
+    padding: 25px 0px 0px 5px !important;
+}
+
+.botones{
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 0 20px 0 !important;
+}
+
+.botonCancelarConfirmacion{
+    background: transparent !important; 
+    border: 1px solid #2E1F5E !important;
+    padding: 8px 22px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+}
+
+.botonCancelarConfirmacion:hover{
+    background-color: #f5e6ff !important;
+}
+
+.botonAceptarConfirmacion{
+    background: #6239E6 !important;
+    color: white !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    border: none !important;
+    padding: 8px 22px !important;
+}
+
+.botonAceptarConfirmacion:hover{
+    background-color: #125a9e !important;
+}
