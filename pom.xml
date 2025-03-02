@@ -31,11 +31,24 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.4.2</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.4.2</version>
+            </plugin>
             <!-- <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.4.2</version>
             </plugin> -->
+        <configuration>
+           <mainClass>com.backend.XploraApplication</mainClass>
+        </configuration>
         </plugins>
     </build>
 
