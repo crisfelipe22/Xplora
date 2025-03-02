@@ -41,11 +41,11 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.4.2</version>
             </plugin>
-            <!-- <plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.2</version>
-            </plugin> -->
+
+            </plugin>
         <configuration>
            <mainClass>com.backend.XploraApplication</mainClass>
         </configuration>
