@@ -1,5 +1,3 @@
-use ${DB_NAME};
-
 INSERT INTO categoria (nombre) VALUES
     ('Aventuras y deportes'),
     ('Gastronomia'),
