@@ -31,19 +31,19 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaSalidaDTO> obtenerCategoriaPorId(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<CategoriaSalidaDTO> obtenerCategoriaPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
         CategoriaSalidaDTO categoriaDto = categoriaService.obtenerCategoriaPorId(id);
         return new ResponseEntity<>(categoriaDto, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaSalidaDTO> actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
+    public ResponseEntity<CategoriaSalidaDTO> actualizarCategoria(@PathVariable(name = "id") Long id, @RequestBody CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
         CategoriaSalidaDTO categoriaActualizada = categoriaService.actualizarCategoria(id, categoriaDto);
         return new ResponseEntity<>(categoriaActualizada, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CategoriaSalidaDTO> eliminarCategoria(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<CategoriaSalidaDTO> eliminarCategoria(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
         CategoriaSalidaDTO categoriaEliminada = categoriaService.eliminarCategoria(id);
         return new ResponseEntity<>(categoriaEliminada, HttpStatus.OK);
     }
