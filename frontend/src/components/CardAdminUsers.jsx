@@ -168,13 +168,12 @@ const CardAdminUsers = () =>{
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 15]}
                         component="div"
                         count={users.length}
                         rowsPerPage={columnPorPag}
                         page={pag}
                         onPageChange={(event, newPage) => setPag(newPage)}
-                        onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
+                        onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 5))}
                         labelRowsPerPage="Filas por página"
                     />
 
