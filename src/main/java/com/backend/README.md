@@ -131,6 +131,87 @@ http://localhost:8080/api
 - 400 Bad Request: La categoría ya existe.
 - 500 Internal Server Error: Error en el servidor.
 
+#### Obtener todas las Categorías
+
+- **Método:** GET
+- **Endpoint:** `/categoria`
+- **Descripción:** Obtener todas las categoría para clasificar paquetes de experiencia.
+
+```
+**Respuesta Exitosa (200 OK):**
+```lista objetos
+[
+    {
+        "id_categoria": 1,
+        "nombre": "Aventuras y deportes"
+    },
+    {
+        "id_categoria": 3,
+        "nombre": "Comida"
+    },
+    {
+        "id_categoria": 2,
+        "nombre": "Gastronomia"
+    }
+]
+```
+
+**Errores Posibles:**
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener una Categoría
+
+- **Método:** GET
+- **Endpoint:** `/categoria/{id}`
+- **Descripción:** Obtener una categoría para clasificar paquetes de experiencia. `Es necesario que exista la categoría para poder crear un paquete de experiencia`
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+"idCategoria": 1,
+"nombre": "Aventura"
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: La categoría ya existe.
+- 500 Internal Server Error: Error en el servidor.
+
+#### Eliminar una Categoría
+
+- **Método:** DELETE
+- **Endpoint:** `/categoria/{id}`
+- **Descripción:** Eliminar una categoría para clasificar paquetes de experiencia.
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+    "id_categoria": 2,
+    "nombre": "Comida"
+}
+```
+
+**Errores Posibles:**
+- 404 Bad Request: La categoría no existe.
+- 500 Internal Server Error: Error en el servidor.
+
+#### Editar una Categoría
+
+- **Método:** PUT
+- **Endpoint:** `/categoria/{id}`
+- **Descripción:** Editar una categoría para clasificar paquetes de experiencia.
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+"idCategoria": 1,
+"nombre": "Comida"
+}
+```
+
+
 #### Actualizar un Paquete de Experiencia
 
 - **Método:** PUT
@@ -316,6 +397,162 @@ Spring Validation generaría errores de validación
 
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
+### Editar un usuario
+- **Método:** PUT
+- **Endpoint:** `/auth/{id}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o el mismo usuario logueado
+- **Descripción:** Permite actualizar un usuario
+- **Request Body:**
+```json
+{
+  "nombre": "Nombre cliente3",
+  "email": "cliente3@ejemplo.com",
+  "contrasena": "Password123",
+  "telefono": 587653313,
+  "direccion": "Av. 2Ejemplo 1233, Ciudad",
+  "id_rol": 2
+}
+```
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_usuario": 6,
+  "nombre": "Nombre cliente3",
+  "email": "cliente3@ejemplo.com",
+  "telefono": 587653313,
+  "direccion": "Av. 2Ejemplo 1233, Ciudad",
+  "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+  "id_rol": 2
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+
+### Editar solo un campo de un usuario
+- **Método:** PATCH
+- **Endpoint:** `/auth/{id}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador unicamente
+- **Descripción:** Permite actualizar un usuario en un campo
+- **Request Body:**
+```json
+{
+  "id_rol": 1
+}
+```
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_usuario": 6,
+  "nombre": "Nombre cliente3",
+  "email": "cliente3@ejemplo.com",
+  "telefono": 587653313,
+  "direccion": "Av. 2Ejemplo 1233, Ciudad",
+  "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+  "id_rol": 2
+}
+```
+
+### Eliminar un usuario
+- **Método:** DELETE
+- **Endpoint:** `/auth/{id}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Descripción:** Permite eliminar un usuario
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_usuario": 6,
+  "nombre": "Nombre cliente3",
+  "email": "cliente3@ejemplo.com",
+  "telefono": 587653313,
+  "direccion": "Av. 2Ejemplo 1233, Ciudad",
+  "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+  "id_rol": 2
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+### Obtener un usuario
+- **Método:** GET
+- **Endpoint:** `/auth/{id}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o el usuario autenticado
+- **Descripción:** Permite obtener datos de un usuario
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_usuario": 6,
+  "nombre": "Nombre cliente3",
+  "email": "cliente3@ejemplo.com",
+  "telefono": 587653313,
+  "direccion": "Av. 2Ejemplo 1233, Ciudad",
+  "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+  "id_rol": 2
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+### Obtener todos los usuarios
+- **Método:** GET
+- **Endpoint:** `/auth`
+- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Descripción:** Permite obtener datos de todos los usuarios
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  {
+    "id_usuario": 1,
+    "nombre": "Nombre Usuario",
+    "email": "usuario@ejemplo.com",
+    "telefono": 987654321,
+    "direccion": "Av. Ejemplo 123, Ciudad",
+    "fechaRegistro": "2025-02-28T04:17:12.060+00:00",
+    "id_rol": 1
+  },
+  {
+    "id_usuario": 2,
+    "nombre": "Nombre superadmin",
+    "email": "superadmin@ejemplo.com",
+    "telefono": 987654321,
+    "direccion": "Av. Ejemplo 123, Ciudad",
+    "fechaRegistro": "2025-03-03T04:25:21.860+00:00",
+    "id_rol": 3
+  },
+  {
+    "id_usuario": 6,
+    "nombre": "Nombre cliente3",
+    "email": "cliente3@ejemplo.com",
+    "telefono": 587653313,
+    "direccion": "Av. 2Ejemplo 1233, Ciudad",
+    "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+    "id_rol": 2
+  }
+]
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
 
   **Notas:**
 - El token JWT generado tiene un tiempo de expiración.
