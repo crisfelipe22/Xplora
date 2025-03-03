@@ -63,15 +63,21 @@ public class SecurityConfig {
                             auth.requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**", "/assets/**", "/logo.svg", "/imagen**").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia/**").permitAll();
-                            auth.requestMatchers(HttpMethod.POST, "/api/paquete-experiencia").hasRole("Administrador");
-                            auth.requestMatchers(HttpMethod.DELETE, "/api/paquete-experiencia/**").hasRole("Administrador");
-                            auth.requestMatchers(HttpMethod.PUT, "/api/paquete-experiencia/**").hasRole("Administrador");
-                            auth.requestMatchers(HttpMethod.POST, "/api/categoria").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/paquete-experiencia").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/paquete-experiencia/**").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.PUT, "/api/paquete-experiencia/**").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.GET, "/api/categoria").permitAll();
-                            auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasRole("Administrador");
-                            auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasRole("Administrador");
-                            auth.requestMatchers("/api/auth/**").permitAll()
-                                    .requestMatchers("/api/test/**").permitAll()
+                            auth.requestMatchers(HttpMethod.GET, "/api/categoria/**").permitAll();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/auth").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/auth").authenticated();
+                            auth.requestMatchers(HttpMethod.GET, "/api/auth/**").authenticated();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.PATCH, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/auth").hasAnyRole( "SuperAdministrador");
+                            auth.requestMatchers("/api/test/**").permitAll()
                                     .anyRequest().authenticated();
                         }
                 );

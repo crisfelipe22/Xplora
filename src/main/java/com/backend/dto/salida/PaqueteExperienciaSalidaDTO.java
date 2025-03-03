@@ -2,7 +2,7 @@ package com.backend.dto.salida;
 
 import java.util.Date;
 
-public class PaqueteExperienciaSalidaDto {
+public class PaqueteExperienciaSalidaDTO {
 
     private Long id_paquete_experiencia;
     private String nombre;
@@ -19,7 +19,7 @@ public class PaqueteExperienciaSalidaDto {
 
     private Long id_categoria;
 
-    public PaqueteExperienciaSalidaDto(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia, Long id_categoria) {
+    public PaqueteExperienciaSalidaDTO(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia, Long id_categoria) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -31,7 +31,7 @@ public class PaqueteExperienciaSalidaDto {
         this.id_categoria = id_categoria;
     }
 
-    public PaqueteExperienciaSalidaDto() {
+    public PaqueteExperienciaSalidaDTO() {
     }
 
     public String getNombre() {

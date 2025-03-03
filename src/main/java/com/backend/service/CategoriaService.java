@@ -1,7 +1,7 @@
 package com.backend.service;
 
 import com.backend.dto.entada.CategoriaEntradaDto;
-import com.backend.dto.salida.CategoriaSalidaDto;
+import com.backend.dto.salida.CategoriaSalidaDTO;
 import com.backend.entity.Categoria;
 import com.backend.exceptions.ConflictException;
 import com.backend.exceptions.ResourceNotFoundException;
@@ -30,14 +30,14 @@ public class CategoriaService {
         this.modelMapper = modelMapper;
     }
 
-    public CategoriaSalidaDto agregarCategoria(CategoriaEntradaDto categoriaDto) {
+    public CategoriaSalidaDTO agregarCategoria(CategoriaEntradaDto categoriaDto) {
         try {
             if (categoriaRepository.findByNombre(categoriaDto.getNombre()).isPresent()) {
                 throw new ConflictException("La categoría ya existe.");
             }
             Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
             Categoria nuevaCategoria = categoriaRepository.save(categoria);
-            return modelMapper.map(nuevaCategoria, CategoriaSalidaDto.class);
+            return modelMapper.map(nuevaCategoria, CategoriaSalidaDTO.class);
         } catch (IllegalArgumentException e) {
             logger.error("Error al agregar categoría: {}", e.getMessage());
             throw e;
@@ -47,11 +47,11 @@ public class CategoriaService {
         }
     }
 
-    public List<CategoriaSalidaDto> obtenerTodasLasCategorias() {
+    public List<CategoriaSalidaDTO> obtenerTodasLasCategorias() {
         try {
             List<Categoria> categorias = categoriaRepository.findAll();
             return categorias.stream()
-                    .map(categoria -> modelMapper.map(categoria, CategoriaSalidaDto.class))
+                    .map(categoria -> modelMapper.map(categoria, CategoriaSalidaDTO.class))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error obteniendo todas las categorías", e);
@@ -59,18 +59,18 @@ public class CategoriaService {
         }
     }
 
-    public CategoriaSalidaDto obtenerCategoriaPorId(Long id) throws ResourceNotFoundException {
+    public CategoriaSalidaDTO obtenerCategoriaPorId(Long id) throws ResourceNotFoundException {
         logger.info("Buscando categoría con id '{}'", id);
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Categoría con id '{}' no encontrada", id);
                     return new ResourceNotFoundException("Categoría no encontrada");
                 });
-        return modelMapper.map(categoria, CategoriaSalidaDto.class);
+        return modelMapper.map(categoria, CategoriaSalidaDTO.class);
     }
 
     @Transactional
-    public CategoriaSalidaDto actualizarCategoria(Long id, CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
+    public CategoriaSalidaDTO actualizarCategoria(Long id, CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
         logger.info("Actualizando categoría con id '{}'", id);
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> {
@@ -80,11 +80,11 @@ public class CategoriaService {
         modelMapper.map(categoriaDto, categoria);
         categoria = categoriaRepository.save(categoria);
         logger.info("Categoría con id '{}' actualizada exitosamente", id);
-        return modelMapper.map(categoria, CategoriaSalidaDto.class);
+        return modelMapper.map(categoria, CategoriaSalidaDTO.class);
     }
 
     @Transactional
-    public CategoriaSalidaDto eliminarCategoria(Long id) throws ResourceNotFoundException {
+    public CategoriaSalidaDTO eliminarCategoria(Long id) throws ResourceNotFoundException {
         logger.info("Eliminando categoría con id '{}'", id);
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> {
@@ -93,6 +93,6 @@ public class CategoriaService {
                 });
         categoriaRepository.deleteById(id);
         logger.info("Categoría con id '{}' eliminada exitosamente", id);
-        return modelMapper.map(categoria, CategoriaSalidaDto.class);
+        return modelMapper.map(categoria, CategoriaSalidaDTO.class);
     }
 }

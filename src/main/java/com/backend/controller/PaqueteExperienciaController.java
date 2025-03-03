@@ -1,8 +1,7 @@
 package com.backend.controller;
 
-import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
-import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
-import com.backend.entity.PaqueteExperiencia;
+import com.backend.dto.entada.PaqueteExperienciaEntradaDTO;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDTO;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.PaqueteExperienciaService;
 import jakarta.validation.Valid;
@@ -24,42 +23,42 @@ public class PaqueteExperienciaController {
 
     @PostMapping
     // @CrossOrigin
-    public ResponseEntity<PaqueteExperienciaSalidaDto> agregarPaqueteExperiencia(@RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
-        PaqueteExperienciaSalidaDto nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperienciaEntradaDto);
+    public ResponseEntity<PaqueteExperienciaSalidaDTO> agregarPaqueteExperiencia(@RequestBody @Valid PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDto) throws BadRequestException {
+        PaqueteExperienciaSalidaDTO nuevoPaquete = paqueteExperienciaService.agregarPaqueteExperiencia(paqueteExperienciaEntradaDto);
         return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaqueteExperienciaSalidaDto> obtenerPaqueteExperienciaPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
-        PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorId(id);
+    public ResponseEntity<PaqueteExperienciaSalidaDTO> obtenerPaqueteExperienciaPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+        PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorId(id);
         return new ResponseEntity<>(paqueteExperienciaSalidaDto, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PaqueteExperienciaSalidaDto> eliminarPaqueteExperiencia(@PathVariable(name = "id") Long id) throws ResourceNotFoundException, BadRequestException {
-        PaqueteExperienciaSalidaDto paqueteEliminado =paqueteExperienciaService.eliminarPaqueteExperiencia(id);
+    public ResponseEntity<PaqueteExperienciaSalidaDTO> eliminarPaqueteExperiencia(@PathVariable(name = "id") Long id) throws ResourceNotFoundException, BadRequestException {
+        PaqueteExperienciaSalidaDTO paqueteEliminado =paqueteExperienciaService.eliminarPaqueteExperiencia(id);
         return new ResponseEntity<>(paqueteEliminado, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaqueteExperienciaSalidaDto> actualizarPaqueteExperiencia(
+    public ResponseEntity<PaqueteExperienciaSalidaDTO> actualizarPaqueteExperiencia(
             @PathVariable(name = "id") Long id,
-            @RequestBody @Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws ResourceNotFoundException, BadRequestException {
-        PaqueteExperienciaSalidaDto paqueteActualizado = paqueteExperienciaService.actualizarPaqueteExperiencia(id, paqueteExperienciaEntradaDto);
+            @RequestBody @Valid PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDto) throws ResourceNotFoundException, BadRequestException {
+        PaqueteExperienciaSalidaDTO paqueteActualizado = paqueteExperienciaService.actualizarPaqueteExperiencia(id, paqueteExperienciaEntradaDto);
         return new ResponseEntity<>(paqueteActualizado, HttpStatus.ACCEPTED);
     }
 
 
     @GetMapping
-    public ResponseEntity<List<PaqueteExperienciaSalidaDto>> obtenerTodosLosPaquetes() {
-        List<PaqueteExperienciaSalidaDto> paquetesDto = paqueteExperienciaService.obtenerTodosLosPaquetes();
+    public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerTodosLosPaquetes() {
+        List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerTodosLosPaquetes();
         return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
     @GetMapping("/aleatorios")
-    public ResponseEntity<List<PaqueteExperienciaSalidaDto>> obtenerPaquetesAleatorios(
+    public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaquetesAleatorios(
             @RequestParam(name = "cantidad", defaultValue = "10", required = false) int cantidad) {
-        List<PaqueteExperienciaSalidaDto> paquetesDto = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
+        List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
         return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
 }
