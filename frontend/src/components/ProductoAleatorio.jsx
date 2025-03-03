@@ -42,8 +42,10 @@ const ProductoAleatorio = () => {
                 count={Math.ceil(productosAleatorios.length / itemPorPag)}
                 page={pag}
                 onChange={(event, newPage) => setPag(newPage)}
-                color="primary"
                 className={styles.pagination}
+                shape="rounded"
+                siblingCount={5} // Número de páginas visibles a los lados
+                boundaryCount={1}  // Mostrar primera y última página siempre
             />
         </Box>
         
