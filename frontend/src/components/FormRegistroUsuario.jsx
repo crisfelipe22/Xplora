@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import imagenFondo from "/frontend/public/imagen_20.png";
+import imagenFondo from "/imagen_20.png";
 import {
   Grid,
   TextField,
@@ -10,6 +10,7 @@ import {
   Box,
   Link,
 } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const FormRegistroUsuario = () => {
   const [form, setForm] = useState({
@@ -19,6 +20,9 @@ const FormRegistroUsuario = () => {
     password: "",
     terms: false,
   });
+
+  const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   const [errors, setErrors] = useState({});
 
@@ -77,7 +81,7 @@ const FormRegistroUsuario = () => {
       container
       sx={{
         height: "100vh",
-        width: "100vw",
+        width: "100%",
         margin: 0,
         padding: 0,
         display: "flex",
@@ -91,18 +95,24 @@ const FormRegistroUsuario = () => {
         md={6}
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "left",
           alignItems: "center",
           height: "100vh",
+          width: "50%",
+          padding: "0",
+          margin: "0",
+          paddingLeft: "5%",
         }}
       >
         <Box
           sx={{
-            width: 400,
+            width: "100%",
+            maxWidth: "550px",
             p: 4,
             borderRadius: 2,
-            backgroundColor: "background.paper",
-            boxShadow: 3,
+            backgroundColor: "transparent",
+            boxShadow: 0,
+            margin: 0,
           }}
         >
           <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -130,6 +140,7 @@ const FormRegistroUsuario = () => {
               margin="normal"
               variant="outlined"
               placeholder="Ingresa tu nombre"
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <TextField
@@ -143,6 +154,7 @@ const FormRegistroUsuario = () => {
               margin="normal"
               variant="outlined"
               placeholder="Ingresa tu apellido"
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <TextField
@@ -157,6 +169,7 @@ const FormRegistroUsuario = () => {
               margin="normal"
               variant="outlined"
               placeholder="micorreo@gmail.com"
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <TextField
@@ -171,6 +184,7 @@ const FormRegistroUsuario = () => {
               margin="normal"
               variant="outlined"
               placeholder="*************"
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <FormControlLabel
@@ -207,7 +221,7 @@ const FormRegistroUsuario = () => {
         xs={12}
         md={6}
         sx={{
-          display: { xs: "none", md: "flex" },
+          display: isMobileOrTablet ? "none" : "flex",
           justifyContent: "center",
           alignItems: "center",
           width: "50%",
@@ -215,14 +229,15 @@ const FormRegistroUsuario = () => {
           overflow: "hidden",
         }}
       >
-        <img
+        <Box
+          component="img"
           src={imagenFondo}
           alt="Registro"
-          style={{
+          sx={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            display: "block",
+            //display: "block",
           }}
         />
       </Grid>

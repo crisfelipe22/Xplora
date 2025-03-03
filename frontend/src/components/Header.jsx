@@ -1,11 +1,22 @@
 // eslint-disable-next-line no-unused-vars
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import styles from "../styles/header.module.css";
+import MenuUsuario from "./MenuUsuario";
 
 const Header = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Con esto estoy simulando que el usuario inició sesión
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+  // Y con esto estoy simulando el cierre de sesión.
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
+
   return (
     <Box
       sx={{ padding: { tablet: "12px 24px" } }}
@@ -27,24 +38,32 @@ const Header = () => {
           className={styles.header__menu}
         />
 
-        <Link to="/registro">
-          <Button
-            sx={{ display: { mobile: "none", desktop: "block" } }}
-            variant="text"
-            className={styles.header__button}
-          >
-            CREAR CUENTA
-          </Button>
-        </Link>
+        {!isAuthenticated ? (
+          <>
+            <Link to="/registro">
+              <Button
+                sx={{ display: { mobile: "none", desktop: "block" } }}
+                variant="text"
+                className={styles.header__button}
+              >
+                CREAR CUENTA
+              </Button>
+            </Link>
 
-        <Button
-          sx={{ display: { mobile: "none", desktop: "block" } }}
-          variant="contained"
-          color="primary"
-          className={`${styles.header__button} ${styles["header__button--login"]}`}
-        >
-          INICIAR SESIÓN
-        </Button>
+            <Button
+              sx={{ display: { mobile: "none", desktop: "block" } }}
+              variant="contained"
+              color="primary"
+              className={`${styles.header__button} ${styles["header__button--login"]}`}
+              //Aqui simulo que se inicia la sesión
+              onClick={handleLogin}
+            >
+              INICIAR SESIÓN
+            </Button>
+          </>
+        ) : (
+          <MenuUsuario onLogout={handleLogout} />
+        )}
       </Box>
     </Box>
   );
