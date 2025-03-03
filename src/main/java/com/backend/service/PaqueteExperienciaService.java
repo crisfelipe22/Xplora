@@ -154,7 +154,7 @@ public class PaqueteExperienciaService {
                     return new ResourceNotFoundException("Paquete de experiencia con ID " + id + " no encontrado");
                 });
 
-        categoriaRepository.findById(paqueteExperienciaEntradaDto.getId_categoria())
+        Categoria categoria = categoriaRepository.findById(paqueteExperienciaEntradaDto.getId_categoria())
                 .orElseThrow(() -> {
                     logger.error("La categoría con ID " + paqueteExperienciaEntradaDto.getId_categoria() + " no existe");
                     return new ResourceNotFoundException(
@@ -162,6 +162,7 @@ public class PaqueteExperienciaService {
                 });
 
         modelMapper.map(paqueteExperienciaEntradaDto, paquete);
+        paquete.setCategoria(categoria);
         try {
             paquete = paqueteExperienciaRepository.save(paquete);
             logger.info("Paquete con ID '{}' actualizado exitosamente", id);

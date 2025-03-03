@@ -42,7 +42,7 @@ public class AuthController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioSalidaDTO> obtenerUsuarioPorId(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<UsuarioSalidaDTO> obtenerUsuarioPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
         UsuarioSalidaDTO usuarioDto = authService.obtenerUsuarioPorId(id);
         return ResponseEntity.ok(usuarioDto);
     }
@@ -54,14 +54,14 @@ public class AuthController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MensajeResponseDTO> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
+    public ResponseEntity<MensajeResponseDTO> actualizarUsuario(@PathVariable(name = "id") Long id, @Valid @RequestBody RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
         MensajeResponseDTO mensaje = authService.actualizarUsuario(id, registroDTO);
         HttpStatus status = mensaje.isExito() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(mensaje, status);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MensajeResponseDTO> eliminarUsuario(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<MensajeResponseDTO> eliminarUsuario(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
         MensajeResponseDTO mensaje = authService.eliminarUsuario(id);
         return ResponseEntity.ok(mensaje);
     }
