@@ -1,17 +1,17 @@
 package com.backend.dto.salida;
 
-public class CategoriaSalidaDto {
+public class CategoriaSalidaDTO {
     private Long id_categoria;
 
     private String nombre;
 
 
-    public CategoriaSalidaDto(Long id_categoria, String nombre) {
+    public CategoriaSalidaDTO(Long id_categoria, String nombre) {
         this.id_categoria = id_categoria;
         this.nombre = nombre;
     }
 
-    public CategoriaSalidaDto() {
+    public CategoriaSalidaDTO() {
     }
 
     public Long getId_categoria() {

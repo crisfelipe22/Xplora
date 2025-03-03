@@ -4,6 +4,7 @@ import com.backend.dto.salida.AuthResponseDTO;
 import com.backend.dto.entada.LoginRequestDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
+import com.backend.dto.salida.UsuarioSalidaDTO;
 import com.backend.service.AuthService;
 import jakarta.validation.Valid;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,4 +40,30 @@ public class AuthController {
     public ResponseEntity<MensajeResponseDTO> cerrarSesion() {
         return ResponseEntity.ok(new MensajeResponseDTO("Sesión cerrada correctamente", true));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioSalidaDTO> obtenerUsuarioPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+        UsuarioSalidaDTO usuarioDto = authService.obtenerUsuarioPorId(id);
+        return ResponseEntity.ok(usuarioDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UsuarioSalidaDTO>> obtenerTodosLosUsuarios() {
+        List<UsuarioSalidaDTO> usuariosDto = authService.obtenerTodosLosUsuarios();
+        return ResponseEntity.ok(usuariosDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MensajeResponseDTO> actualizarUsuario(@PathVariable(name = "id") Long id, @Valid @RequestBody RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
+        MensajeResponseDTO mensaje = authService.actualizarUsuario(id, registroDTO);
+        HttpStatus status = mensaje.isExito() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(mensaje, status);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MensajeResponseDTO> eliminarUsuario(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+        MensajeResponseDTO mensaje = authService.eliminarUsuario(id);
+        return ResponseEntity.ok(mensaje);
+    }
+
 }
