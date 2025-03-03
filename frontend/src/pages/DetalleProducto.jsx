@@ -30,12 +30,7 @@ const DetalleProducto = () =>{
         const obtenerCategorias = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/api/categoria");
-                const categoriasTransformadas = response.data.map(cat => ({
-                    id_categoria: cat.idCategoria, // Cambia la propiedad
-                    nombre: cat.nombre
-                }));
-                setCategorias(categoriasTransformadas); 
-                console.log(response.data)
+                setCategorias(response.data); 
             } catch (error) {
                 console.error("Error al obtener las categorías:", error);
             }
