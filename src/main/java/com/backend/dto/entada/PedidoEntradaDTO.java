@@ -1,27 +1,23 @@
 package com.backend.dto.entada;
 public class PedidoEntradaDTO {
-    private Long paqueteExperienciaId;
-    private boolean esRegalo;
+    private Long paquete_experienciaId;
+    private boolean es_regalo;
     private double total;
 
-    public PedidoEntradaDTO() {
+    public Long getPaquete_experienciaId() {
+        return paquete_experienciaId;
     }
 
-    // Getters y Setters
-    public Long getPaqueteExperienciaId() {
-        return paqueteExperienciaId;
+    public void setPaquete_experienciaId(Long paquete_experienciaId) {
+        this.paquete_experienciaId = paquete_experienciaId;
     }
 
-    public void setPaqueteExperienciaId(Long paqueteExperienciaId) {
-        this.paqueteExperienciaId = paqueteExperienciaId;
+    public boolean isEs_regalo() {
+        return es_regalo;
     }
 
-    public boolean isEsRegalo() {
-        return esRegalo;
-    }
-
-    public void setEsRegalo(boolean esRegalo) {
-        this.esRegalo = esRegalo;
+    public void setEs_regalo(boolean es_regalo) {
+        this.es_regalo = es_regalo;
     }
 
     public double getTotal() {
@@ -30,5 +26,14 @@ public class PedidoEntradaDTO {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public PedidoEntradaDTO(Long paquete_experienciaId, boolean es_regalo, double total) {
+        this.paquete_experienciaId = paquete_experienciaId;
+        this.es_regalo = es_regalo;
+        this.total = total;
+    }
+
+    public PedidoEntradaDTO() {
     }
 }
