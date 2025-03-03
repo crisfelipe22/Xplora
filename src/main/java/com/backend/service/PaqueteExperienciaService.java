@@ -1,7 +1,7 @@
 package com.backend.service;
 
-import com.backend.dto.entada.PaqueteExperienciaEntradaDto;
-import com.backend.dto.salida.PaqueteExperienciaSalidaDto;
+import com.backend.dto.entada.PaqueteExperienciaEntradaDTO;
+import com.backend.dto.salida.PaqueteExperienciaSalidaDTO;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.entity.Categoria;
 import com.backend.exceptions.ConflictException;
@@ -40,10 +40,10 @@ public class PaqueteExperienciaService {
     private static final Logger logger = LoggerFactory.getLogger(PaqueteExperienciaService.class);
 
     @Transactional
-    public PaqueteExperienciaSalidaDto agregarPaqueteExperiencia(@Valid PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws BadRequestException {
+    public PaqueteExperienciaSalidaDTO agregarPaqueteExperiencia(@Valid PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDto) throws BadRequestException {
         logger.info("Iniciando proceso para agregar un nuevo Paquete de Experiencia: {}", paqueteExperienciaEntradaDto.getNombre());
 
-        PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto;
+        PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto;
 
         // Verificar si el nombre ya existe en la base de datos
         if (paqueteExperienciaRepository.findByNombre(paqueteExperienciaEntradaDto.getNombre()).isPresent()) {
@@ -67,7 +67,7 @@ public class PaqueteExperienciaService {
             // Guardar el paquete en la base de datos
             PaqueteExperiencia nuevoPaquete = paqueteExperienciaRepository.save(paqueteExperiencia);
             logger.info("Paquete de experiencia '{}' agregado exitosamente con ID {}", nuevoPaquete.getNombre(), nuevoPaquete.getId_paquete_experiencia());
-            paqueteExperienciaSalidaDto = modelMapper.map(nuevoPaquete, PaqueteExperienciaSalidaDto.class);
+            paqueteExperienciaSalidaDto = modelMapper.map(nuevoPaquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(nuevoPaquete.getCategoria().getId_categoria());
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
@@ -76,13 +76,13 @@ public class PaqueteExperienciaService {
         }
     }
 
-    public List<PaqueteExperienciaSalidaDto> obtenerTodosLosPaquetes() {
+    public List<PaqueteExperienciaSalidaDTO> obtenerTodosLosPaquetes() {
         try {
             logger.info("Obteniendo todos los paquetes de experiencia");
             List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findAll();
             return paquetes.stream()
                     .map(paquete -> {
-                        PaqueteExperienciaSalidaDto dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+                        PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
                         dto.setId_categoria(paquete.getCategoria().getId_categoria());
                         return dto;
                     })
@@ -93,7 +93,7 @@ public class PaqueteExperienciaService {
         }
     }
 
-    public List<PaqueteExperienciaSalidaDto> obtenerPaquetesAleatorios(int cantidad) {
+    public List<PaqueteExperienciaSalidaDTO> obtenerPaquetesAleatorios(int cantidad) {
         try {
             logger.info("Obteniendo {} paquetes de experiencia aleatorios", cantidad);
             List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findAll();
@@ -101,7 +101,7 @@ public class PaqueteExperienciaService {
             return paquetes.stream()
                     .limit(cantidad)
                     .map(paquete -> {
-                        PaqueteExperienciaSalidaDto dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+                        PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
                         dto.setId_categoria(paquete.getCategoria().getId_categoria());
                         return dto;
                     })
@@ -113,20 +113,20 @@ public class PaqueteExperienciaService {
     }
 
 
-    public PaqueteExperienciaSalidaDto obtenerPaqueteExperienciaPorId(Long id) throws ResourceNotFoundException {
+    public PaqueteExperienciaSalidaDTO obtenerPaqueteExperienciaPorId(Long id) throws ResourceNotFoundException {
         logger.info("Obteniendo datos del paquete con id '{}'", id);
         PaqueteExperiencia paquete = paqueteExperienciaRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Paquete con id '{}' no encontrado", id);
                     return new ResourceNotFoundException("Paquete de experiencia no encontrado");
                 });
-        PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+        PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
         paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
         return paqueteExperienciaSalidaDto;
     }
 
     @Transactional
-    public PaqueteExperienciaSalidaDto eliminarPaqueteExperiencia(Long id) throws ResourceNotFoundException, BadRequestException {
+    public PaqueteExperienciaSalidaDTO eliminarPaqueteExperiencia(Long id) throws ResourceNotFoundException, BadRequestException {
         logger.info("Eliminando el paquete de experiencia con el id '{}'", id);
         PaqueteExperiencia paquete = paqueteExperienciaRepository.findById(id).orElse(null);
         if (paquete == null) {
@@ -136,7 +136,7 @@ public class PaqueteExperienciaService {
         try {
             paqueteExperienciaRepository.deleteById(id);
             logger.info("Paquete con ID '{}' eliminado exitosamente", id);
-            PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+            PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class PaqueteExperienciaService {
     }
 
     @Transactional
-    public PaqueteExperienciaSalidaDto actualizarPaqueteExperiencia(Long id, PaqueteExperienciaEntradaDto paqueteExperienciaEntradaDto) throws ResourceNotFoundException, BadRequestException {
+    public PaqueteExperienciaSalidaDTO actualizarPaqueteExperiencia(Long id, PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDto) throws ResourceNotFoundException, BadRequestException {
         logger.info("Actualizando el paquete con el id '{}'", id);
         PaqueteExperiencia paquete = paqueteExperienciaRepository.findById(id)
                 .orElseThrow(() -> {
@@ -165,7 +165,7 @@ public class PaqueteExperienciaService {
         try {
             paquete = paqueteExperienciaRepository.save(paquete);
             logger.info("Paquete con ID '{}' actualizado exitosamente", id);
-            PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+            PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(paqueteExperienciaEntradaDto.getId_categoria());
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
