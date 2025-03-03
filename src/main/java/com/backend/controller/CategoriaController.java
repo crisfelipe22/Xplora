@@ -1,6 +1,9 @@
 package com.backend.controller;
 
+import com.backend.dto.entada.CategoriaEntradaDto;
+import com.backend.dto.salida.CategoriaSalidaDto;
 import com.backend.entity.Categoria;
+import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,24 +21,32 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     @PostMapping
-    public ResponseEntity<?> agregarCategoria(@RequestBody Categoria categoria) {
-        try {
-            Categoria nuevaCategoria = categoriaService.agregarCategoria(categoria);
-            return new ResponseEntity<>(nuevaCategoria, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Ocurrió un error al agregar la categoría.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<CategoriaSalidaDto> agregarCategoria(@RequestBody CategoriaEntradaDto categoriaDto) {
+        CategoriaSalidaDto nuevaCategoriaDto = categoriaService.agregarCategoria(categoriaDto);
+        return new ResponseEntity<>(nuevaCategoriaDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> obtenerTodasLasCategorias() {
-      try {
-          List<Categoria> categorias = categoriaService.obtenerTodasLasCategorias();
-          return new ResponseEntity<>(categorias, HttpStatus.OK);
-      } catch (Exception e) {
-          return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-  }
+    public ResponseEntity<List<CategoriaSalidaDto>> obtenerTodasLasCategorias() {
+        List<CategoriaSalidaDto> categoriasDto = categoriaService.obtenerTodasLasCategorias();
+        return new ResponseEntity<>(categoriasDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaSalidaDto> obtenerCategoriaPorId(@PathVariable Long id) throws ResourceNotFoundException {
+        CategoriaSalidaDto categoriaDto = categoriaService.obtenerCategoriaPorId(id);
+        return new ResponseEntity<>(categoriaDto, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaSalidaDto> actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
+        CategoriaSalidaDto categoriaActualizada = categoriaService.actualizarCategoria(id, categoriaDto);
+        return new ResponseEntity<>(categoriaActualizada, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CategoriaSalidaDto> eliminarCategoria(@PathVariable Long id) throws ResourceNotFoundException {
+        CategoriaSalidaDto categoriaEliminada = categoriaService.eliminarCategoria(id);
+        return new ResponseEntity<>(categoriaEliminada, HttpStatus.OK);
+    }
 }

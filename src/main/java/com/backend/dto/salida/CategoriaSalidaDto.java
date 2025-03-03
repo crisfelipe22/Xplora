@@ -1,15 +1,32 @@
-package com.backend.dto;
-
-import com.backend.entity.PaqueteExperiencia;
-
-import java.util.List;
+package com.backend.dto.salida;
 
 public class CategoriaSalidaDto {
     private Long id_categoria;
 
     private String nombre;
 
-    private String descripcion;
 
-    private List<PaqueteExperiencia> paquete_experiencias;
+    public CategoriaSalidaDto(Long id_categoria, String nombre) {
+        this.id_categoria = id_categoria;
+        this.nombre = nombre;
+    }
+
+    public CategoriaSalidaDto() {
+    }
+
+    public Long getId_categoria() {
+        return id_categoria;
+    }
+
+    public void setId_categoria(Long id_categoria) {
+        this.id_categoria = id_categoria;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }

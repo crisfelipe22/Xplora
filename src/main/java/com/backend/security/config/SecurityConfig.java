@@ -60,11 +60,16 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->{
+                            auth.requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**", "/assets/**", "/logo.svg", "/imagen**").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia/**").permitAll();
                             auth.requestMatchers(HttpMethod.POST, "/api/paquete-experiencia").hasRole("Administrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/paquete-experiencia/**").hasRole("Administrador");
                             auth.requestMatchers(HttpMethod.PUT, "/api/paquete-experiencia/**").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/categoria").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.GET, "/api/categoria").permitAll();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasRole("Administrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasRole("Administrador");
                             auth.requestMatchers("/api/auth/**").permitAll()
                                     .requestMatchers("/api/test/**").permitAll()
                                     .anyRequest().authenticated();

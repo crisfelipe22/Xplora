@@ -52,23 +52,14 @@ public class PaqueteExperienciaController {
 
 
     @GetMapping
-    public ResponseEntity<List<PaqueteExperiencia>> obtenerTodosLosPaquetes() {
-        try {
-            List<PaqueteExperiencia> paquetes = paqueteExperienciaService.obtenerTodosLosPaquetes();
-            return new ResponseEntity<>(paquetes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<List<PaqueteExperienciaSalidaDto>> obtenerTodosLosPaquetes() {
+        List<PaqueteExperienciaSalidaDto> paquetesDto = paqueteExperienciaService.obtenerTodosLosPaquetes();
+        return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
-
     @GetMapping("/aleatorios")
-    public ResponseEntity<List<PaqueteExperiencia>> obtenerPaquetesAleatorios(
+    public ResponseEntity<List<PaqueteExperienciaSalidaDto>> obtenerPaquetesAleatorios(
             @RequestParam(name = "cantidad", defaultValue = "10", required = false) int cantidad) {
-        try {
-            List<PaqueteExperiencia> paquetes = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
-            return new ResponseEntity<>(paquetes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<PaqueteExperienciaSalidaDto> paquetesDto = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
+        return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
 }

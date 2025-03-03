@@ -68,7 +68,7 @@ public class PaqueteExperienciaService {
             PaqueteExperiencia nuevoPaquete = paqueteExperienciaRepository.save(paqueteExperiencia);
             logger.info("Paquete de experiencia '{}' agregado exitosamente con ID {}", nuevoPaquete.getNombre(), nuevoPaquete.getId_paquete_experiencia());
             paqueteExperienciaSalidaDto = modelMapper.map(nuevoPaquete, PaqueteExperienciaSalidaDto.class);
-            paqueteExperienciaSalidaDto.setId_categoria(nuevoPaquete.getCategoria().getIdCategoria());
+            paqueteExperienciaSalidaDto.setId_categoria(nuevoPaquete.getCategoria().getId_categoria());
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
             logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}", paqueteExperienciaEntradaDto.getNombre(), e.getMessage(), e);
@@ -76,17 +76,40 @@ public class PaqueteExperienciaService {
         }
     }
 
-    public List<PaqueteExperiencia> obtenerTodosLosPaquetes() {
-        return paqueteExperienciaRepository.findAll();
+    public List<PaqueteExperienciaSalidaDto> obtenerTodosLosPaquetes() {
+        try {
+            logger.info("Obteniendo todos los paquetes de experiencia");
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findAll();
+            return paquetes.stream()
+                    .map(paquete -> {
+                        PaqueteExperienciaSalidaDto dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+                        dto.setId_categoria(paquete.getCategoria().getId_categoria());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo todos los paquetes", e);
+            throw new RuntimeException("Error obteniendo paquetes de experiencia");
+        }
     }
 
-    public List<PaqueteExperiencia> obtenerPaquetesAleatorios(int cantidad) {
-        logger.info("Obtener los '{}' paquetes aleatorios", cantidad);
-        List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findAll();
-
-        Collections.shuffle(paquetes);
-
-        return paquetes.stream().limit(cantidad).collect(Collectors.toList());
+    public List<PaqueteExperienciaSalidaDto> obtenerPaquetesAleatorios(int cantidad) {
+        try {
+            logger.info("Obteniendo {} paquetes de experiencia aleatorios", cantidad);
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findAll();
+            Collections.shuffle(paquetes);
+            return paquetes.stream()
+                    .limit(cantidad)
+                    .map(paquete -> {
+                        PaqueteExperienciaSalidaDto dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
+                        dto.setId_categoria(paquete.getCategoria().getId_categoria());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo paquetes aleatorios", e);
+            throw new RuntimeException("Error obteniendo paquetes aleatorios");
+        }
     }
 
 
@@ -98,7 +121,7 @@ public class PaqueteExperienciaService {
                     return new ResourceNotFoundException("Paquete de experiencia no encontrado");
                 });
         PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
-        paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getIdCategoria());
+        paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
         return paqueteExperienciaSalidaDto;
     }
 
@@ -114,7 +137,7 @@ public class PaqueteExperienciaService {
             paqueteExperienciaRepository.deleteById(id);
             logger.info("Paquete con ID '{}' eliminado exitosamente", id);
             PaqueteExperienciaSalidaDto paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDto.class);
-            paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getIdCategoria());
+            paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
             logger.error("Error inesperado al eliminar el paquete con ID '{}': {}", id, e.getMessage(), e);
