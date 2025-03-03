@@ -4,12 +4,14 @@ import com.backend.dto.salida.AuthResponseDTO;
 import com.backend.dto.entada.LoginRequestDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
+import com.backend.dto.salida.UsuarioSalidaDTO;
 import com.backend.entity.Rol;
 import com.backend.entity.Usuario;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.RolRepository;
 import com.backend.repository.UsuarioRepository;
 import com.backend.security.jwt.JwtUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -37,18 +41,21 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
+    private final ModelMapper modelMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public AuthService(UsuarioRepository usuarioRepository,
                        RolRepository rolRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
-                       JwtUtils jwtUtils) {
+                       JwtUtils jwtUtils, ModelMapper modelMapper) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
@@ -124,5 +131,51 @@ public class AuthService {
                 usuario.getIniciales(),
                 usuario.getRol().getNombre()
         );
+    }
+
+    public UsuarioSalidaDTO obtenerUsuarioPorId(Long id) throws ResourceNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Usuario con ID '{}' no encontrado", id);
+                    return new ResourceNotFoundException("Usuario no encontrado");
+                });
+
+        return modelMapper.map(usuario, UsuarioSalidaDTO.class);
+    }
+
+    public List<UsuarioSalidaDTO> obtenerTodosLosUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios.stream()
+                .map(usuario -> modelMapper.map(usuario, UsuarioSalidaDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public MensajeResponseDTO actualizarUsuario(Long id, RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Usuario con ID '{}' no encontrado", id);
+                    return new ResourceNotFoundException("Usuario no encontrado");
+                });
+
+        modelMapper.map(registroDTO, usuario);
+        usuarioRepository.save(usuario);
+        logger.info("Usuario con ID '{}' actualizado exitosamente", id);
+
+        return new MensajeResponseDTO("Usuario actualizado correctamente", true);
+    }
+
+    @Transactional
+    public MensajeResponseDTO eliminarUsuario(Long id) throws ResourceNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Usuario con ID '{}' no encontrado", id);
+                    return new ResourceNotFoundException("Usuario no encontrado");
+                });
+
+        usuarioRepository.deleteById(id);
+        logger.info("Usuario con ID '{}' eliminado exitosamente", id);
+
+        return new MensajeResponseDTO("Usuario eliminado correctamente", true);
     }
 }
