@@ -17,12 +17,8 @@ public class CategoriaEntradaDto {
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
 
-    @Positive(message = "El precio no puede ser nulo o menor a cero")
-    private String id_categoria;
-
-    public CategoriaEntradaDto(String nombre, String id_categoria) {
+    public CategoriaEntradaDto(String nombre) {
         this.nombre = nombre;
-        this.id_categoria = id_categoria;
     }
 
     public CategoriaEntradaDto() {
@@ -36,11 +32,4 @@ public class CategoriaEntradaDto {
         this.nombre = nombre;
     }
 
-    public String getId_categoria() {
-        return id_categoria;
-    }
-
-    public void setId_categoria(String id_categoria) {
-        this.id_categoria = id_categoria;
-    }
 }
