@@ -9,11 +9,6 @@ public class UsuarioSalidaDTO {
 
     private String email;
 
-<<<<<<< HEAD
-    private String contrasena;
-
-=======
->>>>>>> 322df1c863b17f9aee8d8f8ee0eea9ece0f9602d
     private int telefono;
 
     private String direccion;
@@ -22,8 +17,6 @@ public class UsuarioSalidaDTO {
 
     private Long id_rol;
 
-<<<<<<< HEAD
-=======
     public UsuarioSalidaDTO(Long id_usuario, String nombre, String email, int telefono, String direccion, Date fechaRegistro, Long id_rol) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
@@ -92,5 +85,4 @@ public class UsuarioSalidaDTO {
     public void setId_rol(Long id_rol) {
         this.id_rol = id_rol;
     }
->>>>>>> 322df1c863b17f9aee8d8f8ee0eea9ece0f9602d
 }
