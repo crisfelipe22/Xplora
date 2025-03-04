@@ -69,10 +69,47 @@ const FormRegistroUsuario = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Formulario enviado:", form);
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/auth/registro",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nombre: form.nombre,
+              apellido: form.apellido,
+              email: form.email,
+              password: form.password,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Error en el registro");
+        }
+
+        const data = await response.json();
+        console.log("Registro exitoso:", data);
+
+        alert("Registro exitoso");
+
+        setForm({
+          nombre: "",
+          apellido: "",
+          email: "",
+          password: "",
+          terms: false,
+        });
+        setErrors({});
+      } catch (error) {
+        console.error("Error al registrar usuario:", error);
+        alert("Hubo un problema con el registro. Inténtalo de nuevo.");
+      }
     }
   };
 
