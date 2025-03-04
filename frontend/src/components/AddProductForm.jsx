@@ -155,8 +155,6 @@ const AddProductForm = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault()
         if (validaciones()){
-            console.log("Formulario exitoso, producto subido", productFormatoEnvio)
-
             //llamada a POST
             try {
                 const response = await axios.post('/api/paquete-experiencia', productFormatoEnvio, {
@@ -228,7 +226,7 @@ const AddProductForm = () => {
                                 error={!!errores.descripcion}
                                 helperText={errores.descripcion}
                                 multiline
-                                rows={3}
+                                rows={2}
                                 fullWidth
                             />
 

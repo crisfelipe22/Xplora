@@ -9,7 +9,7 @@ import { useState } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
 import { useMediaQuery } from "@mui/material";
 
-const CardDetalleProducto = ({product}) =>{
+const CardDetalleProducto = ({product, categorias}) =>{
     const [openGallery, setOpenGallery] = useState(false);
     const handleOpenGallery = () => setOpenGallery(true);
     const handleCloseGallery = () => setOpenGallery(false);
@@ -56,7 +56,7 @@ const CardDetalleProducto = ({product}) =>{
             <Box className={styles.contenedorDetalles}> 
                 <Box className={styles.contenedorDos}>
                     <div className={styles.seccionRating}>
-                        {/*<Chip label={product.categoria.nombre} className={styles.chip} />*/}
+                        <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
                         <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
                     </div>    
                     <List dense>

@@ -11,6 +11,7 @@ import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
+import AdminUsers from "./pages/AdminUsers";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<EditarProductoAdmin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
     </>

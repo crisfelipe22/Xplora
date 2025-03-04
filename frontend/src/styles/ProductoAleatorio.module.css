@@ -68,3 +68,18 @@
     align-self: flex-start;
     margin-top: auto;
 }
+
+.pagination{
+    display: flex;
+    justify-content: space-around;
+    padding: 0px 6px;
+    margin-top: 3%;
+}
+
+.MuiPagination-root {
+    justify-content: center;
+}
+
+.MuiPaginationItem-root {
+    border-radius: 8px; 
+}

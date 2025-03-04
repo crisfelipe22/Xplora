@@ -2,6 +2,7 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Box, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListIcon from '@mui/icons-material/List';
+import PeopleIcon from '@mui/icons-material/People';
 import styles from "../styles/AdminPanel.module.css";
 import { Link } from 'react-router-dom';
 import logoImg from '../assets/images/logoImg.png'
@@ -30,6 +31,7 @@ const SidebarAdmin = () => {
                         }
                     }}>
                     <List className={styles.menuList}> 
+
                         <Link to='/admin' style={{ textDecoration: 'none' }}>
                             <ListItemButton className={styles.menuItem}>
                                 <ListItemIcon>
@@ -45,6 +47,15 @@ const SidebarAdmin = () => {
                                     <ListIcon  className={styles.menuIcon}/>
                                 </ListItemIcon>
                                 <ListItemText primary="Lista de productos" className={styles.menuText} />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="/admin/users" style={{ textDecoration: 'none' }}>
+                            <ListItemButton className={styles.menuItem}>
+                                <ListItemIcon>
+                                    <PeopleIcon  className={styles.menuIcon}/>
+                                </ListItemIcon>
+                                <ListItemText primary="Usuarios" className={styles.menuText} />
                             </ListItemButton>
                         </Link>
                     </List>

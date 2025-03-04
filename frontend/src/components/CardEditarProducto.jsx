@@ -50,11 +50,7 @@ const CardEditarProducto = () =>{
             const obtenerCategorias = async () => {
                 try {
                     const response = await axios.get("http://localhost:8080/api/categoria");
-                    const categoriasTransformadas = response.data.map(cat => ({
-                        id_categoria: cat.idCategoria, // Cambia la propiedad
-                        nombre: cat.nombre
-                    }));
-                    setCategorias(categoriasTransformadas); 
+                    setCategorias(response.data); 
                     console.log(response.data)
                 } catch (error) {
                     console.error("Error al obtener las categorías:", error);
@@ -177,10 +173,7 @@ const CardEditarProducto = () =>{
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("array imagen: "+ product.imagen)
         if (validaciones()){
-            console.log("Formulario exitoso, producto subido", productFormatoEnvio)
-
             try {
                 await axios.put(`/api/paquete-experiencia/${id_paquete_experiencia}`, productFormatoEnvio);
                     setOpenAlertExito(true)
@@ -188,6 +181,7 @@ const CardEditarProducto = () =>{
                         setOpenAlertExito(false)
                         navigate("/admin/productos")
                     }, 3000);
+                    console.log( ' categoria ' + product.id_categoria )
             } catch (error) {
                 console.error("Error al actualizar el producto:", error);
             }    

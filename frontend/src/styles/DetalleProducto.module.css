@@ -230,7 +230,7 @@
     }
 }
 
-@media (max-width: 900px){
+@media (max-width: 412px){
     .backButton{
         margin-left: 65% !important;
         font-size: xx-small !important;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,14 @@ public class GlobalExceptionHandler {
     public Map<String, String> manejarEntityNotFoundException(EntityNotFoundException entityNotFoundException) {
         Map<String, String> mensaje = new HashMap<>();
         mensaje.put("mensaje: ", entityNotFoundException.getMessage());
+        return mensaje;
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> manejarAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> mensaje = new HashMap<>();
+        mensaje.put("mensaje", "No tienes permisos para realizar esta acción.");
         return mensaje;
     }
 

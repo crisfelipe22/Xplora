@@ -16,11 +16,20 @@ public class Categoria {
     private String nombre;
 
     // Getters y setters
-    public Long getIdCategoria() {
+
+    public Categoria(Long id_categoria, String nombre) {
+        this.id_categoria = id_categoria;
+        this.nombre = nombre;
+    }
+
+    public Categoria() {
+    }
+
+    public Long getId_categoria() {
         return id_categoria;
     }
 
-    public void setIdCategoria(Long idCategoria) {
+    public void setId_categoria(Long id_categoria) {
         this.id_categoria = id_categoria;
     }
 
