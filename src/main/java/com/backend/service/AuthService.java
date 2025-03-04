@@ -138,11 +138,7 @@ public class AuthService {
         );
     }
 
-<<<<<<< HEAD
-    public UsuarioSalidaDTO obtenerUsuarioPorId(Long id) throws ResourceNotFoundException {
-=======
     public UsuarioSalidaDTO obtenerUsuarioPorId(Long id) throws ResourceNotFoundException, AccessDeniedException {
->>>>>>> 322df1c863b17f9aee8d8f8ee0eea9ece0f9602d
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Usuario con ID '{}' no encontrado", id);
