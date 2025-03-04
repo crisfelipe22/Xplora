@@ -2,18 +2,15 @@
 import React from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Home from "./pages/Home"; 
-import Admin from "./pages/Admin"; 
-import Login from "./pages/Login"; 
-import Registro from "./pages/Registro"; 
-import CssBaseline from '@mui/material/CssBaseline';
+import Home from "./pages/Home";
+import Admin from "./pages/Admin";
+import CssBaseline from "@mui/material/CssBaseline";
 // import './App.css'
 import { Route, Routes, useLocation } from "react-router-dom";
 import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
-
 
 
 function App() {
