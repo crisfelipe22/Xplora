@@ -77,6 +77,12 @@ public class SecurityConfig {
                             auth.requestMatchers(HttpMethod.PUT, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.PATCH, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/auth").hasAnyRole( "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.GET, "/api/rol").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/rol/**").permitAll();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+
                             auth.requestMatchers("/api/test/**").permitAll()
                                     .anyRequest().authenticated();
                         }
