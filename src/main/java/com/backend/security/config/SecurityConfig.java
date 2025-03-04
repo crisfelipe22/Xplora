@@ -69,10 +69,28 @@ public class SecurityConfig {
                             auth.requestMatchers(HttpMethod.POST, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.GET, "/api/categoria").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/categoria/**").permitAll();
+<<<<<<< HEAD
                             auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasRole("Administrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasRole("Administrador");
                             auth.requestMatchers("/api/auth/**").permitAll()
                                     .requestMatchers("/api/test/**").permitAll()
+=======
+                            auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/auth").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/auth").authenticated();
+                            auth.requestMatchers(HttpMethod.GET, "/api/auth/**").authenticated();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.PATCH, "/api/auth").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/auth").hasAnyRole( "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.GET, "/api/rol").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/rol/**").permitAll();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
+
+                            auth.requestMatchers("/api/test/**").permitAll()
+>>>>>>> 0e7cee20c41028027f03951084cabb2c9585cb32
                                     .anyRequest().authenticated();
                         }
                 );
