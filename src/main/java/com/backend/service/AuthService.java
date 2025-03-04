@@ -189,7 +189,7 @@ public class AuthService {
         logger.info("Usuario con ID '{}' actualizado exitosamente", id);
 
         UsuarioSalidaDTO usuarioSalidaDTO = modelMapper.map(usuario, UsuarioSalidaDTO.class);
-        usuarioSalidaDTO.setId_rol(usuario.getRol().getId_rol());
+        usuarioSalidaDTO.setId_rol(registroDTO.getId_rol());
         return usuarioSalidaDTO;
     }
 
@@ -211,35 +211,54 @@ public class AuthService {
     }
 
     @Transactional
-    public UsuarioSalidaDTO actualizarParcialmenteUsuario(Long id, Map<String, Object> cambios) throws ResourceNotFoundException, AccessDeniedException {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Usuario con ID '{}' no encontrado", id);
-                    return new ResourceNotFoundException("Usuario no encontrado");
-                });
+    public UsuarioSalidaDTO actualizarParcialmenteUsuario(Long id, Map<String, Object> cambios)
+            throws ResourceNotFoundException, AccessDeniedException {
 
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        // Obtener el usuario autenticado
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuario.getEmail().equals(emailActual) && !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+        // Validar permisos
+        if (!usuario.getEmail().equals(emailActual) &&
+                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
             throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
         }
 
-        cambios.forEach((campo, valor) -> {
-            Field field = ReflectionUtils.findField(Usuario.class, campo);
-            if (field != null) {
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, usuario, valor);
+        // Variable para almacenar el nuevo ID de rol si se envía en cambios
+        Long nuevoIdRol = null;
+
+        for (Map.Entry<String, Object> entry : cambios.entrySet()) {
+            String campo = entry.getKey();
+            Object valor = entry.getValue();
+
+            if (campo.equals("id_rol")) {
+                nuevoIdRol = ((Number) valor).longValue(); // Guardamos el nuevo id_rol para asignarlo después
+            } else {
+                Field field = ReflectionUtils.findField(Usuario.class, campo);
+                if (field != null) {
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, usuario, valor);
+                }
             }
-        });
+        }
+
+        if (nuevoIdRol != null) {
+            Rol nuevoRol = rolRepository.findById(nuevoIdRol)
+                    .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
+            usuario.setRol(nuevoRol);
+        }
 
         usuarioRepository.save(usuario);
-        logger.info("Usuario con ID '{}' actualizado parcialmente", id);
 
         UsuarioSalidaDTO usuarioSalidaDTO = modelMapper.map(usuario, UsuarioSalidaDTO.class);
-        usuarioSalidaDTO.setId_rol(usuario.getRol().getId_rol());
+        usuarioSalidaDTO.setId_rol(nuevoIdRol != null ? nuevoIdRol : usuario.getRol().getId_rol());
+
         return usuarioSalidaDTO;
     }
+
 
 }
