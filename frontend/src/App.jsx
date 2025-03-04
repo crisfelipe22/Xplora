@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home"; 
 import Admin from "./pages/Admin"; 
+import Login from "./pages/Login"; 
 import CssBaseline from '@mui/material/CssBaseline';
 // import './App.css'
 import { Route, Routes,  useLocation } from "react-router-dom";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/admin/productos/nuevo-producto" element={<AddProduct />} />
         <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
         <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<EditarProductoAdmin />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
       
