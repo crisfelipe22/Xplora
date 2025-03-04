@@ -4,8 +4,10 @@ import { Button, Box, Typography, TableContainer, TableBody, TableCell, TableHea
 import AdminLayout from "./AdminLayout";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
+import axios from "axios";
 
 const CardAdminUsers = () =>{
+    
     const [pag, setPag] = useState(0);
     const [columnPorPag, setColumnPorPag] = useState(5);
 
@@ -13,60 +15,41 @@ const CardAdminUsers = () =>{
     const [cambioRol, setCambioRol] = useState('');
     const [usuarioSelect, setUsuarioSelect] = useState(null);
 
-    const [users, setUsers] = useState([
-        {id: 1,
-            nombre: 'Sara Mendoza',
-            correo: 'sara@xplora.com',
-            id_rol: 1
-        },
-        {id: 2,
-            nombre: 'Solymar Quiaro',
-            correo: 'solymar@xplora.com',
-            id_rol: 2
-        },
-        {id: 3,
-            nombre: 'Sara Mendoza',
-            correo: 'sara@xplora.com',
-            id_rol: 2
-        },
-        {id: 4,
-            nombre: 'Solymar Quiaro',
-            correo: 'solymar@xplora.com',
-            id_rol: 2
-        },
-        {id: 5,
-            nombre: 'Sara Mendoza',
-            correo: 'sara@xplora.com',
-            id_rol: 2
-        },
-        {id: 6,
-            nombre: 'Solymar Quiaro',
-            correo: 'solymar@xplora.com',
-            id_rol: 2
-        },
-    ])
+    const [users, setUsers] = useState([])
     const [roles, setRoles] = useState([
         {
             id_rol: 1,
-            nombre: 'Administrador'
+            nombre: 'SuperAdministrador'
         },
         {
             id_rol: 2,
+            nombre: 'Administrador'
+        },
+        {
+            id_rol: 3,
             nombre: 'Usuario'
         }
     ])
 
-    /*useEffect(() => {
+    //EL TOKEN SE OBTIENE DEL LOCAL STORAGE, POR AHORA PARA PRUEBAS LO PASO ASÍ
+    const token = /*localStorage.getItem("token")*/ "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhQHhwbG9yYS5jb20iLCJpYXQiOjE3NDEwNTEzMzgsImV4cCI6MTc0MTEzNzczOH0.-hETzMkG7wpUP6wkl97j_9yLrTC0n0LbwkxU5vc7B4A";
+
+    useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("/api/usuarios");
+                const response = await axios.get("http://localhost:8080/api/auth", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setUsers(response.data);
+                console.log(response.data)
             } catch (error) {
                 console.error("Error al obtener los usuarios:", error);
             }
         };
 
-        const obtenerRoles= async () => {
+        /*const obtenerRoles= async () => {
                 try {
                     const response = await axios.get("http://localhost:8080/api/roles");
                     setRoles(response.data); 
@@ -75,9 +58,9 @@ const CardAdminUsers = () =>{
                     console.error("Error al obtener los roles:", error);
                 }
         
-        obtenerRoles();
+        obtenerRoles();*/
         fetchUsers();
-    }, []);*/
+    }, [token]);
 
     const handleOpenDialog = (user, id_rol) => {
         setCambioRol(id_rol);
@@ -92,21 +75,23 @@ const CardAdminUsers = () =>{
 
     const handleChangeRol = async () =>{
         if(!usuarioSelect) return;
-
-        setUsers(prevUsers =>
-            prevUsers.map(user => 
-                user.id === usuarioSelect.id ? { ...user, id_rol: cambioRol } : user
-        ));
-
+        const idRolNumber = Number(cambioRol);
+        setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+                users.id_usuario === usuarioSelect.id_usuario ? { ...user, id_rol:idRolNumber } : user
+            )
+        );
         setOpenDialog(false);
 
-        /*try {
-            await axios.put(`api/admin/${usuarioSelect.id}`, { id_rol: cambioRol });
-            
+        try {
+            await axios.patch(`http://localhost:8080/api/auth/${usuarioSelect.id_usuario}`, { id_rol: idRolNumber },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }});
             console.log(`Rol de ${usuarioSelect.nombre} actualizado a ${cambioRol}`);
         } catch (error) {
             console.error("Error al actualizar el rol", error);
-        }*/
+        }
     }
 
         
@@ -143,10 +128,10 @@ const CardAdminUsers = () =>{
                             <TableBody>
                                 {users.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)                                
                                 .map((user) => (
-                                    <TableRow key={user.id} className={styles.tableRow}>
-                                        <TableCell>{user.id}</TableCell>
+                                    <TableRow key={user.id_usuario} className={styles.tableRow}>
+                                        <TableCell>{user.id_usuario}</TableCell>
                                         <TableCell>{user.nombre}</TableCell>
-                                        <TableCell>{user.correo}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
                                         <TableCell>
                                             <Select
                                                 labelId="rol-label"
