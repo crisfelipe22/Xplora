@@ -5,7 +5,7 @@ import { Card, CardContent, Typography, CardMedia, Rating, Chip} from '@mui/mate
 import styles from '../styles/ProductoAleatorio.module.css';
 import { Link } from 'react-router-dom';
 
-const CardProductoAleatorio = ({product}) => {
+const CardProductoAleatorio = ({product, categorias}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
     const imagenUrl =  imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
     //suponiendo raiting por ahora
@@ -32,7 +32,7 @@ const CardProductoAleatorio = ({product}) => {
                         {product.descripcion}
                     </Typography>
 
-                    <Chip label={product.categoria.nombre} className={styles.categoriaProducto} />
+                    <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.categoriaProducto} />
                     
                 </CardContent>
             </Card>

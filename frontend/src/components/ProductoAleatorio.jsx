@@ -10,6 +10,7 @@ const ProductoAleatorio = () => {
     const [itemPorPag, setItemPorPag] = useState(6);
 
     const [productosAleatorios, setProductosAleatorios] = useState([]);
+    const [categorias, setCategorias] = useState()
 
     useEffect(() => {
         const obtenerProductosAleatorios = async () => {
@@ -20,6 +21,17 @@ const ProductoAleatorio = () => {
             console.error("Error obteniendo productos aleatorios:", error);
         }
         };
+
+        const obtenerCategorias = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/api/categoria");
+                setCategorias(response.data); 
+            } catch (error) {
+                console.error("Error al obtener las categorías:", error);
+            }
+        };
+
+        obtenerCategorias();
 
         obtenerProductosAleatorios();
     }, []);
@@ -33,7 +45,7 @@ const ProductoAleatorio = () => {
             <Grid2 container spacing={4}  columns={12}>
                 {paginatedProducts.map((product) => (
                     <Grid2 item size={{ mobile: 12, tablet: 6, desktop: 4 }} key={product.id_paquete_experiencia}>
-                        <CardProductoAleatorio product={product} />
+                        <CardProductoAleatorio product={product} categorias={categorias}/>
                     </Grid2>
                 ))}
             </Grid2>
