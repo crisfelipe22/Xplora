@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,7 +44,7 @@ public class AuthController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioSalidaDTO> obtenerUsuarioPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+    public ResponseEntity<UsuarioSalidaDTO> obtenerUsuarioPorId(@PathVariable(name = "id") Long id) throws ResourceNotFoundException, AccessDeniedException {
         UsuarioSalidaDTO usuarioDto = authService.obtenerUsuarioPorId(id);
         return ResponseEntity.ok(usuarioDto);
     }
@@ -54,16 +56,28 @@ public class AuthController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MensajeResponseDTO> actualizarUsuario(@PathVariable(name = "id") Long id, @Valid @RequestBody RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
-        MensajeResponseDTO mensaje = authService.actualizarUsuario(id, registroDTO);
-        HttpStatus status = mensaje.isExito() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(mensaje, status);
+    public ResponseEntity<UsuarioSalidaDTO> actualizarUsuario(
+            @PathVariable(name = "id") Long id,
+            @Valid @RequestBody RegistroRequestDTO registroDTO) throws ResourceNotFoundException, AccessDeniedException {
+
+        UsuarioSalidaDTO usuarioActualizado = authService.actualizarUsuario(id, registroDTO);
+        return ResponseEntity.ok(usuarioActualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MensajeResponseDTO> eliminarUsuario(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
-        MensajeResponseDTO mensaje = authService.eliminarUsuario(id);
-        return ResponseEntity.ok(mensaje);
+    public ResponseEntity<UsuarioSalidaDTO> eliminarUsuario(@PathVariable(name = "id") Long id) throws ResourceNotFoundException {
+        UsuarioSalidaDTO usuarioEliminado = authService.eliminarUsuario(id);
+        return ResponseEntity.ok(usuarioEliminado);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UsuarioSalidaDTO> actualizarParcialmenteUsuario(
+            @PathVariable(name = "id") Long id,
+            @RequestBody Map<String, Object> cambios) throws ResourceNotFoundException, AccessDeniedException {
+
+        UsuarioSalidaDTO usuarioActualizado = authService.actualizarParcialmenteUsuario(id, cambios);
+        return ResponseEntity.ok(usuarioActualizado);
+    }
+
 
 }
