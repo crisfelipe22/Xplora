@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import imagenFondo from "/imagen_20.png";
+import axios from "axios";
 import {
   Grid,
   TextField,
@@ -15,10 +17,12 @@ import { useMediaQuery, useTheme } from "@mui/material";
 const FormRegistroUsuario = () => {
   const [form, setForm] = useState({
     nombre: "",
-    apellido: "",
+    direccion: "",
     email: "",
-    password: "",
+    contrasena: "",
     terms: false,
+    telefono: 123456,
+    id_rol: 3
   });
 
   const theme = useTheme();
@@ -35,11 +39,9 @@ const FormRegistroUsuario = () => {
       newErrors.nombre = "Solo se permiten letras";
     }
 
-    if (!form.apellido.trim()) {
-      newErrors.apellido = "El apellido es obligatorio";
-    } else if (!/^[A-Za-z ]+$/.test(form.apellido)) {
-      newErrors.apellido = "Solo se permiten letras";
-    }
+    if (!form.direccion.trim()) {
+      newErrors.direccion = "La dirección es obligatoria";
+    } 
 
     if (!form.email.trim()) {
       newErrors.email = "El correo es obligatorio";
@@ -47,10 +49,10 @@ const FormRegistroUsuario = () => {
       newErrors.email = "Correo inválido";
     }
 
-    if (!form.password.trim()) {
-      newErrors.password = "La contraseña es obligatoria";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Mínimo 6 caracteres";
+    if (!form.contrasena.trim()) {
+      newErrors.contrasena = "La contraseña es obligatoria";
+    } else if (form.contrasena.length < 6) {
+      newErrors.contrasena = "Mínimo 6 caracteres";
     }
 
     if (!form.terms) {
@@ -69,46 +71,42 @@ const FormRegistroUsuario = () => {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const dataToSend = {
+      nombre: form.nombre,
+      direccion: form.direccion,
+      email: form.email,
+      contrasena: form.contrasena,
+      telefono: 123456, 
+      id_rol: 3, 
+    };
+    console.log(form)
+    console.log(dataToSend)
     if (validate()) {
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/auth/registro",
+        const response = await axios.post("http://localhost:8080/api/auth/registro", dataToSend,
           {
-            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              nombre: form.nombre,
-              apellido: form.apellido,
-              email: form.email,
-              password: form.password,
-            }),
           }
         );
-
-        if (!response.ok) {
-          throw new Error("Error en el registro");
-        }
-
-        const data = await response.json();
-        console.log("Registro exitoso:", data);
-
+        console.log("Usuario registrado:", response.data);
         alert("Registro exitoso");
 
         setForm({
           nombre: "",
-          apellido: "",
+          direccion: "",
           email: "",
-          password: "",
+          contrasena: "",
           terms: false,
         });
         setErrors({});
       } catch (error) {
         console.error("Error al registrar usuario:", error);
-        alert("Hubo un problema con el registro. Inténtalo de nuevo.");
+        alert("Hubo un problema con el registro: " + (error.response?.data?.message || "Error desconocido"));
       }
     }
   };
@@ -158,7 +156,7 @@ const FormRegistroUsuario = () => {
 
           <Typography variant="body2" color="text.secondary" gutterBottom>
             Si ya tienes una cuenta en Xplora, puedes{" "}
-            <Link href="#" color="primary" underline="hover">
+            <Link href="#" underline="hover">
               iniciar sesión
             </Link>
           </Typography>
@@ -182,15 +180,15 @@ const FormRegistroUsuario = () => {
 
             <TextField
               fullWidth
-              label="Apellido"
-              name="apellido"
-              value={form.apellido}
+              label="Dirección"
+              name="direccion"
+              value={form.direccion}
               onChange={handleChange}
-              error={Boolean(errors.apellido)}
-              helperText={errors.apellido}
+              error={Boolean(errors.direccion)}
+              helperText={errors.direccion}
               margin="normal"
               variant="outlined"
-              placeholder="Ingresa tu apellido"
+              placeholder="Ingresa tu dirección"
               slotProps={{ inputLabel: { shrink: true } }}
             />
 
@@ -213,11 +211,11 @@ const FormRegistroUsuario = () => {
               fullWidth
               label="Contraseña"
               type="password"
-              name="password"
-              value={form.password}
+              name="contrasena"
+              value={form.contrasena}
               onChange={handleChange}
-              error={Boolean(errors.password)}
-              helperText={errors.password}
+              error={Boolean(errors.contrasena)}
+              helperText={errors.contrasena}
               margin="normal"
               variant="outlined"
               placeholder="*************"
