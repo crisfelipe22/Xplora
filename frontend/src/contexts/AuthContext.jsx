@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         try {
           // Try to make a request that requires authentication
           // Choose an endpoint that requires authentication and is safe to call
-          const response = await axios.get('/api/auth', {
+          const response = await axios.get('/api/auth/validate', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
