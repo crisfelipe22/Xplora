@@ -9,6 +9,9 @@ import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
 import AdminLayout from "./AdminLayout";
+//iconos//
+
+//
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -42,7 +45,9 @@ const AddProductForm = () => {
         { id_car: 7, nombre: "Servicio de Wi-Fi" },
         { id_car: 8, nombre: "Servicio de decoración" },
     ]
-    const iconosDisponibles={}
+    const iconosDisponibles={
+        1: 'icon1'
+    }
     const [caracteristicas, setCaracteristicas] = useState([]);
     const [dialogCaracteristicas, setDialogCaracteristicas] = useState(false);
     const [caracteristicaSeleccionada, setCaracteristicaSeleccionada] = useState("");
@@ -69,10 +74,11 @@ const AddProductForm = () => {
                 }
             ]);
             handleCloseDialogCarac();
+            console.log(caracteristicas)
         }
     };
     const handleEliminarCaracteristica = (id_car_prod) => {
-        setCaracteristicas(caracteristicas.filter((item) => item.id !== id_car_prod));
+        setCaracteristicas(caracteristicas.filter((item) => item.id_car_prod !== id_car_prod));
     };
 
 /////////
@@ -371,7 +377,7 @@ const AddProductForm = () => {
                                     </List>
                                 )}
                             </Box>
-                        </Box>}
+                        </Box>
 
                         <Box className={styles.seccion}>
                             <Typography className={styles.h6} variant="h6" gutterBottom>
