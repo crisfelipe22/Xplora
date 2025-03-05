@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -30,6 +31,51 @@ const AddProductForm = () => {
 
     const [categorias, setCategorias] = useState([]);
 
+    //CARACTERISTICAS///////
+    const caracteristicasDisponibles = [
+        { id_car: 1, nombre: "Estacionamiento gratuito" },
+        { id_car: 2, nombre: "Fechas flexibles" },
+        { id_car: 3, nombre: "Vista a las montañas" },
+        { id_car: 4, nombre: "Desayuno incluido" },
+        { id_car: 5, nombre: "Se permiten mascotas" },
+        { id_car: 6, nombre: "Zona de comida al aire libre" },
+        { id_car: 7, nombre: "Servicio de Wi-Fi" },
+        { id_car: 8, nombre: "Servicio de decoración" },
+    ]
+    const iconosDisponibles={}
+    const [caracteristicas, setCaracteristicas] = useState([]);
+    const [dialogCaracteristicas, setDialogCaracteristicas] = useState(false);
+    const [caracteristicaSeleccionada, setCaracteristicaSeleccionada] = useState("");
+    const [iconoSeleccionado, setIconoSeleccionado] = useState("");
+
+    const handleOpenDialogCarac = () => {
+        setDialogCaracteristicas(true);
+    };
+    
+    const handleCloseDialogCarac = () => {
+        setDialogCaracteristicas(false);
+        setCaracteristicaSeleccionada("");
+        setIconoSeleccionado("");
+    };
+
+    const handleGuardarCaracteristica = () => {
+        if (caracteristicaSeleccionada && iconoSeleccionado) {
+            setCaracteristicas([
+                ...caracteristicas,
+                { 
+                    id_car_prod: Date.now(), 
+                    nombre: caracteristicaSeleccionada, 
+                    icono: iconosDisponibles[iconoSeleccionado] 
+                }
+            ]);
+            handleCloseDialogCarac();
+        }
+    };
+    const handleEliminarCaracteristica = (id_car_prod) => {
+        setCaracteristicas(caracteristicas.filter((item) => item.id !== id_car_prod));
+    };
+
+/////////
     useEffect(() => {
         const obtenerCategorias = async () => {
             try {
@@ -325,7 +371,79 @@ const AddProductForm = () => {
                                     </List>
                                 )}
                             </Box>
+                        </Box>}
+
+                        <Box className={styles.seccion}>
+                            <Typography className={styles.h6} variant="h6" gutterBottom>
+                                Administrar caracteristicas
+                            </Typography>
+                            <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonAgregar}>
+                                AÑADIR NUEVA
+                            </Button>
+                            <TableContainer className={styles.tableContainer}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell className={styles.tableHeader}>Características</TableCell>
+                                            <TableCell className={styles.tableHeader}>Acciones</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    
+                                    <TableBody>
+                                        {caracteristicas.map((carac) => (
+                                            <TableRow key={carac.id_car_prod} className={styles.tableRow}>
+                                                <TableCell>{carac.nombre}</TableCell>
+                                                <TableCell>
+                                                    <Button variant="outlined" className={styles.botonEliminar} onClick={() => handleEliminarCaracteristica(carac.id_car_prod)}>
+                                                        Eliminar
+                                                    </Button>
+                                                    <Button variant="outlined" className={styles.botonEditar}>
+                                                        Editar
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <Dialog open={dialogCaracteristicas} onClose={handleCloseDialogCarac}>
+                                <DialogTitle>Agregar Característica</DialogTitle>
+                                <DialogContent>
+                                <Select
+                                    fullWidth
+                                    value={caracteristicaSeleccionada}
+                                    onChange={(e) => setCaracteristicaSeleccionada(e.target.value)}
+                                    displayEmpty
+                                >
+                                    <MenuItem value="" disabled>Selecciona una característica</MenuItem>
+                                    {caracteristicasDisponibles.map((car) => (
+                                    <MenuItem key={car.id_car} value={car.nombre}>{car.nombre}</MenuItem>
+                                    ))}
+                                </Select>
+
+                                <Select
+                                    fullWidth
+                                    value={iconoSeleccionado}
+                                    onChange={(e) => setIconoSeleccionado(e.target.value)}
+                                    displayEmpty
+                                    style={{ marginTop: "10px" }}
+                                >
+                                    <MenuItem value="" disabled>Selecciona un icono</MenuItem>
+                                    {Object.keys(iconosDisponibles).map((icono) => (
+                                    <MenuItem key={icono} value={icono}>
+                                        {iconosDisponibles[icono]} {icono}
+                                    </MenuItem>
+                                    ))}
+                                </Select>
+                                </DialogContent>
+
+                                <DialogActions>
+                                <Button onClick={handleCloseDialogCarac} color="secondary">Cancelar</Button>
+                                <Button onClick={handleGuardarCaracteristica} color="primary" variant="contained">Guardar</Button>
+                                </DialogActions>
+                            </Dialog>
                         </Box>
+
 
                         <Box className={styles.botones}>
                             <Button className={styles.botonAgregar} type="submit" variant="contained">
