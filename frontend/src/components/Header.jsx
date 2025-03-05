@@ -1,21 +1,24 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import styles from "../styles/header.module.css";
 import MenuUsuario from "./MenuUsuario";
+import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // Con esto estoy simulando que el usuario inició sesión
+  let navigate = useNavigate();
+  const { isAuthenticated, logout, user } = useAuth();
+  
   const handleLogin = () => {
-    setIsAuthenticated(true);
+    navigate("/login");
   };
   // Y con esto estoy simulando el cierre de sesión.
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    logout();
   };
 
   return (
@@ -63,7 +66,11 @@ const Header = () => {
             </Button>
           </>
         ) : (
-          <MenuUsuario onLogout={handleLogout} />
+          <MenuUsuario 
+            onLogout={handleLogout}
+            avatarText={user.iniciales}
+            userName={user.nombre}
+          />
         )}
       </Box>
     </Box>

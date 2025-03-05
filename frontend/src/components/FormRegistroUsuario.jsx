@@ -105,7 +105,7 @@ const FormRegistroUsuario = () => {
         setOpenAlertExito(true)
         setTimeout(() => {
           setOpenAlertExito(false)
-          navigate("/")
+          navigate("/login")
         }, 3000);;
 
         setForm({

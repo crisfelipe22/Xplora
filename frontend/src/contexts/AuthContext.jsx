@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setIsAuthenticated(false);
     setUser(null);
-    navigate('/login');
+    navigate('/');
   };
 
   // Only render children when loading is complete
