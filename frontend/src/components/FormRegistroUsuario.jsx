@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import imagenFondo from "/frontend/public/imagen_20.png";
 import {
   Grid,
   TextField,
@@ -19,6 +18,9 @@ const FormRegistroUsuario = () => {
     password: "",
     terms: false,
   });
+
+  const imagenFondo = "/imagen_20.png"; // Correct way to reference public files
+
 
   const [errors, setErrors] = useState({});
 

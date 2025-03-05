@@ -4,6 +4,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
+import Login from "./pages/Login";
+import Registro from "./pages/Registro";
 import CssBaseline from "@mui/material/CssBaseline";
 // import './App.css'
 import { Route, Routes, useLocation } from "react-router-dom";
