@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->{
                             auth.requestMatchers("/", "/login", "/registro", "/error", "/index.html", "/css/**", "/js/**", "/images/**", "/assets/**", "/logo.svg", "/imagen**").permitAll();
-                            auth.requestMatchers("/admin", "/admin/**").hasAnyRole("Administrador", "SuperAdministrador");
+ 
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia/**").permitAll();
                             auth.requestMatchers(HttpMethod.POST, "/api/paquete-experiencia").hasAnyRole("Administrador", "SuperAdministrador");
@@ -85,8 +85,8 @@ public class SecurityConfig {
                             auth.requestMatchers(HttpMethod.PUT, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
 
-                            auth.requestMatchers("/api/test/**").permitAll()
-                                    .anyRequest().authenticated();
+                            auth.requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated();
                         }
                 );
 
