@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import imagenFondo from "/imagen_20.png";
 import axios from "axios";
+import { useNavigate } from "react-router";
 import {
-  Grid,
+  Grid, Alert, Snackbar,
   TextField,
   Button,
   Checkbox,
@@ -24,6 +25,13 @@ const FormRegistroUsuario = () => {
     telefono: 123456,
     id_rol: 3
   });
+
+   const [openAlertExito, setOpenAlertExito] = useState(false);
+   let navigate = useNavigate();
+   const handleCloseAlertExito = (_, reason) => {
+    if (reason === "clickaway") return;
+    setOpenAlertExito(false);
+};
 
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
@@ -94,7 +102,11 @@ const FormRegistroUsuario = () => {
           }
         );
         console.log("Usuario registrado:", response.data);
-        alert("Registro exitoso");
+        setOpenAlertExito(true)
+        setTimeout(() => {
+          setOpenAlertExito(false)
+          navigate("/")
+        }, 3000);;
 
         setForm({
           nombre: "",
@@ -276,7 +288,20 @@ const FormRegistroUsuario = () => {
           }}
         />
       </Grid>
+
+      <Snackbar
+        open={openAlertExito}
+        autoHideDuration={3000}
+        onClose={handleCloseAlertExito}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+      >
+        <Alert onClose={handleCloseAlertExito} severity="success">
+          ¡Usuario registrado con éxito!
+        </Alert>
+      </Snackbar>
     </Grid>
+
+    
   );
 };
 
