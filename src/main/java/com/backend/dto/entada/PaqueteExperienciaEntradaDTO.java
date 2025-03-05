@@ -6,14 +6,14 @@ import jakarta.validation.constraints.*;
 
 import java.util.Date;
 
-public class PaqueteExperienciaEntradaDto {
+public class PaqueteExperienciaEntradaDTO {
 
     @NotBlank(message="Debe indicar el nombre del paquete de experiencia")
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
 
     @NotBlank(message="Debe indicar la descripción del paquete de experiencia")
-    @Size(min = 3, max = 50, message = "La descripción debe tener entre 3 y 50 caracteres")
+    @Size(min = 3, max = 255, message = "La descripción debe tener entre 3 y 255 caracteres")
     private String descripcion;
 
     @Positive(message = "El precio no puede ser nulo o menor a cero")
@@ -38,7 +38,7 @@ public class PaqueteExperienciaEntradaDto {
     @Positive(message = "La categoria no puede ser nulo o menor a cero")
     private Long id_categoria;
 
-    public PaqueteExperienciaEntradaDto(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_experiencia, String duracion, Long id_categoria) {
+    public PaqueteExperienciaEntradaDTO(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_experiencia, String duracion, Long id_categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -49,7 +49,7 @@ public class PaqueteExperienciaEntradaDto {
         this.id_categoria = id_categoria;
     }
 
-    public PaqueteExperienciaEntradaDto() {
+    public PaqueteExperienciaEntradaDTO() {
     }
 
     public String getNombre() {

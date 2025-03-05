@@ -1,28 +1,17 @@
-package com.backend.entity;
+package com.backend.dto.salida;
 
-import jakarta.persistence.*;
-import jakarta.persistence.Entity;
-
-@Entity
-@Table(name = "categoria")
-public class Categoria {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_categoria")
+public class CategoriaSalidaDTO {
     private Long id_categoria;
 
-    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    // Getters y setters
 
-    public Categoria(Long id_categoria, String nombre) {
+    public CategoriaSalidaDTO(Long id_categoria, String nombre) {
         this.id_categoria = id_categoria;
         this.nombre = nombre;
     }
 
-    public Categoria() {
+    public CategoriaSalidaDTO() {
     }
 
     public Long getId_categoria() {
