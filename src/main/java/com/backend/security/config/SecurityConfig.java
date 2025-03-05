@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->{
-                            auth.requestMatchers("/", "/login", "/registro", "/index.html", "/css/**", "/js/**", "/images/**", "/assets/**", "/logo.svg", "/imagen**").permitAll();
+                            auth.requestMatchers("/", "/login", "/registro", "/error", "/index.html", "/css/**", "/js/**", "/images/**", "/assets/**", "/logo.svg", "/imagen**").permitAll();
                             auth.requestMatchers("/admin", "/admin/**").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/paquete-experiencia/**").permitAll();
