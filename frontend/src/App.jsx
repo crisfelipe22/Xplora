@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
+import { AuthProvider } from './contexts/AuthContext';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <>
+      <AuthProvider>
       <CssBaseline />
       {!esRutaAdmin && <Header />}
       <Routes>
@@ -43,6 +45,7 @@ function App() {
         <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
+      </AuthProvider>
     </>
   );
 }

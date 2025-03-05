@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 import { 
   Box, 
   Container, 
@@ -21,6 +23,8 @@ const LoginForm = () => {
     email: '',
     contrasena: ''
   });
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -40,17 +44,16 @@ const LoginForm = () => {
       const response = await axios.post('/api/auth/login', formData);
       
       // Store token and user info in localStorage or context
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify({
+      login(response.data.token, {
         id: response.data.id,
         nombre: response.data.nombre,
         email: response.data.email,
         iniciales: response.data.iniciales,
         rol: response.data.rol
-      }));
+      });
       
       // Redirect to dashboard or home page
-      window.location.href = '/';
+      navigate('/');
     } catch (err) {
       console.error('Login error:', err);
       
