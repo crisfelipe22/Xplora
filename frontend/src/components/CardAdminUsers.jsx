@@ -16,20 +16,7 @@ const CardAdminUsers = () =>{
     const [usuarioSelect, setUsuarioSelect] = useState(null);
 
     const [users, setUsers] = useState([])
-    const [roles, setRoles] = useState([
-        {
-            id_rol: 1,
-            nombre: 'SuperAdministrador'
-        },
-        {
-            id_rol: 2,
-            nombre: 'Administrador'
-        },
-        {
-            id_rol: 3,
-            nombre: 'Usuario'
-        }
-    ])
+    const [roles, setRoles] = useState([])
 
     //EL TOKEN SE OBTIENE DEL LOCAL STORAGE, POR AHORA PARA PRUEBAS LO PASO ASÍ
     const token = /*localStorage.getItem("token")*/ "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhQHhwbG9yYS5jb20iLCJpYXQiOjE3NDEwNTEzMzgsImV4cCI6MTc0MTEzNzczOH0.-hETzMkG7wpUP6wkl97j_9yLrTC0n0LbwkxU5vc7B4A";
@@ -49,22 +36,27 @@ const CardAdminUsers = () =>{
             }
         };
 
-        /*const obtenerRoles= async () => {
+        const obtenerRoles= async () => {
                 try {
-                    const response = await axios.get("http://localhost:8080/api/roles");
+                    const response = await axios.get("http://localhost:8080/api/rol", {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                     setRoles(response.data); 
                     console.log(response.data)
                 } catch (error) {
                     console.error("Error al obtener los roles:", error);
                 }
+            }
         
-        obtenerRoles();*/
+        obtenerRoles();
         fetchUsers();
     }, [token]);
 
     const handleOpenDialog = (user, id_rol) => {
         setCambioRol(id_rol);
-        setUsuarioSelect(user)
+        setUsuarioSelect({...user, [id_rol]: roles})
         setOpenDialog(true);
     };
 
@@ -78,7 +70,7 @@ const CardAdminUsers = () =>{
         const idRolNumber = Number(cambioRol);
         setUsers((prevUsers) =>
             prevUsers.map((user) =>
-                users.id_usuario === usuarioSelect.id_usuario ? { ...user, id_rol:idRolNumber } : user
+                user.id_usuario === usuarioSelect.id_usuario ? { ...user, id_rol:idRolNumber } : user
             )
         );
         setOpenDialog(false);
@@ -89,11 +81,17 @@ const CardAdminUsers = () =>{
                     Authorization: `Bearer ${token}`
                 }});
             console.log(`Rol de ${usuarioSelect.nombre} actualizado a ${cambioRol}`);
+            setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user.id_usuario === usuarioSelect.id_usuario ? { ...user, id_rol:idRolNumber } : user
+                )
+            );
         } catch (error) {
             console.error("Error al actualizar el rol", error);
         }
     }
-
+    
+   
         
 
     return(
