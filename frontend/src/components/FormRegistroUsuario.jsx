@@ -11,10 +11,13 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
   Typography,
   Box,
   Link,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useMediaQuery, useTheme } from "@mui/material";
 
 const FormRegistroUsuario = () => {
@@ -27,6 +30,12 @@ const FormRegistroUsuario = () => {
     telefono: 123456,
     id_rol: 3,
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const imagenFondo = "/imagen_20.png"; // Correct way to reference public files
    const [openAlertExito, setOpenAlertExito] = useState(false);
@@ -230,7 +239,7 @@ const FormRegistroUsuario = () => {
             <TextField
               fullWidth
               label="Contraseña"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="contrasena"
               value={form.contrasena}
               onChange={handleChange}
@@ -240,6 +249,19 @@ const FormRegistroUsuario = () => {
               variant="outlined"
               placeholder="*************"
               slotProps={{ inputLabel: { shrink: true } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePasswordVisibility}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <FormControlLabel
