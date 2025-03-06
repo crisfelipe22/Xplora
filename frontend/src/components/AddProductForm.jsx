@@ -10,6 +10,9 @@ import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
 import AdminLayout from "./AdminLayout";
 //iconos//
+import {
+    LocalParking, CalendarToday, Landscape, FreeBreakfast, Pets, OutdoorGrill, Wifi, Brush
+    } from '@mui/icons-material';
 
 //
 
@@ -46,7 +49,14 @@ const AddProductForm = () => {
         { id_car: 8, nombre: "Servicio de decoración" },
     ]
     const iconosDisponibles={
-        1: 'icon1'
+        1: LocalParking,       
+        2: CalendarToday,    
+        3: Landscape,          
+        4: FreeBreakfast,      
+        5: Pets,              
+        6: OutdoorGrill,       
+        7: Wifi,               
+        8: Brush 
     }
     const [caracteristicas, setCaracteristicas] = useState([]);
     const [dialogCaracteristicas, setDialogCaracteristicas] = useState(false);
@@ -65,11 +75,17 @@ const AddProductForm = () => {
 
     const handleGuardarCaracteristica = () => {
         if (caracteristicaSeleccionada && iconoSeleccionado) {
-            setCaracteristicas([
-                ...caracteristicas,
+            const caracteristica = caracteristicasDisponibles.find(
+                c => c.id_car === Number(caracteristicaSeleccionada)
+            );
+            
+            setCaracteristicas(prev => [
+                ...prev,
                 { 
-                    id_car_prod: Date.now(), 
-                    nombre: caracteristicaSeleccionada, 
+                    id_car_prod: Date.now(),
+                    id_car: caracteristica.id_car, 
+                    id_icono: iconoSeleccionado,   
+                    nombre: caracteristica.nombre,
                     icono: iconosDisponibles[iconoSeleccionado] 
                 }
             ]);
@@ -86,12 +102,8 @@ const AddProductForm = () => {
         const obtenerCategorias = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/api/categoria");
-                const categoriasTransformadas = response.data.map(cat => ({
-                    id_categoria: cat.idCategoria, // Cambia la propiedad
-                    nombre: cat.nombre
-                }));
-                setCategorias(categoriasTransformadas); 
-                console.log(response.data)
+                setCategorias(response.data); 
+                console.log()
             } catch (error) {
                 console.error("Error al obtener las categorías:", error);
             }
@@ -181,7 +193,8 @@ const AddProductForm = () => {
         fecha_experiencia: "2026-02-19T12:00:00",
         id_categoria: Number(product.id_categoria)
     };
-    
+
+
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
         formData.append("image", archivo);
@@ -190,7 +203,9 @@ const AddProductForm = () => {
             const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    Authorization: undefined
                 },
+                withCredentials: false,
             });
     
             if (response.data && response.data.data.url) {
@@ -383,10 +398,11 @@ const AddProductForm = () => {
                             <Typography className={styles.h6} variant="h6" gutterBottom>
                                 Administrar caracteristicas
                             </Typography>
-                            <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonAgregar}>
-                                AÑADIR NUEVA
-                            </Button>
+                            
                             <TableContainer className={styles.tableContainer}>
+                                <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonNuevaCarac}>
+                                    AÑADIR NUEVA
+                                </Button>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
@@ -423,7 +439,7 @@ const AddProductForm = () => {
                                 >
                                     <MenuItem value="" disabled>Selecciona una característica</MenuItem>
                                     {caracteristicasDisponibles.map((car) => (
-                                    <MenuItem key={car.id_car} value={car.nombre}>{car.nombre}</MenuItem>
+                                    <MenuItem key={car.id_car} value={car.id_car}>{car.nombre}</MenuItem>
                                     ))}
                                 </Select>
 
@@ -435,10 +451,10 @@ const AddProductForm = () => {
                                     style={{ marginTop: "10px" }}
                                 >
                                     <MenuItem value="" disabled>Selecciona un icono</MenuItem>
-                                    {Object.keys(iconosDisponibles).map((icono) => (
-                                    <MenuItem key={icono} value={icono}>
-                                        {iconosDisponibles[icono]} {icono}
-                                    </MenuItem>
+                                    {Object.entries(iconosDisponibles).map(([id, Icono]) => (
+                                        <MenuItem key={id} value={id}>
+                                            <Icono style={{ fontSize: 24 }} />
+                                        </MenuItem>
                                     ))}
                                 </Select>
                                 </DialogContent>

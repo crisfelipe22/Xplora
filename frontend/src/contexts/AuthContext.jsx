@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -65,7 +67,9 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.interceptors.request.use(
         config => {
-          config.headers['Authorization'] = `Bearer ${token}`;
+          if (!config.url.includes("imgbb.com")) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+          }
           return config;
         },
         error => {
