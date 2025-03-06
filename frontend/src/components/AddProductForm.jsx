@@ -27,12 +27,19 @@ const AddProductForm = () => {
     })
 
     const [errores, setErrores] = useState({})
+    const [erroresRequest, setErroresRequest] = useState({})
     const [openAlertExito, setOpenAlertExito] = useState(false);
+    const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
     let navigate = useNavigate();
     
     const handleCloseAlertExito = (_, reason) => {
         if (reason === "clickaway") return;
         setOpenAlertExito(false);
+    };
+
+    const handleCloseAlertFracaso = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertFracaso(false);
     };
 
     const [categorias, setCategorias] = useState([]);
@@ -101,7 +108,7 @@ const AddProductForm = () => {
     useEffect(() => {
         const obtenerCategorias = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/categoria");
+                const response = await axios.get("/api/categoria");
                 setCategorias(response.data); 
                 console.log()
             } catch (error) {
@@ -240,6 +247,8 @@ const AddProductForm = () => {
                 }, 3000);
             } catch (error) {
                 console.error("Error al enviar el producto:", error);
+                setErroresRequest(error?.response?.data["mensaje: "]);
+                setOpenAlertFracaso(true)
             }
             
         } else {
@@ -484,6 +493,16 @@ const AddProductForm = () => {
                             >
                                 <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
                                     ¡Producto agregado con éxito!
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar
+                                open={openAlertFracaso}
+                                autoHideDuration={3000}
+                                onClose={handleCloseAlertFracaso}
+                                anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                            >
+                                <Alert onClose={handleCloseAlertFracaso} severity="error" className={styles.alertaFracaso}>
+                                    {erroresRequest}
                                 </Alert>
                             </Snackbar>
                         </Box>

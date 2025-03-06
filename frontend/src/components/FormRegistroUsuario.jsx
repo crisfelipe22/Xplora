@@ -98,7 +98,7 @@ const FormRegistroUsuario = () => {
     if (validate()) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/auth/registro",
+          "/api/auth/registro",
           dataToSend,
           {
             headers: {

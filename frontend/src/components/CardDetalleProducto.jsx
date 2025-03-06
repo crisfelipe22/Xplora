@@ -7,6 +7,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
+import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from "@mui/material";
 import {
     DirectionsBoat,    // Kayak
@@ -31,8 +32,10 @@ import {
     AcUnit,            // Clima frío
     AccessTime         // Horarios
   } from '@mui/icons-material';
+  
 
 const CardDetalleProducto = ({product, categorias}) =>{
+    const navigate = useNavigate();
     const [openGallery, setOpenGallery] = useState(false);
     const handleOpenGallery = () => setOpenGallery(true);
     const handleCloseGallery = () => setOpenGallery(false);
@@ -143,7 +146,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
         <Container className={styles.container}>
             <div className={styles.detalleSuperior}>
                 <div className={styles.tituloVolver}>
-                    <IconButton component={Link} to="/" className={styles.backButton}>
+                    <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
                         <ArrowBackIcon /> VOLVER ATRÁS
                     </IconButton>
                     <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>

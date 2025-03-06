@@ -86,7 +86,7 @@ const Home = () => {
         >
           <TextField
             label="¿Qué vamos a hacer?"
-            defaultValue="Playa, masajes, cena, cabalgata..."
+            placeholder="Playa, masajes, cena, cabalgata..."
             {...(isMobile ? { fullWidth: true } : {})}
             size="small"
             margin="normal"
@@ -105,7 +105,7 @@ const Home = () => {
           </TextField>
           <TextField
             label="¿Cuándo?"
-            defaultValue="Elegir fecha"
+            placeholder="Elegir fecha"
             size="small"
             margin="normal"
             className="search-inputs"

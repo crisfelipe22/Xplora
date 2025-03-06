@@ -82,7 +82,7 @@ form fieldset {
 }
 
 form input {
-  color: rgba(0, 0, 0, 0.38) !important;
+  color: rgba(0, 0, 0, 0.38);
 }
 
 form>button {

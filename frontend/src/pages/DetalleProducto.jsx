@@ -19,7 +19,7 @@ const DetalleProducto = () =>{
         try {
           const [productResponse, categoriesResponse] = await Promise.all([
             fetch(`/api/paquete-experiencia/${id_paquete_experiencia}`),
-            axios.get("http://localhost:8080/api/categoria")
+            axios.get("/api/categoria")
           ]);
 
           const productData = await productResponse.json();

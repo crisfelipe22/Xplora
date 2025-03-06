@@ -28,7 +28,7 @@ const CardAdminUsers = () =>{
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/auth", {
+                const response = await axios.get("/api/auth", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -42,7 +42,7 @@ const CardAdminUsers = () =>{
 
         const obtenerRoles= async () => {
                 try {
-                    const response = await axios.get("http://localhost:8080/api/rol", {
+                    const response = await axios.get("/api/rol", {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -80,7 +80,7 @@ const CardAdminUsers = () =>{
         setOpenDialog(false);
 
         try {
-            await axios.patch(`http://localhost:8080/api/auth/${usuarioSelect.id_usuario}`, { id_rol: idRolNumber },{
+            await axios.patch(`/api/auth/${usuarioSelect.id_usuario}`, { id_rol: idRolNumber },{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }});
