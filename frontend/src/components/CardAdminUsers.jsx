@@ -5,8 +5,12 @@ import AdminLayout from "./AdminLayout";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext"; // Asegúrate de poner la ruta correcta
 
 const CardAdminUsers = () =>{
+  const { user } = useContext(AuthContext);
+  const userRole = user.rol
     
     const [pag, setPag] = useState(0);
     const [columnPorPag, setColumnPorPag] = useState(5);
@@ -132,6 +136,7 @@ const CardAdminUsers = () =>{
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>
                                             <Select
+                                                {...(userRole === "Administrador"  && user.id_rol === 1 ? { disabled: true } : {})}
                                                 labelId="rol-label"
                                                 name="id_rol"
                                                 value={user.id_rol}

@@ -125,7 +125,7 @@ const FormRegistroUsuario = () => {
         console.error("Error al registrar usuario:", error);
         alert(
           "Hubo un problema con el registro: " +
-            (error.response?.data?.message || "Error desconocido")
+            ((Object.values(error.response?.data)[0]) || "Error desconocido")
         );
       }
     }
