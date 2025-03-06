@@ -4,7 +4,9 @@ import imagenFondo from "/imagen_20.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import {
-  Grid, Alert, Snackbar,
+  Grid,
+  Alert,
+  Snackbar,
   TextField,
   Button,
   Checkbox,
@@ -23,15 +25,15 @@ const FormRegistroUsuario = () => {
     contrasena: "",
     terms: false,
     telefono: 123456,
-    id_rol: 3
+    id_rol: 3,
   });
 
-   const [openAlertExito, setOpenAlertExito] = useState(false);
-   let navigate = useNavigate();
-   const handleCloseAlertExito = (_, reason) => {
+  const [openAlertExito, setOpenAlertExito] = useState(false);
+  let navigate = useNavigate();
+  const handleCloseAlertExito = (_, reason) => {
     if (reason === "clickaway") return;
     setOpenAlertExito(false);
-};
+  };
 
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
@@ -49,7 +51,7 @@ const FormRegistroUsuario = () => {
 
     if (!form.direccion.trim()) {
       newErrors.direccion = "La dirección es obligatoria";
-    } 
+    }
 
     if (!form.email.trim()) {
       newErrors.email = "El correo es obligatorio";
@@ -61,6 +63,8 @@ const FormRegistroUsuario = () => {
       newErrors.contrasena = "La contraseña es obligatoria";
     } else if (form.contrasena.length < 6) {
       newErrors.contrasena = "Mínimo 6 caracteres";
+    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(form.password)) {
+      newErrors.password = "Debe contener al menos una letra y un número";
     }
 
     if (!form.terms) {
@@ -79,7 +83,6 @@ const FormRegistroUsuario = () => {
     });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToSend = {
@@ -87,14 +90,16 @@ const FormRegistroUsuario = () => {
       direccion: form.direccion,
       email: form.email,
       contrasena: form.contrasena,
-      telefono: 123456, 
-      id_rol: 3, 
+      telefono: 123456,
+      id_rol: 3,
     };
-    console.log(form)
-    console.log(dataToSend)
+    console.log(form);
+    console.log(dataToSend);
     if (validate()) {
       try {
-        const response = await axios.post("http://localhost:8080/api/auth/registro", dataToSend,
+        const response = await axios.post(
+          "http://localhost:8080/api/auth/registro",
+          dataToSend,
           {
             headers: {
               "Content-Type": "application/json",
@@ -102,11 +107,11 @@ const FormRegistroUsuario = () => {
           }
         );
         console.log("Usuario registrado:", response.data);
-        setOpenAlertExito(true)
+        setOpenAlertExito(true);
         setTimeout(() => {
-          setOpenAlertExito(false)
-          navigate("/")
-        }, 3000);;
+          setOpenAlertExito(false);
+          navigate("/");
+        }, 3000);
 
         setForm({
           nombre: "",
@@ -118,7 +123,10 @@ const FormRegistroUsuario = () => {
         setErrors({});
       } catch (error) {
         console.error("Error al registrar usuario:", error);
-        alert("Hubo un problema con el registro: " + (error.response?.data?.message || "Error desconocido"));
+        alert(
+          "Hubo un problema con el registro: " +
+            (error.response?.data?.message || "Error desconocido")
+        );
       }
     }
   };
@@ -293,15 +301,13 @@ const FormRegistroUsuario = () => {
         open={openAlertExito}
         autoHideDuration={3000}
         onClose={handleCloseAlertExito}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert onClose={handleCloseAlertExito} severity="success">
           ¡Usuario registrado con éxito!
         </Alert>
       </Snackbar>
     </Grid>
-
-    
   );
 };
 
