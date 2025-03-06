@@ -9,11 +9,10 @@
     margin-top: 65px;
     flex-direction: column;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #f8f9fa !important;
 }
 
 .container{
-    margin: auto;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -144,9 +143,9 @@
 }
 
 .botones{
-    grid-column: 2;
     display: flex;
     gap: 16px;
+    align-items: flex-start;
 }
 
 .botonCancelar{
@@ -225,4 +224,54 @@
     font-weight: bold;
     border-radius: 8px;
     margin-top: 65px;
+}
+
+/*iconos tabla*/
+.tableContainer {
+    width: 100%;
+    background-color: white;
+}
+
+.tableHeader {
+    font-weight: 600 !important;
+}
+
+.contenido{
+    border-radius: 8px;
+    background-color: #F2EFFD;
+    overflow: hidden;
+    max-width: calc(100% - 20px)
+}
+
+.botonEditar{
+    color: #7B3FF6 !important;
+    background: transparent !important;
+    border: 1px solid #7B3FF6 !important;
+    font-size: small !important;
+    font-weight: bold !important;
+    margin: 0 2% !important;
+}
+
+.botonEditar:hover{
+    background-color: #f5e6ff !important;
+}
+
+
+.botonEliminar{
+    color: #D32F2F !important;
+    background: transparent !important;
+    border: 1px solid #D32F2F !important;
+    font-size: small !important;
+    font-weight: bold !important;
+    margin: 0 2% !important;
+}
+
+.botonEliminar:hover{
+    background-color: #f5e6ff !important;
+}
+
+.botonNuevaCarac{
+    background-color: #2E1F5E !important;
+    padding: 2% !important;
+    margin:  5% 0 5% 60% !important;
 }
