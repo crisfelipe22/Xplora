@@ -6,13 +6,32 @@ import {
   Typography,
   Divider,
   ListItemIcon,
+  useMediaQuery,
+  useTheme,
+  Button,
   IconButton
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import styles from "../styles/header.module.css";
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from "react-router";
 
 const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
+  let navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+  
+  const handleLogin = () => {
+    navigate("/login");
+  };
+  // Y con esto estoy simulando el cierre de sesión.
+  const handleLogout = () => {
+    logout();
+  };
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -27,7 +46,13 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
   return (
     <div>
       <IconButton onClick={handleClick} variant="contained">
-        <Avatar sx={{ bgcolor: "purple", color: "white" }}>{avatarText}</Avatar>
+        { isDesktop ? (
+          <Avatar sx={{ bgcolor: "purple", color: "white" }}>{avatarText}</Avatar>
+        ) : (
+          <MenuIcon
+            sx={{ display: { desktop: "none" }, color: "black" }}
+          />
+        )}
       </IconButton>
 
       {/* Menú de usuario */}
@@ -44,30 +69,58 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
           horizontal: "right",
         }}
       >
-        <MenuItem>
-          <Avatar sx={{ bgcolor: "purple", width: 32, height: 32, mr: 1 }}>
-            {avatarText}
-          </Avatar>
-          <Typography variant="body1">{userName}</Typography>
-        </MenuItem>
+        { isAuthenticated ? (
+          <>
+            <MenuItem>
+              <Avatar sx={{ bgcolor: "purple", width: 32, height: 32, mr: 1 }}>
+                {avatarText}
+              </Avatar>
+              <Typography variant="body1">{userName}</Typography>
+            </MenuItem>
+            <Divider />
+            <Link to="/perfil">
+                <MenuItem>
+                  <ListItemIcon>
+                    <AccountCircleIcon fontSize="small" />
+                  </ListItemIcon>
+                  Mi cuenta
+                </MenuItem>
+              </Link>
+              <MenuItem onClick={onLogout}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                Cerrar sesión
+              </MenuItem>
+          </>
+        ) : (
+          <>
+            <MenuItem>
+              <Link to="/registro">
+              <Button
+                variant="text"
+                className={styles.header__button}
+              >
+                CREAR CUENTA
+              </Button>
+            </Link>
+            </MenuItem>
+            <Divider />
+                <MenuItem>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={`${styles.header__button} ${styles["header__button--login"]}`}
+                    onClick={handleLogin}
+                  >
+                    INICIAR SESIÓN
+                  </Button>
+                </MenuItem>
+          </>
+        )}
 
-        <Divider />
 
-        <Link to="/perfil">
-          <MenuItem>
-            <ListItemIcon>
-              <AccountCircleIcon fontSize="small" />
-            </ListItemIcon>
-            Mi cuenta
-          </MenuItem>
-        </Link>
-
-        <MenuItem onClick={onLogout}>
-          <ListItemIcon>
-            <LogoutIcon fontSize="small" />
-          </ListItemIcon>
-          Cerrar sesión
-        </MenuItem>
+        
       </Menu>
     </div>
   );
