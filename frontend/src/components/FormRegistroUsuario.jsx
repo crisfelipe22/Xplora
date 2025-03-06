@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import imagenFondo from "/imagen_20.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import "../styles/FormRegistroUsuario.css";
 import {
   Grid,
   Alert,
@@ -147,15 +148,17 @@ const FormRegistroUsuario = () => {
         item
         xs={12}
         md={6}
+        className="formulario-grid"
         sx={{
           display: "flex",
-          justifyContent: "left",
+          //justifyContent: "left",
+          justifyContent: "center",
           alignItems: "center",
           height: "100vh",
           width: "50%",
-          padding: "0",
+          padding: { xs: "0", md: "5%" },
+
           margin: "0",
-          paddingLeft: "5%",
         }}
       >
         <Box
@@ -284,6 +287,7 @@ const FormRegistroUsuario = () => {
         }}
       >
         <Box
+          className="mi-imagen"
           component="img"
           src={imagenFondo}
           alt="Registro"
