@@ -5,6 +5,16 @@ INSERT INTO categoria (nombre) VALUES
     ('Gastronomia'),
     ('Estadias');
 
+INSERT INTO rol (id_rol, nombre) VALUES
+    (1, 'SuperAdministrador'),
+    (2, 'Administrador'),
+    (3, 'Usuario');
+
+INSERT INTO usuario (id_usuario, nombre, direccion, contrasena, telefono, id_rol, email) VALUES
+    (1, 'Xplora Superadmin', 'Xplora Boulevard 123', '$2a$10$svyGvq1UnKdQNMNMc8/Nwep9WbyCJjNyDHvfs2wezPJgeC6TwPMcm', 12345678,1,'superadmin@xplora.com'),
+    (2, 'Xplora Admin', 'Xplora Boulevard 123', '$2a$10$d8celupi88HCw5E07LAXeu9MBYKPDBpiNtgPxCvhstDN4CyXdSWxi', 12345678,2,'admin@xplora.com'),
+    (3, 'Xplora Usuario', 'Xplora Boulevard 123', '$2a$10$bixazDGCVrXkoCtSkrzkle3uCyzUCHvkC3a0aYkZWxSBN5HBlbhLa', 12345678,3,'usuario@xplora.com');
+
 INSERT INTO paquete_experiencia (id_paquete_experiencia, nombre, descripcion, precio, ubicacion, imagen, duracion, fecha_experiencia, id_categoria) VALUES
     (1, 'Spa de Lujo', 'Aventura extrema en aguas rápidas', 150.00, 'Mendoza, Argentina', '/imagen_1.jpeg,/imagen_1.jpeg,/imagen_1.jpeg,/imagen_1.jpeg,/imagen_1.jpeg', '4 horas', NOW(), 1),
     (2, 'Paseo en kayak', 'Navega en kaya frente a uno de los glaciares más famosos', 120.00, 'Buenos Aires, Argentina', '/imagen_2.jpeg,/imagen_3.jpeg,/imagen_4.jpeg,/imagen_5.jpeg,/imagen_6.jpeg', '3 horas', NOW(), 2),
