@@ -8,6 +8,29 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
 import { useMediaQuery } from "@mui/material";
+import {
+    DirectionsBoat,    // Kayak
+    Landscape,         // Montañas
+    Waves,             // Agua
+    SafetyDivider,     // Seguridad
+    Timer,             // Duración
+    Groups,            // Grupo
+    LocalOffer,        // Incluido
+    Wc,                // Sanitarios
+    Restaurant,        // Comida
+    Hiking,            // Trekking
+    CameraAlt,         // Fotografía
+    NaturePeople,      // Naturaleza
+    WaterDrop,         // Cascadas
+    Terrain,           // Terreno
+    DarkMode,          // Noche
+    Brightness5,       // Día
+    Emergency,         // Emergencia
+    Flag,              // Punto encuentro
+    Map,               // Mapa
+    AcUnit,            // Clima frío
+    AccessTime         // Horarios
+  } from '@mui/icons-material';
 
 const CardDetalleProducto = ({product, categorias}) =>{
     const [openGallery, setOpenGallery] = useState(false);
@@ -20,14 +43,98 @@ const CardDetalleProducto = ({product, categorias}) =>{
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
 
     //caracteristicas provisorias
+    
     const caracteristicas = [
-        'Traslado privado Caracas-Aeropuerto',
-        'Boletos aéreos Caracas-Canaima',
-        'Hospedaje en Lodge (campamento) de tu elección',
-        'Todas las comidas desde el almuerzo del día de llegada hasta el desayuno del día de salida (incluyendo bebidas no alcohólicas)',
-        'Impuestos de entrada al Parque Nacional Canaima',
-        'Excursión al Salto Ángel incluida en modalidad full day o pernocta (sujeto a disponibilidad)',
-        'Sesión de stand up de kayak en la laguna'
+        {
+            id_car: 1,
+            nombre: "Kayak profesional incluido",
+            id_icono: 1,
+            icono: DirectionsBoat
+        },
+        {
+            id_car: 2,
+            nombre: "Chaleco salvavidas regulado",
+            id_icono: 2,
+            icono: SafetyDivider
+        },
+        {
+            id_car: 3,
+            nombre: "Guía certificado por grupo",
+            id_icono: 3,
+            icono: Groups
+        },
+        {
+            id_car: 4,
+            nombre: "Ruta por río de montaña",
+            id_icono: 4,
+            icono: Waves
+        },
+        {
+            id_car: 5,
+            nombre: "Equipo impermeable incluido",
+            id_icono: 5,
+            icono: WaterDrop
+        },
+        {
+            id_car: 6,
+            nombre: "Fotografías profesionales",
+            id_icono: 6,
+            icono: CameraAlt
+        },
+        {
+            id_car: 7,
+            nombre: "Almuerzo tipo picnic",
+            id_icono: 7,
+            icono: Restaurant
+        },
+        {
+            id_car: 8,
+            nombre: "Botiquín de primeros auxilios",
+            id_icono: 8,
+            icono: Emergency
+        },
+        {
+            id_car: 9,
+            nombre: "Instrucción básica de remo",
+            id_icono: 9,
+            icono: DirectionsBoat
+        },
+        {
+            id_car: 10,
+            nombre: "Avistamiento de fauna local",
+            id_icono: 10,
+            icono: NaturePeople
+        },
+        {
+            id_car: 11,
+            nombre: "Seguro contra accidentes",
+            id_icono: 11,
+            icono: LocalOffer
+        },
+        {
+            id_car: 12,
+            nombre: "Punto de encuentro señalizado",
+            id_icono: 12,
+            icono: Flag
+        },
+        {
+            id_car: 13,
+            nombre: "Mapa de la ruta digital",
+            id_icono: 13,
+            icono: Map
+        },
+        {
+            id_car: 14,
+            nombre: "Duración 4 horas",
+            id_icono: 14,
+            icono: Timer
+        },
+        {
+            id_car: 15,
+            nombre: "Zonas de descanso designadas",
+            id_icono: 15,
+            icono: Brightness5
+        }
     ]
     //simulando raiting
     const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
@@ -59,16 +166,16 @@ const CardDetalleProducto = ({product, categorias}) =>{
                         <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
                         <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
                     </div>    
-                    <List dense>
-                        {caracteristicas.map((item, index) => (
-                            <ListItem key={index} className={styles.listItem}>
-                                <ListItemIcon className={styles.listIcon}>
-                                    <CheckIcon fontSize="small" />
-                                </ListItemIcon>
-                                <Typography variant="body1">{item}</Typography>
-                            </ListItem>
+                    <Box className={styles.gridCaracteristicas}>
+                    {caracteristicas.map((item) => (
+                        <ListItem key={item.id_car} className={styles.listItem}>
+                            <ListItemIcon className={styles.listIcon}>
+                            <item.icono fontSize="small" />
+                            </ListItemIcon>
+                            <Typography variant="body1">{item.nombre}</Typography>
+                        </ListItem>
                         ))}
-                    </List>
+                    </Box>
                 </Box>                 
 
                 <Card className={styles.cardPrecio}>
