@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import imagenFondo from "/imagen_20.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import {
@@ -28,9 +27,10 @@ const FormRegistroUsuario = () => {
     id_rol: 3,
   });
 
-  const [openAlertExito, setOpenAlertExito] = useState(false);
-  let navigate = useNavigate();
-  const handleCloseAlertExito = (_, reason) => {
+  const imagenFondo = "/imagen_20.png"; // Correct way to reference public files
+   const [openAlertExito, setOpenAlertExito] = useState(false);
+   let navigate = useNavigate();
+   const handleCloseAlertExito = (_, reason) => {
     if (reason === "clickaway") return;
     setOpenAlertExito(false);
   };
@@ -108,9 +108,9 @@ const FormRegistroUsuario = () => {
         console.log("Usuario registrado:", dataToSend);
         setOpenAlertExito(true);
         setTimeout(() => {
-          setOpenAlertExito(false);
-          navigate("/");
-        }, 3000);
+          setOpenAlertExito(false)
+          navigate("/login")
+        }, 3000);;
 
         setForm({
           nombre: "",

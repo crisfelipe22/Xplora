@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +79,19 @@ public class AuthController {
 
         UsuarioSalidaDTO usuarioActualizado = authService.actualizarParcialmenteUsuario(id, cambios);
         return ResponseEntity.ok(usuarioActualizado);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Map<String, String>> validateToken(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("role", authentication.getAuthorities().iterator().next().getAuthority());
+        response.put("username", authentication.getName());
+
+        return ResponseEntity.ok(response);
     }
 
 

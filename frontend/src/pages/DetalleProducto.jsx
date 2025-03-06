@@ -15,30 +15,23 @@ const DetalleProducto = () =>{
     const [categorias, setCategorias] = useState()
 
     useEffect(() => {
-        const fetchProductoDetalle = async () => {
-            try {
-                const response = await fetch(`/api/paquete-experiencia/${id_paquete_experiencia}`);
-                if (!response.ok) {
-                    throw new Error('Error al obtener el producto');
-                }
-                const data = await response.json();
-                setProduct(data); 
-            } catch (error) {
-                console.error('Hubo un problema con la solicitud de la API:', error);
-            }
-        };
-        const obtenerCategorias = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/categoria");
-                setCategorias(response.data); 
-            } catch (error) {
-                console.error("Error al obtener las categorías:", error);
-            }
-        };
+      const fetchData = async () => {
+        try {
+          const [productResponse, categoriesResponse] = await Promise.all([
+            fetch(`/api/paquete-experiencia/${id_paquete_experiencia}`),
+            axios.get("http://localhost:8080/api/categoria")
+          ]);
 
-        obtenerCategorias();
-        fetchProductoDetalle();
-    }, [id_paquete_experiencia]); 
+          const productData = await productResponse.json();
+          setProduct(productData);
+          setCategorias(categoriesResponse.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchData();
+    }, [id_paquete_experiencia]);
 
     if (!product) {
         return <div>Cargando...</div>;

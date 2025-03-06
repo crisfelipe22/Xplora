@@ -18,8 +18,8 @@ const CardAdminUsers = () =>{
     const [users, setUsers] = useState([])
     const [roles, setRoles] = useState([])
 
-    //EL TOKEN SE OBTIENE DEL LOCAL STORAGE, POR AHORA PARA PRUEBAS LO PASO ASÍ
-    const token = /*localStorage.getItem("token")*/ "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhQHhwbG9yYS5jb20iLCJpYXQiOjE3NDExMzgzNzYsImV4cCI6MTc0MTIyNDc3Nn0.uv-wD1PTkvbNBgH7-LzMcs8adD6WrOizuDJ8v-TPYtM";
+    //EL TOKEN SE OBTIENE DEL LOCAL STORAGE
+    const token = localStorage.getItem("token")/* "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhQHhwbG9yYS5jb20iLCJpYXQiOjE3NDExMzgzNzYsImV4cCI6MTc0MTIyNDc3Nn0.uv-wD1PTkvbNBgH7-LzMcs8adD6WrOizuDJ8v-TPYtM";*/
 
     useEffect(() => {
         const fetchUsers = async () => {
