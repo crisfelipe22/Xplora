@@ -2,8 +2,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import "../styles/FormRegistroUsuario.css";
 import {
-  Grid, Alert, Snackbar,
+  Grid,
+  Alert,
+  Snackbar,
   TextField,
   Button,
   Checkbox,
@@ -22,7 +25,7 @@ const FormRegistroUsuario = () => {
     contrasena: "",
     terms: false,
     telefono: 123456,
-    id_rol: 3
+    id_rol: 3,
   });
 
   const imagenFondo = "/imagen_20.png"; // Correct way to reference public files
@@ -31,7 +34,7 @@ const FormRegistroUsuario = () => {
    const handleCloseAlertExito = (_, reason) => {
     if (reason === "clickaway") return;
     setOpenAlertExito(false);
-};
+  };
 
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
@@ -49,7 +52,7 @@ const FormRegistroUsuario = () => {
 
     if (!form.direccion.trim()) {
       newErrors.direccion = "La dirección es obligatoria";
-    } 
+    }
 
     if (!form.email.trim()) {
       newErrors.email = "El correo es obligatorio";
@@ -61,6 +64,8 @@ const FormRegistroUsuario = () => {
       newErrors.contrasena = "La contraseña es obligatoria";
     } else if (form.contrasena.length < 6) {
       newErrors.contrasena = "Mínimo 6 caracteres";
+    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(form.contrasena)) {
+      newErrors.contrasena = "Debe contener al menos una letra y un número";
     }
 
     if (!form.terms) {
@@ -79,7 +84,6 @@ const FormRegistroUsuario = () => {
     });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToSend = {
@@ -87,22 +91,23 @@ const FormRegistroUsuario = () => {
       direccion: form.direccion,
       email: form.email,
       contrasena: form.contrasena,
-      telefono: 123456, 
-      id_rol: 3, 
+      telefono: 123456,
+      id_rol: 3,
     };
-    console.log(form)
-    console.log(dataToSend)
+    
     if (validate()) {
       try {
-        const response = await axios.post("http://localhost:8080/api/auth/registro", dataToSend,
+        const response = await axios.post(
+          "http://localhost:8080/api/auth/registro",
+          dataToSend,
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-        console.log("Usuario registrado:", response.data);
-        setOpenAlertExito(true)
+        console.log("Usuario registrado:", dataToSend);
+        setOpenAlertExito(true);
         setTimeout(() => {
           setOpenAlertExito(false)
           navigate("/login")
@@ -118,7 +123,10 @@ const FormRegistroUsuario = () => {
         setErrors({});
       } catch (error) {
         console.error("Error al registrar usuario:", error);
-        alert("Hubo un problema con el registro: " + (error.response?.data?.message || "Error desconocido"));
+        alert(
+          "Hubo un problema con el registro: " +
+            (error.response?.data?.message || "Error desconocido")
+        );
       }
     }
   };
@@ -140,15 +148,17 @@ const FormRegistroUsuario = () => {
         item
         xs={12}
         md={6}
+        className="formulario-grid"
         sx={{
           display: "flex",
-          justifyContent: "left",
+          //justifyContent: "left",
+          justifyContent: "center",
           alignItems: "center",
           height: "100vh",
           width: "50%",
-          padding: "0",
+          padding: { xs: "0", md: "5%" },
+
           margin: "0",
-          paddingLeft: "5%",
         }}
       >
         <Box
@@ -277,6 +287,7 @@ const FormRegistroUsuario = () => {
         }}
       >
         <Box
+          className="mi-imagen"
           component="img"
           src={imagenFondo}
           alt="Registro"
@@ -293,15 +304,17 @@ const FormRegistroUsuario = () => {
         open={openAlertExito}
         autoHideDuration={3000}
         onClose={handleCloseAlertExito}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseAlertExito} severity="success">
+        <Alert onClose={handleCloseAlertExito} severity="success" 
+        sx={{
+          marginTop: '85px',
+          fontSize: '16px',
+          }}>
           ¡Usuario registrado con éxito!
         </Alert>
       </Snackbar>
     </Grid>
-
-    
   );
 };
 
