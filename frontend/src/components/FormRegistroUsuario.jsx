@@ -63,8 +63,8 @@ const FormRegistroUsuario = () => {
       newErrors.contrasena = "La contraseña es obligatoria";
     } else if (form.contrasena.length < 6) {
       newErrors.contrasena = "Mínimo 6 caracteres";
-    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(form.password)) {
-      newErrors.password = "Debe contener al menos una letra y un número";
+    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(form.contrasena)) {
+      newErrors.contrasena = "Debe contener al menos una letra y un número";
     }
 
     if (!form.terms) {
@@ -93,8 +93,7 @@ const FormRegistroUsuario = () => {
       telefono: 123456,
       id_rol: 3,
     };
-    console.log(form);
-    console.log(dataToSend);
+    
     if (validate()) {
       try {
         const response = await axios.post(
@@ -106,7 +105,7 @@ const FormRegistroUsuario = () => {
             },
           }
         );
-        console.log("Usuario registrado:", response.data);
+        console.log("Usuario registrado:", dataToSend);
         setOpenAlertExito(true);
         setTimeout(() => {
           setOpenAlertExito(false);
@@ -303,7 +302,11 @@ const FormRegistroUsuario = () => {
         onClose={handleCloseAlertExito}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseAlertExito} severity="success">
+        <Alert onClose={handleCloseAlertExito} severity="success" 
+        sx={{
+          marginTop: '85px',
+          fontSize: '16px',
+          }}>
           ¡Usuario registrado con éxito!
         </Alert>
       </Snackbar>
