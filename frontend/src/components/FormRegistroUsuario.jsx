@@ -37,7 +37,7 @@ const FormRegistroUsuario = () => {
   };
 
   const theme = useTheme();
-  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("desktop"));
 
   const [errors, setErrors] = useState({});
 
@@ -146,8 +146,6 @@ const FormRegistroUsuario = () => {
     >
       <Grid
         item
-        xs={12}
-        md={6}
         className="formulario-grid"
         sx={{
           display: "flex",
@@ -155,8 +153,8 @@ const FormRegistroUsuario = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          width: "50%",
-          padding: { xs: "0", md: "5%" },
+          width: {mobile: "100%", tablet: "75%", desktop: "50%"},
+          padding: { mobile: "0", tablet: "5%" },
 
           margin: "0",
         }}
@@ -275,8 +273,6 @@ const FormRegistroUsuario = () => {
 
       <Grid
         item
-        xs={12}
-        md={6}
         sx={{
           display: isMobileOrTablet ? "none" : "flex",
           justifyContent: "center",

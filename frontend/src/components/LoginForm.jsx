@@ -13,12 +13,18 @@ import {
   IconButton, 
   InputAdornment,
   Snackbar,
+  useMediaQuery,
+  useTheme,
+  Grid,
   Alert
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
 const LoginForm = () => {
+  const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("desktop"));
+  const imagenFondo = "/imagen_24.jpeg"; 
   const [formData, setFormData] = useState({
     email: '',
     contrasena: ''
@@ -86,7 +92,38 @@ const LoginForm = () => {
   return (
     <>
       {/* Login Form */}
-      <Container component="main" maxWidth="xs" sx={{ mt: 4, mb: 4 }}>
+      <Grid
+            container
+            sx={{
+              height: "100vh",
+              width: "100%",
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              backgroundColor: "#FAF9FF",
+              overflow: "hidden",
+              justifyContent: "center",
+            }}
+          >
+
+      
+      <Grid
+       item
+        
+        
+        className="formulario-grid"
+        sx={{
+          display: "flex",
+          //justifyContent: "left",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          width: {mobile: "100%", tablet: "75%", desktop: "50%"},
+          padding: { mobile: "0", tablet: "5%" },
+
+          margin: "0",
+        }}
+      >
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography component="h1" variant="h5" sx={{ mb: 0.5 }}>
             Inicia sesión
@@ -160,7 +197,36 @@ const LoginForm = () => {
             </Button>
           </Box>
         </Box>
-      </Container>
+        </Grid
+        >
+        <Grid
+        item
+        
+        
+        sx={{
+          display: isMobileOrTablet ? "none" : "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "50%",
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          className="mi-imagen"
+          component="img"
+          src={imagenFondo}
+          alt="Registro"
+          sx={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            //display: "block",
+          }}
+        />
+      
+      </Grid>
+      </Grid>
 
       {/* Error Snackbar */}
       <Snackbar 
@@ -174,7 +240,7 @@ const LoginForm = () => {
         </Alert>
       </Snackbar>
     </>
-);
+  );
 };
 
 export default LoginForm;
