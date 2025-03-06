@@ -6,8 +6,9 @@ import {
   Typography,
   Divider,
   ListItemIcon,
-  IconButton,
+  IconButton
 } from "@mui/material";
+import { Link } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -52,12 +53,14 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
 
         <Divider />
 
-        <MenuItem>
-          <ListItemIcon>
-            <AccountCircleIcon fontSize="small" />
-          </ListItemIcon>
-          Mi cuenta
-        </MenuItem>
+        <Link to="/perfil">
+          <MenuItem>
+            <ListItemIcon>
+              <AccountCircleIcon fontSize="small" />
+            </ListItemIcon>
+            Mi cuenta
+          </MenuItem>
+        </Link>
 
         <MenuItem onClick={onLogout}>
           <ListItemIcon>

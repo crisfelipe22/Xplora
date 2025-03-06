@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 import Unauthorized from "./pages/Unauthorized";
+import Perfil from "./pages/Perfil"
 import CssBaseline from "@mui/material/CssBaseline";
 // import './App.css'
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -89,6 +90,8 @@ function App() {
         />
         <Route path="/registro" element={<Registro />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/perfil" 
+          element={<ProtectedRoute  ><Perfil /></ProtectedRoute>} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
