@@ -67,7 +67,9 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.interceptors.request.use(
         config => {
-          config.headers['Authorization'] = `Bearer ${token}`;
+          if (!config.url.includes("imgbb.com")) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+          }
           return config;
         },
         error => {

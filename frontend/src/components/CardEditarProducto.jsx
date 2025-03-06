@@ -106,6 +106,7 @@ const CardEditarProducto = () =>{
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
+                withCredentials: false,
             });
     
             if (response.data && response.data.data.url) {
@@ -118,6 +119,7 @@ const CardEditarProducto = () =>{
             return { success: false };
         }
     };
+
 
     const handleUploadImagenes = async(e) =>{
         if (!e.target.files || e.target.files.length === 0) return;

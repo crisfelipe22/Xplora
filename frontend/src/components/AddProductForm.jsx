@@ -86,12 +86,8 @@ const AddProductForm = () => {
         const obtenerCategorias = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/api/categoria");
-                const categoriasTransformadas = response.data.map(cat => ({
-                    id_categoria: cat.idCategoria, // Cambia la propiedad
-                    nombre: cat.nombre
-                }));
-                setCategorias(categoriasTransformadas); 
-                console.log(response.data)
+                setCategorias(response.data); 
+                console.log()
             } catch (error) {
                 console.error("Error al obtener las categorías:", error);
             }
@@ -181,7 +177,8 @@ const AddProductForm = () => {
         fecha_experiencia: "2026-02-19T12:00:00",
         id_categoria: Number(product.id_categoria)
     };
-    
+
+
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
         formData.append("image", archivo);
@@ -190,7 +187,9 @@ const AddProductForm = () => {
             const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    Authorization: undefined
                 },
+                withCredentials: false,
             });
     
             if (response.data && response.data.data.url) {
