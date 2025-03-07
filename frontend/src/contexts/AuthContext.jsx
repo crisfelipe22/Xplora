@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Create the context
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 // Create a custom hook for using the auth context
 export const useAuth = () => {
@@ -21,27 +21,22 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [interceptorId, setInterceptorId] = useState(null);  // 🔥 Store interceptor ID
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
 
     const verifyToken = async () => {
       if (token) {
         try {
-          // Try to make a request that requires authentication
-          // Choose an endpoint that requires authentication and is safe to call
           const response = await axios.get('/api/auth/validate', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
           });
 
-          // If the request succeeds, the token is valid
-          setIsAuthenticated(true);
-          setUser(storedUser ? JSON.parse(storedUser) : null);
-          // navigate('/login');
         } catch (error) {
           // Token is invalid or expired
           localStorage.removeItem('token');
@@ -60,38 +55,61 @@ export const AuthProvider = ({ children }) => {
     verifyToken();
   }, [navigate]);
 
-  // Configure axios to always include the token
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    
-    if (token) {
-      axios.interceptors.request.use(
-        config => {
-          if (!config.url.includes("imgbb.com")) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-          }
-          return config;
-        },
-        error => {
-          return Promise.reject(error);
+  // Remove the separate setupInterceptor function and consolidate logic
+// into a single useEffect
+
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  
+  // Remove previous interceptor if it exists
+  if (interceptorId !== null) {
+    console.log("Removing previous interceptor:", interceptorId);
+    axios.interceptors.request.eject(interceptorId);
+  }
+  
+  // Only set up a new interceptor if we have a token
+  if (token) {
+    console.log("Setting up interceptor with token:", token);
+    const newInterceptor = axios.interceptors.request.use(
+      config => {
+        console.log("Intercepting request to:", config.url);
+        if (!config.url?.includes("imgbb.com")) {
+          config.headers['Authorization'] = `Bearer ${token}`;
         }
-      );
-    }
-  }, []);
+        return config;
+      },
+      error => {
+        console.log("Interceptor error:", error);
+        return Promise.reject(error);
+      }
+    );
+    
+    setInterceptorId(newInterceptor);
+  }
+  
+  // No return cleanup needed as we're handling it at the beginning of the effect
+}, [isAuthenticated]); // Only re-run when authentication status changes
+
 
   const login = (token, userData) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
-    setIsAuthenticated(true);
     setUser(userData);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    setIsAuthenticated(false);
+    
+    if (interceptorId !== null) {
+      console.log("Interceptor was unmounted!")
+      axios.interceptors.request.eject(interceptorId);  // 🔥 Remove interceptor on logout
+      setInterceptorId(null);
+    }
+
     setUser(null);
-    navigate('/');
+    setIsAuthenticated(false);
   };
 
   // Only render children when loading is complete
@@ -103,6 +121,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       isAuthenticated,
       user,
+      userRole,
       login, 
       logout 
     }}>

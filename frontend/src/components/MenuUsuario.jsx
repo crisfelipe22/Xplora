@@ -19,19 +19,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from "react-router";
 
-const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
+const MenuUsuario = ({ avatarText = "U", userName = "Usuario" }) => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
   let navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
-  
-  const handleLogin = () => {
-    navigate("/login");
-  };
-  // Y con esto estoy simulando el cierre de sesión.
-  const handleLogout = () => {
-    logout();
-  };
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -42,6 +34,21 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
+  const handleLogin = () => {
+    handleClose();
+    navigate("/login");
+  };
+  
+  const handleMyProfile = () => {
+    handleClose();
+    navigate("/perfil");
+  }
+  
+  const handleLogout = () => {
+    handleClose();
+    logout();
+  }
 
   return (
     <div>
@@ -78,15 +85,13 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
               <Typography variant="body1">{userName}</Typography>
             </MenuItem>
             <Divider />
-            <Link to="/perfil">
-                <MenuItem>
+                <MenuItem onClick={handleMyProfile}>
                   <ListItemIcon>
                     <AccountCircleIcon fontSize="small" />
                   </ListItemIcon>
                   Mi cuenta
                 </MenuItem>
-              </Link>
-              <MenuItem onClick={onLogout}>
+              <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
@@ -95,7 +100,7 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario", onLogout }) => {
           </>
         ) : (
           <>
-            <MenuItem>
+            <MenuItem onClick={handleClose}>
               <Link to="/registro">
               <Button
                 variant="text"

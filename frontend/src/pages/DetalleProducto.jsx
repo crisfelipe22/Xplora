@@ -7,7 +7,6 @@ import axios from "axios";
 
 const DetalleProducto = () =>{
     const {id_paquete_experiencia} = useParams()
-    console.log(id_paquete_experiencia)
 
     //LLAMADO GET  
     
