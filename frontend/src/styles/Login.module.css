@@ -1,0 +1,7 @@
+body {
+  margin: 0;
+  display: block;
+  place-items: unset;
+  min-width: 320px;
+  min-height: none;
+}

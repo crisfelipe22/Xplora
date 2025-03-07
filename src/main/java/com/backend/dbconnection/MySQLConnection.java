@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MySQLConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/Xplora_db?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/xplora_db?useSSL=false&serverTimezone=UTC";
     private static final String USER = "app_user";
     private static final String PASSWORD = "root";
     private static final String SCRIPT_PATH = "statement.sql";

@@ -13,27 +13,25 @@ const ProductoAleatorio = () => {
     const [categorias, setCategorias] = useState()
 
     useEffect(() => {
-        const obtenerProductosAleatorios = async () => {
-        try {
-            const response = await axios.get("/api/paquete-experiencia/aleatorios?cantidad=30");
-            setProductosAleatorios(response.data);
-        } catch (error) {
-            console.error("Error obteniendo productos aleatorios:", error);
-        }
-        };
-
-        const obtenerCategorias = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/categoria");
-                setCategorias(response.data); 
-            } catch (error) {
-                console.error("Error al obtener las categorías:", error);
+        const obtenerDatos = async () => {
+          try {
+            const [productosResponse, categoriasResponse] = await Promise.all([
+              axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),
+              axios.get("/api/categoria")
+            ]);
+            
+            setProductosAleatorios(productosResponse.data);
+            setCategorias(categoriasResponse.data);
+          } catch (error) {
+            console.error("Error obteniendo datos:", error);
+            // Aquí puedes manejar el error de manera más específica si lo necesitas
+            if (error.response) {
+              console.error("Detalle del error:", error.response.status, error.response.data);
             }
+          }
         };
 
-        obtenerCategorias();
-
-        obtenerProductosAleatorios();
+        obtenerDatos();
     }, []);
     
     const startIndex = (pag - 1) * itemPorPag;

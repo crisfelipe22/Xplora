@@ -1,6 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dto.entada.CategoriaEntradaDto;
+import com.backend.dto.entada.CategoriaEntradaDTO;
 import com.backend.dto.salida.CategoriaSalidaDTO;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.CategoriaService;
@@ -19,7 +19,7 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     @PostMapping
-    public ResponseEntity<CategoriaSalidaDTO> agregarCategoria(@RequestBody CategoriaEntradaDto categoriaDto) {
+    public ResponseEntity<CategoriaSalidaDTO> agregarCategoria(@RequestBody CategoriaEntradaDTO categoriaDto) {
         CategoriaSalidaDTO nuevaCategoriaDto = categoriaService.agregarCategoria(categoriaDto);
         return new ResponseEntity<>(nuevaCategoriaDto, HttpStatus.CREATED);
     }
@@ -37,7 +37,7 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaSalidaDTO> actualizarCategoria(@PathVariable(name = "id") Long id, @RequestBody CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
+    public ResponseEntity<CategoriaSalidaDTO> actualizarCategoria(@PathVariable(name = "id") Long id, @RequestBody CategoriaEntradaDTO categoriaDto) throws ResourceNotFoundException {
         CategoriaSalidaDTO categoriaActualizada = categoriaService.actualizarCategoria(id, categoriaDto);
         return new ResponseEntity<>(categoriaActualizada, HttpStatus.OK);
     }

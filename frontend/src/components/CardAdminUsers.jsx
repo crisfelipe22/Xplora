@@ -5,8 +5,12 @@ import AdminLayout from "./AdminLayout";
 import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext"; // Asegúrate de poner la ruta correcta
 
 const CardAdminUsers = () =>{
+  const { user } = useContext(AuthContext);
+  const userRole = user.rol
     
     const [pag, setPag] = useState(0);
     const [columnPorPag, setColumnPorPag] = useState(5);
@@ -24,7 +28,7 @@ const CardAdminUsers = () =>{
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/auth", {
+                const response = await axios.get("/api/auth", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -38,7 +42,7 @@ const CardAdminUsers = () =>{
 
         const obtenerRoles= async () => {
                 try {
-                    const response = await axios.get("http://localhost:8080/api/rol", {
+                    const response = await axios.get("/api/rol", {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -76,7 +80,7 @@ const CardAdminUsers = () =>{
         setOpenDialog(false);
 
         try {
-            await axios.patch(`http://localhost:8080/api/auth/${usuarioSelect.id_usuario}`, { id_rol: idRolNumber },{
+            await axios.patch(`/api/auth/${usuarioSelect.id_usuario}`, { id_rol: idRolNumber },{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }});
@@ -132,6 +136,7 @@ const CardAdminUsers = () =>{
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>
                                             <Select
+                                                {...(userRole === "Administrador"  && user.id_rol === 1 ? { disabled: true } : {})}
                                                 labelId="rol-label"
                                                 name="id_rol"
                                                 value={user.id_rol}

@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { Box, Button, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import styles from "../styles/header.module.css";
 import MenuUsuario from "./MenuUsuario";
 import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
   let navigate = useNavigate();
   const { isAuthenticated, logout, user } = useAuth();
   
@@ -37,12 +38,8 @@ const Header = () => {
         </Box>
       </Link>
       <Box className={styles.header__right}>
-        <MenuIcon
-          sx={{ display: { desktop: "none" } }}
-          className={styles.header__menu}
-        />
 
-        {!isAuthenticated ? (
+        {!isAuthenticated && isDesktop ? (
           <>
             <Link to="/registro">
               <Button
@@ -59,7 +56,6 @@ const Header = () => {
               variant="contained"
               color="primary"
               className={`${styles.header__button} ${styles["header__button--login"]}`}
-              //Aqui simulo que se inicia la sesión
               onClick={handleLogin}
             >
               INICIAR SESIÓN
@@ -68,8 +64,8 @@ const Header = () => {
         ) : (
           <MenuUsuario 
             onLogout={handleLogout}
-            avatarText={user.iniciales}
-            userName={user.nombre}
+            avatarText={user?.iniciales}
+            userName={user?.nombre}
           />
         )}
       </Box>

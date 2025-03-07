@@ -10,18 +10,18 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public class CategoriaEntradaDto {
+public class CategoriaEntradaDTO {
 
 
     @NotBlank(message="Debe indicar el nombre de la categoria")
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
 
-    public CategoriaEntradaDto(String nombre) {
+    public CategoriaEntradaDTO(String nombre) {
         this.nombre = nombre;
     }
 
-    public CategoriaEntradaDto() {
+    public CategoriaEntradaDTO() {
     }
 
     public String getNombre() {
