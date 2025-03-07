@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { 
   Box, 
-  Container, 
   TextField, 
   Button, 
   Typography, 
   Link, 
-  AppBar, 
-  Toolbar, 
   IconButton, 
   InputAdornment,
   Snackbar,
@@ -93,38 +90,37 @@ const LoginForm = () => {
     <>
       {/* Login Form */}
       <Grid
-            container
-            sx={{
-              height: "100vh",
-              width: "100%",
-              margin: 0,
-              padding: 0,
-              display: "flex",
-              backgroundColor: "#FAF9FF",
-              overflow: "hidden",
-              justifyContent: "center",
-            }}
-          >
-
-      
-      <Grid
-       item
-        
-        
-        className="formulario-grid"
+        container
         sx={{
-          display: "flex",
-          //justifyContent: "left",
-          justifyContent: "center",
-          alignItems: "center",
           height: "100vh",
-          width: {mobile: "100%", tablet: "75%", desktop: "50%"},
-          padding: { mobile: "0", tablet: "5%" },
-
-          margin: "0",
+          width: "100%",
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          backgroundColor: "#FAF9FF",
+          overflow: "hidden",
+          justifyContent: "center",
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Grid
+          item
+          className="formulario-grid"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            width: {mobile: "100%", tablet: "75%", desktop: "50%"},
+            padding: { mobile: "0", tablet: "5%" },
+
+            margin: "0",
+          }}
+        >
+        <Box sx={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center' 
+          }}>
           <Typography component="h1" variant="h5" sx={{ mb: 0.5 }}>
             Inicia sesión
           </Typography>
@@ -198,33 +194,34 @@ const LoginForm = () => {
           </Box>
         </Box>
         </Grid>
+
         <Grid
-        item
-        
-        
-        sx={{
-          display: isMobileOrTablet ? "none" : "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "50%",
-          height: "100vh",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          className="mi-imagen"
-          component="img"
-          src={imagenFondo}
-          alt="Registro"
+          item
+          
+          
           sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            //display: "block",
+            display: isMobileOrTablet ? "none" : "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "50%",
+            height: "100vh",
+            overflow: "hidden",
           }}
-        />
-      
-      </Grid>
+        >
+          <Box
+            className="mi-imagen"
+            component="img"
+            src={imagenFondo}
+            alt="Registro"
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              //display: "block",
+            }}
+          />
+        
+        </Grid>
       </Grid>
 
       {/* Error Snackbar */}

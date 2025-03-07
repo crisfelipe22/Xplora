@@ -151,6 +151,7 @@ const FormRegistroUsuario = () => {
         display: "flex",
         backgroundColor: "#FAF9FF",
         overflow: "hidden",
+        justifyContent: "center",
       }}
     >
       <Grid
@@ -158,7 +159,6 @@ const FormRegistroUsuario = () => {
         className="formulario-grid"
         sx={{
           display: "flex",
-          //justifyContent: "left",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
@@ -177,6 +177,7 @@ const FormRegistroUsuario = () => {
             backgroundColor: "transparent",
             boxShadow: 0,
             margin: 0,
+            textAlign: "center",
           }}
         >
           <Typography variant="h5" fontWeight="bold" gutterBottom>
