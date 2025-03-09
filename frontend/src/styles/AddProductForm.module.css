@@ -12,10 +12,11 @@
   background-color: #f8f9fa !important;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.container{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .titleListaProductos {
