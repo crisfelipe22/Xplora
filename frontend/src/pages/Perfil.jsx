@@ -18,7 +18,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { AuthContext } from '../contexts/AuthContext'; // Ajusta esta ruta
+import { AuthContext } from '../contexts/AuthContext'; 
 
 const obtenerRolTexto = (idRol) => {
   switch(idRol) {
@@ -33,16 +33,6 @@ const obtenerRolTexto = (idRol) => {
   }
 };
 
-const obtenerUsuarioPorId = async (id) => {
-  try {
-    const respuesta = await axios.get(`api/auth/${id}`);
-    console.log(respuesta.data)
-    return respuesta.data;
-  } catch (error) {
-    console.error('Error al obtener datos del usuario:', error);
-    throw error; // Re-lanzamos el error para que pueda ser manejado por quien llama a la función
-  }
-};
 
 const PerfilUsuario = () => {
   const { user } = useContext(AuthContext);
@@ -53,6 +43,22 @@ const PerfilUsuario = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!user || !user.id) {
+      setError(new Error('Usuario no definido o sin ID'));
+      setLoading(false);
+      return;
+    }
+
+    const obtenerUsuarioPorId = async (id) => {
+      try {
+        const respuesta = await axios.get(`/api/auth/${id}`);
+        return respuesta.data;
+      } catch (error) {
+        console.error('Error al obtener datos del usuario:', error);
+        throw error; // Re-lanzamos el error para que pueda ser manejado por quien llama a la función
+      }
+    };
+    
     const fetchUser = async () => {
       try {
         const userData = await obtenerUsuarioPorId(user.id);
@@ -65,7 +71,7 @@ const PerfilUsuario = () => {
     };
 
     fetchUser();
-  }, [user.id]);
+  }, []);
 
   if (loading) return <p>Cargando información...</p>;
   if (error) return <p>Error al cargar los datos del usuario</p>;

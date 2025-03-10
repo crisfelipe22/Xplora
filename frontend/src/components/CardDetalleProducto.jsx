@@ -32,7 +32,6 @@ import {
     AcUnit,            // Clima frío
     AccessTime         // Horarios
   } from '@mui/icons-material';
-  
 
 const CardDetalleProducto = ({product, categorias}) =>{
     const navigate = useNavigate();

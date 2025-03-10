@@ -12,14 +12,10 @@ const Header = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
   let navigate = useNavigate();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   
   const handleLogin = () => {
     navigate("/login");
-  };
-  // Y con esto estoy simulando el cierre de sesión.
-  const handleLogout = () => {
-    logout();
   };
 
   return (
@@ -63,7 +59,6 @@ const Header = () => {
           </>
         ) : (
           <MenuUsuario 
-            onLogout={handleLogout}
             avatarText={user?.iniciales}
             userName={user?.nombre}
           />

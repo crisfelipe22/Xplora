@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute'
+import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -11,9 +12,6 @@ import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 import Unauthorized from "./pages/Unauthorized";
 import Perfil from "./pages/Perfil"
-import CssBaseline from "@mui/material/CssBaseline";
-// import './App.css'
-import { Route, Routes, useLocation } from "react-router-dom";
 import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import DetalleProducto from "./pages/DetalleProducto";
@@ -22,50 +20,6 @@ import AdminUsers from "./pages/AdminUsers";
 
 
 function App() {
-  function ProtectedRoute({ children, requiredRoles = [] }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [userRole, setUserRole] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      setIsAuthenticated(false);
-      return;
-    }
-
-    // Token validity check endpoint
-    axios.get('/api/auth/validate', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
-    .then(response => {
-      setIsAuthenticated(true);
-      setUserRole(response.data.role);
-    })
-    .catch(() => {
-      localStorage.removeItem('token');
-      setIsAuthenticated(false);
-    });
-  }, []);
-
-  // Loading state
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  // Not authenticated
-  if (isAuthenticated === false) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Role check if required
-  if (requiredRoles.length > 0 && !requiredRoles.includes(userRole)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  return children;
-}
-
   const location = useLocation();
   const esRutaAdmin = location.pathname.startsWith("/admin");
 
