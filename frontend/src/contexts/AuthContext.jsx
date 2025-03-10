@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [currentToken, setCurrentToken] = useState(localStorage.getItem('token'));
   const [interceptorId, setInterceptorId] = useState(null);  // 🔥 Store interceptor ID
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(null);
@@ -29,6 +30,8 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
 
     const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+      
       if (token) {
         try {
           const response = await axios.get('/api/auth/validate', {
@@ -36,18 +39,28 @@ export const AuthProvider = ({ children }) => {
               'Authorization': `Bearer ${token}`
             }
           });
-
+          
+          // Validation successful
+          const userData = JSON.parse(localStorage.getItem('user') || '{}');
+          setUser(userData);
+          setUserRole(response.data.role);
+          setIsAuthenticated(true);
+          setCurrentToken(token); // Ensure token state is in sync
+          
         } catch (error) {
-          // Token is invalid or expired
+          // Token invalid
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          setIsAuthenticated(false);
           setUser(null);
-          navigate('/login');
+          setUserRole(null);
+          setIsAuthenticated(false);
+          setCurrentToken(null);
         } finally {
           setIsLoading(false);
         }
       } else {
+        setIsAuthenticated(false);
+        setCurrentToken(null);
         setIsLoading(false);
       }
     };
@@ -59,57 +72,49 @@ export const AuthProvider = ({ children }) => {
 // into a single useEffect
 
 useEffect(() => {
-  const token = localStorage.getItem('token');
-  
   // Remove previous interceptor if it exists
   if (interceptorId !== null) {
     console.log("Removing previous interceptor:", interceptorId);
     axios.interceptors.request.eject(interceptorId);
+    setInterceptorId(null);
   }
   
   // Only set up a new interceptor if we have a token
-  if (token) {
-    console.log("Setting up interceptor with token:", token);
+  if (currentToken) {
+    console.log("Setting up interceptor with token:", currentToken);
     const newInterceptor = axios.interceptors.request.use(
       config => {
-        console.log("Intercepting request to:", config.url);
         if (!config.url?.includes("imgbb.com")) {
-          config.headers['Authorization'] = `Bearer ${token}`;
+          config.headers['Authorization'] = `Bearer ${currentToken}`;
         }
         return config;
       },
       error => {
-        console.log("Interceptor error:", error);
         return Promise.reject(error);
       }
     );
     
     setInterceptorId(newInterceptor);
   }
-  
-  // No return cleanup needed as we're handling it at the beginning of the effect
-}, [isAuthenticated]); // Only re-run when authentication status changes
+}, [currentToken]); // Only re-run when the token changes
 
 
   const login = (token, userData) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
+    setUserRole("ROLE_" + userData.rol);
     setIsAuthenticated(true);
+    setCurrentToken(token); // Update token state to trigger interceptor update
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    
-    if (interceptorId !== null) {
-      console.log("Interceptor was unmounted!")
-      axios.interceptors.request.eject(interceptorId);  // 🔥 Remove interceptor on logout
-      setInterceptorId(null);
-    }
-
     setUser(null);
+    setUserRole(null);
     setIsAuthenticated(false);
+    setCurrentToken(null); // Clear token state to trigger interceptor removal
   };
 
   // Only render children when loading is complete
@@ -122,6 +127,7 @@ useEffect(() => {
       isAuthenticated,
       user,
       userRole,
+      isLoading,
       login, 
       logout 
     }}>
