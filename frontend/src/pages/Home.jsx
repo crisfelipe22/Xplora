@@ -4,11 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"; // Import styles
 import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
-import BeachAccessFilled from '@mui/icons-material/BeachAccess';
-import CalendarTodayFilled from '@mui/icons-material/CalendarToday';
 import ProductoAleatorio from "../components/ProductoAleatorio";
 import { BeachAccess, CalendarToday } from "@mui/icons-material";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+/*import { DateRangePicker } from "@mui/x-date-pickers";*/
+import { DateRangePicker } from "@mui/x-date-pickers-pro";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +18,7 @@ const Home = () => {
   const [query, setQuery] = useState("");
   const [dateRange, setDateRange] = useState([null, null]); 
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   
   const handleBuscar = () => {
     const [fechaInicio, fechaFin] = dateRange;
@@ -29,6 +29,7 @@ const Home = () => {
     
     const formattedFechaInicio = dayjs(fechaInicio).format("YYYY-MM-DD");
     const formattedFechaFin = dayjs(fechaFin).format("YYYY-MM-DD");
+    console.log("Buscando:", { query, formattedFechaInicio, formattedFechaFin })
 
     navigate(`/resultados?query=${query}&fechaInicio=${formattedFechaInicio}&fechaFin=${formattedFechaFin}`);
   };
@@ -127,52 +128,33 @@ const Home = () => {
             </TextField>
             <TextField
               label="¿Cuándo?"
-              placeholder="Elegir fecha"
+              placeholder="Elige una fecha"
               size="small"
-              margin="normal"
-              className="search-inputs"
-              {...(!isMobile && {
-                slotProps: {
-                  input: {
-                    startAdornment: <InputAdornment position="start"> <CalendarTodayFilled/> </InputAdornment>,
-                  },
-                },
-              })}
-            >
-            </TextField>
-            {/*///////////////////////// */}
-            <DateRangePicker
-              value={dateRange}
-              onChange={(newValue) => setDateRange(newValue)}
-              localeText={{ start: "Desde", end: "Hasta" }}
-              sx={{
-                flexGrow: { tablet: "3" },
-                marginTop: "8px",
-              }}
-              slots={{
-                textField: (params) => (
-                  <TextField
-                    {...params}
-                    size="small"
-                    margin="normal"
-                    className="search-inputs"
-                    sx={{
-                      flexGrow: { tablet: "3" },
-                    }}
-                    {...(!isMobile && {
-                      InputProps: {
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <CalendarToday />
-                          </InputAdornment>
-                        ),
-                      },
-                    })}
-                  />
+              fullWidth
+              value={
+                dateRange[0] && dateRange[1]
+                  ? `${dayjs(dateRange[0]).format("DD/MM/YYYY")} - ${dayjs(dateRange[1]).format("DD/MM/YYYY")}`
+                  : ""
+              }
+              onClick={() => setOpen(true)}
+              Input={{
+                readOnly: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarToday />
+                  </InputAdornment>
                 ),
               }}
             />
-            {/*///////////////////////// */}
+
+              {/* Calendario doble oculto */}
+              <DateRangePicker
+                open={open}
+                onClose={() => setOpen(false)}
+                value={dateRange}
+                onChange={(newValue) => setDateRange(newValue)}
+                slotProps={{ textField: { sx: { display: "none" } } }} // Oculta los inputs nativos
+              />
             
               <Button
                 onClick={handleBuscar}
