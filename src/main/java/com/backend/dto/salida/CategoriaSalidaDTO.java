@@ -30,3 +30,4 @@ public class CategoriaSalidaDTO {
         this.nombre = nombre;
     }
 }
+
