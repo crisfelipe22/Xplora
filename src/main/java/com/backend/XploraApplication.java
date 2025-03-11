@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class XploraApplication {
     public static void main(String[] args){
-        MySQLConnection.ejecutarScriptInicial();
-
-        // Inicia la aplicación Spring Boot
-        SpringApplication.run(XploraApplication.class, args);
+      SpringApplication.run(XploraApplication.class, args);
+      
+      // Inicia la aplicación Spring Boot
+      MySQLConnection.ejecutarScriptInicial();
     }
 
     @Bean
