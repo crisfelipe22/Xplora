@@ -1,16 +1,17 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
+
 import React from "react";
+import { Link } from 'react-router-dom';
 import "../styles/Home.css"; // Import styles
 import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import BeachAccessFilled from '@mui/icons-material/BeachAccess';
 import CalendarTodayFilled from '@mui/icons-material/CalendarToday';
 import ProductoAleatorio from "../components/ProductoAleatorio";
 
-
 const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
-  
+
   return (
     <Box className="home-container"
       sx={{
@@ -67,9 +68,6 @@ const Home = () => {
               <img src="/imagen_23.jpeg" alt="" />
             </ImageListItem>
           </ImageList>
-
-          
-
         
         </Box>
 
@@ -118,13 +116,16 @@ const Home = () => {
             })}
           >
           </TextField>
-          <Button
-            variant="contained"
-            sx={{display: "block", height: {tablet: "40px !important"}}}
-            {...(isMobile ? {} : { size: "small" })}
-          >
-            BUSCAR
-          </Button>
+          
+          <Link to="`/resultados?query=${query}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`">
+            <Button
+              variant="contained"
+              sx={{display: "block", height: {tablet: "40px !important"}}}
+              {...(isMobile ? {} : { size: "small" })}
+            >
+              BUSCAR
+            </Button>
+          </Link>
         </Box>
       </Container>
 
