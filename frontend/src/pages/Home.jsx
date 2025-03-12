@@ -7,10 +7,13 @@ import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextF
 import ProductoAleatorio from "../components/ProductoAleatorio";
 import { BeachAccess, CalendarToday } from "@mui/icons-material";
 /*import { DateRangePicker } from "@mui/x-date-pickers";*/
-import { DateRangePicker } from "@mui/x-date-pickers-pro";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
 
 const Home = () => {
   const theme = useTheme();
@@ -19,6 +22,9 @@ const Home = () => {
   const [dateRange, setDateRange] = useState([null, null]); 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const [fechaInicio, fechaFin] = dateRange;
+  
   
   const handleBuscar = () => {
     const [fechaInicio, fechaFin] = dateRange;
@@ -27,8 +33,8 @@ const Home = () => {
       return;
     }
     
-    const formattedFechaInicio = dayjs(fechaInicio).format("YYYY-MM-DD");
-    const formattedFechaFin = dayjs(fechaFin).format("YYYY-MM-DD");
+    const formattedFechaInicio = format(fechaInicio, "yyyy-MM-dd");
+    const formattedFechaFin = format(fechaFin, "yyyy-MM-dd");
     console.log("Buscando:", { query, formattedFechaInicio, formattedFechaFin })
 
     navigate(`/resultados?query=${query}&fechaInicio=${formattedFechaInicio}&fechaFin=${formattedFechaFin}`);
@@ -132,29 +138,41 @@ const Home = () => {
               size="small"
               fullWidth
               value={
-                dateRange[0] && dateRange[1]
-                  ? `${dayjs(dateRange[0]).format("DD/MM/YYYY")} - ${dayjs(dateRange[1]).format("DD/MM/YYYY")}`
-                  : ""
+                fechaInicio && fechaFin
+                ? `${format(fechaInicio, "dd/MM/yyyy")} - ${format(fechaFin, "dd/MM/yyyy")}`
+                : ""
               }
               onClick={() => setOpen(true)}
-              Input={{
-                readOnly: true,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <CalendarToday />
-                  </InputAdornment>
-                ),
-              }}
+              {...(!isMobile && {
+                slotProps: {
+                  input: {
+                    readOnly: true,
+                    startAdornment: 
+                    <InputAdornment position="start"> 
+                      <CalendarToday/> 
+                    </InputAdornment>,
+                  },
+                },
+              })}
             />
 
               {/* Calendario doble oculto */}
-              <DateRangePicker
-                open={open}
-                onClose={() => setOpen(false)}
-                value={dateRange}
-                onChange={(newValue) => setDateRange(newValue)}
-                slotProps={{ textField: { sx: { display: "none" } } }} // Oculta los inputs nativos
-              />
+              {open && (
+                <DatePicker
+                  selectsRange
+                  startDate={fechaInicio}
+                  endDate={fechaFin}
+                  onChange={(update) => {
+                    setDateRange(update);
+                    if (update[0] && update[1]) {
+                      setOpen(false); // Cierra el calendario cuando ambas fechas son seleccionadas
+                    }
+                  }}
+                  inline
+                  locale={es}
+                />
+              )}
+
             
               <Button
                 onClick={handleBuscar}
