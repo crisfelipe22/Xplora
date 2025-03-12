@@ -9,7 +9,6 @@ import { BeachAccess, CalendarToday } from "@mui/icons-material";
 /*import { DateRangePicker } from "@mui/x-date-pickers";*/
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
@@ -170,6 +169,8 @@ const Home = () => {
                   inline
                   locale={es}
                   monthsShown={2}
+                  direction="horizontal"
+                  rangeColors={["#7B1FA2"]}
                 />
               )}
 
