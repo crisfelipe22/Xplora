@@ -105,13 +105,13 @@ form>button {
 .input-nombre{
   flex: 3;
   color: var(--Primary, #6239E6);
-  margin: 16px 0px 8px;
+  margin: 16px 0px 8px !important;
 }
 
 .input-fecha{
   flex: 2;
   color: var(--Primary, #6239E6);
-  margin: 16px 0px 8px;
+  margin: 16px 0px 8px !important;
 }
 
 .boton-buscar{
