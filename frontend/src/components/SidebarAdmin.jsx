@@ -58,6 +58,14 @@ const SidebarAdmin = () => {
                                 <ListItemText primary="Usuarios" className={styles.menuText} />
                             </ListItemButton>
                         </Link>
+                        <Link to="/admin/categoria" style={{ textDecoration: 'none' }}>
+                            <ListItemButton className={styles.menuItem}>
+                                <ListItemIcon>
+                                    <PeopleIcon  className={styles.menuIcon}/>
+                                </ListItemIcon>
+                                <ListItemText primary="Lista de categorías" className={styles.menuText} />
+                            </ListItemButton>
+                        </Link>
                     </List>
                 </Drawer>
 
