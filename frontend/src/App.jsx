@@ -18,7 +18,7 @@ import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
 import AdminUsers from "./pages/AdminUsers";
 import ResultadoBusqueda from './pages/ResultadoBusqueda';
-
+import Categoria from './pages/AdminCategoria';
 
 function App() {
   const location = useLocation();
@@ -43,6 +43,7 @@ function App() {
           path="/detalle-producto/:id_paquete_experiencia"
           element={<DetalleProducto />}
         />
+        <Route path="/admin/categoria" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Categoria /></ProtectedRoute>} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/login" element={<Login />} />
         <Route path="/perfil" 

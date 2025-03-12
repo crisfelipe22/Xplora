@@ -47,11 +47,4 @@ public class CategoriaController {
         CategoriaSalidaDTO categoriaEliminada = categoriaService.eliminarCategoria(id);
         return new ResponseEntity<>(categoriaEliminada, HttpStatus.OK);
     }
-
-    @GetMapping("/{id}")
-public ResponseEntity<List<CategoriaSalidaDTO>> listarCategorias() {
-    List<CategoriaSalidaDTO> categorias = categoriaService.obtenerTodasLasCategorias();
-    return ResponseEntity.ok(categorias);
-}
-
 }
