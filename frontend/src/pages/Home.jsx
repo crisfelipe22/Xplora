@@ -103,6 +103,7 @@ const Home = () => {
           <Box
             component="form"
             noValidate
+            className="box-form"
             sx={{
               display: {tablet: "flex"}, 
               alignSelf: {desktop: "flex-start"},
@@ -117,7 +118,7 @@ const Home = () => {
               {...(isMobile ? { fullWidth: true } : {})}
               size="small"
               margin="normal"
-              className="search-inputs"
+              className="input-nombre"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               sx={{
@@ -137,6 +138,7 @@ const Home = () => {
               placeholder="Elige una fecha"
               size="small"
               fullWidth
+              className="input-fecha"
               value={
                 fechaInicio && fechaFin
                 ? `${format(fechaInicio, "dd/MM/yyyy")} - ${format(fechaFin, "dd/MM/yyyy")}`
@@ -175,6 +177,7 @@ const Home = () => {
               <Button
                 onClick={handleBuscar}
                 variant="contained"
+                className="boton-buscar"
                 sx={{display: "block", height: {tablet: "40px !important"}}}
                 {...(isMobile ? {} : { size: "small" })}
               >

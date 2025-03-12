@@ -68,10 +68,10 @@ div.search-bar {
   text-transform: uppercase;
 }
 
-.search-bar .search-inputs {
+.search-bar  {
   /* margin:  */
   color: var(--Primary, #6239E6);
-
+  margin: 16px 0px 8px;
 }
 
 form fieldset {
@@ -95,4 +95,26 @@ form>button {
   color: #333;
   text-align: left;
   margin-bottom: 20px !important;
+}
+
+.box-form{
+  display: flex !important;
+  align-items: center;
+}
+
+.input-nombre{
+  flex: 3;
+  color: var(--Primary, #6239E6);
+  margin: 16px 0px 8px;
+}
+
+.input-fecha{
+  flex: 2;
+  color: var(--Primary, #6239E6);
+  margin: 16px 0px 8px;
+}
+
+.boton-buscar{
+  flex: 1;
+  margin: 16px 0 8px !important;
 }
