@@ -1,9 +1,9 @@
 package com.backend.entity;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
 
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "paquete_experiencia")
@@ -26,6 +26,13 @@ public class PaqueteExperiencia {
     private Date fecha_inicio;
     private Date fecha_fin;
 
+    
+    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteDetalleProducto> detallesProductos = new ArrayList<>();
+
+    public PaqueteExperiencia() {
+    }
+
     public PaqueteExperiencia(Long id_paquete_experiencia, Categoria categoria, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_inicio, Date fecha_fin) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.categoria = categoria;
@@ -39,13 +46,12 @@ public class PaqueteExperiencia {
         this.fecha_fin = fecha_fin;
     }
 
-    public PaqueteExperiencia() {
+    public void agregarDetalleProducto(PaqueteDetalleProducto detalle) {
+        this.detallesProductos.add(detalle);
+        detalle.setPaqueteExperiencia(this);
     }
 
     // Getters y Setters
-    // Getters y Setters
-
-
     public Long getId_paquete_experiencia() {
         return id_paquete_experiencia;
     }
@@ -124,6 +130,14 @@ public class PaqueteExperiencia {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
+    }
+
+    public List<PaqueteDetalleProducto> getDetallesProductos() {
+        return detallesProductos;
+    }
+
+    public void setDetallesProductos(List<PaqueteDetalleProducto> detallesProductos) {
+        this.detallesProductos = detallesProductos;
     }
 }
 
