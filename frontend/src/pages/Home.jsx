@@ -164,12 +164,10 @@ const Home = () => {
                   endDate={fechaFin}
                   onChange={(update) => {
                     setDateRange(update);
-                    if (update[0] && update[1]) {
-                      setOpen(false); // Cierra el calendario cuando ambas fechas son seleccionadas
-                    }
                   }}
                   inline
                   locale={es}
+                  monthsShown={2}
                 />
               )}
 
