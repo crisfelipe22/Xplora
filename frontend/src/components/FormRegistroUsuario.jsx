@@ -139,7 +139,6 @@ const FormRegistroUsuario = () => {
       }
     }
   };
-
   return (
     <Grid
       container
