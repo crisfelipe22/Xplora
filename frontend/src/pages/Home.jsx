@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"; // Import styles
 import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
@@ -24,7 +24,18 @@ const Home = () => {
 
   const [fechaInicio, fechaFin] = dateRange;
   
-  
+  const calendarRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleBuscar = () => {
     const [fechaInicio, fechaFin] = dateRange;
     if (!query || !fechaInicio || !fechaFin) {
@@ -132,48 +143,60 @@ const Home = () => {
               })}
             >
             </TextField>
-            <TextField
-              label="¿Cuándo?"
-              placeholder="Elige una fecha"
-              size="small"
-              fullWidth
-              className="input-fecha"
-              value={
-                fechaInicio && fechaFin
-                ? `${format(fechaInicio, "dd/MM/yyyy")} - ${format(fechaFin, "dd/MM/yyyy")}`
-                : ""
-              }
-              onClick={() => setOpen(true)}
-              {...(!isMobile && {
-                slotProps: {
-                  input: {
-                    readOnly: true,
-                    startAdornment: 
-                    <InputAdornment position="start"> 
-                      <CalendarToday/> 
-                    </InputAdornment>,
+
+            <Box sx={{ position: 'relative'}} ref={calendarRef}>
+              <TextField
+                
+                label="¿Cuándo?"
+                placeholder="Elige una fecha"
+                size="small"
+                fullWidth
+                className="input-fecha"
+                value={
+                  fechaInicio && fechaFin
+                  ? `${format(fechaInicio, "dd/MM/yyyy")} - ${format(fechaFin, "dd/MM/yyyy")}`
+                  : ""
+                }
+                onClick={() => setOpen(true)}
+                {...(!isMobile && {
+                  slotProps: {
+                    input: {
+                      readOnly: true,
+                      startAdornment: 
+                      <InputAdornment position="start"> 
+                        <CalendarToday/> 
+                      </InputAdornment>,
+                    },
                   },
-                },
-              })}
-            />
+                })}
+              />
 
-              {/* Calendario doble oculto */}
-              {open && (
-                <DatePicker
-                  selectsRange
-                  startDate={fechaInicio}
-                  endDate={fechaFin}
-                  onChange={(update) => {
-                    setDateRange(update);
-                  }}
-                  inline
-                  locale={es}
-                  monthsShown={2}
-                  direction="horizontal"
-                  rangeColors={["#7B1FA2"]}
-                />
-              )}
-
+                {/* Calendario doble oculto */}
+                {open && (
+                  <Box sx={{
+                    position: 'absolute',
+                    zIndex: 9999,
+                    top: '100%',
+                    left: 0,
+                    backgroundColor: 'white',
+                    boxShadow: 3,
+                    mt: 1
+                  }}>
+                    <DatePicker
+                      selectsRange
+                      startDate={fechaInicio}
+                      endDate={fechaFin}
+                      onChange={(update) => setDateRange(update)}
+                      onCalendarClose={() => setOpen(false)}
+                      inline
+                      locale={es}
+                      monthsShown={2}
+                      direction="horizontal"
+                      calendarClassName="custom-calendar"
+                    />
+                  </Box>
+                )}
+              </Box>
             
               <Button
                 onClick={handleBuscar}

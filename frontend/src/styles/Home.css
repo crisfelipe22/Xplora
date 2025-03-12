@@ -85,10 +85,6 @@ form input {
   color: rgba(0, 0, 0, 0.38);
 }
 
-form>button {
-  margin-top: 16px !important;
-  background-color: #6239E6 !important;
-}
 
 .titulo-recomendados {
   font-size: 1.8rem !important;
@@ -117,4 +113,23 @@ form>button {
 .boton-buscar{
   flex: 1;
   margin: 16px 0 8px !important;
+  background-color: #6239E6 !important;
+}
+
+.custom-calendar {
+  gap: 20px;
+  padding: 16px;
+}
+
+.custom-calendar .react-datepicker__month-container {
+  width: 300px;
+}
+
+.custom-calendar .react-datepicker__header {
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.custom-calendar .react-datepicker__day--selected {
+  background-color: #7B1FA2;
 }
