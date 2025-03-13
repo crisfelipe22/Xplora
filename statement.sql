@@ -35,12 +35,12 @@ INSERT INTO pedido (estado, es_regalo, total, id_paquete_experiencia) VALUES
     ('Pendiente', TRUE, 120.00, 2),
     ('Completado', FALSE, 200.00, 3);
 
-INSERT INTO metodo_pago (nombre) VALUES
-    ('Tarjeta de crédito'),
-    ('PayPal'),
-    ('Transferencia bancaria');
+-- INSERT INTO metodo_pago (nombre) VALUES
+--     ('Tarjeta de crédito'),
+--     ('PayPal'),
+--     ('Transferencia bancaria');
 
-INSERT INTO pago (monto, estado, id_pedido, id_metodo_pago) VALUES
-    (150.00, 'Aprobado', 1, 1),
-    (120.00, 'Pendiente', 2, 2),
-    (200.00, 'Aprobado', 3, 3);
+-- INSERT INTO pago (monto, estado, id_pedido, id_metodo_pago) VALUES
+--     (150.00, 'Aprobado', 1, 1),
+--     (120.00, 'Pendiente', 2, 2),
+--     (200.00, 'Aprobado', 3, 3);
