@@ -9,6 +9,7 @@ import { BeachAccess, CalendarToday } from "@mui/icons-material";
 /*import { DateRangePicker } from "@mui/x-date-pickers";*/
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+/*import "./custom-datepicker.css";*/
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
@@ -22,7 +23,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const [fechaInicio, fechaFin] = dateRange;
+  const fechaInicio = dateRange[0] || null;
+  const fechaFin = dateRange[1] || null;
   
   const calendarRef = useRef(null);
 
@@ -37,7 +39,6 @@ const Home = () => {
   }, []);
 
   const handleBuscar = () => {
-    const [fechaInicio, fechaFin] = dateRange;
     if (!query || !fechaInicio || !fechaFin) {
       alert("Por favor completa todos los campos.");
       return;
@@ -173,15 +174,7 @@ const Home = () => {
 
                 {/* Calendario doble oculto */}
                 {open && (
-                  <Box sx={{
-                    position: 'absolute',
-                    zIndex: 9999,
-                    top: '100%',
-                    left: 0,
-                    backgroundColor: 'white',
-                    boxShadow: 3,
-                    mt: 1
-                  }}>
+                  <Box className="box-calendar">
                     <DatePicker
                       selectsRange
                       startDate={fechaInicio}
@@ -191,7 +184,6 @@ const Home = () => {
                       inline
                       locale={es}
                       monthsShown={2}
-                      direction="horizontal"
                       calendarClassName="custom-calendar"
                     />
                   </Box>
