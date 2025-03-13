@@ -1,13 +1,20 @@
 package com.backend.service;
 
+import com.backend.dto.entada.PaqueteDetalleProductoEntradaDTO;
 import com.backend.dto.entada.PaqueteExperienciaEntradaDTO;
+import com.backend.dto.salida.PaqueteDetalleSalidaDTO;
 import com.backend.dto.salida.PaqueteExperienciaSalidaDTO;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.entity.Categoria;
+import com.backend.entity.DetalleProducto;
+import com.backend.entity.PaqueteDetalleProducto;
 import com.backend.exceptions.ConflictException;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.CategoriaRepository;
+import com.backend.repository.DetalleProductoRepository;
+import com.backend.repository.PaqueteDetalleProductoRepository;
+
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
@@ -16,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +40,12 @@ public class PaqueteExperienciaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private PaqueteDetalleProductoRepository paqueteDetalleProductoRepository;
+
+    @Autowired
+    private DetalleProductoRepository detalleProductoRepository;
+
     private final ModelMapper modelMapper;
 
     public PaqueteExperienciaService(ModelMapper modelMapper) {
@@ -41,38 +55,90 @@ public class PaqueteExperienciaService {
     private static final Logger logger = LoggerFactory.getLogger(PaqueteExperienciaService.class);
 
     @Transactional
-    public PaqueteExperienciaSalidaDTO agregarPaqueteExperiencia(@Valid PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDto) throws BadRequestException {
-        logger.info("Iniciando proceso para agregar un nuevo Paquete de Experiencia: {}", paqueteExperienciaEntradaDto.getNombre());
+    public PaqueteExperienciaSalidaDTO agregarPaqueteExperiencia(@Valid PaqueteExperienciaEntradaDTO paqueteExperienciaEntradaDTO) throws BadRequestException {
+        logger.info("Iniciando proceso para agregar un nuevo Paquete de Experiencia: {}", paqueteExperienciaEntradaDTO.getNombre());
 
         PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto;
 
         // Verificar si el nombre ya existe en la base de datos
-        if (paqueteExperienciaRepository.findByNombre(paqueteExperienciaEntradaDto.getNombre()).isPresent()) {
-            logger.warn("El nombre '{}' ya está en uso", paqueteExperienciaEntradaDto.getNombre());
+        if (paqueteExperienciaRepository.findByNombre(paqueteExperienciaEntradaDTO.getNombre()).isPresent()) {
+            logger.warn("El nombre '{}' ya está en uso", paqueteExperienciaEntradaDTO.getNombre());
             throw new ConflictException("El nombre del paquete de experiencia ya está en uso");
         }
 
         // Obtener la categoría y lanzar una excepción si no existe
-        Categoria categoria = categoriaRepository.findById(paqueteExperienciaEntradaDto.getId_categoria())
+        Categoria categoria = categoriaRepository.findById(paqueteExperienciaEntradaDTO.getId_categoria())
                 .orElseThrow(() -> {
-                    logger.error("Categoría con ID {} no encontrada", paqueteExperienciaEntradaDto.getId_categoria());
+                    logger.error("Categoría con ID {} no encontrada", paqueteExperienciaEntradaDTO.getId_categoria());
                     return new RuntimeException("La categoría no existe");
                 });
 
         // Mapear DTO a entidad y asegurarse de que no tenga ID para evitar problemas de persistencia
-        PaqueteExperiencia paqueteExperiencia = modelMapper.map(paqueteExperienciaEntradaDto, PaqueteExperiencia.class);
+        PaqueteExperiencia paqueteExperiencia = modelMapper.map(paqueteExperienciaEntradaDTO, PaqueteExperiencia.class);
         paqueteExperiencia.setId_paquete_experiencia(null);
         paqueteExperiencia.setCategoria(categoria);
 
+        PaqueteExperiencia nuevoPaquete;
+
         try {
             // Guardar el paquete en la base de datos
-            PaqueteExperiencia nuevoPaquete = paqueteExperienciaRepository.save(paqueteExperiencia);
+            nuevoPaquete = paqueteExperienciaRepository.save(paqueteExperiencia);
+
             logger.info("Paquete de experiencia '{}' agregado exitosamente con ID {}", nuevoPaquete.getNombre(), nuevoPaquete.getId_paquete_experiencia());
             paqueteExperienciaSalidaDto = modelMapper.map(nuevoPaquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(nuevoPaquete.getCategoria().getId_categoria());
+            
+        } catch (Exception e) {
+            logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}", paqueteExperienciaEntradaDTO.getNombre(), e.getMessage(), e);
+            throw new BadRequestException("Error al guardar el paquete de experiencia, por favor intente nuevamente.");
+        }
+
+        List<PaqueteDetalleProducto> paquetesDetallesProductos = new ArrayList<>();
+        logger.info("los detalles de productos son: {}", paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos());
+        if (!paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos().isEmpty()) {
+            logger.info("Estoy agregando los detalles del paquete de la experiencia");
+            for (PaqueteDetalleProductoEntradaDTO detalleDTO : paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos()) {
+                
+                DetalleProducto detalleProducto = detalleProductoRepository.findById(detalleDTO.getId_detalle_producto())
+                        .orElseThrow(() -> new RuntimeException("Detalle producto con ID " + detalleDTO.getId_detalle_producto() + " no encontrado"));
+                
+                boolean existe = paqueteDetalleProductoRepository
+                    .findByPaqueteExperienciaAndDetalleProducto(
+                        detalleDTO.getId_paquete_experiencia(), 
+                        detalleDTO.getId_detalle_producto()
+                    ).isPresent();
+
+                if (existe) {
+                    throw new RuntimeException("El detalle de producto con ID " + detalleDTO.getId_detalle_producto() 
+                        + " ya se encuentra en el paquete de experiencia con ID " + detalleDTO.getId_paquete_experiencia());
+                }
+
+                // Crear objeto PaqueteDetalleProducto
+                PaqueteDetalleProducto paqueteDetalleProducto = new PaqueteDetalleProducto();
+                paqueteDetalleProducto.setPaquete_experiencia(nuevoPaquete);
+                paqueteDetalleProducto.setDetalle_producto(detalleProducto);
+
+                paquetesDetallesProductos.add(paqueteDetalleProducto);
+            }
+            logger.info("Se van a agregar los siguiente detalles del paquete de experiencia {}", paquetesDetallesProductos);
+        }
+
+        try {
+            // Guardar el paquete de detalle producto en la base de datos
+            if (!paquetesDetallesProductos.isEmpty()) {
+                paquetesDetallesProductos.forEach(detalle -> detalle.setPaquete_experiencia(nuevoPaquete));
+                paqueteDetalleProductoRepository.saveAll(paquetesDetallesProductos);
+                logger.info("Detalle del producto con el paquete de experiencia '{}' agregados exitosamente", nuevoPaquete.getNombre());
+            }
+
+            List<PaqueteDetalleSalidaDTO> detallesSalida = paquetesDetallesProductos.stream()
+                .map(detalle -> new PaqueteDetalleSalidaDTO(detalle))
+                .collect(Collectors.toList());
+
+            paqueteExperienciaSalidaDto.setPaquetes_detalles_productos(detallesSalida);
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
-            logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}", paqueteExperienciaEntradaDto.getNombre(), e.getMessage(), e);
+            logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}", paqueteExperienciaEntradaDTO.getNombre(), e.getMessage(), e);
             throw new BadRequestException("Error al guardar el paquete de experiencia, por favor intente nuevamente.");
         }
     }

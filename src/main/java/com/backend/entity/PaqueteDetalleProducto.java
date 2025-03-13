@@ -1,6 +1,8 @@
 package com.backend.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,46 +16,47 @@ public class PaqueteDetalleProducto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id_paquete_detalle_producto")
+    private Long id_paquete_detalle_producto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paquete_experiencia", nullable = false)
-    private PaqueteExperiencia paqueteExperiencia;
+    private PaqueteExperiencia paquete_experiencia;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_detalle_producto", nullable = false)
-    private DetalleProducto detalleProducto;
+    private DetalleProducto detalle_producto;
 
     public PaqueteDetalleProducto() {
     }
 
-    public PaqueteDetalleProducto(PaqueteExperiencia paqueteExperiencia, DetalleProducto detalleProducto) {
-        this.paqueteExperiencia = paqueteExperiencia;
-        this.detalleProducto = detalleProducto;
+    public PaqueteDetalleProducto(PaqueteExperiencia paquete_experiencia, DetalleProducto detalle_producto) {
+        this.paquete_experiencia = paquete_experiencia;
+        this.detalle_producto = detalle_producto;
     }
 
-    public Long getId() {
-        return id;
+    public PaqueteExperiencia getPaquete_experiencia() {
+        return paquete_experiencia;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPaquete_experiencia(PaqueteExperiencia paquete_experiencia) {
+        this.paquete_experiencia = paquete_experiencia;
     }
 
-    public PaqueteExperiencia getPaqueteExperiencia() {
-        return paqueteExperiencia;
+    public Long getId_paquete_detalle_producto() {
+        return id_paquete_detalle_producto;
     }
 
-    public void setPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia) {
-        this.paqueteExperiencia = paqueteExperiencia;
+    public void setId_paquete_detalle_producto(Long id_paquete_detalle_producto) {
+        this.id_paquete_detalle_producto = id_paquete_detalle_producto;
     }
 
-    public DetalleProducto getDetalleProducto() {
-        return detalleProducto;
+    public DetalleProducto getDetalle_producto() {
+        return detalle_producto;
     }
 
-    public void setDetalleProducto(DetalleProducto detalleProducto) {
-        this.detalleProducto = detalleProducto;
+    public void setDetalle_producto(DetalleProducto detalle_producto) {
+        this.detalle_producto = detalle_producto;
     }
 }
 

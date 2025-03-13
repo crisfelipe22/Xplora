@@ -1,10 +1,12 @@
 package com.backend.dto.entada;
 
+import com.backend.entity.PaqueteDetalleProducto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.util.Date;
+import java.util.List;
 
 public class PaqueteExperienciaEntradaDTO {
 
@@ -45,7 +47,9 @@ public class PaqueteExperienciaEntradaDTO {
     @Positive(message = "La categoria no puede ser nulo o menor a cero")
     private Long id_categoria;
 
-    public PaqueteExperienciaEntradaDTO(String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Long id_categoria, Date fecha_inicio, Date fecha_fin) {
+    private List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos;
+
+    public PaqueteExperienciaEntradaDTO(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_inicio, Date fecha_fin, String duracion, Long id_categoria, List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -55,6 +59,7 @@ public class PaqueteExperienciaEntradaDTO {
         this.fecha_fin = fecha_fin;
         this.duracion = duracion;
         this.id_categoria = id_categoria;
+        this.paquetes_detalles_productos = paquetes_detalles_productos;
     }
 
     public PaqueteExperienciaEntradaDTO() {
@@ -130,5 +135,13 @@ public class PaqueteExperienciaEntradaDTO {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
+    }
+
+    public List<PaqueteDetalleProductoEntradaDTO> getPaquetes_detalles_productos() {
+        return paquetes_detalles_productos;
+    }
+
+    public void setPaquetes_detalles_productos(List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos) {
+        this.paquetes_detalles_productos = paquetes_detalles_productos;
     }
 }

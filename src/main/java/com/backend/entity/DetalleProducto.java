@@ -21,9 +21,9 @@ public class DetalleProducto {
 
     @ManyToMany
     @JoinTable(
-        name = "paquete_experiencia_detalle_producto",
-        joinColumns = @JoinColumn(name = "detalle_producto_id"),
-        inverseJoinColumns = @JoinColumn(name = "paquete_experiencia_id")
+        name = "paquete_detalle_producto",
+        joinColumns = @JoinColumn(name = "id_detalle_producto"),
+        inverseJoinColumns = @JoinColumn(name = "id_paquete_experiencia")
     )
     private Set<PaqueteExperiencia> paquetesExperiencia = new HashSet<>();
 

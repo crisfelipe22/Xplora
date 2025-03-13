@@ -26,9 +26,8 @@ public class PaqueteExperiencia {
     private Date fecha_inicio;
     private Date fecha_fin;
 
-    
-    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaqueteDetalleProducto> detallesProductos = new ArrayList<>();
+    @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteDetalleProducto> detalles_productos = new ArrayList<>();
 
     public PaqueteExperiencia() {
     }
@@ -47,8 +46,8 @@ public class PaqueteExperiencia {
     }
 
     public void agregarDetalleProducto(PaqueteDetalleProducto detalle) {
-        this.detallesProductos.add(detalle);
-        detalle.setPaqueteExperiencia(this);
+        this.detalles_productos.add(detalle);
+        detalle.setPaquete_experiencia(this);
     }
 
     // Getters y Setters
@@ -130,14 +129,6 @@ public class PaqueteExperiencia {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
-    }
-
-    public List<PaqueteDetalleProducto> getDetallesProductos() {
-        return detallesProductos;
-    }
-
-    public void setDetallesProductos(List<PaqueteDetalleProducto> detallesProductos) {
-        this.detallesProductos = detallesProductos;
     }
 }
 

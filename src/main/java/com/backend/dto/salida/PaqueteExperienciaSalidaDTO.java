@@ -1,6 +1,9 @@
 package com.backend.dto.salida;
 
 import java.util.Date;
+import java.util.List;
+
+import com.backend.entity.PaqueteDetalleProducto;
 
 public class PaqueteExperienciaSalidaDTO {
 
@@ -21,7 +24,9 @@ public class PaqueteExperienciaSalidaDTO {
 
     private Date fecha_fin;
 
-    public PaqueteExperienciaSalidaDTO(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Long id_categoria, Date fecha_inicio, Date fecha_fin) {
+    private List<PaqueteDetalleSalidaDTO> paquetes_detalles_productos;
+
+    public PaqueteExperienciaSalidaDTO(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_inicio, Date fecha_fin, Long id_categoria, List<PaqueteDetalleSalidaDTO> paquetes_detalles_productos) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -30,8 +35,7 @@ public class PaqueteExperienciaSalidaDTO {
         this.imagen = imagen;
         this.duracion = duracion;
         this.id_categoria = id_categoria;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
+        this.paquetes_detalles_productos = paquetes_detalles_productos;
     }
 
     public PaqueteExperienciaSalidaDTO() {
@@ -115,5 +119,13 @@ public class PaqueteExperienciaSalidaDTO {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
+    }
+    
+    public List<PaqueteDetalleSalidaDTO> getPaquetes_detalles_productos() {
+        return paquetes_detalles_productos;
+    }
+
+    public void setPaquetes_detalles_productos(List<PaqueteDetalleSalidaDTO> paquetes_detalles_productos) {
+        this.paquetes_detalles_productos = paquetes_detalles_productos;
     }
 }
