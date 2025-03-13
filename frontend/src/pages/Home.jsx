@@ -181,6 +181,7 @@ const Home = () => {
                       endDate={fechaFin}
                       onChange={(update) => setDateRange(update)}
                       onCalendarClose={() => setOpen(false)}
+                      minDate={new Date()}
                       inline
                       locale={es}
                       monthsShown={2}
