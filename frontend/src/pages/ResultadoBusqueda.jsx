@@ -20,14 +20,14 @@ const ResultadoBusqueda = () =>{
         const fetchResultados = async () => {
             setLoading(true);
             setError(null);
-            const query = searchParams.get("query");
-            const fechaInicio = searchParams.get("fechaInicio");
-            const fechaFin = searchParams.get("fechaFin");
+            const nombre = searchParams.get("nombre");
+            const fecha_inicio = searchParams.get("fecha_inicio");
+            const fecha_fin = searchParams.get("fecha_fin");
     
             try {
                 const [productosResponse, categoriasResponse] = await Promise.all([
                     axios.get(`/api/paquete-experiencia/filtro`, {
-                        params: { query, fechaInicio, fechaFin },
+                        params: { nombre, fecha_inicio, fecha_fin },
                     }),
                     /*axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),*/
                     axios.get("/api/categoria")

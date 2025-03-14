@@ -76,7 +76,7 @@ const Home = () => {
     const formattedFechaFin = format(fechaFin, "yyyy-MM-dd");
     console.log("Buscando:", { query, formattedFechaInicio, formattedFechaFin })
 
-    navigate(`/resultados?query=${query}&fechaInicio=${formattedFechaInicio}&fechaFin=${formattedFechaFin}`);
+    navigate(`/resultados?nombre=${query}&fecha_inicio=${formattedFechaInicio}&fecha_fin=${formattedFechaFin}`);
   };
 
   if (loading) return <p>Cargando productos...</p>;
