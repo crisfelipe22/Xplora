@@ -1,6 +1,6 @@
 package com.backend.service;
 
-import com.backend.dto.entada.CategoriaEntradaDto;
+import com.backend.dto.entada.CategoriaEntradaDTO;
 import com.backend.dto.salida.CategoriaSalidaDTO;
 import com.backend.entity.Categoria;
 import com.backend.exceptions.ConflictException;
@@ -30,7 +30,7 @@ public class CategoriaService {
         this.modelMapper = modelMapper;
     }
 
-    public CategoriaSalidaDTO agregarCategoria(CategoriaEntradaDto categoriaDto) {
+    public CategoriaSalidaDTO agregarCategoria(CategoriaEntradaDTO categoriaDto) {
         try {
             if (categoriaRepository.findByNombre(categoriaDto.getNombre()).isPresent()) {
                 throw new ConflictException("La categoría ya existe.");
@@ -70,7 +70,7 @@ public class CategoriaService {
     }
 
     @Transactional
-    public CategoriaSalidaDTO actualizarCategoria(Long id, CategoriaEntradaDto categoriaDto) throws ResourceNotFoundException {
+    public CategoriaSalidaDTO actualizarCategoria(Long id, CategoriaEntradaDTO categoriaDto) throws ResourceNotFoundException {
         logger.info("Actualizando categoría con id '{}'", id);
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> {

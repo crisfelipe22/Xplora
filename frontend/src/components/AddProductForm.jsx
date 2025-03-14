@@ -1,13 +1,20 @@
+/* eslint-disable no-unused-vars */
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
 import AdminLayout from "./AdminLayout";
+//iconos//
+import {
+    LocalParking, CalendarToday, Landscape, FreeBreakfast, Pets, OutdoorGrill, Wifi, Brush
+    } from '@mui/icons-material';
+
+//
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -20,7 +27,9 @@ const AddProductForm = () => {
     })
 
     const [errores, setErrores] = useState({})
+    const [erroresRequest, setErroresRequest] = useState({})
     const [openAlertExito, setOpenAlertExito] = useState(false);
+    const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
     let navigate = useNavigate();
     
     const handleCloseAlertExito = (_, reason) => {
@@ -28,18 +37,80 @@ const AddProductForm = () => {
         setOpenAlertExito(false);
     };
 
+    const handleCloseAlertFracaso = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertFracaso(false);
+    };
+
     const [categorias, setCategorias] = useState([]);
 
+    //CARACTERISTICAS///////
+    const caracteristicasDisponibles = [
+        { id_car: 1, nombre: "Estacionamiento gratuito" },
+        { id_car: 2, nombre: "Fechas flexibles" },
+        { id_car: 3, nombre: "Vista a las montañas" },
+        { id_car: 4, nombre: "Desayuno incluido" },
+        { id_car: 5, nombre: "Se permiten mascotas" },
+        { id_car: 6, nombre: "Zona de comida al aire libre" },
+        { id_car: 7, nombre: "Servicio de Wi-Fi" },
+        { id_car: 8, nombre: "Servicio de decoración" },
+    ]
+    const iconosDisponibles={
+        1: LocalParking,       
+        2: CalendarToday,    
+        3: Landscape,          
+        4: FreeBreakfast,      
+        5: Pets,              
+        6: OutdoorGrill,       
+        7: Wifi,               
+        8: Brush 
+    }
+    const [caracteristicas, setCaracteristicas] = useState([]);
+    const [dialogCaracteristicas, setDialogCaracteristicas] = useState(false);
+    const [caracteristicaSeleccionada, setCaracteristicaSeleccionada] = useState("");
+    const [iconoSeleccionado, setIconoSeleccionado] = useState("");
+
+    const handleOpenDialogCarac = () => {
+        setDialogCaracteristicas(true);
+    };
+    
+    const handleCloseDialogCarac = () => {
+        setDialogCaracteristicas(false);
+        setCaracteristicaSeleccionada("");
+        setIconoSeleccionado("");
+    };
+
+    const handleGuardarCaracteristica = () => {
+        if (caracteristicaSeleccionada && iconoSeleccionado) {
+            const caracteristica = caracteristicasDisponibles.find(
+                c => c.id_car === Number(caracteristicaSeleccionada)
+            );
+            
+            setCaracteristicas(prev => [
+                ...prev,
+                { 
+                    id_car_prod: Date.now(),
+                    id_car: caracteristica.id_car, 
+                    id_icono: iconoSeleccionado,   
+                    nombre: caracteristica.nombre,
+                    icono: iconosDisponibles[iconoSeleccionado] 
+                }
+            ]);
+            handleCloseDialogCarac();
+            console.log(caracteristicas)
+        }
+    };
+    const handleEliminarCaracteristica = (id_car_prod) => {
+        setCaracteristicas(caracteristicas.filter((item) => item.id_car_prod !== id_car_prod));
+    };
+
+/////////
     useEffect(() => {
         const obtenerCategorias = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/categoria");
-                const categoriasTransformadas = response.data.map(cat => ({
-                    id_categoria: cat.idCategoria, // Cambia la propiedad
-                    nombre: cat.nombre
-                }));
-                setCategorias(categoriasTransformadas); 
-                console.log(response.data)
+                const response = await axios.get("/api/categoria");
+                setCategorias(response.data); 
+                console.log()
             } catch (error) {
                 console.error("Error al obtener las categorías:", error);
             }
@@ -129,7 +200,8 @@ const AddProductForm = () => {
         fecha_experiencia: "2026-02-19T12:00:00",
         id_categoria: Number(product.id_categoria)
     };
-    
+
+
     const subirImagenAlServidor = async (archivo) => {
         const formData = new FormData();
         formData.append("image", archivo);
@@ -138,7 +210,9 @@ const AddProductForm = () => {
             const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    Authorization: undefined
                 },
+                withCredentials: false,
             });
     
             if (response.data && response.data.data.url) {
@@ -155,8 +229,6 @@ const AddProductForm = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault()
         if (validaciones()){
-            console.log("Formulario exitoso, producto subido", productFormatoEnvio)
-
             //llamada a POST
             try {
                 const response = await axios.post('/api/paquete-experiencia', productFormatoEnvio, {
@@ -175,6 +247,8 @@ const AddProductForm = () => {
                 }, 3000);
             } catch (error) {
                 console.error("Error al enviar el producto:", error);
+                setErroresRequest(error?.response?.data["mensaje: "]);
+                setOpenAlertFracaso(true)
             }
             
         } else {
@@ -228,7 +302,7 @@ const AddProductForm = () => {
                                 error={!!errores.descripcion}
                                 helperText={errores.descripcion}
                                 multiline
-                                rows={3}
+                                rows={2}
                                 fullWidth
                             />
 
@@ -329,6 +403,79 @@ const AddProductForm = () => {
                             </Box>
                         </Box>
 
+                        <Box className={styles.seccion}>
+                            <Typography className={styles.h6} variant="h6" gutterBottom>
+                                Administrar caracteristicas
+                            </Typography>
+                            
+                            <TableContainer className={styles.tableContainer}>
+                                <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonNuevaCarac}>
+                                    AÑADIR NUEVA
+                                </Button>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell className={styles.tableHeader}>Características</TableCell>
+                                            <TableCell className={styles.tableHeader}>Acciones</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    
+                                    <TableBody>
+                                        {caracteristicas.map((carac) => (
+                                            <TableRow key={carac.id_car_prod} className={styles.tableRow}>
+                                                <TableCell>{carac.nombre}</TableCell>
+                                                <TableCell>
+                                                    <Button variant="outlined" className={styles.botonEliminar} onClick={() => handleEliminarCaracteristica(carac.id_car_prod)}>
+                                                        Eliminar
+                                                    </Button>
+                                                    <Button variant="outlined" className={styles.botonEditar}>
+                                                        Editar
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <Dialog open={dialogCaracteristicas} onClose={handleCloseDialogCarac}>
+                                <DialogTitle>Agregar Característica</DialogTitle>
+                                <DialogContent>
+                                <Select
+                                    fullWidth
+                                    value={caracteristicaSeleccionada}
+                                    onChange={(e) => setCaracteristicaSeleccionada(e.target.value)}
+                                    displayEmpty
+                                >
+                                    <MenuItem value="" disabled>Selecciona una característica</MenuItem>
+                                    {caracteristicasDisponibles.map((car) => (
+                                    <MenuItem key={car.id_car} value={car.id_car}>{car.nombre}</MenuItem>
+                                    ))}
+                                </Select>
+
+                                <Select
+                                    fullWidth
+                                    value={iconoSeleccionado}
+                                    onChange={(e) => setIconoSeleccionado(e.target.value)}
+                                    displayEmpty
+                                    style={{ marginTop: "10px" }}
+                                >
+                                    <MenuItem value="" disabled>Selecciona un icono</MenuItem>
+                                    {Object.entries(iconosDisponibles).map(([id, Icono]) => (
+                                        <MenuItem key={id} value={id}>
+                                            <Icono style={{ fontSize: 24 }} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                </DialogContent>
+
+                                <DialogActions>
+                                <Button onClick={handleCloseDialogCarac} color="secondary">Cancelar</Button>
+                                <Button onClick={handleGuardarCaracteristica} color="primary" variant="contained">Guardar</Button>
+                                </DialogActions>
+                            </Dialog>
+                        </Box>
+
+
                         <Box className={styles.botones}>
                             <Button className={styles.botonAgregar} type="submit" variant="contained">
                                 Añadir Producto
@@ -346,6 +493,16 @@ const AddProductForm = () => {
                             >
                                 <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
                                     ¡Producto agregado con éxito!
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar
+                                open={openAlertFracaso}
+                                autoHideDuration={3000}
+                                onClose={handleCloseAlertFracaso}
+                                anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                            >
+                                <Alert onClose={handleCloseAlertFracaso} severity="error" className={styles.alertaFracaso}>
+                                    {erroresRequest}
                                 </Alert>
                             </Snackbar>
                         </Box>

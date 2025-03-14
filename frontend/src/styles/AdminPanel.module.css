@@ -2,7 +2,7 @@
 .panel{
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     box-sizing: border-box;
 }
 
@@ -30,7 +30,7 @@
 
 .sidebarBox {
     display: flex;
-    height: 100vh;
+    height: 100vw;
     margin-top: 65px; 
     z-index: 1;
 }
@@ -71,6 +71,7 @@
     min-height: 100vh;
     background-color: #f8f9fa;
     width: 100vw;
+    height: calc(100vh - 65px);
 }
 
 .adminContainer {

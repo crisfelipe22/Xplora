@@ -7,10 +7,12 @@ import com.backend.service.PaqueteExperienciaService;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -59,6 +61,16 @@ public class PaqueteExperienciaController {
     public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaquetesAleatorios(
             @RequestParam(name = "cantidad", defaultValue = "10", required = false) int cantidad) {
         List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaquetesAleatorios(cantidad);
+        return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/filtro")
+    public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaqueteExperienciaPorFiltro(
+            @RequestParam(name = "nombre", required = false) String nombre,
+            @RequestParam(name = "fecha_inicio", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_inicio,
+            @RequestParam(name = "fecha_fin", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_fin
+    ) {
+        List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorFiltro(nombre, fecha_inicio, fecha_fin);
         return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
 }

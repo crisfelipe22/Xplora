@@ -33,7 +33,7 @@
 }
 
 .botonAddProduct {
-    margin: 2% 0% 2% 70% !important;
+    margin: 2% 0% 0% 80% !important;
     background-color: #6239E6 !important;
     color: white !important;
     border-radius: 4px !important;
@@ -49,7 +49,6 @@
 
 .tableContainer {
     width: 100%;
-    margin-top: 20px;
 }
 
 .tableHeader {
@@ -59,6 +58,8 @@
 .contenido{
     border-radius: 8px;
     background-color: #F2EFFD;
+    overflow: hidden;
+    max-width: calc(100% - 20px)
 }
 
 .botonEditar{
@@ -86,4 +87,47 @@
 
 .botonEliminar:hover{
     background-color: #f5e6ff !important;
+}
+
+.selectRol {
+    width: 220px;
+    height: 40px;
+}
+
+.tituloConfirmacion{
+    display: flex;
+    justify-content: center;
+    color: #05030D;
+    padding: 25px 0px 0px 5px !important;
+}
+
+.botones{
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 0 20px 0 !important;
+}
+
+.botonCancelarConfirmacion{
+    background: transparent !important; 
+    border: 1px solid #2E1F5E !important;
+    padding: 8px 22px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+}
+
+.botonCancelarConfirmacion:hover{
+    background-color: #f5e6ff !important;
+}
+
+.botonAceptarConfirmacion{
+    background: #6239E6 !important;
+    color: white !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    border: none !important;
+    padding: 8px 22px !important;
+}
+
+.botonAceptarConfirmacion:hover{
+    background-color: #125a9e !important;
 }

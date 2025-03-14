@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,6 +124,20 @@ public class PaqueteExperienciaService {
         PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
         paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
         return paqueteExperienciaSalidaDto;
+    }
+
+    public List<PaqueteExperienciaSalidaDTO> obtenerPaqueteExperienciaPorFiltro(String nombre, Date fecha_inicio, Date fecha_fin) {
+        try {
+            logger.info("Obteniendo datos del paquete por filtro: nombre={}, fecha_inicio={}, fecha_fin={}", nombre, fecha_inicio, fecha_fin);
+
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findByFilter(nombre, fecha_inicio, fecha_fin);
+            return paquetes.stream()
+                    .map(paquete -> modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo paquetes por filtro", e);
+            throw new RuntimeException("Error obteniendo paquetes por filtro");
+        }
     }
 
     @Transactional
