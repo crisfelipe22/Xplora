@@ -30,8 +30,8 @@
 
 .sidebarBox {
     display: flex;
-    height: 100vw;
-    margin-top: 65px; 
+    height: 100vh;
+    padding-top: 65px; 
     z-index: 1;
 }
 
@@ -68,7 +68,6 @@
 
 .container{
     display: flex;
-    min-height: 100vh;
     background-color: #f8f9fa;
     width: 100vw;
     height: calc(100vh - 65px);

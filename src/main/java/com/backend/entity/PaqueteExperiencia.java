@@ -23,9 +23,10 @@ public class PaqueteExperiencia {
     private String ubicacion;
     private String imagen;
     private String duracion;
-    private Date fecha_experiencia;
+    private Date fecha_inicio;
+    private Date fecha_fin;
 
-    public PaqueteExperiencia(Long id_paquete_experiencia, Categoria categoria, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_experiencia) {
+    public PaqueteExperiencia(Long id_paquete_experiencia, Categoria categoria, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_inicio, Date fecha_fin) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.categoria = categoria;
         this.nombre = nombre;
@@ -34,7 +35,8 @@ public class PaqueteExperiencia {
         this.ubicacion = ubicacion;
         this.imagen = imagen;
         this.duracion = duracion;
-        this.fecha_experiencia = fecha_experiencia;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
     }
 
     public PaqueteExperiencia() {
@@ -48,16 +50,8 @@ public class PaqueteExperiencia {
         return id_paquete_experiencia;
     }
 
-    public Date getFecha_experiencia() {
-        return fecha_experiencia;
-    }
-
     public void setId_paquete_experiencia(Long id_paquete_experiencia) {
         this.id_paquete_experiencia = id_paquete_experiencia;
-    }
-
-    public void setFecha_experiencia(Date fecha_experiencia) {
-        this.fecha_experiencia = fecha_experiencia;
     }
 
     public Categoria getCategoria() {
@@ -114,6 +108,22 @@ public class PaqueteExperiencia {
 
     public void setDuracion(String duracion) {
         this.duracion = duracion;
+    }
+
+    public Date getFecha_inicio() {
+        return fecha_inicio;
+    }
+
+    public void setFecha_inicio(Date fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
+    }
+
+    public Date getFecha_fin() {
+        return fecha_fin;
+    }
+
+    public void setFecha_fin(Date fecha_fin) {
+        this.fecha_fin = fecha_fin;
     }
 }
 
