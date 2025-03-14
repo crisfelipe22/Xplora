@@ -263,3 +263,49 @@ form input {
 .react-datepicker__day--in-selecting-range:last-child::before {
   border-bottom-right-radius: 18px !important;
 }
+
+/* Ocultar fondo continuo en días fuera del mes */
+.react-datepicker__day--outside-month.react-datepicker__day--in-range::before,
+.react-datepicker__day--outside-month.react-datepicker__day--in-selecting-range::before {
+  display: none !important;
+}
+
+/* Asegurar que los días fuera del mes no tengan fondo */
+.react-datepicker__day--outside-month {
+  background: transparent !important;
+  color: #ccc !important; /* Color gris para días fuera del mes */
+  pointer-events: none !important; /* Deshabilitar interacción */
+}
+
+/* Bordes redondeados para el último día del mes anterior 
+.react-datepicker__day--in-range:not(.react-datepicker__day--outside-month)::before {
+  border-top-right-radius: 18px !important;
+  border-bottom-right-radius: 18px !important;
+}*/
+
+/* Bordes redondeados en días válidos anteriores a días fuera del mes */
+.react-datepicker__day--outside-month + .react-datepicker__day--in-range::before,
+.react-datepicker__day--outside-month + .react-datepicker__day--in-selecting-range::before {
+  border-top-left-radius: 18px !important; 
+  border-bottom-left-radius: 18px !important; 
+}
+
+/*AUTOCOMPLETAR*/
+.autocomplete {
+  width: 100%;
+  max-width: 300px;
+  flex: 3;
+}
+
+.autocomplete .MuiAutocomplete-paper {
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+  background-color: #f9f9f9;
+}
+
+.autocomplete .MuiAutocomplete-option {
+  padding: 8px 16px; 
+  font-size: 14px; 
+}
+

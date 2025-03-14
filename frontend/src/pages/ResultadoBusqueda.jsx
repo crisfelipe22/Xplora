@@ -20,16 +20,16 @@ const ResultadoBusqueda = () =>{
         const fetchResultados = async () => {
             setLoading(true);
             setError(null);
-            /*const query = searchParams.get("query");
+            const query = searchParams.get("query");
             const fechaInicio = searchParams.get("fechaInicio");
-            const fechaFin = searchParams.get("fechaFin");*/
+            const fechaFin = searchParams.get("fechaFin");
     
             try {
                 const [productosResponse, categoriasResponse] = await Promise.all([
-                    /*axios.get(`http://localhost:8080/api/productos/buscar`, {
+                    axios.get(`http://localhost:8080/api/productos/filtro`, {
                         params: { query, fechaInicio, fechaFin },
-                    })*/
-                    axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),//MIENTRAS OBTENGO EL ENDPOINT DE RESULTADO BUSQUEDA
+                    }),
+                    /*axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),*/
                     axios.get("/api/categoria")
                 ]);
 

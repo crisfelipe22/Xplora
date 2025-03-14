@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"; // Import styles
-import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme, Autocomplete } from '@mui/material';
 import ProductoAleatorio from "../components/ProductoAleatorio";
 import { BeachAccess, CalendarToday } from "@mui/icons-material";
 /*import { DateRangePicker } from "@mui/x-date-pickers";*/
@@ -14,9 +14,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
 import { format } from "date-fns";
+import { useProducts } from '../contexts/ProductContext';
 
 const Home = () => {
   const theme = useTheme();
+  const { products, loading, error } = useProducts();
+
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
   const [query, setQuery] = useState("");
   const [dateRange, setDateRange] = useState([null, null]); 
@@ -27,9 +30,12 @@ const Home = () => {
   const fechaFin = dateRange[1] || null;
   
   const calendarRef = useRef(null);
+  const [sugerencias, setSugerencias] = useState([]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
         setOpen(false);
       }
@@ -37,6 +43,28 @@ const Home = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  /*sugerencias*/
+  useEffect(() => {
+    if (products.length > 0 && query) {
+      const filtrarSugerencias = products.filter(product =>
+        product.nombre.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      setSugerencias(filtrarSugerencias);
+    } else {
+      setSugerencias([]);
+    }
+  }, [query, products]);
+
+  console.log(sugerencias)
+  /*const handleSugerenciaClick = (sugerencia) => {
+    event.stopPropagation();
+    setQuery(sugerencia.nombre); 
+    setTimeout(() => {
+      setSugerencias([]);
+    }, 0); 
+  };*/
 
   const handleBuscar = () => {
     if (!query || !fechaInicio || !fechaFin) {
@@ -50,6 +78,9 @@ const Home = () => {
 
     navigate(`/resultados?query=${query}&fechaInicio=${formattedFechaInicio}&fechaFin=${formattedFechaFin}`);
   };
+
+  if (loading) return <p>Cargando productos...</p>;
+  if (error) return <p>Error al cargar los productos: {error.message}</p>;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -122,28 +153,39 @@ const Home = () => {
               // marginTop: {tablet: "96px"},
               width: {desktop: "50% !important"}
           }}
-          >
-            <TextField
-              label="¿Qué vamos a hacer?"
-              placeholder="Playa, masajes, cena, cabalgata..."
-              {...(isMobile ? { fullWidth: true } : {})}
-              size="small"
-              margin="normal"
-              className="input-nombre"
+          >  
+            <Autocomplete
+              freeSolo
+              options={sugerencias.map((sug) => sug.nombre)}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              sx={{
-                flexGrow: {tablet: "3"},
-              }}
-              {...(!isMobile && {
-                slotProps: {
-                  input: {
-                    startAdornment: <InputAdornment position="start"> <BeachAccess /> </InputAdornment>,
-                  },
-                },
-              })}
-            >
-            </TextField>
+              onInputChange={(_, newValue) => setQuery(newValue)}
+              onChange={(_, newValue) => setQuery(newValue)}
+              className="autocomplete"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="¿Qué vamos a hacer?"
+                  placeholder="Playa, masajes, cena, cabalgata..."
+                  {...(isMobile ? { fullWidth: true } : {})}
+                  size="small"
+                  margin="normal"
+                  className="input-nombre"
+                  sx={{
+                    flexGrow: {tablet: "3"},
+                  }}
+                  InputProps={{
+                    ...params.InputProps, // Mantén las propiedades del Autocomplete
+                    startAdornment: !isMobile && ( 
+                      <InputAdornment position="start">
+                        <BeachAccess />
+                      </InputAdornment>
+                    ),
+                  }}
+                  
+                />
+              )}
+              
+            />
 
             <Box sx={{ position: 'relative'}} ref={calendarRef}>
               <TextField
