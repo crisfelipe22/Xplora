@@ -17,7 +17,7 @@ public class DetalleProducto {
     
     private String descripcion;
     
-    private String logo;
+    private Long logo;
 
     @ManyToMany
     @JoinTable(
@@ -30,7 +30,7 @@ public class DetalleProducto {
     public DetalleProducto() {
     }
 
-    public DetalleProducto(String nombre, String descripcion, String logo) {
+    public DetalleProducto(String nombre, String descripcion, Long logo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.logo = logo;
@@ -61,11 +61,11 @@ public class DetalleProducto {
         this.descripcion = descripcion;
     }
 
-    public String getLogo() {
+    public Long getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(Long logo) {
         this.logo = logo;
     }
 
