@@ -300,6 +300,39 @@ http://localhost:8080/api
 - Precio debe ser un valor numérico positivo.
 - La ubicacion, imagen, duracion y descripcion son opcionales pero recomendados para una mejor experiencia del usuario.
 
+#### Obtener Paquetes de Experiencia por Filtro
+
+- **Método:** GET
+- **Endpoint:** `/paquete-experiencia/filtro`
+- **Descripción:** Devuelve una lista de paquetes de experiencia que coinciden con los filtros proporcionados. También puede ser utilizado para obtener las predicciones.
+
+
+- **Parámetros de Consulta:**
+  - `nombre` (opcional): Filtra los paquetes por nombre. Se puede usar una parte del nombre.
+  - `fecha_inicio` (opcional): Filtra los paquetes que tienen una fecha de experiencia mayor o igual a esta fecha. Formato: `yyyy-MM-dd`.
+  - `fecha_fin` (opcional): Filtra los paquetes que tienen una fecha de experiencia menor o igual a esta fecha. Formato: `yyyy-MM-dd`.
+
+
+- **Respuesta Exitosa (200 OK):**
+
+```json
+[
+  {
+    "id_paquete_experiencia": 1,
+    "nombre": "Aventura en la Montaña",
+    "descripcion": "Un día completo de senderismo y escalada.",
+    "precio": 150.00,
+    "ubicacion": "Andes, Chile",
+    "imagen": "https://example.com/imagen.jpg",
+    "duracion": "8 horas",
+    "fecha_experiencia": "2025-03-15T10:00:00Z",
+    "id_categoria": 1
+  }
+]
+```
+**Errores Posibles:**
+
+- 500 Internal Server Error: Error en el servidor.
 
 # API de Autenticación
 
