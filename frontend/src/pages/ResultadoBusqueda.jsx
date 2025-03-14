@@ -26,7 +26,7 @@ const ResultadoBusqueda = () =>{
     
             try {
                 const [productosResponse, categoriasResponse] = await Promise.all([
-                    axios.get(`http://localhost:8080/api/productos/filtro`, {
+                    axios.get(`/api/paquete-experiencia/filtro`, {
                         params: { query, fechaInicio, fechaFin },
                     }),
                     /*axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),*/
@@ -58,7 +58,7 @@ const ResultadoBusqueda = () =>{
 
     return(
         <Container>
-            <Typography variant="h5" className="titulo-recomendados" >
+            <Typography variant="h5" className="titulo-recomendados" sx={{marginTop: "75px"}}>
                 Resultados de tú busqueda
             </Typography>
 
