@@ -83,3 +83,29 @@
 .MuiPaginationItem-root {
     border-radius: 8px; 
 }
+
+.tituloVolver {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.backButton{
+    color: #6239E6 !important;
+    font-size: small !important;
+    border-radius: 2px !important;
+    font-weight: 500;
+}
+
+.backButton svg{
+    padding-right: 7%;
+}
+
+.container {
+    padding: 2rem;
+    margin-top: 50px;
+    min-height: 100vh;
+    margin-bottom: 50px;
+}

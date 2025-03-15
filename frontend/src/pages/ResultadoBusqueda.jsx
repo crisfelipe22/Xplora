@@ -2,10 +2,16 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Typography, Grid2, CircularProgress, Alert, Pagination } from "@mui/material";
+import { Container, Typography, Grid2, CircularProgress, Alert, Pagination, IconButton } from "@mui/material";
 import CardProductoAleatorio from "../components/CardProductoAleatorio";
+import styles from "../styles/ProductoAleatorio.module.css";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ResultadoBusqueda = () =>{
+
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [productosBusqueda, setProductosBusqueda] = useState([]);
     const [categorias, setCategorias] = useState([])
@@ -13,7 +19,7 @@ const ResultadoBusqueda = () =>{
     const [error, setError] = useState(null);
 
     const [pag, setPag] = useState(1);
-    const [itemPorPag, setItemPorPag] = useState(9);
+    const [itemPorPag, setItemPorPag] = useState(6);
 
     //API PRODUCTO BUSCADO  
     useEffect(() => {
@@ -59,10 +65,16 @@ const ResultadoBusqueda = () =>{
     const paginatedProducts = productosBusqueda.slice(startIndex, endIndex);
 
     return(
-        <Container>
-            <Typography variant="h5" className="titulo-recomendados" sx={{marginTop: "75px"}}>
-                Resultados de tú busqueda
-            </Typography>
+        <Container className={styles.container}>
+            <div className={styles.tituloVolver}>
+                    <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
+                        <ArrowBackIcon /> VOLVER ATRÁS
+                    </IconButton>
+                    <Typography variant="h5" className={styles.title}>
+                        Resultados de tú busqueda
+                    </Typography>
+            </div>
+            
 
             {loading && <CircularProgress />} {/* Muestra el spinner mientras carga */}
             {error && <Alert severity="error">{error}</Alert>} 
@@ -81,7 +93,7 @@ const ResultadoBusqueda = () =>{
                 count={Math.ceil(productosBusqueda.length / itemPorPag)}
                 page={pag}
                 onChange={(event, newPage) => setPag(newPage)}
-                /*className={styles.pagination}*/
+                className={styles.pagination}
                 shape="rounded"
                 siblingCount={5} // Número de páginas visibles a los lados
                 boundaryCount={1}  // Mostrar primera y última página siempre
