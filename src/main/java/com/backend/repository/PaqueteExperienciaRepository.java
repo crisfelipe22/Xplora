@@ -24,5 +24,6 @@ public interface PaqueteExperienciaRepository extends JpaRepository<PaqueteExper
             @Param("nombre") String nombre, 
             @Param("fecha_inicio") Date fecha_inicio, 
             @Param("fecha_fin") Date fecha_fin, 
-            @Param("categoriaId") Long categoriaId);
+            @Param("categoriaId") Long categoriaId
+    );
 }

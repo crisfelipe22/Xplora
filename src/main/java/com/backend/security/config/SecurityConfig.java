@@ -72,6 +72,11 @@ public class SecurityConfig {
                             auth.requestMatchers(HttpMethod.GET, "/api/categoria/**").permitAll();
                             auth.requestMatchers(HttpMethod.PUT, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/categoria").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.POST, "/api/caracteristica").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.GET, "/api/caracteristica").permitAll();
+                            auth.requestMatchers(HttpMethod.GET, "/api/caracteristica/**").permitAll();
+                            auth.requestMatchers(HttpMethod.PUT, "/api/caracteristica").hasAnyRole("Administrador", "SuperAdministrador");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/caracteristica").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.POST, "/api/auth").permitAll();
                             auth.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
                             auth.requestMatchers(HttpMethod.GET, "/api/auth").authenticated();

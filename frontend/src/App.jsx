@@ -17,6 +17,7 @@ import AddProduct from "./pages/AddProduct";
 import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
 import AdminUsers from "./pages/AdminUsers";
+import ResultadoBusqueda from './pages/ResultadoBusqueda';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path="/perfil" 
           element={<ProtectedRoute  ><Perfil /></ProtectedRoute>} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/resultados" element={<ResultadoBusqueda />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
       </AuthProvider>
