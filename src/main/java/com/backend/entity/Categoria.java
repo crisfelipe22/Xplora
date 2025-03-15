@@ -30,7 +30,7 @@ public class Categoria {
         this.imagen = imagen;
     }
 
-    public Long getIdCategoria() {
+    public Long getId_categoria() {
         return idCategoria;
     }
 
