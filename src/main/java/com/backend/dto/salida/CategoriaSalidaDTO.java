@@ -1,25 +1,27 @@
 package com.backend.dto.salida;
 
 public class CategoriaSalidaDTO {
-    private Long id_categoria;
 
+    private Long idCategoria;
     private String nombre;
-
-
-    public CategoriaSalidaDTO(Long id_categoria, String nombre) {
-        this.id_categoria = id_categoria;
-        this.nombre = nombre;
-    }
-
+    private String descripcion;
+    private String imagen;
     public CategoriaSalidaDTO() {
     }
 
-    public Long getId_categoria() {
-        return id_categoria;
+    public CategoriaSalidaDTO(Long idCategoria, String nombre, String descripcion, String imagen) {
+        this.idCategoria = idCategoria;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+    }
+    
+    public Long getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setId_categoria(Long id_categoria) {
-        this.id_categoria = id_categoria;
+    public void setIdCategoria(Long idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public String getNombre() {
@@ -29,5 +31,20 @@ public class CategoriaSalidaDTO {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-}
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+}
