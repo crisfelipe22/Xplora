@@ -254,4 +254,31 @@
     .cardPrecio{
         margin: 0 10%;
     }
+
+/*Nuevos*/
+    .containerUno {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        padding: 10px 0;
+      }
+      
+      .BotonVolver {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .rightButtons {
+        display: flex;
+        gap: 10px;
+      }
+      
 }

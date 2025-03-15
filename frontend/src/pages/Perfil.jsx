@@ -11,8 +11,13 @@ import {
   Card, 
   CardContent,
   useTheme,
-  useMediaQuery
+  useMediaQuery, 
+  Tabs,
+  Tab,
+  IconButton
 } from '@mui/material';
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
@@ -33,7 +38,6 @@ const obtenerRolTexto = (idRol) => {
   }
 };
 
-
 const PerfilUsuario = () => {
   const { user } = useContext(AuthContext);
   const theme = useTheme();
@@ -41,6 +45,35 @@ const PerfilUsuario = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [tabValue, setTabValue] = useState(0);
+  const [favorites, setFavorites] = useState([]);
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue)};
+
+  // Cargar favoritos desde localStorage al montar el componente
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavorites(storedFavorites);
+  }, []);
+
+  // Guardar favoritos en localStorage cuando cambian
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  // Agregar un producto a favoritos
+  const handleAddFavorite = (product) => {
+    if (!favorites.some((fav) => fav.id === product.id)) {
+      setFavorites([...favorites, product]);
+    }
+  };
+
+  // Eliminar un producto de favoritos
+  const removeFavorite = (productId) => {
+    const updatedFavorites = favorites.filter((product) => product.id !== productId);
+    setFavorites(updatedFavorites);
+  };
+
 
   useEffect(() => {
     if (!user || !user.id) {
@@ -117,6 +150,8 @@ const PerfilUsuario = () => {
   };
 
   return (
+    <div>
+    
     <Container maxWidth="md" sx={{ marginTop: "75px" }}>
       <Paper 
         elevation={3} 
@@ -145,11 +180,19 @@ const PerfilUsuario = () => {
               textAlign: 'center'
             }}
           >
-            Mi Perfil
+            Mi Cuenta
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Box sx={{ width: "100%", typography: "body1", marginTop: 5 }}>
+      <Tabs value={tabValue} onChange={handleTabChange} aria-label="account tabs">
+        <Tab icon={<AccountCircleIcon />} label="PERFIL" />
+        <Tab icon={<FavoriteIcon />} label="LISTA DE FAVORITOS" />
+      </Tabs>
+      {tabValue === 0 && (
+
+        <Box p={3}>
+          <Grid container spacing={4}>
           <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: "20px" }}>
               <Avatar 
@@ -224,8 +267,31 @@ const PerfilUsuario = () => {
             </Grid>
           </Grid>
         </Grid>
+        </Box>
+
+      )}
+      {tabValue === 1 && (
+        <Box p={3}>
+          {favorites.length === 0 ? (
+            <Typography>No tienes productos en tu lista de favoritos.</Typography>
+          ) : (
+            favorites.map((product) => (
+              <Box key={product.id} display="flex" alignItems="center" justifyContent="space-between" p={1} borderBottom="1px solid #ddd">
+                <Typography>{product.name}</Typography>
+                <IconButton onClick={() => removeFavorite(product.id)}>
+                  <FavoriteIcon color="error" />
+                </IconButton>
+              </Box>
+            ))
+          )}
+        </Box>
+      )}
+    </Box>
+        
       </Paper>
     </Container>
+
+    </div>
   );
 };
 
