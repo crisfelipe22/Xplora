@@ -5,7 +5,7 @@ import { Card, CardContent, Typography, CardMedia, Rating, Chip, IconButton} fro
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import styles from '../styles/ProductoAleatorio.module.css';
 import { Link } from 'react-router-dom';
-
+import { useAuth } from '../contexts/AuthContext';
 
 const CardProductoAleatorio = ({product, categorias}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
@@ -16,6 +16,7 @@ const CardProductoAleatorio = ({product, categorias}) => {
     //NUEVO
     // Estado para manejar favoritos (usamos localStorage para persistencia)
     const [isFavorite, setIsFavorite] = useState(false);
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
@@ -24,6 +25,14 @@ const CardProductoAleatorio = ({product, categorias}) => {
 
     const toggleFavorite = (e) => {
         e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+
+        //console.log("Estado del usuario:", usuario);
+
+        if (!isAuthenticated) {
+            alert("Debes iniciar sesión para agregar favoritos.");
+            return;
+          }
+
         const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
         let nuevosFavoritos;
 
