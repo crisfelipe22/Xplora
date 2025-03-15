@@ -1,19 +1,19 @@
 package com.backend.service;
 
-import com.backend.dto.entada.PaqueteDetalleProductoEntradaDTO;
+import com.backend.dto.entada.CaracteristicaPaqueteExperienciaEntradaDTO;
 import com.backend.dto.entada.PaqueteExperienciaEntradaDTO;
-import com.backend.dto.salida.PaqueteDetalleSalidaDTO;
+import com.backend.dto.salida.CaracteristicaPaqueteExperienciaSalidaDTO;
 import com.backend.dto.salida.PaqueteExperienciaSalidaDTO;
 import com.backend.entity.PaqueteExperiencia;
 import com.backend.entity.Categoria;
-import com.backend.entity.DetalleProducto;
-import com.backend.entity.PaqueteDetalleProducto;
+import com.backend.entity.Caracteristica;
+import com.backend.entity.CaracteristicaPaqueteExperiencia;
 import com.backend.exceptions.ConflictException;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.CategoriaRepository;
-import com.backend.repository.DetalleProductoRepository;
-import com.backend.repository.PaqueteDetalleProductoRepository;
+import com.backend.repository.CaracteristicaRepository;
+import com.backend.repository.CaracteristicaPaqueteExperienciaRepository;
 
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
@@ -42,10 +42,10 @@ public class PaqueteExperienciaService {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private PaqueteDetalleProductoRepository paqueteDetalleProductoRepository;
+    private CaracteristicaPaqueteExperienciaRepository paqueteDetalleProductoRepository;
 
     @Autowired
-    private DetalleProductoRepository detalleProductoRepository;
+    private CaracteristicaRepository detalleProductoRepository;
 
     private final ModelMapper modelMapper;
 
@@ -84,32 +84,32 @@ public class PaqueteExperienciaService {
             PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(nuevoPaquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(nuevoPaquete.getCategoria().getId_categoria());
         
-            List<PaqueteDetalleProducto> paquetesDetallesProductos = new ArrayList<>();
-            logger.info("Los detalles de productos son: {}", paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos());
+            List<CaracteristicaPaqueteExperiencia> paquetesDetallesProductos = new ArrayList<>();
+            logger.info("Los detalles de productos son: {}", paqueteExperienciaEntradaDTO.getCaracteristicas_paquete_experiencia());
         
-            if (paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos() != null && !paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos().isEmpty()) {
+            if (paqueteExperienciaEntradaDTO.getCaracteristicas_paquete_experiencia() != null && !paqueteExperienciaEntradaDTO.getCaracteristicas_paquete_experiencia().isEmpty()) {
                 logger.info("Estoy agregando los detalles del paquete de la experiencia");
         
-                for (PaqueteDetalleProductoEntradaDTO detalleDTO : paqueteExperienciaEntradaDTO.getPaquetes_detalles_productos()) {
+                for (CaracteristicaPaqueteExperienciaEntradaDTO caracteristicaDTO : paqueteExperienciaEntradaDTO.getCaracteristicas_paquete_experiencia()) {
                     
-                    DetalleProducto detalleProducto = detalleProductoRepository.findById(detalleDTO.getId_detalle_producto())
-                            .orElseThrow(() -> new RuntimeException("Detalle producto con ID " + detalleDTO.getId_detalle_producto() + " no encontrado"));
+                    Caracteristica detalleProducto = detalleProductoRepository.findById(caracteristicaDTO.getId_caracteristica())
+                            .orElseThrow(() -> new RuntimeException("Caracteristica con ID " + caracteristicaDTO.getId_caracteristica() + " no encontrado"));
                     
                     boolean existe = paqueteDetalleProductoRepository
                         .findByPaqueteExperienciaAndDetalleProductoById(
-                            detalleDTO.getId_paquete_experiencia(), 
-                            detalleDTO.getId_detalle_producto()
+                            caracteristicaDTO.getId_paquete_experiencia(), 
+                            caracteristicaDTO.getId_caracteristica()
                         ).isPresent();
         
                     if (existe) {
-                        throw new RuntimeException("El detalle de producto con ID " + detalleDTO.getId_detalle_producto() 
-                            + " ya se encuentra en el paquete de experiencia con ID " + detalleDTO.getId_paquete_experiencia());
+                        throw new RuntimeException("El detalle de producto con ID " + caracteristicaDTO.getId_caracteristica() 
+                            + " ya se encuentra en el paquete de experiencia con ID " + caracteristicaDTO.getId_paquete_experiencia());
                     }
         
                     // Crear objeto PaqueteDetalleProducto
-                    PaqueteDetalleProducto paqueteDetalleProducto = new PaqueteDetalleProducto();
+                    CaracteristicaPaqueteExperiencia paqueteDetalleProducto = new CaracteristicaPaqueteExperiencia();
                     paqueteDetalleProducto.setPaquete_experiencia(nuevoPaquete);
-                    paqueteDetalleProducto.setDetalle_producto(detalleProducto);
+                    paqueteDetalleProducto.setCaracteristica(detalleProducto);
                     paquetesDetallesProductos.add(paqueteDetalleProducto);
                 }
                 logger.info("Se van a agregar los siguientes detalles del paquete de experiencia {}", paquetesDetallesProductos);
@@ -121,11 +121,11 @@ public class PaqueteExperienciaService {
                 logger.info("Detalle del producto con el paquete de experiencia '{}' agregados exitosamente", nuevoPaquete.getNombre());
             }
         
-            List<PaqueteDetalleSalidaDTO> detallesSalida = paquetesDetallesProductos.stream()
-                .map(detalle -> new PaqueteDetalleSalidaDTO(detalle))
+            List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = paquetesDetallesProductos.stream()
+                .map(detalle -> new CaracteristicaPaqueteExperienciaSalidaDTO(detalle))
                 .collect(Collectors.toList());
         
-            paqueteExperienciaSalidaDto.setPaquetes_detalles_productos(detallesSalida);
+            paqueteExperienciaSalidaDto.setCaracteristicas_paquete_experiencia(detallesSalida);
             return paqueteExperienciaSalidaDto;
     }
 
@@ -137,9 +137,9 @@ public class PaqueteExperienciaService {
                     .map(paquete -> {
                         PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
                         dto.setId_categoria(paquete.getCategoria().getId_categoria());
-                        List<PaqueteDetalleSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
+                        List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
 
-                        dto.setPaquetes_detalles_productos(detallesSalida);
+                        dto.setCaracteristicas_paquete_experiencia(detallesSalida);
                         return dto;
                     })
                     .collect(Collectors.toList());
@@ -160,9 +160,9 @@ public class PaqueteExperienciaService {
                         PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
                         dto.setId_categoria(paquete.getCategoria().getId_categoria());
 
-                        List<PaqueteDetalleSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
+                        List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
 
-                        dto.setPaquetes_detalles_productos(detallesSalida);
+                        dto.setCaracteristicas_paquete_experiencia(detallesSalida);
                         return dto;
                     })
                     .collect(Collectors.toList());
@@ -183,9 +183,9 @@ public class PaqueteExperienciaService {
         PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
         paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
 
-        List<PaqueteDetalleSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
+        List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
 
-        paqueteExperienciaSalidaDto.setPaquetes_detalles_productos(detallesSalida);
+        paqueteExperienciaSalidaDto.setCaracteristicas_paquete_experiencia(detallesSalida);
         return paqueteExperienciaSalidaDto;
     }
 
@@ -199,9 +199,9 @@ public class PaqueteExperienciaService {
                     PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
                     dto.setId_categoria(paquete.getCategoria().getId_categoria());
 
-                    List<PaqueteDetalleSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
+                    List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
 
-                    dto.setPaquetes_detalles_productos(detallesSalida);
+                    dto.setCaracteristicas_paquete_experiencia(detallesSalida);
 
                     return dto;
                 })
@@ -221,13 +221,13 @@ public class PaqueteExperienciaService {
             throw new ResourceNotFoundException("Paquete de experiencia con ID " + id + " no encontrado");
         }
         try {
-            List<PaqueteDetalleSalidaDTO> detallesSalida = obtenerDetallesSalida(id);
+            List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(id);
             paqueteExperienciaRepository.deleteById(id);
             logger.info("Paquete con ID '{}' eliminado exitosamente", id);
             PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
             paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
 
-            paqueteExperienciaSalidaDto.setPaquetes_detalles_productos(detallesSalida);
+            paqueteExperienciaSalidaDto.setCaracteristicas_paquete_experiencia(detallesSalida);
             return paqueteExperienciaSalidaDto;
         } catch (Exception e) {
             logger.error("Error inesperado al eliminar el paquete con ID '{}': {}", id, e.getMessage(), e);
@@ -257,68 +257,68 @@ public class PaqueteExperienciaService {
         paquete = paqueteExperienciaRepository.save(paquete);
         logger.info("Paquete con ID '{}' actualizado exitosamente", id);
 
-        if (paqueteExperienciaEntradaDto.getPaquetes_detalles_productos() != null) {
+        if (paqueteExperienciaEntradaDto.getCaracteristicas_paquete_experiencia() != null) {
             logger.info("Actualizando los detalles del paquete de experiencia");
 
-            List<PaqueteDetalleProducto> detallesActuales = paqueteDetalleProductoRepository.findByPaqueteExperienciaById(paquete.getId_paquete_experiencia());
+            List<CaracteristicaPaqueteExperiencia> detallesActuales = paqueteDetalleProductoRepository.findByPaqueteExperienciaById(paquete.getId_paquete_experiencia());
 
-            Set<Long> nuevosIds = paqueteExperienciaEntradaDto.getPaquetes_detalles_productos().stream()
-                .map(PaqueteDetalleProductoEntradaDTO::getId_detalle_producto)
+            Set<Long> nuevosIds = paqueteExperienciaEntradaDto.getCaracteristicas_paquete_experiencia().stream()
+                .map(CaracteristicaPaqueteExperienciaEntradaDTO::getId_caracteristica)
                 .collect(Collectors.toSet());
 
-            List<PaqueteDetalleProducto> detallesAEliminar = detallesActuales.stream()
-                .filter(detalle -> !nuevosIds.contains(detalle.getDetalle_producto().getId()))
+            List<CaracteristicaPaqueteExperiencia> detallesAEliminar = detallesActuales.stream()
+                .filter(detalle -> !nuevosIds.contains(detalle.getCaracteristica().getId()))
                 .collect(Collectors.toList());
 
             if (!detallesAEliminar.isEmpty()) {
                 paqueteDetalleProductoRepository.deleteAll(detallesAEliminar);
                 logger.info("Detalles eliminados: {}", detallesAEliminar.stream()
-                    .map((PaqueteDetalleProducto d) -> d.getDetalle_producto().getId())
+                    .map((CaracteristicaPaqueteExperiencia d) -> d.getCaracteristica().getId())
                     .collect(Collectors.toList()));
             }
 
             Set<Long> idsActuales = detallesActuales.stream()
-                .map(detalle -> detalle.getDetalle_producto().getId())
+                .map(detalle -> detalle.getCaracteristica().getId())
                 .collect(Collectors.toSet());
 
-            List<PaqueteDetalleProducto> detallesNuevos = new ArrayList<>();
-            for (PaqueteDetalleProductoEntradaDTO detalleDTO : paqueteExperienciaEntradaDto.getPaquetes_detalles_productos()) {
-                if (!idsActuales.contains(detalleDTO.getId_detalle_producto())) {
-                    DetalleProducto detalleProducto = detalleProductoRepository.findById(detalleDTO.getId_detalle_producto())
-                            .orElseThrow(() -> new RuntimeException("Detalle producto con ID " + detalleDTO.getId_detalle_producto() + " no encontrado"));
+            List<CaracteristicaPaqueteExperiencia> caracteristicasNuevas = new ArrayList<>();
+            for (CaracteristicaPaqueteExperienciaEntradaDTO caracteristicaDTO : paqueteExperienciaEntradaDto.getCaracteristicas_paquete_experiencia()) {
+                if (!idsActuales.contains(caracteristicaDTO.getId_caracteristica())) {
+                    Caracteristica detalleProducto = detalleProductoRepository.findById(caracteristicaDTO.getId_caracteristica())
+                            .orElseThrow(() -> new RuntimeException("Caracteristica con ID " + caracteristicaDTO.getId_caracteristica() + " no encontrado"));
 
-                    PaqueteDetalleProducto nuevoDetalle = new PaqueteDetalleProducto();
+                    CaracteristicaPaqueteExperiencia nuevoDetalle = new CaracteristicaPaqueteExperiencia();
                     nuevoDetalle.setPaquete_experiencia(paquete);
-                    nuevoDetalle.setDetalle_producto(detalleProducto);
-                    detallesNuevos.add(nuevoDetalle);
+                    nuevoDetalle.setCaracteristica(detalleProducto);
+                    caracteristicasNuevas.add(nuevoDetalle);
                 }
             }
 
-            if (!detallesNuevos.isEmpty()) {
-                paqueteDetalleProductoRepository.saveAll(detallesNuevos);
-                logger.info("Detalles agregados: {}", detallesNuevos.stream()
-                        .map(d -> d.getDetalle_producto().getId()).collect(Collectors.toList()));
+            if (!caracteristicasNuevas.isEmpty()) {
+                paqueteDetalleProductoRepository.saveAll(caracteristicasNuevas);
+                logger.info("Detalles agregados: {}", caracteristicasNuevas.stream()
+                        .map(d -> d.getCaracteristica().getId()).collect(Collectors.toList()));
             }
         }
 
         PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
         paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
 
-        List<PaqueteDetalleSalidaDTO> detallesSalida = paqueteDetalleProductoRepository.findByPaqueteExperienciaById(paquete.getId_paquete_experiencia()).stream()
-            .map(PaqueteDetalleSalidaDTO::new)
+        List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = paqueteDetalleProductoRepository.findByPaqueteExperienciaById(paquete.getId_paquete_experiencia()).stream()
+            .map(CaracteristicaPaqueteExperienciaSalidaDTO::new)
             .collect(Collectors.toList());
 
-        paqueteExperienciaSalidaDto.setPaquetes_detalles_productos(detallesSalida);
+        paqueteExperienciaSalidaDto.setCaracteristicas_paquete_experiencia(detallesSalida);
 
         return paqueteExperienciaSalidaDto;
     }
 
-    private List<PaqueteDetalleSalidaDTO> obtenerDetallesSalida(Long idPaqueteExperiencia) {
-        List<PaqueteDetalleProducto> paqueteDetalleProductos =
+    private List<CaracteristicaPaqueteExperienciaSalidaDTO> obtenerDetallesSalida(Long idPaqueteExperiencia) {
+        List<CaracteristicaPaqueteExperiencia> caracteristicasPaqueteExperiencia =
             paqueteDetalleProductoRepository.findByPaqueteExperienciaById(idPaqueteExperiencia);
     
-        return paqueteDetalleProductos.stream()
-            .map(PaqueteDetalleSalidaDTO::new)
+        return caracteristicasPaqueteExperiencia.stream()
+            .map(CaracteristicaPaqueteExperienciaSalidaDTO::new)
             .collect(Collectors.toList());
     }
 }

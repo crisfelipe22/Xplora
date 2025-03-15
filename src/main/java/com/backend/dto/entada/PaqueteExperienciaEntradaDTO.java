@@ -1,6 +1,6 @@
 package com.backend.dto.entada;
 
-import com.backend.entity.PaqueteDetalleProducto;
+import com.backend.entity.CaracteristicaPaqueteExperiencia;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -47,9 +47,9 @@ public class PaqueteExperienciaEntradaDTO {
     @Positive(message = "La categoria no puede ser nulo o menor a cero")
     private Long id_categoria;
 
-    private List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos;
+    private List<CaracteristicaPaqueteExperienciaEntradaDTO> caracteristicas_paquete_experiencia;
 
-    public PaqueteExperienciaEntradaDTO(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_inicio, Date fecha_fin, String duracion, Long id_categoria, List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos) {
+    public PaqueteExperienciaEntradaDTO(String nombre, String descripcion, double precio, String ubicacion, String imagen, Date fecha_inicio, Date fecha_fin, String duracion, Long id_categoria, List<CaracteristicaPaqueteExperienciaEntradaDTO> caracteristicas_paquete_experiencia) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -59,7 +59,7 @@ public class PaqueteExperienciaEntradaDTO {
         this.fecha_fin = fecha_fin;
         this.duracion = duracion;
         this.id_categoria = id_categoria;
-        this.paquetes_detalles_productos = paquetes_detalles_productos;
+        this.caracteristicas_paquete_experiencia = caracteristicas_paquete_experiencia;
     }
 
     public PaqueteExperienciaEntradaDTO() {
@@ -137,11 +137,11 @@ public class PaqueteExperienciaEntradaDTO {
         this.fecha_fin = fecha_fin;
     }
 
-    public List<PaqueteDetalleProductoEntradaDTO> getPaquetes_detalles_productos() {
-        return paquetes_detalles_productos;
+    public List<CaracteristicaPaqueteExperienciaEntradaDTO> getCaracteristicas_paquete_experiencia() {
+        return caracteristicas_paquete_experiencia;
     }
 
-    public void setPaquetes_detalles_productos(List<PaqueteDetalleProductoEntradaDTO> paquetes_detalles_productos) {
-        this.paquetes_detalles_productos = paquetes_detalles_productos;
+    public void setCaracteristicas_paquete_experiencia(List<CaracteristicaPaqueteExperienciaEntradaDTO> caracteristicas_paquete_experiencia) {
+        this.caracteristicas_paquete_experiencia = caracteristicas_paquete_experiencia;
     }
 }

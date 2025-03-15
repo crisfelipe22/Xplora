@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "detalle_producto")
-public class DetalleProducto {
+@Table(name = "caracteristica")
+public class Caracteristica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,25 +14,22 @@ public class DetalleProducto {
     
     @Column(nullable = false)
     private String nombre;
-    
-    private String descripcion;
-    
+        
     private Long logo;
 
     @ManyToMany
     @JoinTable(
-        name = "paquete_detalle_producto",
-        joinColumns = @JoinColumn(name = "id_detalle_producto"),
+        name = "caracteristica_paquete_experiencia",
+        joinColumns = @JoinColumn(name = "id_caracteristica"),
         inverseJoinColumns = @JoinColumn(name = "id_paquete_experiencia")
     )
     private Set<PaqueteExperiencia> paquetesExperiencia = new HashSet<>();
 
-    public DetalleProducto() {
+    public Caracteristica() {
     }
 
-    public DetalleProducto(String nombre, String descripcion, Long logo) {
+    public Caracteristica(String nombre, Long logo) {
         this.nombre = nombre;
-        this.descripcion = descripcion;
         this.logo = logo;
         this.paquetesExperiencia = new HashSet<>();
     }
@@ -51,14 +48,6 @@ public class DetalleProducto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public Long getLogo() {

@@ -27,7 +27,7 @@ public class PaqueteExperiencia {
     private Date fecha_fin;
 
     @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaqueteDetalleProducto> detalles_productos = new ArrayList<>();
+    private List<CaracteristicaPaqueteExperiencia> detalles_productos = new ArrayList<>();
 
     public PaqueteExperiencia() {
     }
@@ -45,7 +45,7 @@ public class PaqueteExperiencia {
         this.fecha_fin = fecha_fin;
     }
 
-    public void agregarDetalleProducto(PaqueteDetalleProducto detalle) {
+    public void agregarDetalleProducto(CaracteristicaPaqueteExperiencia detalle) {
         this.detalles_productos.add(detalle);
         detalle.setPaquete_experiencia(this);
     }
