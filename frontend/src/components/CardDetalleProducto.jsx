@@ -153,11 +153,13 @@ const CardDetalleProducto = ({product, categorias}) =>{
                 
                 <div className={styles.imagenContainer}>
                     <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
-                    <div className={styles.imgContainer}>
+                    { imagenArray.length > 1 &&
+                      <div className={styles.imgContainer}>
                         {imagenArray.slice(1, numImages).map((img, index) => (
                             <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
                         ))}
-                    </div>
+                      </div>
+                    }
                 </div>
                 <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
             </div>
