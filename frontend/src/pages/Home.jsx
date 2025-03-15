@@ -21,6 +21,7 @@ const Home = () => {
   const { products, loading, error } = useProducts();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('desktop'));
   const [query, setQuery] = useState("");
   const [dateRange, setDateRange] = useState([null, null]); 
   const navigate = useNavigate();
@@ -149,9 +150,11 @@ const Home = () => {
             noValidate
             className="box-form"
             sx={{
-              display: {tablet: "flex"}, 
+              display: {tablet: "flex", mobile: "flex"}, 
+              flexDirection: { mobile: "column", desktop: "row", tablet: "row" },
               alignSelf: {desktop: "flex-start"},
               gap: {tablet: "16px"}, 
+              alignItems: { mobile: "flex-start" },
               // marginTop: {tablet: "96px"},
               width: {desktop: "50% !important"}
           }}
@@ -173,15 +176,13 @@ const Home = () => {
                   margin="normal"
                   error={errorQuery}
                   helperText={errorQuery ? "Por favor ingresa un nombre o selecciona una fecha" : ""}
+                  variant="outlined"
                   className="input-nombre"
                   sx={{
                     flexGrow: {tablet: "3"},
-                    "& .MuiFormHelperText-root": {
-                    fontSize: "0.75rem", 
-                    marginTop: "42px", 
-                    minHeight: "18px", 
-                    position: "absolute",
-                  },
+                  }}
+                  InputLabelProps={{
+                    shrink: true, 
                   }}
                   InputProps={{
                     ...params.InputProps, // Mantén las propiedades del Autocomplete
@@ -204,6 +205,7 @@ const Home = () => {
                 placeholder="Elige una fecha"
                 size="small"
                 fullWidth
+                variant="outlined"
                 className="input-fecha"
                 value={
                   fechaInicio && fechaFin
@@ -211,8 +213,12 @@ const Home = () => {
                   : ""
                 }
                 onClick={() => setOpen(true)}
+                InputLabelProps={{
+                  shrink: true, 
+                }}
                 {...(!isMobile && {
                   slotProps: {
+                    
                     input: {
                       readOnly: true,
                       startAdornment: 
@@ -236,7 +242,7 @@ const Home = () => {
                       minDate={new Date()}
                       inline
                       locale={es}
-                      monthsShown={2}
+                      monthsShown={isTablet ? 1 : 2}
                       calendarClassName="custom-calendar"
                     />
                   </Box>
