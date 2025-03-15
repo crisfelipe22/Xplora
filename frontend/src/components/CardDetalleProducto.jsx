@@ -148,7 +148,10 @@ const CardDetalleProducto = ({product, categorias}) =>{
                     <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
                         <ArrowBackIcon /> VOLVER ATRÁS
                     </IconButton>
-                    <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
+                </div>
+
+                <div className={styles.tituloVolver}>
+                  <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
                 </div>
                 
                 <div className={styles.imagenContainer}>

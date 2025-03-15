@@ -1,6 +1,6 @@
 .container {
-    padding: 2rem;
-    margin-top: 50px;
+    padding-top: 5px !important;
+    margin-top: 65px;
     min-height: 100vh;
 }
 
@@ -199,7 +199,7 @@
     }
 
     .backButton{
-        margin-left: 80% !important;
+        /* margin-left: 80% !important; */
     }
 
     .mainImage {
@@ -238,17 +238,34 @@
 }
 
 @media (max-width: 412px){
-    .backButton{
-        margin-left: 65% !important;
-        font-size: xx-small !important;
+    .container {
+/* padding: 0 !important; */
+      margin: 65px 0 0 0; 
+      min-height: 100vh;
     }
+    .backButton{
+        margin-right: auto !important;
+        font-size: xx-small !important;
+        padding: 0 !important;
+    }
+
+    .tituloVolver:nth-child(2){
+        order: 1;
+    }
+
+    .detalleSuperior {
+      gap: 8px;
+    }
+    
     .tituloVolver h3{
         font-size: 1.5em;
-        gap: 0;
     }
+
     .mainImage {
-        width: 100%;
+        width: calc(100% + 32px);
         height: 100%;
+        border-radius: 0;
+        margin: 0 -16px;
     }
 
     .cardPrecio{
