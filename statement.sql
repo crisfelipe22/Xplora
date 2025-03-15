@@ -52,6 +52,29 @@ INSERT INTO pedido (estado, es_regalo, total, id_paquete_experiencia) VALUES
     ('Pendiente', TRUE, 120.00, 2),
     ('Completado', FALSE, 200.00, 3);
 
+INSERT INTO caracteristica (id, logo, nombre) VALUES
+    (1, 1, 'Estacionamiento gratuito'),
+    (2, 2, 'Fechas flexibles'),
+    (3, 3, 'Vista a las montañas'),
+    (4, 4, 'Desayuno incluido'),
+    (5, 5, 'Se permiten mascotas'),
+    (6, 6, 'Zona de comida al aire libre'),
+    (7, 7, 'Servicio de Wi-Fi'),
+    (8, 8, 'Servicio de decoración');
+
+INSERT INTO caracteristica_paquete_experiencia (id_caracteristica, id_paquete_experiencia) VALUES 
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (1, 5),
+    (1, 6),
+    (1, 7),
+    (1, 8),
+    (1, 9),
+    (1, 10),
+    (1, 11),
+    (1, 12);
 -- INSERT INTO metodo_pago (nombre) VALUES
 --     ('Tarjeta de crédito'),
 --     ('PayPal'),
