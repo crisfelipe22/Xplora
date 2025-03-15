@@ -132,7 +132,11 @@ public class PaqueteExperienciaService {
 
             List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findByFilter(nombre, fecha_inicio, fecha_fin);
             return paquetes.stream()
-                    .map(paquete -> modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class))
+                    .map(paquete -> {
+                        PaqueteExperienciaSalidaDTO paqueteExperienciaSalidaDto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
+                        paqueteExperienciaSalidaDto.setId_categoria(paquete.getCategoria().getId_categoria());
+                        return paqueteExperienciaSalidaDto;
+                    })
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error obteniendo paquetes por filtro", e);
