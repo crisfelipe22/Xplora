@@ -32,7 +32,7 @@ public class CategoriaService {
 
     public CategoriaSalidaDTO agregarCategoria(CategoriaEntradaDTO categoriaDto) {
         try {
-            if (categoriaRepository.findByNombre(categoriaDto.getNombre()).isPresent()) {
+            if (categoriaRepository.findByNombre(categoriaDto.getNombre()).isPresent()) {  
                 throw new ConflictException("La categoría ya existe.");
             }
             Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
