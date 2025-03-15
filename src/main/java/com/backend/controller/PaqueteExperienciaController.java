@@ -1,4 +1,4 @@
-package com.backend.controller;
+Spackage com.backend.controller;
 
 import com.backend.dto.entada.PaqueteExperienciaEntradaDTO;
 import com.backend.dto.salida.PaqueteExperienciaSalidaDTO;
