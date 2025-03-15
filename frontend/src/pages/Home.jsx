@@ -180,6 +180,11 @@ const Home = () => {
                   className="input-nombre"
                   sx={{
                     flexGrow: {tablet: "3"},
+                    "& .MuiFormHelperText-root": {
+                      fontSize: "0.75rem", 
+                      marginTop: {desktop: "45px", mobile: "170px"},
+                      position: "absolute"
+                    },
                   }}
                   InputLabelProps={{
                     shrink: true, 

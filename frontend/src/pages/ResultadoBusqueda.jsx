@@ -71,7 +71,9 @@ const ResultadoBusqueda = () =>{
                         <ArrowBackIcon /> VOLVER ATRÁS
                     </IconButton>
                     <Typography variant="h5" className={styles.title}>
-                        Resultados de tú busqueda
+                        {productosBusqueda.length === 1
+                            ? "1 experiencia"
+                            : `${productosBusqueda.length} experiencias`}
                     </Typography>
             </div>
             
