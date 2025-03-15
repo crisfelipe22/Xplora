@@ -49,19 +49,19 @@ const CardDetalleProducto = ({product, categorias}) =>{
     const caracteristicas = [
         {
             id_car: 1,
-            nombre: "Kayak profesional incluido",
+            nombre: "Kayak profesional",
             id_icono: 1,
             icono: DirectionsBoat
         },
         {
             id_car: 2,
-            nombre: "Chaleco salvavidas regulado",
+            nombre: "Chaleco salvavidas",
             id_icono: 2,
             icono: SafetyDivider
         },
         {
             id_car: 3,
-            nombre: "Guía certificado por grupo",
+            nombre: "Guía certificado",
             id_icono: 3,
             icono: Groups
         },
@@ -73,7 +73,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
         },
         {
             id_car: 5,
-            nombre: "Equipo impermeable incluido",
+            nombre: "Equipo impermeable ",
             id_icono: 5,
             icono: WaterDrop
         },
@@ -173,7 +173,9 @@ const CardDetalleProducto = ({product, categorias}) =>{
                         <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
                         <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
                     </div>    
+                    <Typography variant="h6">Características</Typography>
                     <Box className={styles.gridCaracteristicas}>
+                      
                     {caracteristicas.map((item) => (
                         <ListItem key={item.id_car} className={styles.listItem}>
                             <ListItemIcon className={styles.listIcon}>

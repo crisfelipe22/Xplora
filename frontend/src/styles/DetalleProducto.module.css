@@ -140,22 +140,24 @@
 
 .gridCaracteristicas {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(2, minmax(170px, 1fr));
+    /* gap: 15px; */
     margin-top: 20px;
 }
 
 .listItem {
     display: flex;
     align-items: center;
-    padding: 12px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1)
-}
-
-.listIcon {
-    color: #4caf50;
+    padding: 2px !important;
+    /* background-color: white; */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.2) */
+  }
+  
+  .listIcon {
+    margin-right: 5px;
+    color: #6239E6 !important;
+    min-width: unset !important;
 }
 
 .contenedorDetalles{
@@ -171,6 +173,7 @@
     align-items: stretch;
     flex: 1;
     max-width: 62%;
+    gap: 20px;
 }
 
 .datePicker > label{
