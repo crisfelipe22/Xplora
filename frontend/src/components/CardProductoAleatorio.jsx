@@ -32,7 +32,12 @@ const CardProductoAleatorio = ({product, categorias}) => {
                         {product.descripcion}
                     </Typography>
 
-                    <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.categoriaProducto} />
+                    <Chip 
+                    label={
+                        categorias.length > 0
+                            ? categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"
+                            : "Cargando..."
+                    } className={styles.categoriaProducto} />
                     
                 </CardContent>
             </Card>

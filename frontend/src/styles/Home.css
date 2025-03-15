@@ -309,3 +309,8 @@ form input {
   font-size: 14px; 
 }
 
+/*.autocomplete .MuiAutocomplete-option:hover, .autocomplete .MuiAutocomplete-option[aria-selected="true"],
+.autocomplete .MuiAutocomplete-option:hover {
+  background-color: #6239E6 !important; 
+}*/
+

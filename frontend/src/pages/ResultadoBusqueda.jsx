@@ -8,7 +8,7 @@ import CardProductoAleatorio from "../components/CardProductoAleatorio";
 const ResultadoBusqueda = () =>{
     const [searchParams] = useSearchParams();
     const [productosBusqueda, setProductosBusqueda] = useState([]);
-    const [categorias, setCategorias] = useState()
+    const [categorias, setCategorias] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -23,13 +23,13 @@ const ResultadoBusqueda = () =>{
             const nombre = searchParams.get("nombre");
             const fecha_inicio = searchParams.get("fecha_inicio");
             const fecha_fin = searchParams.get("fecha_fin");
-    
+            console.log("Buscando:", { nombre, fecha_inicio, fecha_fin })
             try {
                 const [productosResponse, categoriasResponse] = await Promise.all([
                     axios.get(`/api/paquete-experiencia/filtro`, {
                         params: { nombre, fecha_inicio, fecha_fin },
                     }),
-                    /*axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),*/
+                    
                     axios.get("/api/categoria")
                 ]);
 
@@ -39,7 +39,8 @@ const ResultadoBusqueda = () =>{
                     setProductosBusqueda(productosResponse.data);
                     setCategorias(categoriasResponse.data)
                 }
-        
+                console.log("Productos recibidos:", productosResponse.data);
+                console.log("Categorías recibidas:", categoriasResponse.data);
             } catch (error) {
                 setError("Hubo un problema al obtener los datos. Intenta de nuevo.");
                 console.error("Error obteniendo productos:", error);
@@ -51,6 +52,7 @@ const ResultadoBusqueda = () =>{
         fetchResultados();
     }, [searchParams]);
 
+    
 
     const startIndex = (pag - 1) * itemPorPag;
     const endIndex = startIndex + itemPorPag;
@@ -63,7 +65,7 @@ const ResultadoBusqueda = () =>{
             </Typography>
 
             {loading && <CircularProgress />} {/* Muestra el spinner mientras carga */}
-            {error && <Alert severity="error">{error}</Alert>} {/* Muestra error si hay */}
+            {error && <Alert severity="error">{error}</Alert>} 
 
             {!loading && !error && (
                 <Grid2 container spacing={4}  columns={12}>

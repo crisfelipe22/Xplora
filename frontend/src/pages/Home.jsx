@@ -28,6 +28,8 @@ const Home = () => {
 
   const fechaInicio = dateRange[0] || null;
   const fechaFin = dateRange[1] || null;
+  const [errorQuery, setErrorQuery] = useState(false);
+  const [errorDate, setErrorDate] = useState(false);
   
   const calendarRef = useRef(null);
   const [sugerencias, setSugerencias] = useState([]);
@@ -58,29 +60,29 @@ const Home = () => {
   }, [query, products]);
 
   console.log(sugerencias)
-  /*const handleSugerenciaClick = (sugerencia) => {
-    event.stopPropagation();
-    setQuery(sugerencia.nombre); 
-    setTimeout(() => {
-      setSugerencias([]);
-    }, 0); 
-  };*/
 
   const handleBuscar = () => {
-    if (!query || !fechaInicio || !fechaFin) {
-      alert("Por favor completa todos los campos.");
+    if (!query.trim() && !fechaInicio && !fechaFin) {
+      setErrorQuery(true);
+      setErrorDate(true);
       return;
     }
+  
+    setErrorQuery(false);
+    setErrorDate(false);
     
-    const formattedFechaInicio = format(fechaInicio, "yyyy-MM-dd");
-    const formattedFechaFin = format(fechaFin, "yyyy-MM-dd");
-    console.log("Buscando:", { query, formattedFechaInicio, formattedFechaFin })
+    const params = new URLSearchParams();
+    if (query.trim()) params.append("nombre", query.trim());
+    if (fechaInicio) params.append("fecha_inicio", format(fechaInicio, "yyyy-MM-dd"));
+    if (fechaFin) params.append("fecha_fin", format(fechaFin, "yyyy-MM-dd"));
+  
+    navigate(`/resultados?${params.toString()}`);
 
-    navigate(`/resultados?nombre=${query}&fecha_inicio=${formattedFechaInicio}&fecha_fin=${formattedFechaFin}`);
   };
 
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error al cargar los productos: {error.message}</p>;
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -169,9 +171,17 @@ const Home = () => {
                   {...(isMobile ? { fullWidth: true } : {})}
                   size="small"
                   margin="normal"
+                  error={errorQuery}
+                  helperText={errorQuery ? "Por favor ingresa un nombre o selecciona una fecha" : ""}
                   className="input-nombre"
                   sx={{
                     flexGrow: {tablet: "3"},
+                    "& .MuiFormHelperText-root": {
+                    fontSize: "0.75rem", 
+                    marginTop: "42px", 
+                    minHeight: "18px", 
+                    position: "absolute",
+                  },
                   }}
                   InputProps={{
                     ...params.InputProps, // Mantén las propiedades del Autocomplete
