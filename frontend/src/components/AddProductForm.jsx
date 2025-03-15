@@ -89,9 +89,9 @@ const AddProductForm = () => {
             setCaracteristicas(prev => [
                 ...prev,
                 { 
-                    id_car_prod: Date.now(),
+                    // id_car_prod: Date.now(),
                     id_car: caracteristica.id_car, 
-                    id_icono: iconoSeleccionado,   
+                    // id_icono: iconoSeleccionado,   
                     nombre: caracteristica.nombre,
                     icono: iconosDisponibles[iconoSeleccionado] 
                 }
