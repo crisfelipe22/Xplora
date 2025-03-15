@@ -39,6 +39,7 @@ const Home = () => {
             }}
             >
             Empieza a crear momentos inolvidables
+            
           </Typography>
           <Typography className="subtext"
             sx={{ 
