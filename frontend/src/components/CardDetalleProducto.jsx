@@ -66,8 +66,10 @@ const CardDetalleProducto = ({product, categorias}) =>{
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-            setOpenCalendar(false);
-        }
+                if (!event.target.closest('.react-datepicker')) {
+                    setOpenCalendar(false);
+                }
+            }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -212,13 +214,13 @@ const CardDetalleProducto = ({product, categorias}) =>{
 
                     <Card className={styles.cardPrecio}>
                         <Typography variant="h5" className={styles.precio}>${product.precio.toLocaleString()}</Typography>
-                        <TextField
+                        <TextField ref={calendarRef}
                             label="Elegir Fecha"
                             placeholder="DD/MM/YYYY"
                             size="small"
                             fullWidth
                             variant="outlined"
-                            className="input-fecha"
+                            className={styles.DatePicker}
                             value={
                                 fechaInicioReserva && fechaFinReserva
                                     ? `${format(fechaInicioReserva, "dd/MM/yyyy")} - ${format(fechaFinReserva, "dd/MM/yyyy")}`
@@ -232,7 +234,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
                                 slotProps: {
                                     input: {
                                         readOnly: true,
-                                        startAdornment: 
+                                        endAdornment: 
                                             <InputAdornment position="end"> 
                                                 <CalendarToday/> 
                                             </InputAdornment>,
@@ -243,7 +245,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
                         
                         {/* Calendario doble oculto */}
                         {openCalendar && (
-                            <Box className="box-calendar">
+                            <Box className={styles.boxCalendar}>
                                 <DatePicker
                                     selectsRange
                                     startDate={fechaInicioReserva}
