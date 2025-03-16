@@ -208,7 +208,7 @@ const PerfilUsuario = () => {
                             {item.icon}
                           </Box>
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs={12}>
                           <Typography variant="body2" color="text.secondary">
                             {item.label}:
                           </Typography>
