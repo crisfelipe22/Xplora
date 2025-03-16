@@ -1,14 +1,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Container, Grid2, Typography, Chip, List, ListItem, ListItemIcon, Card, CardContent, Button, Rating, TextField, IconButton, Box } from '@mui/material';
+import { Container, Grid2, Typography, Chip, List, ListItem, ListItemIcon, Card, CardContent, Button, Rating, TextField, IconButton, Box, InputAdornment, useTheme } from '@mui/material';
 import styles from "../styles/DetalleProducto.module.css";
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from "@mui/material";
+import { CalendarToday } from "@mui/icons-material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
 import {
     DirectionsBoat,    // Kayak
     Landscape,         // Montañas
@@ -34,15 +41,37 @@ import {
   } from '@mui/icons-material';
 
 const CardDetalleProducto = ({product, categorias}) =>{
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
+    const isTablet = useMediaQuery(theme.breakpoints.down('desktop'));
+
     const navigate = useNavigate();
     const [openGallery, setOpenGallery] = useState(false);
+
+    const [openCalendar, setOpenCalendar] = useState(false);
+    const calendarRef = useRef(null);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const fechaInicioReserva = dateRange[0] || null;
+    const fechaFinReserva = dateRange[1] || null;
+    const fechaInicioDisponible = product.fecha_inicio ? new Date(product.fecha_inicio) : null;
+    const fechaFinDisponible = product.fecha_fin ? new Date(product.fecha_fin) : null;
+
+
     const handleOpenGallery = () => setOpenGallery(true);
     const handleCloseGallery = () => setOpenGallery(false);
 
-    const isTablet = useMediaQuery("(max-width:900px)");
-    const isMobile = useMediaQuery("(max-width:412px)");
     const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+            setOpenCalendar(false);
+        }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     //caracteristicas provisorias
     
@@ -142,53 +171,101 @@ const CardDetalleProducto = ({product, categorias}) =>{
     const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
     return (
-        <Container className={styles.container}>
-            <div className={styles.detalleSuperior}>
-                <div className={styles.tituloVolver}>
-                    <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
-                        <ArrowBackIcon /> VOLVER ATRÁS
-                    </IconButton>
-                    <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
-                </div>
-                
-                <div className={styles.imagenContainer}>
-                    <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
-                    <div className={styles.imgContainer}>
-                        {imagenArray.slice(1, numImages).map((img, index) => (
-                            <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
-                        ))}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Container className={styles.container}>
+                <div className={styles.detalleSuperior}>
+                    <div className={styles.tituloVolver}>
+                        <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
+                            <ArrowBackIcon /> VOLVER ATRÁS
+                        </IconButton>
+                        <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
                     </div>
+                    
+                    <div className={styles.imagenContainer}>
+                        <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
+                        <div className={styles.imgContainer}>
+                            {imagenArray.slice(1, numImages).map((img, index) => (
+                                <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
+                            ))}
+                        </div>
+                    </div>
+                    <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
                 </div>
-                <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
-            </div>
 
-            <Box className={styles.contenedorDetalles}> 
-                <Box className={styles.contenedorDos}>
-                    <div className={styles.seccionRating}>
-                        <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
-                        <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
-                    </div>    
-                    <Box className={styles.gridCaracteristicas}>
-                    {caracteristicas.map((item) => (
-                        <ListItem key={item.id_car} className={styles.listItem}>
-                            <ListItemIcon className={styles.listIcon}>
-                            <item.icono fontSize="small" />
-                            </ListItemIcon>
-                            <Typography variant="body1">{item.nombre}</Typography>
-                        </ListItem>
-                        ))}
-                    </Box>
-                </Box>                 
+                <Box className={styles.contenedorDetalles}> 
+                    <Box className={styles.contenedorDos}>
+                        <div className={styles.seccionRating}>
+                            <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
+                            <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
+                        </div>    
+                        <Box className={styles.gridCaracteristicas}>
+                        {caracteristicas.map((item) => (
+                            <ListItem key={item.id_car} className={styles.listItem}>
+                                <ListItemIcon className={styles.listIcon}>
+                                <item.icono fontSize="small" />
+                                </ListItemIcon>
+                                <Typography variant="body1">{item.nombre}</Typography>
+                            </ListItem>
+                            ))}
+                        </Box>
+                    </Box>                 
 
-                <Card className={styles.cardPrecio}>
-                    <Typography variant="h5" className={styles.precio}>${product.precio.toLocaleString()}</Typography>
-                    <TextField type="date" label="Elige fecha" className={styles.datePicker} />
-                    <Button variant="contained" className={styles.botonComprar}>COMPRAR EXPERIENCIA</Button>
-                    <Typography variant="h5" className={styles.preguntaRegalo}>¿TE HICIERON ESTE REGALO?</Typography>
-                </Card>
-            </Box>            
-            <GaleriaImgProducto open={openGallery} close={handleCloseGallery} imagen={product.imagen}/>
-        </Container>
+                    <Card className={styles.cardPrecio}>
+                        <Typography variant="h5" className={styles.precio}>${product.precio.toLocaleString()}</Typography>
+                        <TextField
+                            label="Elegir Fecha"
+                            placeholder="DD/MM/YYYY"
+                            size="small"
+                            fullWidth
+                            variant="outlined"
+                            className="input-fecha"
+                            value={
+                                fechaInicioReserva && fechaFinReserva
+                                    ? `${format(fechaInicioReserva, "dd/MM/yyyy")} - ${format(fechaFinReserva, "dd/MM/yyyy")}`
+                                            : ""
+                                }
+                            onClick={() => setOpenCalendar(true)}
+                            InputLabelProps={{
+                                shrink: true, 
+                            }}
+                            {...(!isMobile && {
+                                slotProps: {
+                                    input: {
+                                        readOnly: true,
+                                        startAdornment: 
+                                            <InputAdornment position="end"> 
+                                                <CalendarToday/> 
+                                            </InputAdornment>,
+                                    },
+                                },
+                            })}
+                        />
+                        
+                        {/* Calendario doble oculto */}
+                        {openCalendar && (
+                            <Box className="box-calendar">
+                                <DatePicker
+                                    selectsRange
+                                    startDate={fechaInicioReserva}
+                                    endDate={fechaFinReserva}
+                                    onChange={(update) => setDateRange(update)}
+                                    onCalendarClose={() => setOpenCalendar(false)}
+                                    minDate={fechaInicioDisponible}
+                                    maxDate={fechaFinDisponible}
+                                    inline
+                                    locale={es}
+                                    monthsShown={isTablet ? 1 : 2}
+                                    calendarClassName="custom-calendar"
+                                />
+                            </Box>
+                        )}
+                        <Button variant="contained" className={styles.botonComprar}>COMPRAR EXPERIENCIA</Button>
+                        <Typography variant="h5" className={styles.preguntaRegalo}>¿TE HICIERON ESTE REGALO?</Typography>
+                    </Card>
+                </Box>            
+                <GaleriaImgProducto open={openGallery} close={handleCloseGallery} imagen={product.imagen}/>
+            </Container>
+        </LocalizationProvider>
     )
 };
 
