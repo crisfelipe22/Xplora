@@ -31,6 +31,10 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.mainImageTablet{
+    width: 60%;
+    height: 300px;
+}
 .imgContainer {
     display: grid;
     width: 50%;
@@ -190,7 +194,7 @@
     transform: translateX(-50%);
 }
 
-@media (max-width: 900px) { 
+@media (max-width: 744px) { 
     .tituloVolver{
         align-items: stretch;
         flex-direction: column;
@@ -232,6 +236,10 @@
 
     .precio, .datePicker, .botonComprar{
         margin-bottom: 10% !important;
+    }
+
+    .boxCalendar{
+        transform: translateY(-50%);
     }
 }
 
