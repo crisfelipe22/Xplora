@@ -177,7 +177,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
             <Container className={styles.container}>
                 <div className={styles.detalleSuperior}>
                     <div className={styles.tituloVolver}>
-                        <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
+                        <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}  >
                             <ArrowBackIcon /> VOLVER ATRÁS
                         </IconButton>
                         <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
