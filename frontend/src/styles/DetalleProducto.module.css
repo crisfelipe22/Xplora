@@ -194,7 +194,7 @@
     transform: translateX(-50%);
 }
 
-@media (max-width: 900px) { 
+@media (max-width: 744px) { 
     .tituloVolver{
         align-items: stretch;
         flex-direction: column;
