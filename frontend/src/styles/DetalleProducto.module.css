@@ -173,23 +173,17 @@
     max-width: 62%;
 }
 
-.datePicker > label{
-    transform: translate(14px, -12px) scale(1) !important;
-    background-color: #f5f0ff;
-    color: black;
-    padding: 0 4px;
-    font-size: 14px;
-}
-
-.datePicker:hover{
-    border-color: #7c3aed !important; 
-    border-width: 2px !important;
-}
-
 .preguntaRegalo{
     font-size: small !important;
     color: #2E1F5E !important;
     font-weight: 600 !important;
+}
+
+.boxCalendar{
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 @media (max-width: 900px) { 
