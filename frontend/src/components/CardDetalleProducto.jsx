@@ -63,6 +63,20 @@ const CardDetalleProducto = ({product, categorias}) =>{
     const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
 
+    //fechas reservadas
+    const fechasReservadas = [
+        new Date(2025, 3, 16),
+        new Date(2025, 3, 17), 
+        new Date(2025, 4, 4), 
+        new Date(2025, 4, 5),
+        new Date(2025, 4, 20), 
+        new Date(2025, 4, 15),
+        new Date(2025, 5, 2),
+        new Date(2025, 5, 3), 
+        new Date(2025, 5, 7),
+    ];
+    console.log(fechasReservadas)
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (calendarRef.current && !calendarRef.current.contains(event.target)) {
@@ -254,6 +268,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
                                     onCalendarClose={() => setOpenCalendar(false)}
                                     minDate={fechaInicioDisponible}
                                     maxDate={fechaFinDisponible}
+                                    excludeDates={fechasReservadas}
                                     inline
                                     locale={es}
                                     monthsShown={isTablet ? 1 : 2}
