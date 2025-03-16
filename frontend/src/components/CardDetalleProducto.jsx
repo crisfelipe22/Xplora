@@ -220,7 +220,7 @@ const CardDetalleProducto = ({product, categorias}) =>{
                             size="small"
                             fullWidth
                             variant="outlined"
-                            className={styles.DatePicker}
+                            className={styles.datePicker}
                             value={
                                 fechaInicioReserva && fechaFinReserva
                                     ? `${format(fechaInicioReserva, "dd/MM/yyyy")} - ${format(fechaFinReserva, "dd/MM/yyyy")}`
