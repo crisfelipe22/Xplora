@@ -189,36 +189,28 @@ public class PaqueteExperienciaService {
         return paqueteExperienciaSalidaDto;
     }
 
-public List<PaqueteExperienciaSalidaDTO> obtenerPaqueteExperienciaPorFiltro(String nombre, Date fecha_inicio, Date fecha_fin, Long categoriaId) {
-    try {
-        logger.info("Obteniendo datos del paquete por filtro: nombre={}, fecha_inicio={}, fecha_fin={}, categoriaId={}", nombre, fecha_inicio, fecha_fin, categoriaId);
-        
-        List<PaqueteExperiencia> paquetes;
+    public List<PaqueteExperienciaSalidaDTO> obtenerPaqueteExperienciaPorFiltro(String nombre, Date fecha_inicio, Date fecha_fin) {
+        try {
+            logger.info("Obteniendo datos del paquete por filtro: nombre={}, fecha_inicio={}, fecha_fin={}", nombre, fecha_inicio, fecha_fin);
 
-        if (categoriaId != null) {
-            paquetes = paqueteExperienciaRepository.findByCategoriaIdAndNombreAndFechaExperienciaBetween(categoriaId, nombre, fecha_inicio, fecha_fin);
-        } else {
-            paquetes = paqueteExperienciaRepository.findByFilter(nombre, fecha_inicio, fecha_fin);
+            List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findByFilter(nombre, fecha_inicio, fecha_fin);
+            return paquetes.stream()
+                .map(paquete -> {
+                    PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
+                    dto.setId_categoria(paquete.getCategoria().getId_categoria());
+
+                    List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
+
+                    dto.setCaracteristicas_paquete_experiencia(detallesSalida);
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo paquetes por filtro", e);
+            throw new RuntimeException("Error obteniendo paquetes por filtro");
         }
-
-        return paquetes.stream()
-            .map(paquete -> {
-                PaqueteExperienciaSalidaDTO dto = modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class);
-                dto.setId_categoria(paquete.getCategoria().getId_categoria());
-
-                List<CaracteristicaPaqueteExperienciaSalidaDTO> detallesSalida = obtenerDetallesSalida(paquete.getId_paquete_experiencia());
-                dto.setCaracteristicas_paquete_experiencia(detallesSalida);
-
-                return dto;
-            })
-            .collect(Collectors.toList());
-
-    } catch (Exception e) {
-        logger.error("Error obteniendo paquetes por filtro", e);
-        throw new RuntimeException("Error obteniendo paquetes por filtro");
     }
-}
-        }
 
     @Transactional
     public PaqueteExperienciaSalidaDTO eliminarPaqueteExperiencia(Long id) throws ResourceNotFoundException, BadRequestException {
@@ -329,3 +321,19 @@ public List<PaqueteExperienciaSalidaDTO> obtenerPaqueteExperienciaPorFiltro(Stri
             .map(CaracteristicaPaqueteExperienciaSalidaDTO::new)
             .collect(Collectors.toList());
     }
+   public List<PaqueteExperienciaSalidaDTO> obtenerPaquetesPorCategoria(String nombreCategoria) {
+    try {
+        Categoria categoria = categoriaRepository.findByNombre(nombreCategoria)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada"));
+
+        List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findByCategoria(categoria);
+        return paquetes.stream()
+                .map(paquete -> modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class))
+                .collect(Collectors.toList());
+    } catch (Exception e) {
+        logger.error("Error al filtrar paquetes por categoría", e);
+        throw new RuntimeException("Error al obtener paquetes de la categoría");
+    }
+}
+}
+

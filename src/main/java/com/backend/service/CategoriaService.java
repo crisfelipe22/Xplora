@@ -95,4 +95,5 @@ public class CategoriaService {
         logger.info("Categoría con id '{}' eliminada exitosamente", id);
         return modelMapper.map(categoria, CategoriaSalidaDTO.class);
     }
+
 }
