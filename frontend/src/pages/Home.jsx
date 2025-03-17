@@ -21,6 +21,7 @@ const Home = () => {
   const { products, loading, error } = useProducts();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('desktop'));
   const [query, setQuery] = useState("");
   const [dateRange, setDateRange] = useState([null, null]); 
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const Home = () => {
 
   const fechaInicio = dateRange[0] || null;
   const fechaFin = dateRange[1] || null;
+  const [errorQuery, setErrorQuery] = useState(false);
+  const [errorDate, setErrorDate] = useState(false);
   
   const calendarRef = useRef(null);
   const [sugerencias, setSugerencias] = useState([]);
@@ -58,29 +61,29 @@ const Home = () => {
   }, [query, products]);
 
   console.log(sugerencias)
-  /*const handleSugerenciaClick = (sugerencia) => {
-    event.stopPropagation();
-    setQuery(sugerencia.nombre); 
-    setTimeout(() => {
-      setSugerencias([]);
-    }, 0); 
-  };*/
 
   const handleBuscar = () => {
-    if (!query || !fechaInicio || !fechaFin) {
-      alert("Por favor completa todos los campos.");
+    if (!query.trim() && !fechaInicio && !fechaFin) {
+      setErrorQuery(true);
+      setErrorDate(true);
       return;
     }
+  
+    setErrorQuery(false);
+    setErrorDate(false);
     
-    const formattedFechaInicio = format(fechaInicio, "yyyy-MM-dd");
-    const formattedFechaFin = format(fechaFin, "yyyy-MM-dd");
-    console.log("Buscando:", { query, formattedFechaInicio, formattedFechaFin })
+    const params = new URLSearchParams();
+    if (query.trim()) params.append("nombre", query.trim());
+    if (fechaInicio) params.append("fecha_inicio", format(fechaInicio, "yyyy-MM-dd"));
+    if (fechaFin) params.append("fecha_fin", format(fechaFin, "yyyy-MM-dd"));
+  
+    navigate(`/resultados?${params.toString()}`);
 
-    navigate(`/resultados?nombre=${query}&fecha_inicio=${formattedFechaInicio}&fecha_fin=${formattedFechaFin}`);
   };
 
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error al cargar los productos: {error.message}</p>;
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -147,9 +150,11 @@ const Home = () => {
             noValidate
             className="box-form"
             sx={{
-              display: {tablet: "flex"}, 
+              display: {tablet: "flex", mobile: "flex"}, 
+              flexDirection: { mobile: "column", desktop: "row", tablet: "row" },
               alignSelf: {desktop: "flex-start"},
               gap: {tablet: "16px"}, 
+              alignItems: { mobile: "flex-start" },
               // marginTop: {tablet: "96px"},
               width: {desktop: "50% !important"}
           }}
@@ -169,9 +174,20 @@ const Home = () => {
                   {...(isMobile ? { fullWidth: true } : {})}
                   size="small"
                   margin="normal"
+                  error={errorQuery}
+                  helperText={errorQuery ? "Por favor ingresa un nombre o selecciona una fecha" : ""}
+                  variant="outlined"
                   className="input-nombre"
                   sx={{
                     flexGrow: {tablet: "3"},
+                    "& .MuiFormHelperText-root": {
+                      fontSize: "0.75rem", 
+                      marginTop: {desktop: "45px", mobile: "170px"},
+                      position: "absolute"
+                    },
+                  }}
+                  InputLabelProps={{
+                    shrink: true, 
                   }}
                   InputProps={{
                     ...params.InputProps, // Mantén las propiedades del Autocomplete
@@ -194,6 +210,7 @@ const Home = () => {
                 placeholder="Elige una fecha"
                 size="small"
                 fullWidth
+                variant="outlined"
                 className="input-fecha"
                 value={
                   fechaInicio && fechaFin
@@ -201,8 +218,12 @@ const Home = () => {
                   : ""
                 }
                 onClick={() => setOpen(true)}
+                InputLabelProps={{
+                  shrink: true, 
+                }}
                 {...(!isMobile && {
                   slotProps: {
+                    
                     input: {
                       readOnly: true,
                       startAdornment: 
@@ -226,7 +247,7 @@ const Home = () => {
                       minDate={new Date()}
                       inline
                       locale={es}
-                      monthsShown={2}
+                      monthsShown={isTablet ? 1 : 2}
                       calendarClassName="custom-calendar"
                     />
                   </Box>

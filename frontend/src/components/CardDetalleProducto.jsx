@@ -5,10 +5,15 @@ import styles from "../styles/DetalleProducto.module.css";
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GaleriaImgProducto from './GaleriaImgProducto';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ShareIcon from "@mui/icons-material/Share";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useAuth } from '../contexts/AuthContext';
+import ModalCompartir from "./ModalCompartir";
 import {
     DirectionsBoat,    // Kayak
     Landscape,         // Montañas
@@ -36,13 +41,53 @@ import {
 const CardDetalleProducto = ({product, categorias}) =>{
     const navigate = useNavigate();
     const [openGallery, setOpenGallery] = useState(false);
+    const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
     const handleOpenGallery = () => setOpenGallery(true);
     const handleCloseGallery = () => setOpenGallery(false);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
 
     const isTablet = useMediaQuery("(max-width:900px)");
     const isMobile = useMediaQuery("(max-width:412px)");
     const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
+
+    const [isFavorite, setIsFavorite] = useState(false);
+    const { isAuthenticated } = useAuth();
+
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
+    const isMobile1 = useMediaQuery(theme.breakpoints.down('tablet'));
+    const isTablet1 = useMediaQuery(theme.breakpoints.between('tablet', 'desktop'));
+
+    useEffect(() => {
+        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
+    }, [product.id_paquete_experiencia]);
+
+    const toggleFavorite = (e) => {
+        e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+
+        //console.log("Estado del usuario:", usuario);
+
+        if (!isAuthenticated) {
+            alert("Debes iniciar sesión para agregar favoritos.");
+            return;
+          }
+
+        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        let nuevosFavoritos;
+
+        if (isFavorite) {
+            nuevosFavoritos = favoritos.filter(id => id !== product.id_paquete_experiencia);
+        } else {
+            nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
+        }
+
+        localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
+        setIsFavorite(!isFavorite);
+    };
+
 
     //caracteristicas provisorias
     
@@ -145,11 +190,47 @@ const CardDetalleProducto = ({product, categorias}) =>{
         <Container className={styles.container}>
             <div className={styles.detalleSuperior}>
                 <div className={styles.tituloVolver}>
-                    <IconButton component={Link} onClick={()=>navigate(-1)} className={styles.backButton}>
-                        <ArrowBackIcon /> VOLVER ATRÁS
+                    
+                    
+                                                        {/* className={styles.backButton} */}
+                    <IconButton component={Link} onClick={()=>navigate(-1)} sx={{
+                            color: 'primary.main',
+                            fontSize: isMobile ? '0.8rem' : '1rem',
+                        }}>
+                        <ArrowBackIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/> VOLVER ATRÁS
                     </IconButton>
+
                     <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
+                    <div className={styles.rightButtons}>
+                        {/* Modal para compartir */}
+                        <ModalCompartir 
+                            open={openModal} 
+                            onClose={handleCloseModal} 
+                            nombre={product.nombre} 
+                            imagen={imagenArray[0]}
+                        />
+
+                        
+                        <IconButton sx={{
+                                backgroundColor: 'secondary.main',
+                                color: 'white',
+                                '&:hover': { backgroundColor: 'secondary.dark' },
+                                width: isMobile ? '32px' : '40px',
+                                height: isMobile ? '32px' : '40px',
+                            }} onClick={handleOpenModal}>
+                            <ShareIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/>
+                        </IconButton>
+                        <IconButton onClick={toggleFavorite} sx={{
+                                color: isFavorite ? 'error.main' : 'inherit',
+                                width: isMobile ? '32px' : '40px',
+                                height: isMobile ? '32px' : '40px',
+                            }}>
+                            {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+                        </IconButton>
+                    </div>
                 </div>
+
+                
                 
                 <div className={styles.imagenContainer}>
                     <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
