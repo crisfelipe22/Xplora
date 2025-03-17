@@ -65,14 +65,19 @@ public class PaqueteExperienciaController {
     }
 
     @GetMapping("/filtro")
-public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaqueteExperienciaPorFiltro(
-        @RequestParam(name = "nombre", required = false) String nombre,
-        @RequestParam(name = "fecha_inicio", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_inicio,
-        @RequestParam(name = "fecha_fin", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_fin,
-        @RequestParam(name = "categoriaId", required = false) Long categoriaId  
-) {
-    List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorFiltro(nombre, fecha_inicio, fecha_fin, categoriaId);
+    public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaqueteExperienciaPorFiltro(
+            @RequestParam(name = "nombre", required = false) String nombre,
+            @RequestParam(name = "fecha_inicio", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_inicio,
+            @RequestParam(name = "fecha_fin", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha_fin
+    ) {
+        List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaqueteExperienciaPorFiltro(nombre, fecha_inicio, fecha_fin);
+        return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
+    }
+    
+    @GetMapping("/filtrar")
+public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaquetesPorCategoria(
+        @RequestParam(name = "categoria") String categoria) {
+    List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaquetesPorCategoria(categoria);
     return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
 }
-
 }
