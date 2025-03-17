@@ -345,15 +345,31 @@ public class PaqueteExperienciaService {
             .map(CaracteristicaPaqueteExperienciaSalidaDTO::new)
             .collect(Collectors.toList());
     }
-   public List<PaqueteExperienciaSalidaDTO> obtenerPaquetesPorCategoria(String nombreCategoria) {
+
+public Map<String, Object> obtenerPaquetesPorCategoria(String nombreCategoria, int pagina, int tamanio) {
     try {
+        // Buscar la categoría por nombre
         Categoria categoria = categoriaRepository.findByNombre(nombreCategoria)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada"));
 
-        List<PaqueteExperiencia> paquetes = paqueteExperienciaRepository.findByCategoria(categoria);
-        return paquetes.stream()
+        // Crear objeto Pageable para la paginación
+        Pageable pageable = PageRequest.of(pagina, tamanio);
+
+        // Obtener los paquetes de la categoría con paginación
+        Page<PaqueteExperiencia> paquetesPage = paqueteExperienciaRepository.findByCategoria(categoria, pageable);
+
+        // Convertir los paquetes a DTOs
+        List<PaqueteExperienciaSalidaDTO> paquetesDTO = paquetesPage.stream()
                 .map(paquete -> modelMapper.map(paquete, PaqueteExperienciaSalidaDTO.class))
                 .collect(Collectors.toList());
+
+        // Crear el objeto de respuesta con los resultados y la cantidad total
+        Map<String, Object> response = new HashMap<>();
+        response.put("paquetes", paquetesDTO);
+        response.put("totalPaquetes", paquetesPage.getTotalElements()); // Total de paquetes filtrados
+        response.put("totalPaginas", paquetesPage.getTotalPages()); // Total de páginas
+
+        return response;
     } catch (Exception e) {
         logger.error("Error al filtrar paquetes por categoría", e);
         throw new RuntimeException("Error al obtener paquetes de la categoría");
