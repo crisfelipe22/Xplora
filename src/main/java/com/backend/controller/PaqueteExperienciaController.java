@@ -11,7 +11,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Map;
+import java.util.HashMap;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -74,10 +80,16 @@ public class PaqueteExperienciaController {
         return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
     }
     
-    @GetMapping("/filtrar")
-public ResponseEntity<List<PaqueteExperienciaSalidaDTO>> obtenerPaquetesPorCategoria(
-        @RequestParam(name = "categoria") String categoria) {
-    List<PaqueteExperienciaSalidaDTO> paquetesDto = paqueteExperienciaService.obtenerPaquetesPorCategoria(categoria);
-    return new ResponseEntity<>(paquetesDto, HttpStatus.OK);
+@GetMapping("/categoria")
+public ResponseEntity<Map<String, Object>> obtenerPaquetesPorCategoria(
+        @RequestParam(name = "categoria") String categoria,
+        @RequestParam(name = "page", defaultValue = "0") int pagina, // Página inicial, 0 por defecto
+        @RequestParam(name = "size", defaultValue = "10") int tamanio) { // Tamaño de la página, 10 por defecto
+    
+    // Llamar al servicio para obtener los paquetes por categoría con paginación
+    Map<String, Object> response = paqueteExperienciaService.obtenerPaquetesPorCategoria(categoria, pagina, tamanio);
+    
+    // Retornar los paquetes y la información de paginación
+    return new ResponseEntity<>(response, HttpStatus.OK);
 }
 }

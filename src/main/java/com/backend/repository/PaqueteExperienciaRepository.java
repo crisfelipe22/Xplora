@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,6 @@ public interface PaqueteExperienciaRepository extends JpaRepository<PaqueteExper
 
             "AND ((:fecha_inicio IS NULL OR :fecha_fin IS NULL) OR p.fecha_inicio >= :fecha_inicio AND p.fecha_fin <= :fecha_fin)")
     List<PaqueteExperiencia> findByFilter(@Param("nombre") String nombre, @Param("fecha_inicio") Date fecha_inicio, @Param("fecha_fin") Date fecha_fin);
-    List<PaqueteExperiencia> findByCategoria(Categoria categoria);
+    Page<PaqueteExperiencia> findByCategoria(Categoria categoria, Pageable pageable);
 
 }
