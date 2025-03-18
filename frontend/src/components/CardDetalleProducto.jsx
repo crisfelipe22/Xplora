@@ -51,13 +51,14 @@ import {
   AccessTime, // Horarios
 } from "@mui/icons-material";
 import PoliticaDialog from "./PoliticaDialog";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
   const navigate = useNavigate();
   const [openGallery, setOpenGallery] = useState(false);
   const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
   const [openPolitica, setOpenPolitica] = useState(false);
-  const [scroll, setScroll] = React.useState('paper');
+  const [scroll, setScroll] = React.useState("paper");
   const handleOpenGallery = () => setOpenGallery(true);
   const handleCloseGallery = () => setOpenGallery(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -344,39 +345,31 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
       {/* 🔹 Sección de Política de Uso */}
       <Divider sx={{ marginTop: 2 }} />
-      <Box sx={{ p: 2, textAlign: "left", mb: 5 }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          sx={{ textDecoration: "underline" }}
-        >
+      <Box>
+        <Typography gutterBottom sx={{ typography: { mobile: "h6", tablet: "h5" }, mt: 3 }}>
           Política de uso
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography gutterBottom sx={{ typography: { mobile: "body2", tablet: "body1" } }}>
           Revisa la política completa para obtener más detalles.
         </Typography>
         <Button
-          onClick={handleClickOpenPolitica('paper')}
+          onClick={handleClickOpenPolitica("paper")}
           color="primary"
-          sx={{
-            fontWeight: "bold",
-            display: "block",
-            mt: 1,
-            textDecoration: "none",
-            "&:hover": { textDecoration: "underline" },
-          }}
+          variant="text" 
+          endIcon={<KeyboardArrowRightIcon />} 
+          sx={{pl:0}}        
         >
-          VER POLÍTICA →
+          VER POLÍTICA
         </Button>
       </Box>
       {/* Modal de Política de Uso */}
-      {openPolitica && 
+      {openPolitica && (
         <PoliticaDialog
           open={openPolitica}
           close={handleClosePolitica}
           scroll={scroll}
         />
-      }
+      )}
     </Container>
   );
 };
