@@ -24,6 +24,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { AuthContext } from '../contexts/AuthContext'; 
+import ListaFavoritos from "../components/ListaFavoritos";
+
 
 const obtenerRolTexto = (idRol) => {
   switch(idRol) {
@@ -50,28 +52,34 @@ const PerfilUsuario = () => {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)};
 
-  // Cargar favoritos desde localStorage al montar el componente
-  useEffect(() => {
+  // Función para cargar favoritos desde localStorage
+  const loadFavorites = () => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(storedFavorites);
-  }, []);
-
-  // Guardar favoritos en localStorage cuando cambian
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
-
-  // Agregar un producto a favoritos
-  const handleAddFavorite = (product) => {
-    if (!favorites.some((fav) => fav.id === product.id)) {
-      setFavorites([...favorites, product]);
-    }
   };
+
+  // Cargar favoritos al montar el componente
+  useEffect(() => {
+    loadFavorites();
+
+    // Escuchar cambios en localStorage
+    const handleStorageChange = (event) => {
+      if (event.key === "favorites") {
+        loadFavorites();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Eliminar un producto de favoritos
   const removeFavorite = (productId) => {
-    const updatedFavorites = favorites.filter((product) => product.id !== productId);
+    const updatedFavorites = favorites.filter((product) => product?.id_paquete_experiencia !== product?.id_paquete_experiencia);
     setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
 
@@ -272,18 +280,9 @@ const PerfilUsuario = () => {
       )}
       {tabValue === 1 && (
         <Box p={3}>
-          {favorites.length === 0 ? (
-            <Typography>No tienes productos en tu lista de favoritos.</Typography>
-          ) : (
-            favorites.map((product) => (
-              <Box key={product.id} display="flex" alignItems="center" justifyContent="space-between" p={1} borderBottom="1px solid #ddd">
-                <Typography>{product.name}</Typography>
-                <IconButton onClick={() => removeFavorite(product.id)}>
-                  <FavoriteIcon color="error" />
-                </IconButton>
-              </Box>
-            ))
-          )}
+          <Box>
+                <ListaFavoritos />
+          </Box>
         </Box>
       )}
     </Box>

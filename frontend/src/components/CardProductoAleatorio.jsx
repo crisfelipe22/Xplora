@@ -6,6 +6,7 @@ import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import styles from '../styles/ProductoAleatorio.module.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 const CardProductoAleatorio = ({product, categorias}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
@@ -13,18 +14,13 @@ const CardProductoAleatorio = ({product, categorias}) => {
     //suponiendo raiting por ahora
     const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
-    //NUEVO
     // Estado para manejar favoritos (usamos localStorage para persistencia)
-    const [isFavorite, setIsFavorite] = useState(false);
     const { isAuthenticated } = useAuth();
+    const { favorites, toggleFavorite } = useFavorites(); // <-- Obtenemos funciones del contexto
+    const isFavorite = favorites.includes(product.id_paquete_experiencia);
 
-    useEffect(() => {
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-    }, [product.id_paquete_experiencia]);
-
-    const toggleFavorite = (e) => {
-        e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+    const toggleFavoriteHandler = (e) => {
+        e.preventDefault();
 
         //console.log("Estado del usuario:", usuario);
 
@@ -32,24 +28,13 @@ const CardProductoAleatorio = ({product, categorias}) => {
             alert("Debes iniciar sesión para agregar favoritos.");
             return;
           }
-
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        let nuevosFavoritos;
-
-        if (isFavorite) {
-            nuevosFavoritos = favoritos.filter(id => id !== product.id_paquete_experiencia);
-        } else {
-            nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
-        }
-
-        localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-        setIsFavorite(!isFavorite);
+        toggleFavorite(product.id_paquete_experiencia);
     };
-
+    console.log("Estado de favoritos en CardProductoAleatorio:", favorites);
     return (
         <Card className={styles.card}>
             <div className={styles.favoriteIcon}>
-                <IconButton onClick={toggleFavorite} color="error">
+                <IconButton onClick={toggleFavoriteHandler} color="error">
                     {isFavorite ? <Favorite /> : <FavoriteBorder />}
                 </IconButton>
             </div>
