@@ -10,19 +10,14 @@ public class CaracteristicaEntradaDTO {
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
 
-    @NotBlank(message = "Debe indicar la descripción de la caracteristica")
-    @Size(min = 3, max = 255, message = "La descripción debe tener entre 3 y 255 caracteres")
-    private String descripcion;
-
     @NotBlank(message = "Debe indicar el logo de la caracteristica")
     private String logo;
 
     public CaracteristicaEntradaDTO() {
     }
 
-    public CaracteristicaEntradaDTO(String nombre, String descripcion, String logo) {
+    public CaracteristicaEntradaDTO(String nombre, String logo) {
         this.nombre = nombre;
-        this.descripcion = descripcion;
         this.logo = logo;
     }
 
@@ -32,14 +27,6 @@ public class CaracteristicaEntradaDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public String getLogo() {

@@ -53,12 +53,12 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario" }) => {
   return (
     <div>
       <IconButton onClick={handleClick} variant="contained">
-        { isDesktop ? (
-          <Avatar sx={{ bgcolor: "purple", color: "white" }}>{avatarText}</Avatar>
+        {isDesktop ? (
+          <Avatar sx={{ bgcolor: "purple", color: "white" }}>
+            {avatarText}
+          </Avatar>
         ) : (
-          <MenuIcon
-            sx={{ display: { desktop: "none" }, color: "black" }}
-          />
+          <MenuIcon sx={{ display: { desktop: "none" }, color: "black" }} />
         )}
       </IconButton>
 
@@ -76,56 +76,50 @@ const MenuUsuario = ({ avatarText = "U", userName = "Usuario" }) => {
           horizontal: "right",
         }}
       >
-        { isAuthenticated ? (
-          <>
-            <MenuItem>
-              <Avatar sx={{ bgcolor: "purple", width: 32, height: 32, mr: 1 }}>
-                {avatarText}
-              </Avatar>
-              <Typography variant="body1">{userName}</Typography>
-            </MenuItem>
-            <Divider />
-                <MenuItem onClick={handleMyProfile}>
-                  <ListItemIcon>
-                    <AccountCircleIcon fontSize="small" />
-                  </ListItemIcon>
-                  Mi cuenta
-                </MenuItem>
-              <MenuItem onClick={handleLogout}>
+        {isAuthenticated
+          ? [
+              <MenuItem key="user">
+                <Avatar
+                  sx={{ bgcolor: "purple", width: 32, height: 32, mr: 1 }}
+                >
+                  {avatarText}
+                </Avatar>
+                <Typography variant="body1">{userName}</Typography>
+              </MenuItem>,
+              <Divider key="divider" />,
+              <MenuItem key="profile" onClick={handleMyProfile}>
+                <ListItemIcon>
+                  <AccountCircleIcon fontSize="small" />
+                </ListItemIcon>
+                Mi cuenta
+              </MenuItem>,
+              <MenuItem key="logout" onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
                 Cerrar sesión
-              </MenuItem>
-          </>
-        ) : (
-          <>
-            <MenuItem onClick={handleClose}>
-              <Link to="/registro">
-              <Button
-                variant="text"
-                className={styles.header__button}
-              >
-                CREAR CUENTA
-              </Button>
-            </Link>
-            </MenuItem>
-            <Divider />
-                <MenuItem>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={`${styles.header__button} ${styles["header__button--login"]}`}
-                    onClick={handleLogin}
-                  >
-                    INICIAR SESIÓN
+              </MenuItem>,
+            ]
+          : [
+              <MenuItem key="register" onClick={handleClose}>
+                <Link to="/registro">
+                  <Button variant="text" className={styles.header__button}>
+                    CREAR CUENTA
                   </Button>
-                </MenuItem>
-          </>
-        )}
-
-
-        
+                </Link>
+              </MenuItem>,
+              <Divider key="divider" />,
+              <MenuItem key="login">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={`${styles.header__button} ${styles["header__button--login"]}`}
+                  onClick={handleLogin}
+                >
+                  INICIAR SESIÓN
+                </Button>
+              </MenuItem>,
+            ]}
       </Menu>
     </div>
   );

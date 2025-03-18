@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { Box, Typography } from '@mui/material';
 import styles from "../styles/footer.module.css"; 
@@ -13,7 +12,7 @@ const Footer = () => {
     <Box 
       sx={{ 
         textAlign: {desktop: "start" }, 
-        position: {desktop: "fixed"},
+        position: {desktop: "static"},
         bottom: {desktop: "0"},
         left: {desktop: "0"},
         display: { desktop: "flex"}, 
