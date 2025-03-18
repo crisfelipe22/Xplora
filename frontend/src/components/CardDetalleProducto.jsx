@@ -19,16 +19,15 @@ import {
   Snackbar, Alert
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
-import CheckIcon from '@mui/icons-material/Check';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link } from 'react-router-dom';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import GaleriaImgProducto from './GaleriaImgProducto';
-import { useNavigate } from 'react-router-dom';
-import { useMediaQuery, useTheme } from "@mui/material";
+import GaleriaImgProducto from "./GaleriaImgProducto";
+import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from "../contexts/AuthContext";
 import ModalCompartir from "./ModalCompartir";
 import {
   DirectionsBoat, // Kayak
@@ -86,10 +85,12 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-    const isTablet = useMediaQuery("(max-width:900px)");
-    const isMobile = useMediaQuery("(max-width:412px)");
-    const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
-    const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
+  const isTablet = useMediaQuery("(max-width:900px)");
+  const isMobile = useMediaQuery("(max-width:412px)");
+  const numImages = isMobile ? 1 : isTablet ? 3 : 5;
+  const imagenArray = product.imagen
+    ? product.imagen.split(",").map((url) => url.trim())
+    : [];
 
   //fechas reservadas
   const fechasReservadas = [
@@ -149,34 +150,41 @@ const CardDetalleProducto = ({ product, categorias }) => {
     const isMobile1 = useMediaQuery(theme.breakpoints.down('tablet'));
     const isTablet1 = useMediaQuery(theme.breakpoints.between('tablet', 'desktop'));
 
-    useEffect(() => {
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-    }, [product.id_paquete_experiencia]);
+  useEffect(() => {
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
+  }, [product.id_paquete_experiencia]);
 
-    const toggleFavorite = (e) => {
-        e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+  const toggleFavorite = (e) => {
+    e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
-        //console.log("Estado del usuario:", usuario);
+    //console.log("Estado del usuario:", usuario);
 
-        if (!isAuthenticated) {
-            alert("Debes iniciar sesión para agregar favoritos.");
-            return;
-          }
+    if (!isAuthenticated) {
+      alert("Debes iniciar sesión para agregar favoritos.");
+      return;
+    }
 
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        let nuevosFavoritos;
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    let nuevosFavoritos;
 
-        if (isFavorite) {
-            nuevosFavoritos = favoritos.filter(id => id !== product.id_paquete_experiencia);
-        } else {
-            nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
-        }
+    if (isFavorite) {
+      nuevosFavoritos = favoritos.filter(
+        (id) => id !== product.id_paquete_experiencia
+      );
+    } else {
+      nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
+    }
 
-        localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-        setIsFavorite(!isFavorite);
-    };
+    localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
+    setIsFavorite(!isFavorite);
+  };
 
+  const handleClickOpenPolitica = (scrollType) => () => {
+    setOpenPolitica(true);
+    setScroll(scrollType);
+  };
+  const handleClosePolitica = () => setOpenPolitica(false);
 
   //caracteristicas provisorias
 
@@ -275,62 +283,88 @@ const CardDetalleProducto = ({ product, categorias }) => {
   //simulando raiting
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
-    return (
-        <Container className={styles.container}>
-            <div className={styles.detalleSuperior}>
-                <div className={styles.tituloVolver}>
-                    
-                    
-                                                        {/* className={styles.backButton} */}
-                    <IconButton component={Link} onClick={()=>navigate(-1)} sx={{
-                            color: 'primary.main',
-                            fontSize: isMobile ? '0.8rem' : '1rem',
-                        }}>
-                        <ArrowBackIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/> VOLVER ATRÁS
-                    </IconButton>
+  return (
+    <Container className={styles.container}>
+      <div className={styles.detalleSuperior}>
+        <div className={styles.tituloVolver}>
+          <IconButton
+            component={Link}
+            onClick={() => navigate(-1)}
+            sx={{
+              color: "primary.main",
+              fontSize: isMobile ? "0.8rem" : "1rem",
+            }}
+          >
+            <ArrowBackIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />{" "}
+            VOLVER ATRÁS
+          </IconButton>
 
-                    <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
-                    <div className={styles.rightButtons}>
-                        {/* Modal para compartir */}
-                        <ModalCompartir 
-                            open={openModal} 
-                            onClose={handleCloseModal} 
-                            nombre={product.nombre} 
-                            imagen={imagenArray[0]}
-                        />
+          <Typography variant="h3" className={styles.title}>
+            {product.nombre}
+          </Typography>
+          <div className={styles.rightButtons}>
+            {/* Modal para compartir */}
+            <ModalCompartir
+              open={openModal}
+              onClose={handleCloseModal}
+              nombre={product.nombre}
+              imagen={imagenArray[0]}
+            />
 
-                        
-                        <IconButton sx={{
-                                backgroundColor: 'secondary.main',
-                                color: 'white',
-                                '&:hover': { backgroundColor: 'secondary.dark' },
-                                width: isMobile ? '32px' : '40px',
-                                height: isMobile ? '32px' : '40px',
-                            }} onClick={handleOpenModal}>
-                            <ShareIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/>
-                        </IconButton>
-                        <IconButton onClick={toggleFavorite} sx={{
-                                color: isFavorite ? 'error.main' : 'inherit',
-                                width: isMobile ? '32px' : '40px',
-                                height: isMobile ? '32px' : '40px',
-                            }}>
-                            {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                        </IconButton>
-                    </div>
-                </div>
+            <IconButton
+              sx={{
+                backgroundColor: "secondary.main",
+                color: "white",
+                "&:hover": { backgroundColor: "secondary.dark" },
+                width: isMobile ? "32px" : "40px",
+                height: isMobile ? "32px" : "40px",
+              }}
+              onClick={handleOpenModal}
+            >
+              <ShareIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />
+            </IconButton>
+            <IconButton
+              onClick={toggleFavorite}
+              sx={{
+                color: isFavorite ? "error.main" : "inherit",
+                width: isMobile ? "32px" : "40px",
+                height: isMobile ? "32px" : "40px",
+              }}
+            >
+              {isFavorite ? (
+                <FavoriteIcon color="error" />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </IconButton>
+          </div>
+        </div>
 
-                
-                
-                <div className={styles.imagenContainer}>
-                    <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
-                    <div className={styles.imgContainer}>
-                        {imagenArray.slice(1, numImages).map((img, index) => (
-                            <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
-                        ))}
-                    </div>
-                </div>
-                <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
-            </div>
+        <div className={styles.imagenContainer}>
+          <img
+            src={imagenArray[0]}
+            alt={product.nombre}
+            className={styles.mainImage}
+          />
+          <div className={styles.imgContainer}>
+            {imagenArray.slice(1, numImages).map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Vista ${index + 1}`}
+                className={styles.img}
+              />
+            ))}
+          </div>
+        </div>
+        <Button
+          variant="contained"
+          onClick={handleOpenGallery}
+          className={styles.seeAllImages}
+        >
+          VER TODAS LAS IMÁGENES
+        </Button>
+      </div>
 
         <Box className={styles.contenedorDetalles}>
           <Box className={styles.contenedorDos}>
