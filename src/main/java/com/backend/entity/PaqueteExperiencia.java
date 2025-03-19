@@ -30,6 +30,9 @@ public class PaqueteExperiencia {
     @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaracteristicaPaqueteExperiencia> detalles_productos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteExperienciaFavorito> usuariosFavoritos = new ArrayList<>();
+
     public PaqueteExperiencia() {
     }
 

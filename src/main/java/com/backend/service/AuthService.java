@@ -3,11 +3,16 @@ package com.backend.service;
 import com.backend.dto.salida.AuthResponseDTO;
 import com.backend.dto.entada.LoginRequestDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
+import com.backend.dto.salida.PaqueteExperienciaFavoritoSalidaDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
 import com.backend.dto.salida.UsuarioSalidaDTO;
+import com.backend.entity.PaqueteExperiencia;
+import com.backend.entity.PaqueteExperienciaFavorito;
 import com.backend.entity.Rol;
 import com.backend.entity.Usuario;
 import com.backend.exceptions.ResourceNotFoundException;
+import com.backend.repository.PaqueteExperienciaFavoritoRepository;
+import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.RolRepository;
 import com.backend.repository.UsuarioRepository;
 import com.backend.security.jwt.JwtUtils;
@@ -41,6 +46,12 @@ public class AuthService {
 
     @Autowired
     private final RolRepository rolRepository;
+    
+    @Autowired
+    private final PaqueteExperienciaRepository paqueteExperienciaRepository;
+
+    @Autowired
+    private final PaqueteExperienciaFavoritoRepository paqueteExperienciaFavoritoRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -52,11 +63,15 @@ public class AuthService {
 
     public AuthService(UsuarioRepository usuarioRepository,
                        RolRepository rolRepository,
+                       PaqueteExperienciaRepository paqueteExperienciaRepository,
+                       PaqueteExperienciaFavoritoRepository paqueteExperienciaFavoritoRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
                        JwtUtils jwtUtils, ModelMapper modelMapper) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+        this.paqueteExperienciaFavoritoRepository = paqueteExperienciaFavoritoRepository;
+        this.paqueteExperienciaRepository = paqueteExperienciaRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
@@ -258,6 +273,80 @@ public class AuthService {
         usuarioSalidaDTO.setId_rol(nuevoIdRol != null ? nuevoIdRol : usuario.getRol().getId_rol());
 
         return usuarioSalidaDTO;
+    }
+
+    @Transactional
+    public PaqueteExperienciaFavoritoSalidaDTO agregarFavorito(Long id_usuario, Long id_paquete_experiencia) 
+            throws ResourceNotFoundException, AccessDeniedException {
+        
+        logger.info("Agregando paquete de experiencia '{}' a favoritos del usuario '{}'", id_paquete_experiencia, id_usuario);
+
+        Usuario usuario = usuarioRepository.findById(id_usuario)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        PaqueteExperiencia paqueteExperiencia = paqueteExperienciaRepository.findById(id_paquete_experiencia)
+                .orElseThrow(() -> new ResourceNotFoundException("Paquete de experiencia no encontrado"));
+
+
+                String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
+                .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
+
+        if (!usuario.getEmail().equals(emailActual) &&
+                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+            throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
+        }
+
+        boolean existeFavorito = paqueteExperienciaFavoritoRepository
+            .findByUsuarioAndPaqueteExperienciaById(id_usuario, id_paquete_experiencia)
+            .isPresent();
+
+        if (existeFavorito) {
+            throw new IllegalArgumentException("El paquete ya está marcado como favorito.");
+        }
+
+        PaqueteExperienciaFavorito nuevoFavorito = new PaqueteExperienciaFavorito();
+        nuevoFavorito.setUsuario(usuario);
+        nuevoFavorito.setPaqueteExperiencia(paqueteExperiencia);
+        
+        nuevoFavorito = paqueteExperienciaFavoritoRepository.save(nuevoFavorito);
+        logger.info("Favorito agregado exitosamente con id '{}'", nuevoFavorito.getId_favorito());
+
+        PaqueteExperienciaFavoritoSalidaDTO paqueteExperienciaFavoritoSalidaDTO = modelMapper.map(nuevoFavorito, PaqueteExperienciaFavoritoSalidaDTO.class);
+        paqueteExperienciaFavoritoSalidaDTO.setId_paquete_experiencia(id_paquete_experiencia);
+        paqueteExperienciaFavoritoSalidaDTO.setid_usuario(id_usuario);
+        return paqueteExperienciaFavoritoSalidaDTO;
+    }
+
+
+    @Transactional
+    public PaqueteExperienciaFavoritoSalidaDTO eliminarFavorito(Long id_usuario, Long id_paquete_experiencia) throws ResourceNotFoundException, AccessDeniedException {
+        logger.info("Eliminando favorito con id '{}' para el usuario '{}'", id_paquete_experiencia, id_usuario);
+
+        PaqueteExperienciaFavorito favorito = paqueteExperienciaFavoritoRepository.findById(id_paquete_experiencia)
+                .orElseThrow(() -> {
+                    logger.error("Favorito con id '{}' no encontrado", id_paquete_experiencia);
+                    return new ResourceNotFoundException("Favorito no encontrado");
+                });
+        
+        Usuario usuario = usuarioRepository.findById(id_usuario)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
+                .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
+
+        if (!usuario.getEmail().equals(emailActual) &&
+                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+            throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
+        }
+
+        paqueteExperienciaFavoritoRepository.deleteById(favorito.getId_favorito());
+        logger.info("Favorito con id '{}' eliminado exitosamente", favorito.getId_favorito());
+        PaqueteExperienciaFavoritoSalidaDTO paqueteExperienciaFavoritoSalidaDTO = modelMapper.map(favorito, PaqueteExperienciaFavoritoSalidaDTO.class);
+        paqueteExperienciaFavoritoSalidaDTO.setId_paquete_experiencia(id_paquete_experiencia);
+        paqueteExperienciaFavoritoSalidaDTO.setid_usuario(id_usuario);
+        return paqueteExperienciaFavoritoSalidaDTO;
     }
 
 
