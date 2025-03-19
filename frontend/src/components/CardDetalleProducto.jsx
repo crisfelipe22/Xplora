@@ -1,27 +1,38 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import * as React from "react";
 import {
   Container,
-  Divider,
+  Grid2,
   Typography,
   Chip,
+  List,
   ListItem,
   ListItemIcon,
   Card,
+  CardContent,
   Button,
   Rating,
   TextField,
   IconButton,
   Box,
+  InputAdornment,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
+import CheckIcon from "@mui/icons-material/Check";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from "./GaleriaImgProducto";
 import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
+import { CalendarToday } from "@mui/icons-material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -50,29 +61,71 @@ import {
   AcUnit, // Clima frío
   AccessTime, // Horarios
 } from "@mui/icons-material";
-import PoliticaDialog from "./PoliticaDialog";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
+
   const navigate = useNavigate();
   const [openGallery, setOpenGallery] = useState(false);
+
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const calendarRef = useRef(null);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const fechaInicioReserva = dateRange[0] || null;
+  const fechaFinReserva = dateRange[1] || null;
+  const fechaInicioDisponible = product.fecha_inicio
+    ? new Date(product.fecha_inicio)
+    : null;
+  const fechaFinDisponible = product.fecha_fin
+    ? new Date(product.fecha_fin)
+    : null;
+
   const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
-  const [openPolitica, setOpenPolitica] = useState(false);
-  const [scroll, setScroll] = React.useState("paper");
   const handleOpenGallery = () => setOpenGallery(true);
   const handleCloseGallery = () => setOpenGallery(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const isTablet = useMediaQuery("(max-width:900px)");
-  const isMobile = useMediaQuery("(max-width:412px)");
   const numImages = isMobile ? 1 : isTablet ? 3 : 5;
   const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
 
+  //fechas reservadas
+  const fechasReservadas = [
+    new Date(2025, 3, 16),
+    new Date(2025, 3, 17),
+    new Date(2025, 4, 4),
+    new Date(2025, 4, 5),
+    new Date(2025, 4, 20),
+    new Date(2025, 4, 15),
+    new Date(2025, 5, 2),
+    new Date(2025, 5, 3),
+    new Date(2025, 5, 7),
+  ];
+  console.log(fechasReservadas);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        if (!event.target.closest(".react-datepicker")) {
+          setOpenCalendar(false);
+        }
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth();
+
+  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
+  const isMobile1 = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isTablet1 = useMediaQuery(
+    theme.breakpoints.between("tablet", "desktop")
+  );
 
   useEffect(() => {
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
@@ -103,12 +156,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
     localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
     setIsFavorite(!isFavorite);
   };
-
-  const handleClickOpenPolitica = (scrollType) => () => {
-    setOpenPolitica(true);
-    setScroll(scrollType);
-  };
-  const handleClosePolitica = () => setOpenPolitica(false);
 
   //caracteristicas provisorias
 
@@ -208,59 +255,43 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
   return (
-    <Container className={styles.container}>
-      <div className={styles.detalleSuperior}>
-        <div className={styles.tituloVolver}>
-          <IconButton
-            component={Link}
-            onClick={() => navigate(-1)}
-            sx={{
-              color: "primary.main",
-              fontSize: isMobile ? "0.8rem" : "1rem",
-            }}
-          >
-            <ArrowBackIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />{" "}
-            VOLVER ATRÁS
-          </IconButton>
-
-          <Typography variant="h3" className={styles.title}>
-            {product.nombre}
-          </Typography>
-          <div className={styles.rightButtons}>
-            {/* Modal para compartir */}
-            <ModalCompartir
-              open={openModal}
-              onClose={handleCloseModal}
-              nombre={product.nombre}
-              imagen={imagenArray[0]}
-            />
-
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container className={styles.container}>
+        <div className={styles.detalleSuperior}>
+          <div className={styles.tituloVolver}>
             <IconButton
-              sx={{
-                backgroundColor: "secondary.main",
-                color: "white",
-                "&:hover": { backgroundColor: "secondary.dark" },
-                width: isMobile ? "32px" : "40px",
-                height: isMobile ? "32px" : "40px",
-              }}
-              onClick={handleOpenModal}
+              component={Link}
+              onClick={() => navigate(-1)}
+              className={styles.backButton}
             >
-              <ShareIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />
+              <ArrowBackIcon /> VOLVER ATRÁS
             </IconButton>
-            <IconButton
-              onClick={toggleFavorite}
-              sx={{
-                color: isFavorite ? "error.main" : "inherit",
-                width: isMobile ? "32px" : "40px",
-                height: isMobile ? "32px" : "40px",
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
-            </IconButton>
+            <Typography variant="h3" className={styles.title}>
+              {product.nombre}
+            </Typography>
+
+            <div className={styles.rightButtons}>
+              <ModalCompartir
+                open={openModal}
+                onClose={handleCloseModal}
+                nombre={product.nombre}
+                imagen={imagenArray[0]}
+              />
+              <IconButton
+                onClick={toggleFavorite}
+                sx={{
+                  color: isFavorite ? "error.main" : "inherit",
+                  width: isMobile ? "32px" : "40px",
+                  height: isMobile ? "32px" : "40px",
+                }}
+              >
+                {isFavorite ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
+            </div>
           </div>
         </div>
 
@@ -288,89 +319,109 @@ const CardDetalleProducto = ({ product, categorias }) => {
         >
           VER TODAS LAS IMÁGENES
         </Button>
-      </div>
 
-      <Box className={styles.contenedorDetalles}>
-        <Box className={styles.contenedorDos}>
-          <div className={styles.seccionRating}>
-            <Chip
-              label={
-                categorias.find(
-                  (cat) => cat.id_categoria === product.id_categoria
-                )?.nombre || "Desconocido"
-              }
-              className={styles.chip}
-            />
-            <Rating
-              value={rating}
-              precision={0.5}
-              readOnly
-              className={styles.rating}
-            />
-          </div>
-          <Box className={styles.gridCaracteristicas}>
-            {caracteristicas.map((item) => (
-              <ListItem key={item.id_car} className={styles.listItem}>
-                <ListItemIcon className={styles.listIcon}>
-                  <item.icono fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="body1">{item.nombre}</Typography>
-              </ListItem>
-            ))}
+        <Box className={styles.contenedorDetalles}>
+          <Box className={styles.contenedorDos}>
+            <div className={styles.seccionRating}>
+              <Chip
+                label={
+                  categorias.find(
+                    (cat) => cat.id_categoria === product.id_categoria
+                  )?.nombre || "Desconocido"
+                }
+                className={styles.chip}
+              />
+              <Rating
+                value={rating}
+                precision={0.5}
+                readOnly
+                className={styles.rating}
+              />
+            </div>
+            <Box className={styles.gridCaracteristicas}>
+              {caracteristicas.map((item) => (
+                <ListItem key={item.id_car} className={styles.listItem}>
+                  <ListItemIcon className={styles.listIcon}>
+                    <item.icono fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="body1">{item.nombre}</Typography>
+                </ListItem>
+              ))}
+            </Box>
           </Box>
+
+          <Card className={styles.cardPrecio}>
+            <Typography variant="h5" className={styles.precio}>
+              ${product.precio.toLocaleString()}
+            </Typography>
+            <TextField
+              ref={calendarRef}
+              label="Elegir Fecha"
+              placeholder="DD/MM/YYYY"
+              size="small"
+              fullWidth
+              variant="outlined"
+              className={styles.datePicker}
+              value={
+                fechaInicioReserva && fechaFinReserva
+                  ? `${format(fechaInicioReserva, "dd/MM/yyyy")} - ${format(
+                      fechaFinReserva,
+                      "dd/MM/yyyy"
+                    )}`
+                  : ""
+              }
+              onClick={() => setOpenCalendar(true)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              {...(!isMobile && {
+                slotProps: {
+                  input: {
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CalendarToday />
+                      </InputAdornment>
+                    ),
+                  },
+                },
+              })}
+            />
+
+            {/* Calendario doble oculto */}
+            {openCalendar && (
+              <Box className={styles.boxCalendar}>
+                <DatePicker
+                  selectsRange
+                  startDate={fechaInicioReserva}
+                  endDate={fechaFinReserva}
+                  onChange={(update) => setDateRange(update)}
+                  onCalendarClose={() => setOpenCalendar(false)}
+                  minDate={fechaInicioDisponible}
+                  maxDate={fechaFinDisponible}
+                  excludeDates={fechasReservadas}
+                  inline
+                  locale={es}
+                  monthsShown={isTablet ? 1 : 2}
+                  calendarClassName="custom-calendar"
+                />
+              </Box>
+            )}
+            <Button variant="contained" className={styles.botonComprar}>
+              COMPRAR EXPERIENCIA
+            </Button>
+            <Typography variant="h5" className={styles.preguntaRegalo}>
+              ¿TE HICIERON ESTE REGALO?
+            </Typography>
+          </Card>
         </Box>
-
-        <Card className={styles.cardPrecio}>
-          <Typography variant="h5" className={styles.precio}>
-            ${product.precio.toLocaleString()}
-          </Typography>
-          <TextField
-            type="date"
-            label="Elige fecha"
-            className={styles.datePicker}
-          />
-          <Button variant="contained" className={styles.botonComprar}>
-            COMPRAR EXPERIENCIA
-          </Button>
-          <Typography variant="h5" className={styles.preguntaRegalo}>
-            ¿TE HICIERON ESTE REGALO?
-          </Typography>
-        </Card>
-      </Box>
-      <GaleriaImgProducto
-        open={openGallery}
-        close={handleCloseGallery}
-        imagen={product.imagen}
-      />
-
-      {/* 🔹 Sección de Política de Uso */}
-      <Divider sx={{ marginTop: 2 }} />
-      <Box>
-        <Typography gutterBottom sx={{ typography: { mobile: "h6", tablet: "h5" }, mt: 3 }}>
-          Política de uso
-        </Typography>
-        <Typography gutterBottom sx={{ typography: { mobile: "body2", tablet: "body1" } }}>
-          Revisa la política completa para obtener más detalles.
-        </Typography>
-        <Button
-          onClick={handleClickOpenPolitica("paper")}
-          color="primary"
-          variant="text" 
-          endIcon={<KeyboardArrowRightIcon />} 
-          sx={{pl:0}}        
-        >
-          VER POLÍTICA
-        </Button>
-      </Box>
-      {/* Modal de Política de Uso */}
-      {openPolitica && (
-        <PoliticaDialog
-          open={openPolitica}
-          close={handleClosePolitica}
-          scroll={scroll}
+        <GaleriaImgProducto
+          open={openGallery}
+          close={handleCloseGallery}
+          imagen={product.imagen}
         />
-      )}
-    </Container>
+      </Container>
+    </LocalizationProvider>
   );
 };
 
