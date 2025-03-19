@@ -1,276 +1,428 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Container, Grid2, Typography, Chip, List, ListItem, ListItemIcon, Card, CardContent, Button, Rating, TextField, IconButton, Box } from '@mui/material';
+import {
+  Container,
+  Grid2,
+  Typography,
+  Chip,
+  List,
+  ListItem,
+  ListItemIcon,
+  Card,
+  CardContent,
+  Button,
+  Rating,
+  TextField,
+  IconButton,
+  Box,
+  InputAdornment,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
-import CheckIcon from '@mui/icons-material/Check';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from "react";
-import GaleriaImgProducto from './GaleriaImgProducto';
-import { useNavigate } from 'react-router-dom';
-import { useMediaQuery, useTheme } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import GaleriaImgProducto from "./GaleriaImgProducto";
+import { useNavigate } from "react-router-dom";
+import { CalendarToday } from "@mui/icons-material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from "../contexts/AuthContext";
 import ModalCompartir from "./ModalCompartir";
 import {
-    DirectionsBoat,    // Kayak
-    Landscape,         // Montañas
-    Waves,             // Agua
-    SafetyDivider,     // Seguridad
-    Timer,             // Duración
-    Groups,            // Grupo
-    LocalOffer,        // Incluido
-    Wc,                // Sanitarios
-    Restaurant,        // Comida
-    Hiking,            // Trekking
-    CameraAlt,         // Fotografía
-    NaturePeople,      // Naturaleza
-    WaterDrop,         // Cascadas
-    Terrain,           // Terreno
-    DarkMode,          // Noche
-    Brightness5,       // Día
-    Emergency,         // Emergencia
-    Flag,              // Punto encuentro
-    Map,               // Mapa
-    AcUnit,            // Clima frío
-    AccessTime         // Horarios
-  } from '@mui/icons-material';
+  DirectionsBoat, // Kayak
+  Landscape, // Montañas
+  Waves, // Agua
+  SafetyDivider, // Seguridad
+  Timer, // Duración
+  Groups, // Grupo
+  LocalOffer, // Incluido
+  Wc, // Sanitarios
+  Restaurant, // Comida
+  Hiking, // Trekking
+  CameraAlt, // Fotografía
+  NaturePeople, // Naturaleza
+  WaterDrop, // Cascadas
+  Terrain, // Terreno
+  DarkMode, // Noche
+  Brightness5, // Día
+  Emergency, // Emergencia
+  Flag, // Punto encuentro
+  Map, // Mapa
+  AcUnit, // Clima frío
+  AccessTime, // Horarios
+} from "@mui/icons-material";
 
-const CardDetalleProducto = ({product, categorias}) =>{
-    const navigate = useNavigate();
-    const [openGallery, setOpenGallery] = useState(false);
-    const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
-    const handleOpenGallery = () => setOpenGallery(true);
-    const handleCloseGallery = () => setOpenGallery(false);
-    const handleOpenModal = () => setOpenModal(true);
-    const handleCloseModal = () => setOpenModal(false);
+const CardDetalleProducto = ({ product, categorias }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
 
-    const isTablet = useMediaQuery("(max-width:900px)");
-    const isMobile = useMediaQuery("(max-width:412px)");
-    const numImages = isMobile ? 1 : isTablet ? 3 : 5; 
-    const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
+  const navigate = useNavigate();
+  const [openGallery, setOpenGallery] = useState(false);
 
-    const [isFavorite, setIsFavorite] = useState(false);
-    const { isAuthenticated } = useAuth();
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const calendarRef = useRef(null);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const fechaInicioReserva = dateRange[0] || null;
+  const fechaFinReserva = dateRange[1] || null;
+  const fechaInicioDisponible = product.fecha_inicio
+    ? new Date(product.fecha_inicio)
+    : null;
+  const fechaFinDisponible = product.fecha_fin
+    ? new Date(product.fecha_fin)
+    : null;
 
-    const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
-    const isMobile1 = useMediaQuery(theme.breakpoints.down('tablet'));
-    const isTablet1 = useMediaQuery(theme.breakpoints.between('tablet', 'desktop'));
+  const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
+  const handleOpenGallery = () => setOpenGallery(true);
+  const handleCloseGallery = () => setOpenGallery(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
-    useEffect(() => {
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-    }, [product.id_paquete_experiencia]);
+  const numImages = isMobile ? 1 : isTablet ? 3 : 5;
+  const imagenArray = product.imagen
+    ? product.imagen.split(",").map((url) => url.trim())
+    : [];
 
-    const toggleFavorite = (e) => {
-        e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+  //fechas reservadas
+  const fechasReservadas = [
+    new Date(2025, 3, 16),
+    new Date(2025, 3, 17),
+    new Date(2025, 4, 4),
+    new Date(2025, 4, 5),
+    new Date(2025, 4, 20),
+    new Date(2025, 4, 15),
+    new Date(2025, 5, 2),
+    new Date(2025, 5, 3),
+    new Date(2025, 5, 7),
+  ];
+  console.log(fechasReservadas);
 
-        //console.log("Estado del usuario:", usuario);
-
-        if (!isAuthenticated) {
-            alert("Debes iniciar sesión para agregar favoritos.");
-            return;
-          }
-
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-        let nuevosFavoritos;
-
-        if (isFavorite) {
-            nuevosFavoritos = favoritos.filter(id => id !== product.id_paquete_experiencia);
-        } else {
-            nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        if (!event.target.closest(".react-datepicker")) {
+          setOpenCalendar(false);
         }
-
-        localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-        setIsFavorite(!isFavorite);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { isAuthenticated } = useAuth();
 
+  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
+  const isMobile1 = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isTablet1 = useMediaQuery(
+    theme.breakpoints.between("tablet", "desktop")
+  );
 
-    //caracteristicas provisorias
-    
-    const caracteristicas = [
-        {
-            id_car: 1,
-            nombre: "Kayak profesional incluido",
-            id_icono: 1,
-            icono: DirectionsBoat
-        },
-        {
-            id_car: 2,
-            nombre: "Chaleco salvavidas regulado",
-            id_icono: 2,
-            icono: SafetyDivider
-        },
-        {
-            id_car: 3,
-            nombre: "Guía certificado por grupo",
-            id_icono: 3,
-            icono: Groups
-        },
-        {
-            id_car: 4,
-            nombre: "Ruta por río de montaña",
-            id_icono: 4,
-            icono: Waves
-        },
-        {
-            id_car: 5,
-            nombre: "Equipo impermeable incluido",
-            id_icono: 5,
-            icono: WaterDrop
-        },
-        {
-            id_car: 6,
-            nombre: "Fotografías profesionales",
-            id_icono: 6,
-            icono: CameraAlt
-        },
-        {
-            id_car: 7,
-            nombre: "Almuerzo tipo picnic",
-            id_icono: 7,
-            icono: Restaurant
-        },
-        {
-            id_car: 8,
-            nombre: "Botiquín de primeros auxilios",
-            id_icono: 8,
-            icono: Emergency
-        },
-        {
-            id_car: 9,
-            nombre: "Instrucción básica de remo",
-            id_icono: 9,
-            icono: DirectionsBoat
-        },
-        {
-            id_car: 10,
-            nombre: "Avistamiento de fauna local",
-            id_icono: 10,
-            icono: NaturePeople
-        },
-        {
-            id_car: 11,
-            nombre: "Seguro contra accidentes",
-            id_icono: 11,
-            icono: LocalOffer
-        },
-        {
-            id_car: 12,
-            nombre: "Punto de encuentro señalizado",
-            id_icono: 12,
-            icono: Flag
-        },
-        {
-            id_car: 13,
-            nombre: "Mapa de la ruta digital",
-            id_icono: 13,
-            icono: Map
-        },
-        {
-            id_car: 14,
-            nombre: "Duración 4 horas",
-            id_icono: 14,
-            icono: Timer
-        },
-        {
-            id_car: 15,
-            nombre: "Zonas de descanso designadas",
-            id_icono: 15,
-            icono: Brightness5
-        }
-    ]
-    //simulando raiting
-    const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
+  useEffect(() => {
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
+  }, [product.id_paquete_experiencia]);
 
-    return (
-        <Container className={styles.container}>
-            <div className={styles.detalleSuperior}>
-                <div className={styles.tituloVolver}>
-                    
-                    
-                                                        {/* className={styles.backButton} */}
-                    <IconButton component={Link} onClick={()=>navigate(-1)} sx={{
-                            color: 'primary.main',
-                            fontSize: isMobile ? '0.8rem' : '1rem',
-                        }}>
-                        <ArrowBackIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/> VOLVER ATRÁS
-                    </IconButton>
+  const toggleFavorite = (e) => {
+    e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
-                    <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
-                    <div className={styles.rightButtons}>
-                        {/* Modal para compartir */}
-                        <ModalCompartir 
-                            open={openModal} 
-                            onClose={handleCloseModal} 
-                            nombre={product.nombre} 
-                            imagen={imagenArray[0]}
-                        />
+    //console.log("Estado del usuario:", usuario);
 
-                        
-                        <IconButton sx={{
-                                backgroundColor: 'secondary.main',
-                                color: 'white',
-                                '&:hover': { backgroundColor: 'secondary.dark' },
-                                width: isMobile ? '32px' : '40px',
-                                height: isMobile ? '32px' : '40px',
-                            }} onClick={handleOpenModal}>
-                            <ShareIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/>
-                        </IconButton>
-                        <IconButton onClick={toggleFavorite} sx={{
-                                color: isFavorite ? 'error.main' : 'inherit',
-                                width: isMobile ? '32px' : '40px',
-                                height: isMobile ? '32px' : '40px',
-                            }}>
-                            {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                        </IconButton>
-                    </div>
-                </div>
+    if (!isAuthenticated) {
+      alert("Debes iniciar sesión para agregar favoritos.");
+      return;
+    }
 
-                
-                
-                <div className={styles.imagenContainer}>
-                    <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
-                    <div className={styles.imgContainer}>
-                        {imagenArray.slice(1, numImages).map((img, index) => (
-                            <img key={index} src={img} alt={`Vista ${index + 1}`} className={styles.img} />
-                        ))}
-                    </div>
-                </div>
-                <Button variant="contained" onClick={handleOpenGallery} className={styles.seeAllImages}>VER TODAS LAS IMÁGENES</Button>
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    let nuevosFavoritos;
+
+    if (isFavorite) {
+      nuevosFavoritos = favoritos.filter(
+        (id) => id !== product.id_paquete_experiencia
+      );
+    } else {
+      nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
+    }
+
+    localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
+    setIsFavorite(!isFavorite);
+  };
+
+  //caracteristicas provisorias
+
+  const caracteristicas = [
+    {
+      id_car: 1,
+      nombre: "Kayak profesional incluido",
+      id_icono: 1,
+      icono: DirectionsBoat,
+    },
+    {
+      id_car: 2,
+      nombre: "Chaleco salvavidas regulado",
+      id_icono: 2,
+      icono: SafetyDivider,
+    },
+    {
+      id_car: 3,
+      nombre: "Guía certificado por grupo",
+      id_icono: 3,
+      icono: Groups,
+    },
+    {
+      id_car: 4,
+      nombre: "Ruta por río de montaña",
+      id_icono: 4,
+      icono: Waves,
+    },
+    {
+      id_car: 5,
+      nombre: "Equipo impermeable incluido",
+      id_icono: 5,
+      icono: WaterDrop,
+    },
+    {
+      id_car: 6,
+      nombre: "Fotografías profesionales",
+      id_icono: 6,
+      icono: CameraAlt,
+    },
+    {
+      id_car: 7,
+      nombre: "Almuerzo tipo picnic",
+      id_icono: 7,
+      icono: Restaurant,
+    },
+    {
+      id_car: 8,
+      nombre: "Botiquín de primeros auxilios",
+      id_icono: 8,
+      icono: Emergency,
+    },
+    {
+      id_car: 9,
+      nombre: "Instrucción básica de remo",
+      id_icono: 9,
+      icono: DirectionsBoat,
+    },
+    {
+      id_car: 10,
+      nombre: "Avistamiento de fauna local",
+      id_icono: 10,
+      icono: NaturePeople,
+    },
+    {
+      id_car: 11,
+      nombre: "Seguro contra accidentes",
+      id_icono: 11,
+      icono: LocalOffer,
+    },
+    {
+      id_car: 12,
+      nombre: "Punto de encuentro señalizado",
+      id_icono: 12,
+      icono: Flag,
+    },
+    {
+      id_car: 13,
+      nombre: "Mapa de la ruta digital",
+      id_icono: 13,
+      icono: Map,
+    },
+    {
+      id_car: 14,
+      nombre: "Duración 4 horas",
+      id_icono: 14,
+      icono: Timer,
+    },
+    {
+      id_car: 15,
+      nombre: "Zonas de descanso designadas",
+      id_icono: 15,
+      icono: Brightness5,
+    },
+  ];
+  //simulando raiting
+  const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container className={styles.container}>
+        <div className={styles.detalleSuperior}>
+          <div className={styles.tituloVolver}>
+            <IconButton
+              component={Link}
+              onClick={() => navigate(-1)}
+              className={styles.backButton}
+            >
+              <ArrowBackIcon /> VOLVER ATRÁS
+            </IconButton>
+            <Typography variant="h3" className={styles.title}>
+              {product.nombre}
+            </Typography>
+
+            <div className={styles.rightButtons}>
+              <ModalCompartir
+                open={openModal}
+                onClose={handleCloseModal}
+                nombre={product.nombre}
+                imagen={imagenArray[0]}
+              />
+              <IconButton
+                onClick={toggleFavorite}
+                sx={{
+                  color: isFavorite ? "error.main" : "inherit",
+                  width: isMobile ? "32px" : "40px",
+                  height: isMobile ? "32px" : "40px",
+                }}
+              >
+                {isFavorite ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
             </div>
+          </div>
+        </div>
 
-            <Box className={styles.contenedorDetalles}> 
-                <Box className={styles.contenedorDos}>
-                    <div className={styles.seccionRating}>
-                        <Chip label={categorias.find(cat => cat.id_categoria === product.id_categoria)?.nombre || "Desconocido"} className={styles.chip} />
-                        <Rating value={rating} precision={0.5} readOnly className={styles.rating} />
-                    </div>    
-                    <Box className={styles.gridCaracteristicas}>
-                    {caracteristicas.map((item) => (
-                        <ListItem key={item.id_car} className={styles.listItem}>
-                            <ListItemIcon className={styles.listIcon}>
-                            <item.icono fontSize="small" />
-                            </ListItemIcon>
-                            <Typography variant="body1">{item.nombre}</Typography>
-                        </ListItem>
-                        ))}
-                    </Box>
-                </Box>                 
+        <div className={styles.imagenContainer}>
+          <img
+            src={imagenArray[0]}
+            alt={product.nombre}
+            className={styles.mainImage}
+          />
+          <div className={styles.imgContainer}>
+            {imagenArray.slice(1, numImages).map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Vista ${index + 1}`}
+                className={styles.img}
+              />
+            ))}
+          </div>
+        </div>
+        <Button
+          variant="contained"
+          onClick={handleOpenGallery}
+          className={styles.seeAllImages}
+        >
+          VER TODAS LAS IMÁGENES
+        </Button>
 
-                <Card className={styles.cardPrecio}>
-                    <Typography variant="h5" className={styles.precio}>${product.precio.toLocaleString()}</Typography>
-                    <TextField type="date" label="Elige fecha" className={styles.datePicker} />
-                    <Button variant="contained" className={styles.botonComprar}>COMPRAR EXPERIENCIA</Button>
-                    <Typography variant="h5" className={styles.preguntaRegalo}>¿TE HICIERON ESTE REGALO?</Typography>
-                </Card>
-            </Box>            
-            <GaleriaImgProducto open={openGallery} close={handleCloseGallery} imagen={product.imagen}/>
-        </Container>
-    )
+        <Box className={styles.contenedorDetalles}>
+          <Box className={styles.contenedorDos}>
+            <div className={styles.seccionRating}>
+              <Chip
+                label={
+                  categorias.find(
+                    (cat) => cat.id_categoria === product.id_categoria
+                  )?.nombre || "Desconocido"
+                }
+                className={styles.chip}
+              />
+              <Rating
+                value={rating}
+                precision={0.5}
+                readOnly
+                className={styles.rating}
+              />
+            </div>
+            <Box className={styles.gridCaracteristicas}>
+              {caracteristicas.map((item) => (
+                <ListItem key={item.id_car} className={styles.listItem}>
+                  <ListItemIcon className={styles.listIcon}>
+                    <item.icono fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="body1">{item.nombre}</Typography>
+                </ListItem>
+              ))}
+            </Box>
+          </Box>
+
+          <Card className={styles.cardPrecio}>
+            <Typography variant="h5" className={styles.precio}>
+              ${product.precio.toLocaleString()}
+            </Typography>
+            <TextField
+              ref={calendarRef}
+              label="Elegir Fecha"
+              placeholder="DD/MM/YYYY"
+              size="small"
+              fullWidth
+              variant="outlined"
+              className={styles.datePicker}
+              value={
+                fechaInicioReserva && fechaFinReserva
+                  ? `${format(fechaInicioReserva, "dd/MM/yyyy")} - ${format(
+                      fechaFinReserva,
+                      "dd/MM/yyyy"
+                    )}`
+                  : ""
+              }
+              onClick={() => setOpenCalendar(true)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              {...(!isMobile && {
+                slotProps: {
+                  input: {
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CalendarToday />
+                      </InputAdornment>
+                    ),
+                  },
+                },
+              })}
+            />
+
+            {/* Calendario doble oculto */}
+            {openCalendar && (
+              <Box className={styles.boxCalendar}>
+                <DatePicker
+                  selectsRange
+                  startDate={fechaInicioReserva}
+                  endDate={fechaFinReserva}
+                  onChange={(update) => setDateRange(update)}
+                  onCalendarClose={() => setOpenCalendar(false)}
+                  minDate={fechaInicioDisponible}
+                  maxDate={fechaFinDisponible}
+                  excludeDates={fechasReservadas}
+                  inline
+                  locale={es}
+                  monthsShown={isTablet ? 1 : 2}
+                  calendarClassName="custom-calendar"
+                />
+              </Box>
+            )}
+            <Button variant="contained" className={styles.botonComprar}>
+              COMPRAR EXPERIENCIA
+            </Button>
+            <Typography variant="h5" className={styles.preguntaRegalo}>
+              ¿TE HICIERON ESTE REGALO?
+            </Typography>
+          </Card>
+        </Box>
+        <GaleriaImgProducto
+          open={openGallery}
+          close={handleCloseGallery}
+          imagen={product.imagen}
+        />
+      </Container>
+    </LocalizationProvider>
+  );
 };
 
 export default CardDetalleProducto;
