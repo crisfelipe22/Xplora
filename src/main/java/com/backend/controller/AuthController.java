@@ -114,4 +114,21 @@ public class AuthController {
         return new ResponseEntity<>(favoritoEliminado, HttpStatus.OK);
     }
 
+    @GetMapping("/{id_usuario}/favoritos")
+    public ResponseEntity<List<PaqueteExperienciaFavoritoSalidaDTO>> listarFavoritos(
+            @PathVariable(name = "id_usuario") Long id_usuario) throws ResourceNotFoundException {
+
+        List<PaqueteExperienciaFavoritoSalidaDTO> favoritos = authService.listarFavoritos(id_usuario);
+        return new ResponseEntity<>(favoritos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id_usuario}/favoritos/{id_paquete_experiencia}")
+    public ResponseEntity<PaqueteExperienciaFavoritoSalidaDTO> obtenerFavorito(
+            @PathVariable(name = "id_usuario") Long id_usuario,
+            @PathVariable(name = "id_paquete_experiencia") Long id_paquete_experiencia) throws ResourceNotFoundException {
+
+        PaqueteExperienciaFavoritoSalidaDTO favorito = authService.obtenerFavorito(id_usuario, id_paquete_experiencia);
+        return new ResponseEntity<>(favorito, HttpStatus.OK);
+    }
+
 }
