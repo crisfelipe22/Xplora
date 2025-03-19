@@ -2,14 +2,11 @@
 /* eslint-disable react/prop-types */
 import {
   Container,
-  Grid2,
   Typography,
   Chip,
-  List,
   ListItem,
   ListItemIcon,
   Card,
-  CardContent,
   Button,
   Rating,
   TextField,
@@ -18,6 +15,7 @@ import {
   InputAdornment,
   useTheme,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
 import { useIcons } from "../contexts/IconContext";
@@ -35,7 +33,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
 import { format } from "date-fns";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/AuthContext";
 import ModalCompartir from "./ModalCompartir";
@@ -63,6 +60,8 @@ import {
   AccessTime, // Horarios
 } from "@mui/icons-material";
 import axios from 'axios'; 
+import PoliticaDialog from "./PoliticaDialog";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
   const { icons: iconosDisponibles } = useIcons()
@@ -93,7 +92,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
   const navigate = useNavigate();
   const [openGallery, setOpenGallery] = useState(false);
-
+  const [openPolitica, setOpenPolitica] = useState(false);
+  const [scroll, setScroll] = useState("paper");
   const [openCalendar, setOpenCalendar] = useState(false);
   const calendarRef = useRef(null);
   const [dateRange, setDateRange] = useState([null, null]);
@@ -111,6 +111,13 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const handleCloseGallery = () => setOpenGallery(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const handleClickOpenPolitica = (scrollType) => () => {
+    setOpenPolitica(true);
+    setScroll(scrollType);
+  };
+
+  const handleClosePolitica = () => setOpenPolitica(false);
 
   const numImages = isMobile ? 1 : isTablet ? 3 : 5;
   // console.log(numImages);
@@ -271,6 +278,11 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 className={styles.rating}
               />
             </div>
+            <Box sx={{pt: 3, pb: 4}}>
+              <Typography gutterBottom sx={{typography: {mobile: "body2", tablet: "body1"}}}>
+               {product.descripcion}
+              </Typography>
+            </Box>
             <Typography variant="h6">Características</Typography>
             <Box className={styles.gridCaracteristicas}>
               {caracteristicas.map((item, index) => {
@@ -359,6 +371,41 @@ const CardDetalleProducto = ({ product, categorias }) => {
           close={handleCloseGallery}
           imagen={product.imagen}
         />
+
+        {/* 🔹 Sección de Política de Uso */}
+        <Divider sx={{ marginTop: 2 }} />
+        <Box>
+          <Typography
+            gutterBottom
+            sx={{ typography: { mobile: "h6", tablet: "h5" }, mt: 3 }}
+          >
+            Política de uso
+          </Typography>
+          <Typography
+            gutterBottom
+            sx={{ typography: { mobile: "body2", tablet: "body1" } }}
+          >
+            Revisa la política completa para obtener más detalles.
+          </Typography>
+          <Button
+            onClick={handleClickOpenPolitica("paper")}
+            color="primary"
+            variant="text"
+            endIcon={<KeyboardArrowRightIcon />}
+            sx={{ pl: 0 }}
+          >
+            VER POLÍTICA
+          </Button>
+        </Box>
+
+        {/* Modal de Política de Uso */}
+        {openPolitica && (
+          <PoliticaDialog
+            open={openPolitica}
+            close={handleClosePolitica}
+            scroll={scroll}
+          />
+        )}
       </Container>
     </LocalizationProvider>
   );
