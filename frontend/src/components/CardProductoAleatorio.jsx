@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
-import { Card, CardContent, Typography, CardMedia, Rating, Chip} from '@mui/material';
+import React, {useState, useEffect} from 'react';
+import { Card, CardContent, Typography, CardMedia, Rating, Chip, IconButton} from '@mui/material';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import styles from '../styles/ProductoAleatorio.module.css';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const CardProductoAleatorio = ({product, categorias}) => {
     const imagenArray = product.imagen ? product.imagen.split(',').map(url => url.trim()) : [];
@@ -11,9 +13,48 @@ const CardProductoAleatorio = ({product, categorias}) => {
     //suponiendo raiting por ahora
     const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
+    //NUEVO
+    // Estado para manejar favoritos (usamos localStorage para persistencia)
+    const [isFavorite, setIsFavorite] = useState(false);
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
+    }, [product.id_paquete_experiencia]);
+
+    const toggleFavorite = (e) => {
+        e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
+
+        //console.log("Estado del usuario:", usuario);
+
+        if (!isAuthenticated) {
+            alert("Debes iniciar sesión para agregar favoritos.");
+            return;
+          }
+
+        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        let nuevosFavoritos;
+
+        if (isFavorite) {
+            nuevosFavoritos = favoritos.filter(id => id !== product.id_paquete_experiencia);
+        } else {
+            nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
+        }
+
+        localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
+        setIsFavorite(!isFavorite);
+    };
+
     return (
-        <Link to={ `/detalle-producto/${product.id_paquete_experiencia}`} style={{ textDecoration: 'none' }}>
-            <Card className={styles.card}>
+        <Card className={styles.card}>
+            <div className={styles.favoriteIcon}>
+                <IconButton onClick={toggleFavorite} color="error">
+                    {isFavorite ? <Favorite /> : <FavoriteBorder />}
+                </IconButton>
+            </div>
+            <Link to={ `/detalle-producto/${product.id_paquete_experiencia}`} style={{ textDecoration: 'none' }}>
+                {/* <Card className={styles.card}> */}
                 <CardMedia
                     component="img"
                     height="200"
@@ -40,8 +81,9 @@ const CardProductoAleatorio = ({product, categorias}) => {
                     } className={styles.categoriaProducto} />
                     
                 </CardContent>
-            </Card>
-        </Link>
+            </Link>
+        </Card>
+        
         
     );
 };

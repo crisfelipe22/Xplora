@@ -46,7 +46,7 @@ const ResultadoBusqueda = () =>{
                     setCategorias(categoriasResponse.data)
                 }
                 console.log("Productos recibidos:", productosResponse.data);
-                console.log("Categorías recibidas:", categoriasResponse.data);
+                
             } catch (error) {
                 setError("Hubo un problema al obtener los datos. Intenta de nuevo.");
                 console.error("Error obteniendo productos:", error);
