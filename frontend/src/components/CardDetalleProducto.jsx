@@ -177,7 +177,14 @@ const CardDetalleProducto = ({product, categorias}) =>{
     return (
         <Container className={styles.container}>
             <div className={styles.detalleSuperior}>
-                <div className={styles.tituloVolver}>
+                <div  style={{ 
+        display: "flex", 
+        flexDirection: isMobile1 ? "row" : "column",
+        alignItems: isMobile1 ?"center": "flex-end", 
+        justifyContent: isMobile1 ? "space-between" : "flex-end", 
+        gap: "8px",
+        width: "100%" 
+    }}>
                                                         {/* className={styles.backButton} */}
                     <IconButton component={Link} onClick={()=>navigate(-1)} sx={{
                             color: 'primary.main',
@@ -185,8 +192,8 @@ const CardDetalleProducto = ({product, categorias}) =>{
                         }}>
                         <ArrowBackIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem' }}/> VOLVER ATRÁS
                     </IconButton>
-                    <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
-                    <div className={styles.rightButtons}>
+                    {/* <Typography variant="h3" className={styles.title}>{product.nombre}</Typography> */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         {/* Modal para compartir */}
                         <ModalCompartir 
                             open={openModal} 
@@ -194,15 +201,31 @@ const CardDetalleProducto = ({product, categorias}) =>{
                             nombre={product.nombre} 
                             imagen={imagenArray[0]}
                         />
-                        <IconButton onClick={handleToggleFavorite} sx={{
+                    
+                        {isDesktop ? (
+                            <Box display="flex" alignItems="center" gap={1}>
+                            <IconButton onClick={handleToggleFavorite} sx={{
+                            color: isFavorite ? 'error.main' : 'inherit',
+                            width: isMobile ? '32px' : '40px',
+                            height: isMobile ? '32px' : '40px',
+                            }}>
+                            {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+                            </IconButton>
+                            <Typography variant="body2">GUARDAR</Typography>
+                            </Box>): ( <Box display="flex" alignItems="center" gap={1}>
+                                <IconButton onClick={handleToggleFavorite} sx={{
                                 color: isFavorite ? 'error.main' : 'inherit',
                                 width: isMobile ? '32px' : '40px',
                                 height: isMobile ? '32px' : '40px',
-                            }}>
+                            }}> 
                             {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                        </IconButton>
+                            </IconButton>
+                        </Box>
+                                )}
                     </div>
                 </div>
+
+                <Typography variant="h3" className={styles.title}>{product.nombre}</Typography>
 
                 <div className={styles.imagenContainer}>
                     <img src={imagenArray[0]} alt={product.nombre} className={styles.mainImage} />
