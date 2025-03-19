@@ -559,7 +559,9 @@ http://localhost:8080/api/auth
 
 ## Endpoints
 
-### Registrar un usuario
+### Usuario
+
+#### Registrar un usuario
 - **Método:** Post
 - **Endpoint:** `/registro`
 - **Descripción:** Permite crear una nueva cuenta de usuario en el sistema.
@@ -588,7 +590,7 @@ http://localhost:8080/api/auth
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
 
-### Inicio de Sesión
+#### Inicio de Sesión
 - **Método:** Post
 - **Endpoint:** `/login`
 - **Descripción:** Permite a un usuario autenticarse y obtener un token JWT para acceder a recursos protegidos.
@@ -622,7 +624,7 @@ Tu código lanza un RuntimeException con el mensaje "Error: Usuario no encontrad
 - Errores de validación: Cuando los campos no cumplen con las restricciones @NotBlank o @Email
 Spring Validation generaría errores de validación
 
-### Cierre de Sesión
+#### Cierre de Sesión
 - **Método:** Post
 - **Endpoint:** `/logout`
 - **Headers:** `Authorization: Bearer {token}`
@@ -646,10 +648,10 @@ Spring Validation generaría errores de validación
 
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
-### Editar un usuario
+#### Editar un usuario
 - **Método:** PUT
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el mismo usuario logueado
+- **Headers:** `Authorization: Bearer {token}` superadministrador, administrador o el mismo usuario logueado
 - **Descripción:** Permite actualizar un usuario
 - **Request Body:**
 ```json
@@ -677,14 +679,14 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
 
-### Editar solo un campo de un usuario
+#### Editar solo un campo de un usuario
 - **Método:** PATCH
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador unicamente
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite actualizar un usuario en un campo
 - **Request Body:**
 ```json
@@ -706,10 +708,10 @@ Spring Validation generaría errores de validación
 }
 ```
 
-### Eliminar un usuario
+#### Eliminar un usuario
 - **Método:** DELETE
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite eliminar un usuario
 - **Request Body:**
 
@@ -727,13 +729,13 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener un usuario
+#### Obtener un usuario
 - **Método:** GET
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el usuario autenticado
+- **Headers:** `Authorization: Bearer {token}` superadministradoro, administrador o el usuario autenticado
 - **Descripción:** Permite obtener datos de un usuario
 - **Request Body:**
 
@@ -751,13 +753,13 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener todos los usuarios
+#### Obtener todos los usuarios
 - **Método:** GET
 - **Endpoint:** `/auth`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite obtener datos de todos los usuarios
 - **Request Body:**
 
@@ -795,12 +797,88 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
+#### Obtener todos los favoritos de un usuario
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+    {
+        "id_favorito": 1,
+        "id_paquete_experiencia": 1,
+        "id_usuario": 1
+    },
+    {
+        "id_favorito": 4,
+        "id_paquete_experiencia": 3,
+        "id_usuario": 1
+    }
+]
+```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener el favorito de un usuario apartir del paquete de experiencia
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+    "id_favorito": 4,
+    "id_paquete_experiencia": 3,
+    "id_usuario": 1
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Agregar un favorito
+- **Método:** Post
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite agregar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- 500 Internal Server Error: Error en el servidor.
+
+#### Remover un favorito
+- **Método:** Delete
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite eliminar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (200 ok):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 - 500 Internal Server Error: Error en el servidor.
 
   **Notas:**
