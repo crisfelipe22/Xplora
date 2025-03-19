@@ -559,7 +559,9 @@ http://localhost:8080/api/auth
 
 ## Endpoints
 
-### Registrar un usuario
+### Usuario
+
+#### Registrar un usuario
 - **Método:** Post
 - **Endpoint:** `/registro`
 - **Descripción:** Permite crear una nueva cuenta de usuario en el sistema.
@@ -588,7 +590,7 @@ http://localhost:8080/api/auth
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
 
-### Inicio de Sesión
+#### Inicio de Sesión
 - **Método:** Post
 - **Endpoint:** `/login`
 - **Descripción:** Permite a un usuario autenticarse y obtener un token JWT para acceder a recursos protegidos.
@@ -622,7 +624,7 @@ Tu código lanza un RuntimeException con el mensaje "Error: Usuario no encontrad
 - Errores de validación: Cuando los campos no cumplen con las restricciones @NotBlank o @Email
 Spring Validation generaría errores de validación
 
-### Cierre de Sesión
+#### Cierre de Sesión
 - **Método:** Post
 - **Endpoint:** `/logout`
 - **Headers:** `Authorization: Bearer {token}`
@@ -646,7 +648,7 @@ Spring Validation generaría errores de validación
 
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
-### Editar un usuario
+#### Editar un usuario
 - **Método:** PUT
 - **Endpoint:** `/auth/{id}`
 - **Headers:** `Authorization: Bearer {token}` superadministrador o el mismo usuario logueado
@@ -677,11 +679,11 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
 
-### Editar solo un campo de un usuario
+#### Editar solo un campo de un usuario
 - **Método:** PATCH
 - **Endpoint:** `/auth/{id}`
 - **Headers:** `Authorization: Bearer {token}` superadministrador unicamente
@@ -706,7 +708,7 @@ Spring Validation generaría errores de validación
 }
 ```
 
-### Eliminar un usuario
+#### Eliminar un usuario
 - **Método:** DELETE
 - **Endpoint:** `/auth/{id}`
 - **Headers:** `Authorization: Bearer {token}` superadministrador
@@ -727,10 +729,10 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener un usuario
+#### Obtener un usuario
 - **Método:** GET
 - **Endpoint:** `/auth/{id}`
 - **Headers:** `Authorization: Bearer {token}` superadministrador o el usuario autenticado
@@ -751,10 +753,10 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener todos los usuarios
+#### Obtener todos los usuarios
 - **Método:** GET
 - **Endpoint:** `/auth`
 - **Headers:** `Authorization: Bearer {token}` superadministrador
@@ -795,9 +797,48 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
+#### Obtener todos los favoritos de un usuario
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos`
+- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Descripción:** Permite obtener datos de todos los usuarios
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  {
+    "id_usuario": 1,
+    "nombre": "Nombre Usuario",
+    "email": "usuario@ejemplo.com",
+    "telefono": 987654321,
+    "direccion": "Av. Ejemplo 123, Ciudad",
+    "fechaRegistro": "2025-02-28T04:17:12.060+00:00",
+    "id_rol": 1
+  },
+  {
+    "id_usuario": 2,
+    "nombre": "Nombre superadmin",
+    "email": "superadmin@ejemplo.com",
+    "telefono": 987654321,
+    "direccion": "Av. Ejemplo 123, Ciudad",
+    "fechaRegistro": "2025-03-03T04:25:21.860+00:00",
+    "id_rol": 3
+  },
+  {
+    "id_usuario": 6,
+    "nombre": "Nombre cliente3",
+    "email": "cliente3@ejemplo.com",
+    "telefono": 587653313,
+    "direccion": "Av. 2Ejemplo 1233, Ciudad",
+    "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
+    "id_rol": 2
+  }
+]
+```
 **Errores Posibles:**
 
 - 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
