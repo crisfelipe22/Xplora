@@ -312,10 +312,7 @@ public class AuthService {
         nuevoFavorito = paqueteExperienciaFavoritoRepository.save(nuevoFavorito);
         logger.info("Favorito agregado exitosamente con id '{}'", nuevoFavorito.getId_favorito());
 
-        PaqueteExperienciaFavoritoSalidaDTO paqueteExperienciaFavoritoSalidaDTO = modelMapper.map(nuevoFavorito, PaqueteExperienciaFavoritoSalidaDTO.class);
-        paqueteExperienciaFavoritoSalidaDTO.setId_paquete_experiencia(id_paquete_experiencia);
-        paqueteExperienciaFavoritoSalidaDTO.setid_usuario(id_usuario);
-        return paqueteExperienciaFavoritoSalidaDTO;
+        return convertirAFavoritoSalidaDTO(nuevoFavorito, id_usuario, id_paquete_experiencia);
     }
 
 
@@ -343,11 +340,35 @@ public class AuthService {
 
         paqueteExperienciaFavoritoRepository.deleteById(favorito.getId_favorito());
         logger.info("Favorito con id '{}' eliminado exitosamente", favorito.getId_favorito());
-        PaqueteExperienciaFavoritoSalidaDTO paqueteExperienciaFavoritoSalidaDTO = modelMapper.map(favorito, PaqueteExperienciaFavoritoSalidaDTO.class);
-        paqueteExperienciaFavoritoSalidaDTO.setId_paquete_experiencia(id_paquete_experiencia);
-        paqueteExperienciaFavoritoSalidaDTO.setid_usuario(id_usuario);
-        return paqueteExperienciaFavoritoSalidaDTO;
+        return convertirAFavoritoSalidaDTO(favorito, id_usuario, id_paquete_experiencia);
     }
 
+    @Transactional
+    public List<PaqueteExperienciaFavoritoSalidaDTO> listarFavoritos(Long id_usuario) throws ResourceNotFoundException {
+        usuarioRepository.findById(id_usuario)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        List<PaqueteExperienciaFavorito> favoritos = paqueteExperienciaFavoritoRepository.findByUsuarioId(id_usuario);
+
+        return favoritos.stream().map(favorito -> convertirAFavoritoSalidaDTO(favorito, id_usuario, favorito.getPaqueteExperiencia().getId_paquete_experiencia())).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public PaqueteExperienciaFavoritoSalidaDTO obtenerFavorito(Long id_usuario, Long id_paquete_experiencia) 
+            throws ResourceNotFoundException {
+
+        PaqueteExperienciaFavorito favorito = paqueteExperienciaFavoritoRepository
+                .findByUsuarioAndPaqueteExperienciaById(id_usuario, id_paquete_experiencia)
+                .orElseThrow(() -> new ResourceNotFoundException("Favorito no encontrado"));
+        
+        return convertirAFavoritoSalidaDTO(favorito, id_usuario, id_paquete_experiencia);
+    }
+
+    private PaqueteExperienciaFavoritoSalidaDTO convertirAFavoritoSalidaDTO(PaqueteExperienciaFavorito favorito, Long id_usuario, Long id_paquete_experiencia) {
+        PaqueteExperienciaFavoritoSalidaDTO dto = modelMapper.map(favorito, PaqueteExperienciaFavoritoSalidaDTO.class);
+        dto.setId_paquete_experiencia(id_paquete_experiencia);
+        dto.setId_usuario(id_usuario);
+        return dto;
+    } 
 
 }

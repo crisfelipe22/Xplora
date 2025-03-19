@@ -30,11 +30,11 @@ public class PaqueteExperienciaFavoritoSalidaDTO {
         this.id_paquete_experiencia = id_paquete_experiencia;
     }
 
-    public Long getid_usuario() {
+    public Long getId_usuario() {
         return id_usuario;
     }
 
-    public void setid_usuario(Long id_usuario) {
+    public void setId_usuario(Long id_usuario) {
         this.id_usuario = id_usuario;
     }
 }
