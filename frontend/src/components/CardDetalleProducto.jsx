@@ -27,7 +27,6 @@ import GaleriaImgProducto from './GaleriaImgProducto';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery, useTheme } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from '../contexts/AuthContext';
 import ModalCompartir from "./ModalCompartir";
