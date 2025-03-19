@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -195,7 +196,7 @@ public class AuthService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuario.getEmail().equals(emailActual) && !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+        if (!usuario.getEmail().equals(emailActual) && !Arrays.asList("SuperAdministrador", "Administrador").contains(usuarioAutenticado.getRol().getNombre())) {
             throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
         }
 
@@ -239,7 +240,7 @@ public class AuthService {
 
         // Validar permisos
         if (!usuario.getEmail().equals(emailActual) &&
-                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+            !Arrays.asList("SuperAdministrador", "Administrador").contains(usuarioAutenticado.getRol().getNombre())) {
             throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
         }
 
@@ -293,7 +294,7 @@ public class AuthService {
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
         if (!usuario.getEmail().equals(emailActual) &&
-                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+            !Arrays.asList("SuperAdministrador", "Administrador").contains(usuarioAutenticado.getRol().getNombre())) {
             throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
         }
 
@@ -334,7 +335,7 @@ public class AuthService {
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
         if (!usuario.getEmail().equals(emailActual) &&
-                !usuarioAutenticado.getRol().getNombre().equals("SuperAdministrador")) {
+            !Arrays.asList("SuperAdministrador", "Administrador").contains(usuarioAutenticado.getRol().getNombre())) {
             throw new AccessDeniedException("No tienes permisos para modificar este usuario.");
         }
 
