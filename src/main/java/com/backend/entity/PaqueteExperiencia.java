@@ -18,6 +18,7 @@ public class PaqueteExperiencia {
     private Categoria categoria;
     @Column(nullable = false)
     private String nombre;
+    @Column(length = 800)
     private String descripcion;
     private double precio;
     private String ubicacion;
