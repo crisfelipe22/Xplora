@@ -651,7 +651,7 @@ Spring Validation generaría errores de validación
 #### Editar un usuario
 - **Método:** PUT
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el mismo usuario logueado
+- **Headers:** `Authorization: Bearer {token}` superadministrador, administrador o el mismo usuario logueado
 - **Descripción:** Permite actualizar un usuario
 - **Request Body:**
 ```json
@@ -686,7 +686,7 @@ Spring Validation generaría errores de validación
 #### Editar solo un campo de un usuario
 - **Método:** PATCH
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador unicamente
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite actualizar un usuario en un campo
 - **Request Body:**
 ```json
@@ -711,7 +711,7 @@ Spring Validation generaría errores de validación
 #### Eliminar un usuario
 - **Método:** DELETE
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite eliminar un usuario
 - **Request Body:**
 
@@ -735,7 +735,7 @@ Spring Validation generaría errores de validación
 #### Obtener un usuario
 - **Método:** GET
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el usuario autenticado
+- **Headers:** `Authorization: Bearer {token}` superadministradoro, administrador o el usuario autenticado
 - **Descripción:** Permite obtener datos de un usuario
 - **Request Body:**
 
@@ -759,7 +759,7 @@ Spring Validation generaría errores de validación
 #### Obtener todos los usuarios
 - **Método:** GET
 - **Endpoint:** `/auth`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite obtener datos de todos los usuarios
 - **Request Body:**
 
@@ -803,45 +803,82 @@ Spring Validation generaría errores de validación
 #### Obtener todos los favoritos de un usuario
 - **Método:** GET
 - **Endpoint:** `/auth/{id_usuario}/favoritos`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
-- **Descripción:** Permite obtener datos de todos los usuarios
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
 - **Request Body:**
 
 **Respuesta Exitosa (200 OK):**
 ```json
 [
-  {
-    "id_usuario": 1,
-    "nombre": "Nombre Usuario",
-    "email": "usuario@ejemplo.com",
-    "telefono": 987654321,
-    "direccion": "Av. Ejemplo 123, Ciudad",
-    "fechaRegistro": "2025-02-28T04:17:12.060+00:00",
-    "id_rol": 1
-  },
-  {
-    "id_usuario": 2,
-    "nombre": "Nombre superadmin",
-    "email": "superadmin@ejemplo.com",
-    "telefono": 987654321,
-    "direccion": "Av. Ejemplo 123, Ciudad",
-    "fechaRegistro": "2025-03-03T04:25:21.860+00:00",
-    "id_rol": 3
-  },
-  {
-    "id_usuario": 6,
-    "nombre": "Nombre cliente3",
-    "email": "cliente3@ejemplo.com",
-    "telefono": 587653313,
-    "direccion": "Av. 2Ejemplo 1233, Ciudad",
-    "fechaRegistro": "2025-03-03T04:55:24.111+00:00",
-    "id_rol": 2
-  }
+    {
+        "id_favorito": 1,
+        "id_paquete_experiencia": 1,
+        "id_usuario": 1
+    },
+    {
+        "id_favorito": 4,
+        "id_paquete_experiencia": 3,
+        "id_usuario": 1
+    }
 ]
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener el favorito de un usuario apartir del paquete de experiencia
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+    "id_favorito": 4,
+    "id_paquete_experiencia": 3,
+    "id_usuario": 1
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Agregar un favorito
+- **Método:** Post
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite agregar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- 500 Internal Server Error: Error en el servidor.
+
+#### Remover un favorito
+- **Método:** Delete
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite eliminar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (200 ok):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 - 500 Internal Server Error: Error en el servidor.
 
   **Notas:**
