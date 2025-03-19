@@ -321,7 +321,7 @@ public class AuthService {
     public PaqueteExperienciaFavoritoSalidaDTO eliminarFavorito(Long id_usuario, Long id_paquete_experiencia) throws ResourceNotFoundException, AccessDeniedException {
         logger.info("Eliminando favorito con id '{}' para el usuario '{}'", id_paquete_experiencia, id_usuario);
 
-        PaqueteExperienciaFavorito favorito = paqueteExperienciaFavoritoRepository.findById(id_paquete_experiencia)
+        PaqueteExperienciaFavorito favorito = paqueteExperienciaFavoritoRepository.findByUsuarioAndPaqueteExperienciaById(id_usuario, id_paquete_experiencia)
                 .orElseThrow(() -> {
                     logger.error("Favorito con id '{}' no encontrado", id_paquete_experiencia);
                     return new ResourceNotFoundException("Favorito no encontrado");
