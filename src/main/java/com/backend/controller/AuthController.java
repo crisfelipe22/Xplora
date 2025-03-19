@@ -2,7 +2,9 @@ package com.backend.controller;
 
 import com.backend.dto.salida.AuthResponseDTO;
 import com.backend.dto.entada.LoginRequestDTO;
+import com.backend.dto.entada.PaqueteExperienciaFavoritoEntradaDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
+import com.backend.dto.salida.PaqueteExperienciaFavoritoSalidaDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
 import com.backend.dto.salida.UsuarioSalidaDTO;
 import com.backend.service.AuthService;
@@ -94,5 +96,22 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{id_usuario}/favoritos/{id_paquete_experiencia}")
+    public ResponseEntity<PaqueteExperienciaFavoritoSalidaDTO> agregarFavorito(
+            @PathVariable(name = "id_usuario") Long id_usuario,
+            @PathVariable(name = "id_paquete_experiencia") Long id_paquete_experiencia) throws ResourceNotFoundException, AccessDeniedException {
+
+        PaqueteExperienciaFavoritoSalidaDTO favoritoAgregado = authService.agregarFavorito(id_usuario, id_paquete_experiencia);
+        return new ResponseEntity<>(favoritoAgregado, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id_usuario}/favoritos/{id_paquete_experiencia}")
+    public ResponseEntity<PaqueteExperienciaFavoritoSalidaDTO> eliminarFavorito(
+            @PathVariable(name = "id_usuario") Long id_usuario, 
+            @PathVariable(name = "id_paquete_experiencia") Long id_paquete_experiencia) throws ResourceNotFoundException, AccessDeniedException {
+        
+        PaqueteExperienciaFavoritoSalidaDTO favoritoEliminado = authService.eliminarFavorito(id_usuario, id_paquete_experiencia);
+        return new ResponseEntity<>(favoritoEliminado, HttpStatus.OK);
+    }
 
 }
