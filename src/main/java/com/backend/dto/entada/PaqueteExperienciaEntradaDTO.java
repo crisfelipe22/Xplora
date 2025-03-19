@@ -14,7 +14,7 @@ public class PaqueteExperienciaEntradaDTO {
     private String nombre;
 
     @NotBlank(message="Debe indicar la descripción del paquete de experiencia")
-    @Size(min = 3, max = 800, message = "La descripción debe tener entre 3 y 800 caracteres")
+    @Size(min = 3, max = 1000, message = "La descripción debe tener entre 3 y 1000 caracteres")
     private String descripcion;
 
     @Positive(message = "El precio no puede ser nulo o menor a cero")
