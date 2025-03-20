@@ -16,6 +16,7 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Snackbar, Alert
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
 import { useIcons } from "../contexts/IconContext";
@@ -90,6 +91,9 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const navigate = useNavigate();
   const [openGallery, setOpenGallery] = useState(false);
   const [openPolitica, setOpenPolitica] = useState(false);
@@ -139,7 +143,32 @@ const CardDetalleProducto = ({ product, categorias }) => {
     new Date(2025, 5, 3),
     new Date(2025, 5, 7),
   ];
-  // console.log(fechasReservadas);
+  
+  //validacion que no hayan fechas reservadas en el rango que se seleccione
+  const tieneFechasReservadas = (startDate, endDate, fechasReservadas) => {
+    if (!startDate || !endDate) return false;
+  
+    const fechaActual = new Date(startDate);
+    while (fechaActual <= endDate) {
+      if (fechasReservadas.some(fecha => fecha.getTime() === fechaActual.getTime())) {
+        return true; // Hay una fecha reservada en el rango
+      }
+      fechaActual.setDate(fechaActual.getDate() + 1); // Avanzar al siguiente día
+    }
+    return false; // No hay fechas reservadas en el rango
+  };
+
+  const handleDateChange = (update) => {
+    const [startDate, endDate] = update;
+  
+    if (tieneFechasReservadas(startDate, endDate, fechasReservadas)) {
+      setSnackbarMessage("El rango seleccionado incluye fechas reservadas. Por favor, elige otro rango.");
+      setOpenSnackbar(true);
+      return; 
+    }
+  
+    setDateRange(update); 
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -280,7 +309,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
             </div>
             <Box sx={{pt: 3, pb: 4}}>
               <Typography gutterBottom sx={{typography: {mobile: "body2", tablet: "body1"}}}>
-               {product.descripcion}
+                {product.descripcion}
               </Typography>
             </Box>
             <Typography variant="h6">Características</Typography>
@@ -346,7 +375,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
                   selectsRange
                   startDate={fechaInicioReserva}
                   endDate={fechaFinReserva}
-                  onChange={(update) => setDateRange(update)}
+                  onChange={handleDateChange}
                   onCalendarClose={() => setOpenCalendar(false)}
                   minDate={fechaInicioDisponible}
                   maxDate={fechaFinDisponible}
@@ -407,6 +436,27 @@ const CardDetalleProducto = ({ product, categorias }) => {
           />
         )}
       </Container>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000} 
+        onClose={() => setOpenSnackbar(false)} 
+        anchorOrigin={{ vertical: "center", horizontal: "center" }} 
+        sx={{
+          "&.MuiSnackbar-root": {
+            top: "50%", 
+            transform: "translateY(-50%)", 
+          },
+        }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error" 
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </LocalizationProvider>
   );
 };
