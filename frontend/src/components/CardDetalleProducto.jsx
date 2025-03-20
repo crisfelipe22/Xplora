@@ -21,10 +21,16 @@ import {
 import styles from "../styles/DetalleProducto.module.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from "./GaleriaImgProducto";
 import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
+import { CalendarToday } from "@mui/icons-material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/AuthContext";
@@ -85,8 +91,13 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const isTablet = useMediaQuery("(max-width:900px)");
-  const isMobile = useMediaQuery("(max-width:412px)");
+  const handleClickOpenPolitica = (scrollType) => () => {
+    setOpenPolitica(true);
+    setScroll(scrollType);
+  };
+
+  const handleClosePolitica = () => setOpenPolitica(false);
+
   const numImages = isMobile ? 1 : isTablet ? 3 : 5;
   const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
@@ -175,12 +186,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
     localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
     setIsFavorite(!isFavorite);
   };
-
-  const handleClickOpenPolitica = (scrollType) => () => {
-    setOpenPolitica(true);
-    setScroll(scrollType);
-  };
-  const handleClosePolitica = () => setOpenPolitica(false);
 
   //caracteristicas provisorias
 
@@ -280,59 +285,43 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
   return (
-    <Container className={styles.container}>
-      <div className={styles.detalleSuperior}>
-        <div className={styles.tituloVolver}>
-          <IconButton
-            component={Link}
-            onClick={() => navigate(-1)}
-            sx={{
-              color: "primary.main",
-              fontSize: isMobile ? "0.8rem" : "1rem",
-            }}
-          >
-            <ArrowBackIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />{" "}
-            VOLVER ATRÁS
-          </IconButton>
-
-          <Typography variant="h3" className={styles.title}>
-            {product.nombre}
-          </Typography>
-          <div className={styles.rightButtons}>
-            {/* Modal para compartir */}
-            <ModalCompartir
-              open={openModal}
-              onClose={handleCloseModal}
-              nombre={product.nombre}
-              imagen={imagenArray[0]}
-            />
-
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container className={styles.container}>
+        <div className={styles.detalleSuperior}>
+          <div className={styles.tituloVolver}>
             <IconButton
-              sx={{
-                backgroundColor: "secondary.main",
-                color: "white",
-                "&:hover": { backgroundColor: "secondary.dark" },
-                width: isMobile ? "32px" : "40px",
-                height: isMobile ? "32px" : "40px",
-              }}
-              onClick={handleOpenModal}
+              component={Link}
+              onClick={() => navigate(-1)}
+              className={styles.backButton}
             >
-              <ShareIcon sx={{ fontSize: isMobile ? "1.2rem" : "1.5rem" }} />
+              <ArrowBackIcon /> VOLVER ATRÁS
             </IconButton>
-            <IconButton
-              onClick={toggleFavorite}
-              sx={{
-                color: isFavorite ? "error.main" : "inherit",
-                width: isMobile ? "32px" : "40px",
-                height: isMobile ? "32px" : "40px",
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
-            </IconButton>
+            <Typography variant="h3" className={styles.title}>
+              {product.nombre}
+            </Typography>
+
+            <div className={styles.rightButtons}>
+              <ModalCompartir
+                open={openModal}
+                onClose={handleCloseModal}
+                nombre={product.nombre}
+                imagen={imagenArray[0]}
+              />
+              <IconButton
+                onClick={toggleFavorite}
+                sx={{
+                  color: isFavorite ? "error.main" : "inherit",
+                  width: isMobile ? "32px" : "40px",
+                  height: isMobile ? "32px" : "40px",
+                }}
+              >
+                {isFavorite ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
+            </div>
           </div>
         </div>
 
@@ -360,7 +349,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
         >
           VER TODAS LAS IMÁGENES
         </Button>
-      </div>
 
         <Box className={styles.contenedorDetalles}>
           <Box className={styles.contenedorDos}>

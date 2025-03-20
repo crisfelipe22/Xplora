@@ -44,10 +44,11 @@ const Categorias = () => {
   const [Categorias, setCategorias] = useState([]);
   const [category, setCategory] = useState({ nombre: "", descripcion: "" });
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-
+  const [CategoriasEliminar, setCategoriasEliminar] = useState([]);
 
   useEffect(() => {
     fetchCategorias();
@@ -93,19 +94,30 @@ const Categorias = () => {
     setOpenDialog(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await axios.delete(`/api/categoria/${id}`);
-      fetchCategorias();
+      await axios.delete(`/api/categoria/${CategoriasEliminar.idCategoria}`);
+      setCategorias(Categorias.filter(c => c.idCategoria !== CategoriasEliminar.idCategoria));
     } catch (error) {
       console.error("Error deleting category:", error);
     }
+    setOpenDialogDelete(false)
   };
 
   const handleOpenDialog = () => {
     setCategory({ nombre: "", descripcion: "" });
     setEditMode(false);
     setOpenDialog(true);
+  };
+
+  const handleOpenDialogDelete = (categoria) => {
+    setCategoriasEliminar(categoria);
+    setOpenDialogDelete(true);
+  };
+
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false);
+
   };
 
   const handleCloseDialog = () => {
@@ -206,7 +218,7 @@ const Categorias = () => {
                         <Button
                           variant="outlined"
                           className={styles.botonEliminar}
-                          onClick={() => handleOpenDialog(product)}
+                          onClick={() => handleOpenDialogDelete(cat)}
                         >
                           Eliminar
                         </Button>
@@ -307,10 +319,21 @@ const Categorias = () => {
               </Box>            
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseDialog} color="secondary">Cancelar</Button>
+                <Button onClick={handleCloseDialogDelete} color="secondary">Cancelar</Button>
                 <Button onClick={handleSubmit} color="primary" variant="contained">Añadir Categoría</Button>
             </DialogActions>
       </Dialog>
+
+      <Dialog open={openDialogDelete} onClose={handleCloseDialog}>
+                      <DialogTitle>¿Eliminar categoria?</DialogTitle>
+                      <DialogContent>
+                          <p>¿Estás seguro de que deseas eliminar -- {CategoriasEliminar?.nombre} -- ? Esta acción no se puede deshacer.</p>
+                      </DialogContent>
+                      <DialogActions>
+                          <Button onClick={handleCloseDialog} color="primary">Cancelar</Button>
+                          <Button onClick={handleDelete} color="error">Eliminar</Button>
+                      </DialogActions>
+                  </Dialog>
     </AdminLayout>
   );
 };
