@@ -117,7 +117,6 @@ const Categorias = () => {
 
   const handleCloseDialogDelete = () => {
     setOpenDialogDelete(false);
-
   };
 
   const handleCloseDialog = () => {
@@ -330,7 +329,7 @@ const Categorias = () => {
                           <p>¿Estás seguro de que deseas eliminar -- {CategoriasEliminar?.nombre} -- ? Esta acción no se puede deshacer.</p>
                       </DialogContent>
                       <DialogActions>
-                          <Button onClick={handleCloseDialog} color="primary">Cancelar</Button>
+                          <Button onClick={handleCloseDialogDelete} color="primary">Cancelar</Button>
                           <Button onClick={handleDelete} color="error">Eliminar</Button>
                       </DialogActions>
                   </Dialog>

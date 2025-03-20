@@ -1,15 +1,14 @@
 use xplora_db;
 
-INSERT INTO categoria (nombre) VALUES
-    ('Aventuras y deportes'),
-    ('Gastronomia'),
-    ('Estadias'),
-    ('Bienestar y relajación'),
-    ('Cultura y entretenimiento'),
-    ('Naturaleza y ecoturismo'),
-    ('Experiencias urbanas'),
-    ('Romanticismo y arte');
-
+INSERT INTO categoria (nombre, descripcion) VALUES
+    ('Aventuras y deportes', 'Actividades emocionantes al aire libre y deportes extremos para los amantes de la adrenalina.'),
+    ('Gastronomia', 'Experiencias culinarias que incluyen degustaciones, clases de cocina y cenas especiales.'),
+    ('Estadias', 'Alojamientos únicos y escapadas en hoteles, cabañas o estancias rurales.'),
+    ('Bienestar y relajación', 'Experiencias de spa, masajes y terapias de relajación para el descanso y el equilibrio.'),
+    ('Cultura y entretenimiento', 'Eventos culturales, visitas a museos, espectáculos y experiencias artísticas.'),
+    ('Naturaleza y ecoturismo', 'Actividades en entornos naturales como senderismo, avistamiento de fauna y ecoturismo.'),
+    ('Experiencias urbanas', 'Recorridos, actividades y eventos exclusivos en entornos urbanos vibrantes.'),
+    ('Romanticismo y arte', 'Experiencias diseñadas para parejas, incluyendo cenas románticas y actividades artísticas.');
 
 INSERT INTO rol (id_rol, nombre) VALUES
     (1, 'SuperAdministrador'),
