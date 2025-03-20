@@ -6,14 +6,17 @@ import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
 import '@fontsource/roboto/latin.css';
+import { ProductProvider } from './contexts/ProductContext.jsx';
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <ProductProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </ProductProvider>
   </StrictMode>
 )

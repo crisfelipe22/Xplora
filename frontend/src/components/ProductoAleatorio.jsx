@@ -31,7 +31,6 @@ const ProductoAleatorio = () => {
             setCategorias(categoriasResponse.data);
           } catch (error) {
             console.error("Error obteniendo datos:", error);
-            // Aquí puedes manejar el error de manera más específica si lo necesitas
             if (error.response) {
               console.error("Detalle del error:", error.response.status, error.response.data);
             }

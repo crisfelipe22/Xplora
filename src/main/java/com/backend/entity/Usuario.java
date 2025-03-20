@@ -1,7 +1,9 @@
 package com.backend.entity;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
-import jakarta.persistence.Entity;
+import java.util.List;
 
 
 
@@ -33,6 +35,9 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "id_rol")
     private Rol rol;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteExperienciaFavorito> favoritos = new ArrayList<>();
 
     // Constructor vacío
     public Usuario() {

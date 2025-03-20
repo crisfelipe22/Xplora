@@ -15,7 +15,7 @@ http://localhost:8080/api
 
 - **Método:** POST
 - **Endpoint:** `/paquete-experiencia`
-- **Descripción:** Permite agregar un nuevo paquete de experiencia.
+- **Descripción:** Permite agregar un nuevo paquete de experiencia. Las caracteristicas paquete experiencia son opcionales.
 - **Request Body:**
 
 ```json
@@ -27,25 +27,46 @@ http://localhost:8080/api
   "ubicacion": "Andes, Chile",
   "imagen": "https://example.com/imagen.jpg",
   "duracion": "8 horas",
-  "fecha_experiencia": "2025-03-15T10:00:00Z"
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia":[
+      {
+          "id_caracteristica": 4
+      },{
+          "id_caracteristica": 1
+      }
+  ]
 }
 ```
 
 **Respuesta Exitosa (201 Created):**
 ```json
 {
-"id_paquete_experiencia": 5,
-"categoria": {
-"id_categoria": 1,
-"nombre": "Aventura"
-},
-"nombre": "Aventura en la Montaña",
-"descripcion": "Un día completo de senderismo y escalada.",
-"precio": 150.00,
-"ubicacion": "Andes, Chile",
-"imagen": "https://example.com/imagen.jpg",
-"duracion": "8 horas",
-"fecha_experiencia": "2025-03-15T10:00:00Z"
+  "id_paquete_experiencia": 5,
+  "categoria": {
+  "id_categoria": 1,
+  "nombre": "Aventura"
+  },
+  "nombre": "Aventura en la Montaña",
+  "descripcion": "Un día completo de senderismo y escalada.",
+  "precio": 150.00,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+    {
+        "id_caracteristica_paquete_experiencia": 8,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 4
+    },
+    {
+        "id_caracteristica_paquete_experiencia": 9,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 1
+    }
+  ]
 }
 ```
 
@@ -58,27 +79,39 @@ http://localhost:8080/api
 
 - **Método:** GET
 - **Endpoint:** `/paquete-experiencia`
-- **Descripción:** Devuelve una lista con todos los paquetes de experiencia registrados.
-
+- **Descripción:** Devuelve una lista con todos los paquetes de experiencia registrados. Las caracteristicas del paquete experiencia puede llegar con una lista vacia.
 
 **Respuesta Exitosa (200 OK):**
 ```json
 
 [
-{
-"id_paquete_experiencia": 5,
-"categoria": {
-"id_categoria": 1,
-"nombre": "Aventura"
-},
-"nombre": "Aventura en la Montaña",
-"descripcion": "Un día completo de senderismo y escalada.",
-"precio": 150.00,
-"ubicacion": "Andes, Chile",
-"imagen": "https://example.com/imagen.jpg",
-"duracion": "8 horas",
-"fecha_experiencia": "2025-03-15T10:00:00Z"
-}
+  {
+  "id_paquete_experiencia": 5,
+  "categoria": {
+    "id_categoria": 1,
+    "nombre": "Aventura"
+  },
+  "nombre": "Aventura en la Montaña",
+  "descripcion": "Un día completo de senderismo y escalada.",
+  "precio": 150.00,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+      {
+          "id_caracteristica_paquete_experiencia": 8,
+          "id_paquete_experiencia": 52,
+          "id_caracteristica": 4
+      },
+      {
+          "id_caracteristica_paquete_experiencia": 9,
+          "id_paquete_experiencia": 52,
+          "id_caracteristica": 1
+      }
+    ]
+  }
 ]
 ```
 #### Obtener Paquetes de Experiencia Aleatorios
@@ -99,10 +132,159 @@ http://localhost:8080/api
     "ubicacion": "Santiago, Chile",
     "imagen": "https://example.com/spa.jpg",
     "duracion": "5 horas",
-    "fecha_experiencia": "2025-04-10T14:00:00Z"
+    "fecha_inicio": "2025-03-15T10:00:00Z",
+    "fecha_fin": "2025-03-15T10:00:00Z",
+    "caracteristicas_paquete_experiencia": [
+      {
+          "id_caracteristica_paquete_experiencia": 8,
+          "id_paquete_experiencia": 52,
+          "id_caracteristica": 4
+      },
+      {
+          "id_caracteristica_paquete_experiencia": 9,
+          "id_paquete_experiencia": 52,
+          "id_caracteristica": 1
+      }
+    ]
   }
 ]
 ```
+
+
+#### Actualizar un Paquete de Experiencia
+
+- **Método:** PUT
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Permite actualizar un nuevo de experiencia. Se debe enviar todas las caracteristicas que tiene, por lo tanto todas las del get se quitan o agregan nuevas.
+- **Request Body:**
+
+```json
+{
+  "id_categoria": 3,
+  "nombre": "Aventura prueba",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 270.00,
+  "ubicacion": "Bogotá. Colombia",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "7 dias",
+  "fecha_experiencia": "2025-03-15T10:00:00Z",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+    {
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 4
+    },
+    {
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 1
+    }
+  ]
+}
+```
+
+**Respuesta Exitosa (202 Acepted):**
+```json
+{
+  "id_categoria": 3,
+  "nombre": "Aventura prueba",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 270.00,
+  "ubicacion": "Bogotá. Colombia",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "7 dias",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+    {
+        "id_caracteristica_paquete_experiencia": 8,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 4
+    },
+    {
+        "id_caracteristica_paquete_experiencia": 9,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 1
+    }
+  ]
+}
+```
+
+#### Obtener un paquete de Experiencia por id
+
+- **Método:** GET
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Devuelve el paquete de experiencia solicitado. Si no tiene caracteristicas, esta llega como lista vacia.
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_paquete_experiencia": 1,
+  "nombre": "Aventura en la Montaña 2",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 150.0,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+    {
+        "id_caracteristica_paquete_experiencia": 8,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 4
+    },
+    {
+        "id_caracteristica_paquete_experiencia": 9,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 1
+    }
+  ],
+  "id_categoria": 1
+}
+```
+
+#### Eliminar un paquete de Experiencia por id
+
+- **Método:** DELETE
+- **Endpoint:** `/paquete-experiencia/{id}`
+- **Descripción:** Devuelve el paquete de experiencia eliminado. Si no tiene caracteristicas asoaciadas, vuelve una lista vacia.
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id_paquete_experiencia": 11,
+  "nombre": "Aventura en la Montaña 2",
+  "descripcion": "Un día completo de senderismo y escalada 3.",
+  "precio": 150.0,
+  "ubicacion": "Andes, Chile",
+  "imagen": "https://example.com/imagen.jpg",
+  "duracion": "8 horas",
+  "fecha_experiencia": "2025-03-15T10:00:00.000+00:00",
+  "fecha_inicio": "2025-03-15T10:00:00Z",
+  "fecha_fin": "2025-03-15T10:00:00Z",
+  "caracteristicas_paquete_experiencia": [
+    {
+        "id_caracteristica_paquete_experiencia": 8,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 4
+    },
+    {
+        "id_caracteristica_paquete_experiencia": 9,
+        "id_paquete_experiencia": 52,
+        "id_caracteristica": 1
+    }
+  ],
+  "id_categoria": 1
+}
+```
+
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
 
 ### Categoría
 
@@ -137,7 +319,7 @@ http://localhost:8080/api
 - **Endpoint:** `/categoria`
 - **Descripción:** Obtener todas las categoría para clasificar paquetes de experiencia.
 
-```
+
 **Respuesta Exitosa (200 OK):**
 ```lista objetos
 [
@@ -211,95 +393,162 @@ http://localhost:8080/api
 }
 ```
 
+### Caracteristica
 
-#### Actualizar un Paquete de Experiencia
+#### Crear una caracteristica
 
-- **Método:** PUT
-- **Endpoint:** `/paquete-experiencia/{id}`
-- **Descripción:** Permite actualizar un nuevo de experiencia.
+- **Método:** POST
+- **Endpoint:** `/caracteristica`
+- **Descripción:** Crea una nueva caracteristica para agregar a los paquetes de experiencia. `Es necesario que exista la categoría para poder crear un paquete de experiencia`
+
 - **Request Body:**
 
 ```json
-{
-  "id_categoria": 3,
-  "nombre": "Aventura prueba",
-  "descripcion": "Un día completo de senderismo y escalada 3.",
-  "precio": 270.00,
-  "ubicacion": "Bogotá. Colombia",
-  "imagen": "https://example.com/imagen.jpg",
-  "duracion": "7 dias",
-  "fecha_experiencia": "2025-03-15T10:00:00Z"
-}
+  {
+    "nombre": "wifi",
+    "logo": 2
+  }
 ```
-
-**Respuesta Exitosa (202 Acepted):**
-```json
-{
-  "id_categoria": 3,
-  "nombre": "Aventura prueba",
-  "descripcion": "Un día completo de senderismo y escalada 3.",
-  "precio": 270.00,
-  "ubicacion": "Bogotá. Colombia",
-  "imagen": "https://example.com/imagen.jpg",
-  "duracion": "7 dias",
-  "fecha_experiencia": "2025-03-15T10:00:00Z"
-}
-```
-
-#### Obtener un paquete de Experiencia por id
-
-- **Método:** GET
-- **Endpoint:** `/paquete-experiencia/{id}`
-- **Descripción:** Devuelve el paquete de experiencia solicitado.
-
-
 **Respuesta Exitosa (200 OK):**
 ```json
 {
-  "id_paquete_experiencia": 1,
-  "nombre": "Aventura en la Montaña 2",
-  "descripcion": "Un día completo de senderismo y escalada 3.",
-  "precio": 150.0,
-  "ubicacion": "Andes, Chile",
-  "imagen": "https://example.com/imagen.jpg",
-  "duracion": "8 horas",
-  "fecha_experiencia": "2025-03-15T10:00:00.000+00:00",
-  "id_categoria": 1
-}
-```
-
-#### Eliminar un paquete de Experiencia por id
-
-- **Método:** DELETE
-- **Endpoint:** `/paquete-experiencia/{id}`
-- **Descripción:** Devuelve el paquete de experiencia eliminado.
-
-
-**Respuesta Exitosa (200 OK):**
-```json
-{
-  "id_paquete_experiencia": 11,
-  "nombre": "Aventura en la Montaña 2",
-  "descripcion": "Un día completo de senderismo y escalada 3.",
-  "precio": 150.0,
-  "ubicacion": "Andes, Chile",
-  "imagen": "https://example.com/imagen.jpg",
-  "duracion": "8 horas",
-  "fecha_experiencia": "2025-03-15T10:00:00.000+00:00",
-  "id_categoria": 1
+  "nombre": "wifi",
+  "logo": 2
 }
 ```
 
 **Errores Posibles:**
-
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 400 Bad Request: La caracteristica ya existe.
 - 500 Internal Server Error: Error en el servidor.
+
+#### Obtener todas las Caracteristicas
+
+- **Método:** GET
+- **Endpoint:** `/caracteristica`
+- **Descripción:** Obtener todas las caracteristicas que tienen los paquetes de experiencia.
+
+
+**Respuesta Exitosa (200 OK):**
+```
+[
+    {
+        "id": 1,
+        "nombre": "wifi",
+        "logo": "3"
+    },
+    {
+        "id": 2,
+        "nombre": "comida",
+        "logo": "2"
+    }
+]
+```
+
+**Errores Posibles:**
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener una Caracteristica
+
+- **Método:** GET
+- **Endpoint:** `/caracteristica/{id}`
+- **Descripción:** Obtener una caracteristica para agregar para el paquetes de experiencia. `Es necesario que exista la categoría para poder crear un paquete de experiencia`
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id": 6,
+  "nombre": "wifi",
+  "logo": "2"
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: La caracteristica ya existe.
+- 500 Internal Server Error: Error en el servidor.
+
+#### Eliminar una Categoría
+
+- **Método:** DELETE
+- **Endpoint:** `/categoria/{id}`
+- **Descripción:** Eliminar una caracteristica no correspondiente para el paquetes de experiencia.
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+    "id": 6,
+    "nombre": "wifi",
+    "logo": "2"
+}
+```
+
+**Errores Posibles:**
+- 404 Bad Request: La caractristica no existe.
+- 500 Internal Server Error: Error en el servidor.
+
+#### Editar una Caracteristica
+
+- **Método:** PUT
+- **Endpoint:** `/caracteristica/{id}`
+- **Descripción:** Editar una caracteristica para agregar o eliminar en el paquetes de experiencia.
+
+- **Request Body:**
+
+```json
+{
+  "nombre": "wifi",
+  "logo": 3
+}
+```
+
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id": 6,
+  "nombre": "wifi",
+  "logo": "3"
+}
+```
 
 ### Consideraciones Generales
 - Todas las fechas deben estar en formato ISO 8601 (YYYY-MM-DDTHH:MM:SSZ).
 - Precio debe ser un valor numérico positivo.
 - La ubicacion, imagen, duracion y descripcion son opcionales pero recomendados para una mejor experiencia del usuario.
 
+#### Obtener Paquetes de Experiencia por Filtro
+
+- **Método:** GET
+- **Endpoint:** `/paquete-experiencia/filtro`
+- **Descripción:** Devuelve una lista de paquetes de experiencia que coinciden con los filtros proporcionados. También puede ser utilizado para obtener las predicciones.
+
+
+- **Parámetros de Consulta:**
+  - `nombre` (opcional): Filtra los paquetes por nombre. Se puede usar una parte del nombre.
+  - `fecha_inicio` (opcional): Filtra los paquetes que tienen una fecha de experiencia mayor o igual a esta fecha. Formato: `yyyy-MM-dd`.
+  - `fecha_fin` (opcional): Filtra los paquetes que tienen una fecha de experiencia menor o igual a esta fecha. Formato: `yyyy-MM-dd`.
+
+
+- **Respuesta Exitosa (200 OK):**
+
+```json
+[
+  {
+    "id_paquete_experiencia": 1,
+    "nombre": "Aventura en la Montaña",
+    "descripcion": "Un día completo de senderismo y escalada.",
+    "precio": 150.00,
+    "ubicacion": "Andes, Chile",
+    "imagen": "https://example.com/imagen.jpg",
+    "duracion": "8 horas",
+    "fecha_experiencia": "2025-03-15T10:00:00Z",
+    "id_categoria": 1
+  }
+]
+```
+**Errores Posibles:**
+
+- 500 Internal Server Error: Error en el servidor.
 
 # API de Autenticación
 
@@ -310,7 +559,9 @@ http://localhost:8080/api/auth
 
 ## Endpoints
 
-### Registrar un usuario
+### Usuario
+
+#### Registrar un usuario
 - **Método:** Post
 - **Endpoint:** `/registro`
 - **Descripción:** Permite crear una nueva cuenta de usuario en el sistema.
@@ -339,7 +590,7 @@ http://localhost:8080/api/auth
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
 
-### Inicio de Sesión
+#### Inicio de Sesión
 - **Método:** Post
 - **Endpoint:** `/login`
 - **Descripción:** Permite a un usuario autenticarse y obtener un token JWT para acceder a recursos protegidos.
@@ -373,7 +624,7 @@ Tu código lanza un RuntimeException con el mensaje "Error: Usuario no encontrad
 - Errores de validación: Cuando los campos no cumplen con las restricciones @NotBlank o @Email
 Spring Validation generaría errores de validación
 
-### Cierre de Sesión
+#### Cierre de Sesión
 - **Método:** Post
 - **Endpoint:** `/logout`
 - **Headers:** `Authorization: Bearer {token}`
@@ -397,10 +648,10 @@ Spring Validation generaría errores de validación
 
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 
-### Editar un usuario
+#### Editar un usuario
 - **Método:** PUT
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el mismo usuario logueado
+- **Headers:** `Authorization: Bearer {token}` superadministrador, administrador o el mismo usuario logueado
 - **Descripción:** Permite actualizar un usuario
 - **Request Body:**
 ```json
@@ -428,14 +679,14 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
 
-### Editar solo un campo de un usuario
+#### Editar solo un campo de un usuario
 - **Método:** PATCH
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador unicamente
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite actualizar un usuario en un campo
 - **Request Body:**
 ```json
@@ -457,10 +708,10 @@ Spring Validation generaría errores de validación
 }
 ```
 
-### Eliminar un usuario
+#### Eliminar un usuario
 - **Método:** DELETE
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite eliminar un usuario
 - **Request Body:**
 
@@ -478,13 +729,13 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener un usuario
+#### Obtener un usuario
 - **Método:** GET
 - **Endpoint:** `/auth/{id}`
-- **Headers:** `Authorization: Bearer {token}` superadministrador o el usuario autenticado
+- **Headers:** `Authorization: Bearer {token}` superadministradoro, administrador o el usuario autenticado
 - **Descripción:** Permite obtener datos de un usuario
 - **Request Body:**
 
@@ -502,13 +753,13 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
-### Obtener todos los usuarios
+#### Obtener todos los usuarios
 - **Método:** GET
 - **Endpoint:** `/auth`
-- **Headers:** `Authorization: Bearer {token}` superadministrador
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
 - **Descripción:** Permite obtener datos de todos los usuarios
 - **Request Body:**
 
@@ -546,12 +797,88 @@ Spring Validation generaría errores de validación
 ```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 404 No Found: "mensaje": "Recurso no encontrado: Usuario no encontrado"
 - 500 Internal Server Error: Error en el servidor.
 
+#### Obtener todos los favoritos de un usuario
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+    {
+        "id_favorito": 1,
+        "id_paquete_experiencia": 1,
+        "id_usuario": 1
+    },
+    {
+        "id_favorito": 4,
+        "id_paquete_experiencia": 3,
+        "id_usuario": 1
+    }
+]
+```
 **Errores Posibles:**
 
-- 404 No Found: "mensaje": "Recurso no encontrado:  Paquete de experiencia no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener el favorito de un usuario apartir del paquete de experiencia
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Headers:** `Authorization: Bearer {token}` superadministrador o administrador
+- **Descripción:** Permite obtener datos de todos los favoritos de un usuario
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+    "id_favorito": 4,
+    "id_paquete_experiencia": 3,
+    "id_usuario": 1
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Agregar un favorito
+- **Método:** Post
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite agregar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- 500 Internal Server Error: Error en el servidor.
+
+#### Remover un favorito
+- **Método:** Delete
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_paquete_experiencia}`
+- **Descripción:** Permite eliminar un favorito a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (200 ok):**
+```json
+{
+    "id_favorito": 5,
+    "id_paquete_experiencia": 4,
+    "id_usuario": 1
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 - 500 Internal Server Error: Error en el servidor.
 
   **Notas:**
