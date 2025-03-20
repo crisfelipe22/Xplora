@@ -2,6 +2,7 @@
 import React from 'react';
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
+import { IconProvider } from './contexts/IconContext';
 import ProtectedRoute from './components/ProtectedRoute'
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./components/Header";
@@ -27,6 +28,7 @@ function App() {
   return (
     <>
       <AuthProvider>
+      <IconProvider>
       <CssBaseline />
       {!esRutaAdmin && <Header />}
       <Routes>
@@ -51,6 +53,7 @@ function App() {
         <Route path="/resultados" element={<ResultadoBusqueda />} />
       </Routes>
       {!esRutaAdmin && <Footer />}
+      </IconProvider>
       </AuthProvider>
     </>
   );
