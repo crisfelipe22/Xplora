@@ -12,18 +12,23 @@ import {
   TextField,
   IconButton,
   Box,
+  Divider,
+  Link,
+  Modal,
   InputAdornment,
   useTheme,
   useMediaQuery,
-  Divider,
-  Snackbar, Alert
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
+import { useIcons } from "../contexts/IconContext";
+import CheckIcon from "@mui/icons-material/Check";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from "./GaleriaImgProducto";
 import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { CalendarToday } from "@mui/icons-material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -34,6 +39,8 @@ import { format } from "date-fns";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/AuthContext";
+import { useFavorites } from "../contexts/FavoritesContext";
+import CloseIcon from "@mui/icons-material/Close";
 import ModalCompartir from "./ModalCompartir";
 import {
   DirectionsBoat, // Kayak
@@ -58,10 +65,33 @@ import {
   AcUnit, // Clima frío
   AccessTime, // Horarios
 } from "@mui/icons-material";
+import axios from 'axios'; 
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
+  const { icons: iconosDisponibles } = useIcons()
+  
+  const [allCaracteristicas, setCaracteristicas] = useState([""]);
+  useEffect(() => {
+    const fetchCaracteristicas = async () => {
+      try {
+        const response = await axios.get(
+          "/api/caracteristica"
+        );
+        console.log("response.data: ", response.data);
+        setCaracteristicas(response.data);
+      } catch (error) {
+        console.error("Error al cargar características:", error);
+      }
+    };
+
+    fetchCaracteristicas();
+  }, []);
+  console.log(
+    "product.caracteristicas_paquete_experiencia: ",
+    product.caracteristicas_paquete_experiencia
+  );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
@@ -73,6 +103,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const [openGallery, setOpenGallery] = useState(false);
   const [openPolitica, setOpenPolitica] = useState(false);
   const [scroll, setScroll] = useState("paper");
+  const [open, setOpen] = useState(false);
   const [openCalendar, setOpenCalendar] = useState(false);
   const calendarRef = useRef(null);
   const [dateRange, setDateRange] = useState([null, null]);
@@ -99,9 +130,12 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const handleClosePolitica = () => setOpenPolitica(false);
 
   const numImages = isMobile ? 1 : isTablet ? 3 : 5;
+  // console.log(numImages);
   const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
+
+  const caracteristicas = product.caracteristicas_paquete_experiencia;
 
   //fechas reservadas
   const fechasReservadas = [
@@ -115,14 +149,17 @@ const CardDetalleProducto = ({ product, categorias }) => {
     new Date(2025, 5, 3),
     new Date(2025, 5, 7),
   ];
-  
   //validacion que no hayan fechas reservadas en el rango que se seleccione
   const tieneFechasReservadas = (startDate, endDate, fechasReservadas) => {
     if (!startDate || !endDate) return false;
-  
+
     const fechaActual = new Date(startDate);
     while (fechaActual <= endDate) {
-      if (fechasReservadas.some(fecha => fecha.getTime() === fechaActual.getTime())) {
+      if (
+        fechasReservadas.some(
+          (fecha) => fecha.getTime() === fechaActual.getTime()
+        )
+      ) {
         return true; // Hay una fecha reservada en el rango
       }
       fechaActual.setDate(fechaActual.getDate() + 1); // Avanzar al siguiente día
@@ -132,14 +169,16 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
   const handleDateChange = (update) => {
     const [startDate, endDate] = update;
-  
+
     if (tieneFechasReservadas(startDate, endDate, fechasReservadas)) {
-      setSnackbarMessage("El rango seleccionado incluye fechas reservadas. Por favor, elige otro rango.");
+      setSnackbarMessage(
+        "El rango seleccionado incluye fechas reservadas. Por favor, elige otro rango."
+      );
       setOpenSnackbar(true);
-      return; 
+      return;
     }
-  
-    setDateRange(update); 
+
+    setDateRange(update);
   };
 
   useEffect(() => {
@@ -153,134 +192,30 @@ const CardDetalleProducto = ({ product, categorias }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const { isAuthenticated } = useAuth();
 
+  // Favoritos usando el contexto
+  const { isAuthenticated } = useAuth();
+  const { favorites, toggleFavorite } = useFavorites();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
+  const isMobile1 = useMediaQuery(theme.breakpoints.down("tablet"));
+  const notMobile = useMediaQuery(theme.breakpoints.not("mobile"));
 
   useEffect(() => {
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-  }, [product.id_paquete_experiencia]);
+    setIsFavorite(favorites.includes(product.id_paquete_experiencia));
+  }, [favorites, product.id_paquete_experiencia]);
 
-  const toggleFavorite = (e) => {
+  const handleToggleFavorite = (e) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
-
-    //console.log("Estado del usuario:", usuario);
 
     if (!isAuthenticated) {
       alert("Debes iniciar sesión para agregar favoritos.");
       return;
     }
 
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    let nuevosFavoritos;
-
-    if (isFavorite) {
-      nuevosFavoritos = favoritos.filter(
-        (id) => id !== product.id_paquete_experiencia
-      );
-    } else {
-      nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
-    }
-
-    localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-    setIsFavorite(!isFavorite);
+    toggleFavorite(product.id_paquete_experiencia);
   };
 
-  //caracteristicas provisorias
-
-  const caracteristicas = [
-    {
-      id_car: 1,
-      nombre: "Kayak profesional incluido",
-      id_icono: 1,
-      icono: DirectionsBoat,
-    },
-    {
-      id_car: 2,
-      nombre: "Chaleco salvavidas regulado",
-      id_icono: 2,
-      icono: SafetyDivider,
-    },
-    {
-      id_car: 3,
-      nombre: "Guía certificado por grupo",
-      id_icono: 3,
-      icono: Groups,
-    },
-    {
-      id_car: 4,
-      nombre: "Ruta por río de montaña",
-      id_icono: 4,
-      icono: Waves,
-    },
-    {
-      id_car: 5,
-      nombre: "Equipo impermeable incluido",
-      id_icono: 5,
-      icono: WaterDrop,
-    },
-    {
-      id_car: 6,
-      nombre: "Fotografías profesionales",
-      id_icono: 6,
-      icono: CameraAlt,
-    },
-    {
-      id_car: 7,
-      nombre: "Almuerzo tipo picnic",
-      id_icono: 7,
-      icono: Restaurant,
-    },
-    {
-      id_car: 8,
-      nombre: "Botiquín de primeros auxilios",
-      id_icono: 8,
-      icono: Emergency,
-    },
-    {
-      id_car: 9,
-      nombre: "Instrucción básica de remo",
-      id_icono: 9,
-      icono: DirectionsBoat,
-    },
-    {
-      id_car: 10,
-      nombre: "Avistamiento de fauna local",
-      id_icono: 10,
-      icono: NaturePeople,
-    },
-    {
-      id_car: 11,
-      nombre: "Seguro contra accidentes",
-      id_icono: 11,
-      icono: LocalOffer,
-    },
-    {
-      id_car: 12,
-      nombre: "Punto de encuentro señalizado",
-      id_icono: 12,
-      icono: Flag,
-    },
-    {
-      id_car: 13,
-      nombre: "Mapa de la ruta digital",
-      id_icono: 13,
-      icono: Map,
-    },
-    {
-      id_car: 14,
-      nombre: "Duración 4 horas",
-      id_icono: 14,
-      icono: Timer,
-    },
-    {
-      id_car: 15,
-      nombre: "Zonas de descanso designadas",
-      id_icono: 15,
-      icono: Brightness5,
-    },
-  ];
   //simulando raiting
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
@@ -290,7 +225,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
         <div className={styles.detalleSuperior}>
           <div className={styles.tituloVolver}>
             <IconButton
-              component={Link}
+              component={RouterLink}
               onClick={() => navigate(-1)}
               className={styles.backButton}
             >
@@ -308,7 +243,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 imagen={imagenArray[0]}
               />
               <IconButton
-                onClick={toggleFavorite}
+                onClick={handleToggleFavorite}
                 sx={{
                   color: isFavorite ? "error.main" : "inherit",
                   width: isMobile ? "32px" : "40px",
@@ -322,33 +257,34 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 )}
               </IconButton>
             </div>
-          </div>
-        </div>
-
-        <div className={styles.imagenContainer}>
-          <img
-            src={imagenArray[0]}
-            alt={product.nombre}
-            className={styles.mainImage}
-          />
-          <div className={styles.imgContainer}>
-            {imagenArray.slice(1, numImages).map((img, index) => (
+            <div className={styles.imagenContainer}>
               <img
-                key={index}
-                src={img}
-                alt={`Vista ${index + 1}`}
-                className={styles.img}
+                src={imagenArray[0]}
+                alt={product.nombre}
+                className={styles.mainImage}
               />
-            ))}
+              <div className={styles.imgContainer}>
+                {imagenArray.slice(1, numImages).map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Vista ${index + 1}`}
+                    className={styles.img}
+                  />
+                ))}
+              </div>
+            </div>
+            {notMobile && (
+              <Button
+                variant="contained"
+                onClick={handleOpenGallery}
+                className={styles.seeAllImages}
+              >
+                VER TODAS LAS IMÁGENES
+              </Button>
+            )}
           </div>
         </div>
-        <Button
-          variant="contained"
-          onClick={handleOpenGallery}
-          className={styles.seeAllImages}
-        >
-          VER TODAS LAS IMÁGENES
-        </Button>
 
         <Box className={styles.contenedorDetalles}>
           <Box className={styles.contenedorDos}>
@@ -368,20 +304,29 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 className={styles.rating}
               />
             </div>
-            <Box sx={{pt: 3, pb: 4}}>
-              <Typography gutterBottom sx={{typography: {mobile: "body2", tablet: "body1"}}}>
+            <Box sx={{ pt: 3, pb: 4 }}>
+              <Typography
+                gutterBottom
+                sx={{ typography: { mobile: "body2", tablet: "body1" } }}
+              >
                 {product.descripcion}
               </Typography>
             </Box>
+            <Typography variant="h6">Características</Typography>
             <Box className={styles.gridCaracteristicas}>
-              {caracteristicas.map((item) => (
-                <ListItem key={item.id_car} className={styles.listItem}>
-                  <ListItemIcon className={styles.listIcon}>
-                    <item.icono fontSize="small" />
-                  </ListItemIcon>
-                  <Typography variant="body1">{item.nombre}</Typography>
-                </ListItem>
-              ))}
+              {caracteristicas.map((item, index) => {
+                const id_caracteristica = item.id_caracteristica;
+                const nombre = allCaracteristicas.find((carac) => parseInt(carac.id, 10) === parseInt(id_caracteristica, 10))?.nombre
+                console.log("nombre: ", nombre)
+                const NeededIcon = iconosDisponibles.find((icon) => icon.id === parseInt(id_caracteristica, 10)).component
+                return (
+                  <ListItem key={index} className={styles.listItem}>
+                    <ListItemIcon className={styles.listIcon}>
+                      <NeededIcon fontSize="small" />
+                    </ListItemIcon>
+                    <Typography variant="body1">{nombre}</Typography>
+                  </ListItem>
+                );})}
             </Box>
           </Box>
 
@@ -494,19 +439,19 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000} 
-        onClose={() => setOpenSnackbar(false)} 
-        anchorOrigin={{ vertical: "center", horizontal: "center" }} 
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "center", horizontal: "center" }}
         sx={{
           "&.MuiSnackbar-root": {
-            top: "50%", 
-            transform: "translateY(-50%)", 
+            top: "50%",
+            transform: "translateY(-50%)",
           },
         }}
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
-          severity="error" 
+          severity="error"
           sx={{ width: "100%" }}
         >
           {snackbarMessage}
