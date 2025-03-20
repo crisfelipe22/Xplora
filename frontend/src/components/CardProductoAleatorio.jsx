@@ -68,7 +68,13 @@ const CardProductoAleatorio = ({product, categorias}) => {
           <Typography variant="h6" className={styles.nombreProducto}>
             {product.nombre}
           </Typography>
+          <Typography variant="h6" className={styles.nombreProducto}>
+            {product.nombre}
+          </Typography>
 
+          <Typography variant="body2" className={styles.descripcionProducto}>
+            {descripcionCortaExperiencia + "."}
+          </Typography>
           <Typography variant="body2" className={styles.descripcionProducto}>
             {descripcionCortaExperiencia + "."}
           </Typography>
@@ -89,3 +95,4 @@ const CardProductoAleatorio = ({product, categorias}) => {
 };
 
 export default CardProductoAleatorio;
+

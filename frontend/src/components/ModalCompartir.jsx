@@ -17,6 +17,7 @@ const ModalCompartir = ({ nombre, imagen }) => {
 
     return (
 <<<<<<< HEAD
+<<<<<<< HEAD
       <>
         <IconButton onClick={handleOpen}>
           <ShareIcon sx={{ color: "black" }} />
@@ -65,6 +66,8 @@ const ModalCompartir = ({ nombre, imagen }) => {
         </Dialog>
       </>
 =======
+=======
+>>>>>>> c6bcf23697c53e9b8293a31dd82be3516baf1afb
         <>
             <IconButton onClick={handleOpen}>
                 <ShareIcon />
@@ -96,7 +99,10 @@ const ModalCompartir = ({ nombre, imagen }) => {
                 </DialogContent>
             </Dialog>
         </>
+<<<<<<< HEAD
 >>>>>>> 55c5846 (feat: agregar funcionalidad de favoritos y compartir en detalle de productos)
+=======
+>>>>>>> c6bcf23697c53e9b8293a31dd82be3516baf1afb
     );
 };
 

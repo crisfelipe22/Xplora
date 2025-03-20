@@ -27,6 +27,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const obtenerRolTexto = (idRol) => {
   switch (idRol) {
+  switch (idRol) {
     case 1:
       return "Super Administrador";
     case 2:
@@ -76,6 +77,7 @@ const PerfilUsuario = () => {
   useEffect(() => {
     if (!user || !user.id) {
       setError(new Error("Usuario no definido o sin ID"));
+      setError(new Error("Usuario no definido o sin ID"));
       setLoading(false);
       return;
     }
@@ -86,9 +88,11 @@ const PerfilUsuario = () => {
         return respuesta.data;
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
+        console.error("Error al obtener datos del usuario:", error);
         throw error; // Re-lanzamos el error para que pueda ser manejado por quien llama a la función
       }
     };
+
 
     const fetchUser = async () => {
       try {
@@ -112,6 +116,9 @@ const PerfilUsuario = () => {
   const obtenerIniciales = (nombre) => {
     if (!nombre) return "U";
     return nombre
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .split(" ")
       .map((n) => n[0])
       .join("")
@@ -266,3 +273,4 @@ const PerfilUsuario = () => {
 };
 
 export default PerfilUsuario;
+
