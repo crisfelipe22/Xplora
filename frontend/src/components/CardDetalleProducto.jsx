@@ -145,10 +145,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth();
 
-    const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
-    const isMobile1 = useMediaQuery(theme.breakpoints.down('tablet'));
-    const isTablet1 = useMediaQuery(theme.breakpoints.between('tablet', 'desktop'));
 
   useEffect(() => {
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
