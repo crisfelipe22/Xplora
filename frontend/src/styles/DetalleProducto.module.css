@@ -1,5 +1,7 @@
-.container {
+div.container {
   padding-top: 5px !important;
+  padding-left: 60px;
+  padding-right: 60px;
   margin-top: 65px;
   min-height: 100vh;
 }
@@ -13,7 +15,7 @@
 .tituloVolver .title {
   order: -1;
   margin-right: auto;
-  margin-top: 16px;
+  /* margin-top: 16px; */
 }
 
 .rightButtons {
@@ -197,7 +199,7 @@
   align-items: stretch;
   flex: 1;
   max-width: 62%;
-  gap: 20px;
+  gap: 15px;
 }
 
 .preguntaRegalo {
@@ -214,6 +216,11 @@
 }
 
 @media (min-width: 744px) and (max-width: 1439px) {
+  div.container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .gridCaracteristicas {
     display: grid;
     grid-template-columns: repeat(3, minmax(170px, 1fr));
@@ -230,8 +237,8 @@
   .tituloVolver .title {
     width: 100%;
     order: 0;
-    padding-top: 0; 
-    margin-top: 0; 
+    padding-top: 0;
+    margin-top: 0;
   }
 
   a.backButton {
@@ -290,6 +297,11 @@
 }
 
 @media (max-width: 743px) {
+  div.container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .tituloVolver {
     align-items: stretch;
     flex-direction: row;
@@ -365,16 +377,18 @@
     object-fit: cover;
   }
 
-  .cardPrecio {
-    /* margin: 0 10%; */
-  }
-
   .boxCalendar {
     left: 10%;
     transform: translateY(-70%);
   }
 
   /*Nuevos*/
+  .containerUno {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .containerUno {
     display: flex;
     flex-direction: column;

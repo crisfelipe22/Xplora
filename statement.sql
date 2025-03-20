@@ -1,21 +1,21 @@
 use xplora_db;
 
-INSERT INTO categoria (nombre) VALUES
-    ('Aventuras y deportes'),
-    ('Gastronomia'),
-    ('Estadias'),
-    ('Bienestar y relajación'),
-    ('Cultura y entretenimiento'),
-    ('Naturaleza y ecoturismo'),
-    ('Experiencias urbanas'),
-    ('Romanticismo y arte');
+INSERT INTO categoria (nombre, descripcion) VALUES
+    ('Aventuras y deportes', 'Actividades emocionantes al aire libre y deportes extremos para los amantes de la adrenalina.'),
+    ('Gastronomia', 'Experiencias culinarias que incluyen degustaciones, clases de cocina y cenas especiales.'),
+    ('Estadias', 'Alojamientos únicos y escapadas en hoteles, cabañas o estancias rurales.'),
+    ('Bienestar y relajación', 'Experiencias de spa, masajes y terapias de relajación para el descanso y el equilibrio.'),
+    ('Cultura y entretenimiento', 'Eventos culturales, visitas a museos, espectáculos y experiencias artísticas.'),
+    ('Naturaleza y ecoturismo', 'Actividades en entornos naturales como senderismo, avistamiento de fauna y ecoturismo.'),
+    ('Experiencias urbanas', 'Recorridos, actividades y eventos exclusivos en entornos urbanos vibrantes.'),
+    ('Romanticismo y arte', 'Experiencias diseñadas para parejas, incluyendo cenas románticas y actividades artísticas.');
 
 INSERT INTO rol (id_rol, nombre) VALUES
     (1, 'SuperAdministrador'),
     (2, 'Administrador'),
     (3, 'Usuario');
 
-INSERT INTO usuario (id_usuario, nombre, direccion, contrasena, telefono, id_rol, email) VALUES
+INSERT  INTO usuario (id_usuario, nombre, direccion, contrasena, telefono, id_rol, email) VALUES
     (1, 'Xplora Superadmin', 'Xplora Boulevard 123', '$2a$10$svyGvq1UnKdQNMNMc8/Nwep9WbyCJjNyDHvfs2wezPJgeC6TwPMcm', 12345678,1,'superadmin@xplora.com'),
     (2, 'Xplora Admin', 'Xplora Boulevard 123', '$2a$10$d8celupi88HCw5E07LAXeu9MBYKPDBpiNtgPxCvhstDN4CyXdSWxi', 12345678,2,'admin@xplora.com'),
     (3, 'Xplora Usuario', 'Xplora Boulevard 123', '$2a$10$bixazDGCVrXkoCtSkrzkle3uCyzUCHvkC3a0aYkZWxSBN5HBlbhLa', 12345678,3,'usuario@xplora.com');
@@ -61,3 +61,4 @@ INSERT INTO pedido (estado, es_regalo, total, id_paquete_experiencia) VALUES
 --     (150.00, 'Aprobado', 1, 1),
 --     (120.00, 'Pendiente', 2, 2),
 --     (200.00, 'Aprobado', 3, 3);
+INSERT INTO categoria (nombre) VALUES

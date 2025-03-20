@@ -21,4 +21,3 @@ public interface PaqueteExperienciaRepository extends JpaRepository<PaqueteExper
             "AND ((:fecha_inicio IS NULL OR :fecha_fin IS NULL) OR p.fecha_inicio <= :fecha_fin AND p.fecha_fin >= :fecha_inicio)")
     List<PaqueteExperiencia> findByFilter(@Param("nombre") String nombre, @Param("fecha_inicio") Date fecha_inicio, @Param("fecha_fin") Date fecha_fin);
 }
-

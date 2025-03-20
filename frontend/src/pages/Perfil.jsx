@@ -1,10 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
   Container,
   Paper,
   Typography,
   Box,
+  Grid,
+  Avatar,
+  Divider,
+  Card,
+  CardContent,
+  useTheme,
+  useMediaQuery,
   Tabs,
   Tab,
   IconButton,
@@ -81,6 +88,7 @@ const PerfilUsuario = () => {
   useEffect(() => {
     if (!user || !user.id) {
       setError(new Error("Usuario no definido o sin ID"));
+      setError(new Error("Usuario no definido o sin ID"));
       setLoading(false);
       return;
     }
@@ -90,6 +98,7 @@ const PerfilUsuario = () => {
         const respuesta = await axios.get(`/api/auth/${id}`);
         return respuesta.data;
       } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
         console.error("Error al obtener datos del usuario:", error);
         throw error; // Re-lanzamos el error para que pueda ser manejado por quien llama a la función
       }
@@ -120,30 +129,42 @@ const PerfilUsuario = () => {
       .split(" ")
       .map((n) => n[0])
       .join("")
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .substring(0, 2)
       .toUpperCase();
   };
 
   return (
     <div>
-      <Container maxWidth="md" sx={{ marginTop: "113px", mb: 4, height: "auto" }}>
+      <Container maxWidth="md" sx={{ marginTop: "75px" }}>
         <Paper
           elevation={3}
           sx={{
             p: { mobile: 2, tablet: 4 },
             borderRadius: 2,
             overflow: "hidden",
-            minHeight: "calc(100vh - 80px)",
-            
           }}
         >
           <Box
             sx={{
-              p: 2,
+              bgcolor: "primary.main",
+              p: 3,
+              mb: 4,
+              borderRadius: "8px 8px 0 0",
+              margin: -4,
+              marginBottom: 4,
             }}
           >
             <Typography
-              sx={{ typography: { mobile: "h5", tablet: "h4", desktop: "h4" } }}
+              variant="h4"
+              component="h1"
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
             >
               Mi Cuenta
             </Typography>
@@ -174,8 +195,11 @@ const PerfilUsuario = () => {
                   <ListaFavoritos />
                 </Box>
               </Box>
+              // ))
             )}
           </Box>
+          {/* )}
+    </Box> */}
         </Paper>
       </Container>
     </div>

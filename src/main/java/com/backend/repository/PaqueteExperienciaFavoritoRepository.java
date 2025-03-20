@@ -29,5 +29,4 @@ public interface PaqueteExperienciaFavoritoRepository extends JpaRepository<Paqu
     @Query(value = "SELECT * FROM paquete_experiencia_favorito WHERE id_usuario = :id_usuario", 
         nativeQuery = true)
     List<PaqueteExperienciaFavorito> findByUsuarioId(@Param("id_usuario") Long id_usuario);
-    
 }
