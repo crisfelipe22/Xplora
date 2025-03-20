@@ -18,6 +18,7 @@ public class PaqueteExperiencia {
     private Categoria categoria;
     @Column(nullable = false)
     private String nombre;
+    @Column(length = 1000)
     private String descripcion;
     private double precio;
     private String ubicacion;
@@ -28,6 +29,9 @@ public class PaqueteExperiencia {
 
     @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaracteristicaPaqueteExperiencia> detalles_productos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteExperienciaFavorito> usuariosFavoritos = new ArrayList<>();
 
     public PaqueteExperiencia() {
     }

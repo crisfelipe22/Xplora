@@ -31,6 +31,10 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.mainImageTablet{
+    width: 60%;
+    height: 300px;
+}
 .imgContainer {
     display: grid;
     width: 50%;
@@ -122,7 +126,11 @@
 
 .datePicker {
     width: 100%;
-    margin-top: 10px;
+    
+}
+
+.datePicker  input{
+    padding: 13px;
 }
 
 .botonComprar {
@@ -176,26 +184,20 @@
     gap: 20px;
 }
 
-.datePicker > label{
-    transform: translate(14px, -12px) scale(1) !important;
-    background-color: #f5f0ff;
-    color: black;
-    padding: 0 4px;
-    font-size: 14px;
-}
-
-.datePicker:hover{
-    border-color: #7c3aed !important; 
-    border-width: 2px !important;
-}
-
 .preguntaRegalo{
     font-size: small !important;
     color: #2E1F5E !important;
     font-weight: 600 !important;
 }
 
-@media (max-width: 900px) { 
+.boxCalendar{
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 744px) { 
     .tituloVolver{
         align-items: stretch;
         flex-direction: column;
@@ -238,6 +240,10 @@
     .precio, .datePicker, .botonComprar{
         margin-bottom: 10% !important;
     }
+
+    .boxCalendar{
+        transform: translateY(-50%);
+    }
 }
 
 @media (max-width: 412px){
@@ -274,4 +280,36 @@
     .cardPrecio{
         margin: 0 10%;
     }
+    .boxCalendar{
+        left: 10%;
+        transform: translateY(-70%);
+    }
+
+/*Nuevos*/
+    .containerUno {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        padding: 10px 0;
+      }
+      
+      .BotonVolver {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .rightButtons {
+        display: flex;
+        gap: 10px;
+        align-items:center;
+      }
+      
 }
