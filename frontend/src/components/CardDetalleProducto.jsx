@@ -65,20 +65,18 @@ import {
   AcUnit, // Clima frío
   AccessTime, // Horarios
 } from "@mui/icons-material";
-import axios from 'axios'; 
+import axios from "axios";
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
-  const { icons: iconosDisponibles } = useIcons()
-  
+  const { icons: iconosDisponibles } = useIcons();
+
   const [allCaracteristicas, setCaracteristicas] = useState([""]);
   useEffect(() => {
     const fetchCaracteristicas = async () => {
       try {
-        const response = await axios.get(
-          "/api/caracteristica"
-        );
+        const response = await axios.get("/api/caracteristica");
         console.log("response.data: ", response.data);
         setCaracteristicas(response.data);
       } catch (error) {
@@ -304,7 +302,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 className={styles.rating}
               />
             </div>
-            <Box sx={{ pt: 3, pb: 4 }}>
+            <Box>
               <Typography
                 gutterBottom
                 sx={{ typography: { mobile: "body2", tablet: "body1" } }}
@@ -312,13 +310,47 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 {product.descripcion}
               </Typography>
             </Box>
+            <Typography
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+              }}
+            >
+              Disponible desde el{" "}
+              {new Date(product.fecha_inicio).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+              {" hasta el "}
+              {new Date(product.fecha_fin).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+              {". Cupos diarios limitados"}
+            </Typography>
+            <Typography
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+              }}
+            >
+              Duración: {product.duracion}
+            </Typography>
+            <Divider />
             <Typography variant="h6">Características</Typography>
             <Box className={styles.gridCaracteristicas}>
               {caracteristicas.map((item, index) => {
                 const id_caracteristica = item.id_caracteristica;
-                const nombre = allCaracteristicas.find((carac) => parseInt(carac.id, 10) === parseInt(id_caracteristica, 10))?.nombre
-                console.log("nombre: ", nombre)
-                const NeededIcon = iconosDisponibles.find((icon) => icon.id === parseInt(id_caracteristica, 10)).component
+                const nombre = allCaracteristicas.find(
+                  (carac) =>
+                    parseInt(carac.id, 10) === parseInt(id_caracteristica, 10)
+                )?.nombre;
+                console.log("nombre: ", nombre);
+                const NeededIcon = iconosDisponibles.find(
+                  (icon) => icon.id === parseInt(id_caracteristica, 10)
+                ).component;
                 return (
                   <ListItem key={index} className={styles.listItem}>
                     <ListItemIcon className={styles.listIcon}>
@@ -326,7 +358,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
                     </ListItemIcon>
                     <Typography variant="body1">{nombre}</Typography>
                   </ListItem>
-                );})}
+                );
+              })}
             </Box>
           </Box>
 
