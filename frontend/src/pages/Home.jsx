@@ -60,8 +60,6 @@ const Home = () => {
     }
   }, [query, products]);
 
-  console.log(sugerencias)
-
   const handleBuscar = () => {
     if (!query.trim() && !fechaInicio && !fechaFin) {
       setErrorQuery(true);
@@ -131,7 +129,7 @@ const Home = () => {
               display: {desktop: "block !important"},
             }}
           >
-            <ImageList sx={{ height: 335, margin: 0, }} cols={3} rowHeight={335} gap="20px">
+            <ImageList sx={{ height: 335, margin: 0, }} cols={3} gap="20px">
               <ImageListItem key="1">
                 <img src="/imagen_21.jpeg" alt="" />
               </ImageListItem>

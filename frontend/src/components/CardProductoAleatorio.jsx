@@ -23,20 +23,20 @@ const CardProductoAleatorio = ({ product, categorias }) => {
   const imagenUrl =
     imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
   //suponiendo raiting por ahora
-  const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
+  function stringToNumber(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0; // Simple hash function
+    }
+    return hash % 3; // Maps to 0, 1, or 2
+  }
+  const rating = stringToNumber(product.nombre) + 3;
 
   // Estado para manejar favoritos (usamos localStorage para persistencia)
   const { isAuthenticated } = useAuth();
   const { favorites, toggleFavorite } = useFavorites(); // <-- Obtenemos funciones del contexto
 
-  //NUEVO
-  // Estado para manejar favoritos (usamos localStorage para persistencia)
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  useEffect(() => {
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-  }, [product.id_paquete_experiencia]);
+  const isFavorite = favorites.includes(product.id_paquete_experiencia);
 
   const toggleFavoriteHandler = (e) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
@@ -62,7 +62,7 @@ const CardProductoAleatorio = ({ product, categorias }) => {
     descripcionExperiencia,
     "."
   );
-  console.log("Estado de favoritos en CardProductoAleatorio:", favorites);
+
   return (
     <Card className={styles.card}>
       <div className={styles.favoriteIcon}>
@@ -77,7 +77,6 @@ const CardProductoAleatorio = ({ product, categorias }) => {
         {/* <Card className={styles.card}> */}
         <CardMedia
           component="img"
-          height="200"
           image={imagenUrl || "nada"}
           alt={product.nombre}
           className={styles.imagenProducto}

@@ -149,7 +149,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
     new Date(2025, 5, 3),
     new Date(2025, 5, 7),
   ];
-
   //validacion que no hayan fechas reservadas en el rango que se seleccione
   const tieneFechasReservadas = (startDate, endDate, fechasReservadas) => {
     if (!startDate || !endDate) return false;
