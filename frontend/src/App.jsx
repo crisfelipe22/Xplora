@@ -26,25 +26,10 @@ function App() {
   const location = useLocation();
   const esRutaAdmin = location.pathname.startsWith("/admin");
 
-  const productos = [
-    { id_paquete_experiencia: 1, nombre: "Spa de Lujo", descripcion: "Spa de Lujo", imagen: "/imgen_1.jpeg" },
-    { id_paquete_experiencia: 2, nombre: "Paseo en kayak", descripcion: "Paseo en kayak", imagen: "/img2.jpg" },
-    { id_paquete_experiencia: 3, nombre: "Noche en cabaña", descripcion: "Noche en cabaña", imagen: "/img3.jpg" },
-    { id_paquete_experiencia: 4, nombre: "Parapente en la montaña", descripcion: "Parapente en la montaña", imagen: "/img4.jpg" },
-    { id_paquete_experiencia: 5, nombre: "Tour de vinos premium", descripcion: "Descripción 5", imagen: "/img5.jpg" },
-    { id_paquete_experiencia: 6, nombre: "Aventura en glamping", descripcion: "Aventura en glamping", imagen: "/img6.jpg" },
-    { id_paquete_experiencia: 7, nombre: "Rafting en aguas blancas", descripcion: "Rafting en aguas blancas", imagen: "/img7.jpg" },
-    { id_paquete_experiencia: 8, nombre: "Experiencia gastronómica fusión", descripcion: "Experiencia gastronómica fusión", imagen: "/img8.jpg" },
-    { id_paquete_experiencia: 9, nombre: "Refugio alpino exclusivo", descripcion: "Refugio alpino exclusivo", imagen: "/img9.jpg" },
-    { id_paquete_experiencia: 10, nombre: "Buceo en aguas cristalinas", descripcion: "Buceo en aguas cristalinas", imagen: "/img10.jpg" },
-    { id_paquete_experiencia: 11, nombre: "Taller de cocina internacional", descripcion: "Taller de cocina internacional", imagen: "/img11.jpg" },
-    { id_paquete_experiencia: 12, nombre: "Campamento en la nieve", descripcion: "Campamento en la nieve", imagen: "/img12.jpg" },
-  ];
-
   return (
     <>
       <AuthProvider>
-      <FavoritesProvider productos={productos}>
+      <FavoritesProvider>
       <IconProvider>
       <CssBaseline />
       {!esRutaAdmin && <Header />}

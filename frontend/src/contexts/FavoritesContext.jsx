@@ -1,19 +1,14 @@
-import { createContext, useContext, useReducer, useEffect, useState } from "react";
-import { useAuth } from '../contexts/AuthContext';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
+import axios from "axios";
+import { useAuth } from "./AuthContext";
 
 const FavoritesContext = createContext();
-
-// Cargar favoritos desde localStorage
-const loadFavorites = () => {
-  try {
-    const storedFavorites = localStorage.getItem("favorites");
-    return storedFavorites ? JSON.parse(storedFavorites) : [];
-  } catch (error) {
-    console.error("Error loading favorites from localStorage:", error);
-    return [];
-  }
-};
-
 // Reducer para manejar el estado de favoritos
 const favoritesReducer = (state, action) => {
   switch (action.type) {
@@ -21,54 +16,125 @@ const favoritesReducer = (state, action) => {
       return [...state, action.payload];
     case "REMOVE_FAVORITE":
       return state.filter((id) => id !== action.payload);
+    case "SET_FAVORITES":
+      return action.payload; // Set the favorites directly
     default:
       return state;
   }
 };
 
-export const FavoritesProvider = ({ children, productos }) => {
-  const [favorites, dispatch] = useReducer(favoritesReducer, loadFavorites());
+export const FavoritesProvider = ({ children }) => {
+  const { user: usuario, setUser } = useAuth();
+  const [favorites, dispatch] = useReducer(favoritesReducer, usuario?.favorites || []);
+  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState();
   const [productosDisponibles, setProductosDisponibles] = useState(productos || []);
-
-  // 🔍 Verifica que `productos` está llegando al contexto
-  console.log("📢 `productos` recibido en FavoritesProvider:", productos);
+  const loadFavorites = async () => {
+    if (usuario && !usuario.favorites) {
+      try {
+        const favoritesResponse = await axios.get(
+          `/api/auth/${usuario.id}/favoritos`
+        );
+        const favoriteIds = favoritesResponse.data.map((fav) => fav.id_paquete_experiencia);
+        usuario.favorites = favoriteIds;
+        localStorage.setItem("user", JSON.stringify(usuario));
+        setUser(usuario);
+        return favoriteIds;
+      } catch (error) {
+        console.error("Error loading favorites:", error);
+        return [];
+      }
+    }   
+    return usuario?.favorites || [];
+  };
 
   useEffect(() => {
-    if (productos && productos.length > 0) {
-      console.log("✅ Productos actualizados en FavoritesContext:", productos);
+    const fetchFavorites = async () => {
+      const favoritesData = await loadFavorites();
+      dispatch({ type: "SET_FAVORITES", payload: favoritesData });
+    };
+
+    if (usuario) {
+      fetchFavorites();
+    }
+  }, [usuario]);
+  useEffect(() => {
+
+    const obtenerDatos = async () => {
+      try {
+        const [productosResponse, categoriasResponse] = await Promise.all([
+          axios.get("/api/paquete-experiencia"),
+          axios.get("/api/categoria"),
+        ]);
+
+        setProductos(productosResponse.data);
+        setCategorias(categoriasResponse.data);
+      } catch (error) {
+        console.error("Error obteniendo datos:", error);
+        if (error.response) {
+          console.error(
+            "Detalle del error:",
+            error.response.status,
+            error.response.data
+          );
+        }
+      }
+    };
+
+    obtenerDatos();
+  }, []);
+
+  useEffect(() => {
+    if (productos.length > 0) {
       setProductosDisponibles(productos);
     } else {
-      console.warn("⚠️ `productos` está vacío o no definido en FavoritesContext.");
+      console.warn(
+        "⚠️ `productos` está vacío o no definido en FavoritesContext."
+      );
     }
   }, [productos]);
-  
 
   // Guardar en localStorage cuando cambian los favoritos
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem("user", JSON.stringify(usuario));
   }, [favorites]);
 
   // Función para obtener productos favoritos
   const getFavoriteProducts = () => {
-    console.log("🔎 Filtrando productos favoritos...", {
-        productosDisponibles,
-        favorites,
-      });
     return productosDisponibles.filter((producto) =>
       favorites.includes(Number(producto.id_paquete_experiencia))
     );
   };
 
-  const addFavorite = (productId) => {
-    dispatch({ type: "ADD_FAVORITE", payload: productId });
+  const addFavorite = async (productId) => {
+    try {
+      const response = await axios.post(
+        `/api/auth/${usuario.id}/favoritos/${productId}` 
+      );
+      if (response.status === 201) {
+        usuario.favorites.push(productId); // Add to user object
+        setUser({ ...usuario, favorites: usuario.favorites }); // Update user state
+        dispatch({ type: "ADD_FAVORITE", payload: productId });
+      }
+    } catch (error) {
+      console.error("Error adding favorite:", error);
+    }
   };
 
-  const removeFavorite = (productId) => {
-    dispatch({ type: "REMOVE_FAVORITE", payload: productId });
+  const removeFavorite = async (productId) => {
+    try {
+      const response = await axios.delete(`/api/auth/${usuario.id}/favoritos/${productId}`);
+      if (response.status === 200) {
+        usuario.favorites = usuario.favorites.filter(id => id !== productId); // Remove from user object
+        setUser({ ...usuario, favorites: usuario.favorites }); // Update user state
+        dispatch({ type: "REMOVE_FAVORITE", payload: productId });
+      }
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+    }
   };
 
   const toggleFavorite = (productId) => {
-    
     if (favorites.includes(productId)) {
       removeFavorite(productId);
     } else {
@@ -77,7 +143,17 @@ export const FavoritesProvider = ({ children, productos }) => {
   };
 
   return (
-    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, toggleFavorite, getFavoriteProducts }}>
+    <FavoritesContext.Provider
+      value={{
+        favorites,
+        addFavorite,
+        productos,
+        categorias,
+        removeFavorite,
+        toggleFavorite,
+        getFavoriteProducts,
+      }}
+    >
       {children}
     </FavoritesContext.Provider>
   );

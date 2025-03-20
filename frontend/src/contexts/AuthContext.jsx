@@ -126,6 +126,7 @@ useEffect(() => {
     <AuthContext.Provider value={{
       isAuthenticated,
       user,
+      setUser,
       userRole,
       isLoading,
       login, 
