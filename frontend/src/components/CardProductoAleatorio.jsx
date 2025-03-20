@@ -35,13 +35,11 @@ const CardProductoAleatorio = ({ product, categorias }) => {
   // Estado para manejar favoritos (usamos localStorage para persistencia)
   const { isAuthenticated } = useAuth();
   const { favorites, toggleFavorite } = useFavorites(); // <-- Obtenemos funciones del contexto
-
   const isFavorite = favorites.includes(product.id_paquete_experiencia);
 
   const toggleFavoriteHandler = (e) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
-    //console.log("Estado del usuario:", usuario);
 
     if (!isAuthenticated) {
       alert("Debes iniciar sesión para agregar favoritos.");
@@ -74,7 +72,6 @@ const CardProductoAleatorio = ({ product, categorias }) => {
         to={`/detalle-producto/${product.id_paquete_experiencia}`}
         style={{ textDecoration: "none" }}
       >
-        {/* <Card className={styles.card}> */}
         <CardMedia
           component="img"
           image={imagenUrl || "nada"}

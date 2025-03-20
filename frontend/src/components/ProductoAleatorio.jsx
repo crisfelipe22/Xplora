@@ -49,6 +49,7 @@ const ProductoAleatorio = () => {
             <Grid2 container spacing={4}  columns={12}>
                 {paginatedProducts.map((product) => (
                     <Grid2 size={{ mobile: 12, tablet: 6, desktop: 4 }} key={product.id_paquete_experiencia}>
+
                         <CardProductoAleatorio product={product} categorias={categorias} usuario={usuario}/>
                     </Grid2>
                 ))}

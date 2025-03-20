@@ -11,12 +11,12 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import HomeIcon from '@mui/icons-material/Home';
-import PhoneIcon from '@mui/icons-material/Phone';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { AuthContext } from '../contexts/AuthContext'; 
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import HomeIcon from "@mui/icons-material/Home";
+import PhoneIcon from "@mui/icons-material/Phone";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { AuthContext } from "../contexts/AuthContext";
 import ListaFavoritos from "../components/ListaFavoritos";
 import InformacionUsuario from "../components/InformacionUsuario";
 
@@ -46,7 +46,8 @@ const PerfilUsuario = () => {
 
   // Función para cargar favoritos desde localStorage
   const loadFavorites = () => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedFavorites =
+      JSON.parse(localStorage.getItem("user"))?.favorites || [];
     setFavorites(storedFavorites);
   };
 
@@ -69,7 +70,10 @@ const PerfilUsuario = () => {
 
   // Eliminar un producto de favoritos
   const removeFavorite = (productId) => {
-    const updatedFavorites = favorites.filter((product) => product?.id_paquete_experiencia !== product?.id_paquete_experiencia);
+    const updatedFavorites = favorites.filter(
+      (product) =>
+        product?.id_paquete_experiencia !== product?.id_paquete_experiencia
+    );
     setFavorites(updatedFavorites);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
@@ -122,14 +126,15 @@ const PerfilUsuario = () => {
 
   return (
     <div>
-      <Container maxWidth="md" sx={{ marginTop: "113px", mb: 4 }}>
+      <Container maxWidth="md" sx={{ marginTop: "113px", mb: 4, height: "auto" }}>
         <Paper
           elevation={3}
           sx={{
             p: { mobile: 2, tablet: 4 },
             borderRadius: 2,
             overflow: "hidden",
-            height: "calc(100vh - 80px)",
+            minHeight: "calc(100vh - 80px)",
+            
           }}
         >
           <Box
@@ -165,15 +170,9 @@ const PerfilUsuario = () => {
             )}
             {tabValue === 1 && (
               <Box p={3}>
-                {favorites.length === 0 ? (
-                  <Typography>
-                    No tienes productos en tu lista de favoritos.
-                  </Typography>
-                ) : (
-                  <Box>
-                    <ListaFavoritos />
-                  </Box>
-                )}
+                <Box>
+                  <ListaFavoritos />
+                </Box>
               </Box>
             )}
           </Box>
