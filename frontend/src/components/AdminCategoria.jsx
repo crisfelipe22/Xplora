@@ -169,11 +169,6 @@ const Categorias = () => {
       <Box className={styles.container}>
         <SidebarAdmin />
         <Box className={styles.productContainer}>
-          <Box className={styles.titleLista}>
-            <Typography variant="h4" className={styles.titleListaProductos}>
-              Inicio
-            </Typography>
-          </Box>
           <Box className={styles.titleProduct}>
             <Typography variant="h4" className={styles.titleProducts}>
               Categorías

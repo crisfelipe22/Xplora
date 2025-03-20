@@ -3,6 +3,8 @@ import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolb
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListIcon from '@mui/icons-material/List';
 import PeopleIcon from '@mui/icons-material/People';
+import CategoryIcon from "@mui/icons-material/Category";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import styles from "../styles/AdminPanel.module.css";
 import { Link } from 'react-router-dom';
 import logoImg from '../assets/images/logoImg.png'
@@ -10,71 +12,88 @@ import logoImg from '../assets/images/logoImg.png'
 const SidebarAdmin = () => {
 
     return (
-        <Box className={styles.panel}>
-            <AppBar position="fixed" className={styles.header} elevation={1}>
-                <Toolbar>
-                    <img src={logoImg} alt="Logo" className={styles.logo} />
-                    <Typography variant="h6" className={styles.panelTitle}>
-                        Panel de Administración
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+      <Box className={styles.panel}>
+        <AppBar position="fixed" className={styles.header} elevation={1}>
+          <Toolbar>
+            <img src={logoImg} alt="Logo" className={styles.logo} />
+            <Typography variant="h6" className={styles.panelTitle}>
+              Panel de Administración
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-            <Box className={styles.sidebarBox}>
+        <Box className={styles.sidebarBox}>
+          <Drawer
+            variant="permanent"
+            className={styles.sidebar}
+            sx={{
+              "& .MuiDrawer-paper": {
+                width: "248px",
+                backgroundColor: "#F2EFFD",
+                position: "relative",
+              },
+            }}
+          >
+            <List className={styles.menuList}>
+              <Link to="/admin" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <DashboardIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Inicio" className={styles.menuText} />
+                </ListItemButton>
+              </Link>
 
-                <Drawer variant="permanent" className={styles.sidebar}
-                    sx={{
-                        '& .MuiDrawer-paper': {
-                            width: '248px',
-                            backgroundColor:'#F2EFFD',
-                            position: 'relative',
-                        }
-                    }}>
-                    <List className={styles.menuList}> 
+              <Link to="/admin/users" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <PeopleIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Usuarios"
+                    className={styles.menuText}
+                  />
+                </ListItemButton>
+              </Link>
+              
+              <Link to="/admin/productos" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <ListIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lista de productos"
+                    className={styles.menuText}
+                  />
+                </ListItemButton>
+              </Link>
 
-                        <Link to='/admin' style={{ textDecoration: 'none' }}>
-                            <ListItemButton className={styles.menuItem}>
-                                <ListItemIcon>
-                                    <DashboardIcon className={styles.menuIcon}/>
-                                </ListItemIcon>
-                                <ListItemText primary="Inicio" className={styles.menuText} />
-                            </ListItemButton>
-                        </Link>
-                            
-                        <Link to="/admin/productos" style={{ textDecoration: 'none' }}>
-                            <ListItemButton className={styles.menuItem}>
-                                <ListItemIcon>
-                                    <ListIcon  className={styles.menuIcon}/>
-                                </ListItemIcon>
-                                <ListItemText primary="Lista de productos" className={styles.menuText} />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="/admin/users" style={{ textDecoration: 'none' }}>
-                            <ListItemButton className={styles.menuItem}>
-                                <ListItemIcon>
-                                    <PeopleIcon  className={styles.menuIcon}/>
-                                </ListItemIcon>
-                                <ListItemText primary="Usuarios" className={styles.menuText} />
-                            </ListItemButton>
-                        </Link>
-                        <Link to="/admin/categoria" style={{ textDecoration: 'none' }}>
-                            <ListItemButton className={styles.menuItem}>
-                                <ListItemIcon>
-                                    <PeopleIcon  className={styles.menuIcon}/>
-                                </ListItemIcon>
-                                <ListItemText primary="Lista de categorías" className={styles.menuText} />
-                            </ListItemButton>
-                        </Link>
-                    </List>
-                </Drawer>
-
-            </Box>
-            
-
+              <Link to="/admin/categoria" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <CategoryIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lista de categorías"
+                    className={styles.menuText}
+                  />
+                </ListItemButton>
+              </Link>
+              <Link to="/admin/caracteristicas" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <ChecklistIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lista de Características"
+                    className={styles.menuText}
+                  />
+                </ListItemButton>
+              </Link>
+            </List>
+          </Drawer>
         </Box>
-        
-        
+      </Box>
     );
 };
 
