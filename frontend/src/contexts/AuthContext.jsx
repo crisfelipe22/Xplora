@@ -74,14 +74,14 @@ export const AuthProvider = ({ children }) => {
 useEffect(() => {
   // Remove previous interceptor if it exists
   if (interceptorId !== null) {
-    console.log("Removing previous interceptor:", interceptorId);
+    // console.log("Removing previous interceptor:", interceptorId);
     axios.interceptors.request.eject(interceptorId);
     setInterceptorId(null);
   }
   
   // Only set up a new interceptor if we have a token
   if (currentToken) {
-    console.log("Setting up interceptor with token:", currentToken);
+    // console.log("Setting up interceptor with token:", currentToken);
     const newInterceptor = axios.interceptors.request.use(
       config => {
         if (!config.url?.includes("imgbb.com")) {
@@ -126,6 +126,7 @@ useEffect(() => {
     <AuthContext.Provider value={{
       isAuthenticated,
       user,
+      setUser,
       userRole,
       isLoading,
       login, 

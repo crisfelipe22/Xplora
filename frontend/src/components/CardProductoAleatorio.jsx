@@ -14,6 +14,7 @@ import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import styles from "../styles/ProductoAleatorio.module.css";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 
 const CardProductoAleatorio = ({ product, categorias }) => {
   const imagenArray = product.imagen
@@ -22,43 +23,30 @@ const CardProductoAleatorio = ({ product, categorias }) => {
   const imagenUrl =
     imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
   //suponiendo raiting por ahora
-  const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
+  function stringToNumber(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0; // Simple hash function
+    }
+    return hash % 3; // Maps to 0, 1, or 2
+  }
+  const rating = stringToNumber(product.nombre) + 3;
 
-  //NUEVO
   // Estado para manejar favoritos (usamos localStorage para persistencia)
-  const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { favorites, toggleFavorite } = useFavorites(); // <-- Obtenemos funciones del contexto
+  const isFavorite = favorites.includes(product.id_paquete_experiencia);
 
-  useEffect(() => {
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    setIsFavorite(favoritos.includes(product.id_paquete_experiencia));
-  }, [product.id_paquete_experiencia]);
-
-  const toggleFavorite = (e) => {
+  const toggleFavoriteHandler = (e) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
-    //console.log("Estado del usuario:", usuario);
 
     if (!isAuthenticated) {
       alert("Debes iniciar sesión para agregar favoritos.");
       return;
     }
-
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    let nuevosFavoritos;
-
-    if (isFavorite) {
-      nuevosFavoritos = favoritos.filter(
-        (id) => id !== product.id_paquete_experiencia
-      );
-    } else {
-      nuevosFavoritos = [...favoritos, product.id_paquete_experiencia];
-    }
-
-    localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-    setIsFavorite(!isFavorite);
+    toggleFavorite(product.id_paquete_experiencia);
   };
-
   const getDescripcionCortaExperiencia = (str, char) => {
     const index = str.indexOf(char);
     if (index === -1) {
@@ -68,12 +56,15 @@ const CardProductoAleatorio = ({ product, categorias }) => {
   };
 
   const descripcionExperiencia = product.descripcion;
-  const descripcionCortaExperiencia = getDescripcionCortaExperiencia(descripcionExperiencia, ".");
+  const descripcionCortaExperiencia = getDescripcionCortaExperiencia(
+    descripcionExperiencia,
+    "."
+  );
 
   return (
     <Card className={styles.card}>
       <div className={styles.favoriteIcon}>
-        <IconButton onClick={toggleFavorite} color="error">
+        <IconButton onClick={toggleFavoriteHandler} color="error">
           {isFavorite ? <Favorite /> : <FavoriteBorder />}
         </IconButton>
       </div>
@@ -81,10 +72,8 @@ const CardProductoAleatorio = ({ product, categorias }) => {
         to={`/detalle-producto/${product.id_paquete_experiencia}`}
         style={{ textDecoration: "none" }}
       >
-        {/* <Card className={styles.card}> */}
         <CardMedia
           component="img"
-          height="200"
           image={imagenUrl || "nada"}
           alt={product.nombre}
           className={styles.imagenProducto}
