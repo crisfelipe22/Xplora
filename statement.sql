@@ -10,6 +10,7 @@ INSERT INTO categoria (nombre) VALUES
     ('Experiencias urbanas'),
     ('Romanticismo y arte');
 
+
 INSERT INTO rol (id_rol, nombre) VALUES
     (1, 'SuperAdministrador'),
     (2, 'Administrador'),

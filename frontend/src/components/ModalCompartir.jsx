@@ -67,3 +67,5 @@ const ModalCompartir = ({ nombre, imagen }) => {
 };
 
 export default ModalCompartir;
+
+export default ModalCompartir;
