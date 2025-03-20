@@ -27,7 +27,6 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const obtenerRolTexto = (idRol) => {
   switch (idRol) {
-  switch (idRol) {
     case 1:
       return "Super Administrador";
     case 2:

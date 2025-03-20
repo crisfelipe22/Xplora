@@ -176,7 +176,7 @@ const Categorias = () => {
                 variant="contained"
                 color="primary"
               >
-                NUEVA CATEGORÍA
+                AGREGAR CATEGORÍA
               </Button>
             </Link>
             <TableContainer className={styles.tableContainer}>

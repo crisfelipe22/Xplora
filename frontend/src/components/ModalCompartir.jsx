@@ -16,8 +16,6 @@ const ModalCompartir = ({ nombre, imagen }) => {
     const handleClose = () => setOpen(false);
 
     return (
-<<<<<<< HEAD
-<<<<<<< HEAD
       <>
         <IconButton onClick={handleOpen}>
           <ShareIcon sx={{ color: "black" }} />
@@ -65,44 +63,6 @@ const ModalCompartir = ({ nombre, imagen }) => {
           </DialogContent>
         </Dialog>
       </>
-=======
-=======
->>>>>>> c6bcf23697c53e9b8293a31dd82be3516baf1afb
-        <>
-            <IconButton onClick={handleOpen}>
-                <ShareIcon />
-            </IconButton>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>
-                    Comparte esta Experiencia
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{ position: "absolute", right: 8, top: 8 }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <Box display="flex" alignItems="center" gap={2}>
-                        <img src={imagen} alt={nombre} style={{ width: 50, height: 50, borderRadius: 8 }} />
-                        <Typography fontWeight="bold">{nombre}</Typography>
-                    </Box>
-                    <Box mt={2} display="grid" gap={1}>
-                        <Button variant="outlined" startIcon={<ContentCopyIcon />}>COPIAR ENLACE</Button>
-                        <Button variant="outlined" startIcon={<FacebookIcon />}>FACEBOOK</Button>
-                        <Button variant="outlined" startIcon={<TwitterIcon />}>TWITTER</Button>
-                        <Button variant="outlined" startIcon={<InstagramIcon />}>INSTAGRAM</Button>
-                        <Button variant="outlined" startIcon={<WhatsAppIcon />}>WHATSAPP</Button>
-                        <Button variant="outlined" startIcon={<MailOutlineIcon />}>CORREO ELECTRÓNICO</Button>
-                    </Box>
-                </DialogContent>
-            </Dialog>
-        </>
-<<<<<<< HEAD
->>>>>>> 55c5846 (feat: agregar funcionalidad de favoritos y compartir en detalle de productos)
-=======
->>>>>>> c6bcf23697c53e9b8293a31dd82be3516baf1afb
     );
 };
 
