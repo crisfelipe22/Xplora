@@ -149,7 +149,7 @@ const PerfilUsuario = () => {
         >
           <Box
             sx={{
-              bgcolor: "primary.main",
+              // bgcolor: "primary.main",
               p: 3,
               mb: 4,
               borderRadius: "8px 8px 0 0",
@@ -161,7 +161,7 @@ const PerfilUsuario = () => {
               variant="h4"
               component="h1"
               sx={{
-                color: "white",
+                color: "gray",
                 fontWeight: "bold",
                 textAlign: "center",
               }}

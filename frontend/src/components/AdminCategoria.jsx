@@ -32,12 +32,11 @@ import { AuthContext } from "../contexts/AuthContext";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const Categorias = () => {
-
-      const [categoria, setCategoria] = useState({
-          nombre: '',
-          descripcion: '',
-          imagen:''
-      })
+  const [categoria, setCategoria] = useState({
+    nombre: "",
+    descripcion: "",
+    imagen: "",
+  });
   const [pag, setPag] = useState(0);
   const [columnPorPag, setColumnPorPag] = useState(5);
 
@@ -71,7 +70,7 @@ const Categorias = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await axios.post("/api/categoria", categoria);
+      await axios.post("/api/categoria", categoria);
       fetchCategorias();
       handleCloseDialog();
       setOpenSnackbar(true);
@@ -83,9 +82,9 @@ const Categorias = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-        setArchivo(file);
+      setArchivo(file);
     }
-};
+  };
 
   const handleEdit = (category) => {
     setCategory({ nombre: category.nombre, descripcion: category.descripcion });
@@ -97,11 +96,15 @@ const Categorias = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(`/api/categoria/${CategoriasEliminar.id_categoria}`);
-      setCategorias(Categorias.filter(c => c.id_categoria !== CategoriasEliminar.id_categoria));
+      setCategorias(
+        Categorias.filter(
+          (c) => c.id_categoria !== CategoriasEliminar.id_categoria
+        )
+      );
     } catch (error) {
       console.error("Error deleting category:", error);
     }
-    setOpenDialogDelete(false)
+    setOpenDialogDelete(false);
   };
 
   const handleOpenDialog = () => {
@@ -129,40 +132,42 @@ const Categorias = () => {
     formData.append("image", archivo);
     //para la API, la respuesta es response.data.data.url (no response.data.url)
     try {
-        const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: undefined
-            },
-            withCredentials: false,
-        });
-
-        if (response.data && response.data.data.url) {
-            return { success: true, url: response.data.data.url };
-        } else {
-            throw new Error("No se recibió una URL válida del servidor");
+      const response = await axios.post(
+        "https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: undefined,
+          },
+          withCredentials: false,
         }
-    } catch (error) {
-        console.error("Error al subir la imagen:", error);
-        return { success: false };
-    }
-};
+      );
 
-  const handleUploadImagenes = async(e) =>{
+      if (response.data && response.data.data.url) {
+        return { success: true, url: response.data.data.url };
+      } else {
+        throw new Error("No se recibió una URL válida del servidor");
+      }
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      return { success: false };
+    }
+  };
+
+  const handleUploadImagenes = async (e) => {
     debugger;
     if (!e.target.files || e.target.files.length === 0) return;
-    const archivo = e.target.files[0]
+    const archivo = e.target.files[0];
     const resultado = await subirImagenAlServidor(archivo);
     const imagenesSubir = {
-        nombre: archivo.name,
-        status:resultado.success ? 'Completado' : 'Fallido',
-        url: resultado.success ? resultado.url : null,
-    }
+      nombre: archivo.name,
+      status: resultado.success ? "Completado" : "Fallido",
+      url: resultado.success ? resultado.url : null,
+    };
     debugger;
-    setCategoria({...categoria, imagen:imagenesSubir.url })
-    
-}
-
+    setCategoria({ ...categoria, imagen: imagenesSubir.url });
+  };
 
   return (
     <AdminLayout>
