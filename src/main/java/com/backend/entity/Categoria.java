@@ -9,7 +9,7 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria")
-    private Long idCategoria;  
+    private Long id_categoria;  
 
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
@@ -23,19 +23,19 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(Long idCategoria, String nombre, String descripcion, String imagen) {
-        this.idCategoria = idCategoria;
+    public Categoria(Long id_categoria, String nombre, String descripcion, String imagen) {
+        this.id_categoria = id_categoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
     }
 
     public Long getId_categoria() {
-        return idCategoria;
+        return id_categoria;
     }
 
-    public void setIdCategoria(Long idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setId_categoria(Long id_categoria) {
+        this.id_categoria = id_categoria;
     }
 
     public String getNombre() {
@@ -65,7 +65,7 @@ public class Categoria {
     @Override
     public String toString() {
         return "Categoria{" +
-                "idCategoria=" + idCategoria +
+                "id_categoria=" + id_categoria +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", imagen='" + imagen + '\'' +

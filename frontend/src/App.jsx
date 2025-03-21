@@ -15,6 +15,7 @@ import Registro from "./pages/Registro";
 import Unauthorized from "./pages/Unauthorized";
 import Perfil from "./pages/Perfil"
 import Products from "./pages/Products";
+import Caracteristicas from "./pages/Caracteristicas";
 import AddProduct from "./pages/AddProduct";
 import DetalleProducto from "./pages/DetalleProducto";
 import EditarProductoAdmin from "./pages/EditarProductoAdmin";
@@ -43,11 +44,12 @@ function App() {
           element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AddProduct /></ProtectedRoute>} />
         <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><EditarProductoAdmin /></ProtectedRoute>} />
         <Route path="/admin/users" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AdminUsers /></ProtectedRoute>} />
+        <Route path="/admin/categoria" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Categoria /></ProtectedRoute>} />
+        <Route path="/admin/caracteristicas" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Caracteristicas /></ProtectedRoute>} />
         <Route
           path="/detalle-producto/:id_paquete_experiencia"
           element={<DetalleProducto />}
         />
-        <Route path="/admin/categoria" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Categoria /></ProtectedRoute>} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/login" element={<Login />} />
         <Route path="/perfil" 

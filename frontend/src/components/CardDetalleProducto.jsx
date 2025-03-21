@@ -137,7 +137,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
   //fechas reservadas
   const fechasReservadas = [
-    new Date(2025, 3, 16),
+    new Date(2025, 3, 28),
     new Date(2025, 3, 17),
     new Date(2025, 4, 4),
     new Date(2025, 4, 5),
