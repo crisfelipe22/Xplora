@@ -89,15 +89,15 @@ const Categorias = () => {
 
   const handleEdit = (category) => {
     setCategory({ nombre: category.nombre, descripcion: category.descripcion });
-    setSelectedId(category.idCategoria);
+    setSelectedId(category.id_categoria);
     setEditMode(true);
     setOpenDialog(true);
   };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/categoria/${CategoriasEliminar.idCategoria}`);
-      setCategorias(Categorias.filter(c => c.idCategoria !== CategoriasEliminar.idCategoria));
+      await axios.delete(`/api/categoria/${CategoriasEliminar.id_categoria}`);
+      setCategorias(Categorias.filter(c => c.id_categoria !== CategoriasEliminar.id_categoria));
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -204,8 +204,8 @@ const Categorias = () => {
 
                 <TableBody>
                   {Categorias.map((cat) => (
-                    <TableRow key={cat.idCategoria}>
-                      <TableCell>{cat.idCategoria}</TableCell>
+                    <TableRow key={cat.id_categoria}>
+                      <TableCell>{cat.id_categoria}</TableCell>
                       <TableCell>{cat.nombre}</TableCell>
                       <TableCell>{cat.descripcion}</TableCell>
                       <TableCell>
@@ -239,26 +239,45 @@ const Categorias = () => {
           </Box>
         </Box>
       </Box>
-      <Dialog open={openDialog} onClose={handleCloseDialog}fullWidth
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        fullWidth
         maxWidth="sm"
-        sx={{width: "80%",
-          '& .MuiDialog-paper': { backgroundColor: '#f5f0ff', overflow: 'visible' } // Evita scroll en el contenedor principal
+        sx={{
+          width: "80%",
+          "& .MuiDialog-paper": {
+            backgroundColor: "#f5f0ff",
+            overflow: "visible",
+          }, // Evita scroll en el contenedor principal
         }}
-        className={styles.contenido}>
-      <DialogTitle>Nueva Categoría</DialogTitle>
-            <DialogContent sx={{ overflow: 'hidden', display: "flex", flexDirection: "column", gap: 1.2 }}>
-            <TextField
+        className={styles.contenido}
+      >
+        <DialogTitle>Nueva Categoría</DialogTitle>
+        <DialogContent
+          sx={{
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1.2,
+          }}
+        >
+          <TextField
             label="Título"
             placeholder="Ingresa un título para la categoría"
             variant="outlined"
             fullWidth
             value={categoria.nombre}
-            onChange={(e) => setCategoria({ ...categoria, nombre: e.target.value })}
+            onChange={(e) =>
+              setCategoria({ ...categoria, nombre: e.target.value })
+            }
             // margin="normal"
             margin="dense" // Reduce el margen vertical
             InputLabelProps={{ shrink: true }}
             sx={{
-              maxWidth: "600px", marginBottom: 0.5, "& .MuiOutlinedInput-root": {
+              maxWidth: "600px",
+              marginBottom: 0.5,
+              "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "#6239E6 !important", // Mantiene el borde siempre morado
                 },
@@ -273,61 +292,77 @@ const Categorias = () => {
             multiline
             rows={3}
             value={categoria.descripcion}
-            onChange={(e) => setCategoria({ ...categoria, descripcion: e.target.value })}
+            onChange={(e) =>
+              setCategoria({ ...categoria, descripcion: e.target.value })
+            }
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            sx={{ marginBottom: 0.5 , "& .MuiOutlinedInput-root": {
+            sx={{
+              marginBottom: 0.5,
+              "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "#6239E6 !important", // Mantiene el borde siempre morado
                 },
-              },}}
+              },
+            }}
           />
-                <Typography variant="caption" color="textSecondary">
-                    {categoria.descripcion.length}/100
-                </Typography>
-                <Box className={stylesCategoria.fileUpload} sx={{ marginBottom: 2 }}>
-                <label htmlFor="fileInput" className="file-label">
-                  Imagen categoría
-                </label>
-              </Box>
-             
+          <Typography variant="caption" color="textSecondary">
+            {categoria.descripcion.length}/100
+          </Typography>
+          <Box className={stylesCategoria.fileUpload} sx={{ marginBottom: 2 }}>
+            <label htmlFor="fileInput" className="file-label">
+              Imagen categoría
+            </label>
+          </Box>
 
-             
-
-              <Box className={stylesCategoria.subirImg}>
-                <UploadFileIcon className={stylesCategoria.iconImg} fontSize="small" />
-                <Typography variant="body2">
-                  <label htmlFor="upload">Selecciona archivo</label> o arrastra
-                  para subir
-                </Typography>
-                <Typography variant="caption">
-                  SVG, PNG, JPG o GIF (max. 3MB)
-                </Typography>
-                <input
-                  id="upload"
-                  type="file"
-                  multiple
-                  hidden
-                  onChange={handleUploadImagenes} 
-                />
-              </Box>            
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleCloseDialogDelete} color="secondary">Cancelar</Button>
-                <Button onClick={handleSubmit} color="primary" variant="contained">Añadir Categoría</Button>
-            </DialogActions>
+          <Box className={stylesCategoria.subirImg}>
+            <UploadFileIcon
+              className={stylesCategoria.iconImg}
+              fontSize="small"
+            />
+            <Typography variant="body2">
+              <label htmlFor="upload">Selecciona archivo</label> o arrastra para
+              subir
+            </Typography>
+            <Typography variant="caption">
+              SVG, PNG, JPG o GIF (max. 3MB)
+            </Typography>
+            <input
+              id="upload"
+              type="file"
+              multiple
+              hidden
+              onChange={handleUploadImagenes}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmit} color="primary" variant="contained">
+            Añadir Categoría
+          </Button>
+        </DialogActions>
       </Dialog>
 
       <Dialog open={openDialogDelete} onClose={handleCloseDialog}>
-                      <DialogTitle>¿Eliminar categoria?</DialogTitle>
-                      <DialogContent>
-                          <p>¿Estás seguro de que deseas eliminar -- {CategoriasEliminar?.nombre} -- ? Esta acción no se puede deshacer.</p>
-                      </DialogContent>
-                      <DialogActions>
-                          <Button onClick={handleCloseDialogDelete} color="primary">Cancelar</Button>
-                          <Button onClick={handleDelete} color="error">Eliminar</Button>
-                      </DialogActions>
-                  </Dialog>
+        <DialogTitle>¿Eliminar categoria?</DialogTitle>
+        <DialogContent>
+          <p>
+            ¿Estás seguro de que deseas eliminar -- {CategoriasEliminar?.nombre}{" "}
+            -- ? Esta acción no se puede deshacer.
+          </p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialogDelete} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AdminLayout>
   );
 };
