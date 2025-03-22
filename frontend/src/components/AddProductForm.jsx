@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Dialog, DialogActions, DialogContent, DialogTitle, Stack} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -16,6 +16,13 @@ import {
 
 //
 import {useCategories} from '../contexts/CategoryContext';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
+import dayjs from "dayjs";
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -24,15 +31,21 @@ const AddProductForm = () => {
         precio: '',
         ubicacion: '',
         id_categoria: '',
-        imagen: []
+        imagen: [],
+        fecha_inicio: null,
+        fecha_fin: null
     })
 
     const [errores, setErrores] = useState({})
     const [erroresRequest, setErroresRequest] = useState({})
     const [openAlertExito, setOpenAlertExito] = useState(false);
     const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
+    
     let navigate = useNavigate();
     const { categorias } = useCategories();
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     
     const handleCloseAlertExito = (_, reason) => {
         if (reason === "clickaway") return;
@@ -111,6 +124,23 @@ const AddProductForm = () => {
         setProduct({...product, [name]: value})
     }  
 
+    const handleStartDateChange = (date) => {
+        if (date) {
+            const formattedDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+            setStartDate(date);
+            setProduct((prev) => ({ ...prev, fecha_inicio: formattedDate }));
+            console.log('date: ' + date + 'date formato: ' + formattedDate)
+        }
+    };
+    
+    const handleEndDateChange = (date) => {
+        if (date) {
+            const formattedDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+            setEndDate(date);
+            setProduct((prev) => ({ ...prev, fecha_fin: formattedDate }));
+        }
+    };
+
     const validaciones = () =>{
         let erroresObj = {}
         if(product.nombre.trim().length<3){
@@ -131,6 +161,10 @@ const AddProductForm = () => {
             erroresObj.imagen = 'Se debe incluir al menos una imagen del producto';
         } if (product.id_categoria === ''){
             erroresObj.id_categoria = 'Se debe escoger una categoría';
+        } if (product.fecha_inicio === null) {
+            erroresObj.fecha_inicio = 'Se debe seleccionar una fecha de inicio'
+        } if (product.fecha_fin === null) {
+            erroresObj.fecha_fin = 'Se debe seleccionar una fecha de fin'
         }
 
         setErrores(erroresObj)
@@ -174,7 +208,7 @@ const AddProductForm = () => {
     }
 
     const resetState = () =>{
-        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', id_categoria: '', imagen: [] })
+        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', id_categoria: '', imagen: [], fecha_inicio: null, fecha_fin: null })
     }
 
     const productFormatoEnvio = {
@@ -183,7 +217,6 @@ const AddProductForm = () => {
         imagen: product.imagen.filter((img) => img.status === "Completado" && img.url)
         .map((img) => img.url).join(','), 
         duracion: '30 min',
-        fecha_experiencia: "2026-02-19T12:00:00",
         id_categoria: Number(product.id_categoria)
     };
 
@@ -246,257 +279,311 @@ const AddProductForm = () => {
     
     return (
     <AdminLayout>
-        <Box className={styles.contenedorPrincipal}> 
-            <SidebarAdmin/>
-            
-            <Box className={styles.contenido}>
-                <Box className={styles.titleLista}>
-                    <Typography variant="h4" className={styles.titleListaProductos}>
-                        Lista de Productos
-                    </Typography>
-                </Box>
-                <Box className={styles.titleProduct}>
-                    <Typography variant="h4" className={styles.titleProducts}>
-                        Nuevo producto
-                    </Typography>
-                </Box>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box className={styles.contenedorPrincipal}> 
+                <SidebarAdmin/>
+                
+                <Box className={styles.contenido}>
+                    <Box className={styles.titleLista}>
+                        <Typography variant="h4" className={styles.titleListaProductos}>
+                            Lista de Productos
+                        </Typography>
+                    </Box>
+                    <Box className={styles.titleProduct}>
+                        <Typography variant="h4" className={styles.titleProducts}>
+                            Nuevo producto
+                        </Typography>
+                    </Box>
 
-                <Container className={styles.container}>
-                    
-                    <Box component="form" className={styles.form} onSubmit={handleSubmit}>
-                    
-                        <Box className={styles.seccion}>
-                            <Typography className={styles.h6} variant="h6" gutterBottom>
-                                Descripción del producto
-                            </Typography>
+                    <Container className={styles.container}>
+                        
+                        <Box component="form" className={styles.form} onSubmit={handleSubmit}>
+                        
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Descripción del producto
+                                </Typography>
 
-                            <TextField className={styles.textField}
-                                label="Nombre"
-                                name="nombre"
-                                value={product.nombre}
-                                onChange={handleChange}
-                                error={!!errores.nombre}
-                                helperText={errores.nombre}
-                                fullWidth
-                            />
+                                <TextField className={styles.textField}
+                                    label="Nombre"
+                                    name="nombre"
+                                    value={product.nombre}
+                                    onChange={handleChange}
+                                    error={!!errores.nombre}
+                                    helperText={errores.nombre}
+                                    fullWidth
+                                />
 
-                            <TextField className={styles.textField}
-                                label="Descripción"
-                                name="descripcion"
-                                value={product.descripcion}
-                                onChange={handleChange}
-                                error={!!errores.descripcion}
-                                helperText={errores.descripcion}
-                                multiline
-                                rows={2}
-                                fullWidth
-                            />
+                                <TextField className={styles.textField}
+                                    label="Descripción"
+                                    name="descripcion"
+                                    value={product.descripcion}
+                                    onChange={handleChange}
+                                    error={!!errores.descripcion}
+                                    helperText={errores.descripcion}
+                                    multiline
+                                    rows={2}
+                                    fullWidth
+                                />
 
-                            <TextField className={styles.textField}
-                                label="Precio"
-                                name="precio"
-                                value={product.precio}
-                                onChange={handleChange}
-                                error={!!errores.precio}
-                                helperText={errores.precio}
-                                fullWidth
-                                slotProps={{
-                                    input: {
-                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                    },
-                                }}
-                            />
+                                <TextField className={styles.textField}
+                                    label="Precio"
+                                    name="precio"
+                                    value={product.precio}
+                                    onChange={handleChange}
+                                    error={!!errores.precio}
+                                    helperText={errores.precio}
+                                    fullWidth
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        },
+                                    }}
+                                />
 
-                            <TextField className={styles.textField}
-                                label="Ubicación"
-                                name="ubicacion"
-                                value={product.ubicacion}
-                                onChange={handleChange}
-                                error={!!errores.ubicacion}
-                                helperText={errores.ubicacion}
-                                fullWidth
-                            />
+                                <TextField className={styles.textField}
+                                    label="Ubicación"
+                                    name="ubicacion"
+                                    value={product.ubicacion}
+                                    onChange={handleChange}
+                                    error={!!errores.ubicacion}
+                                    helperText={errores.ubicacion}
+                                    fullWidth
+                                />
 
-                            <FormControl fullWidth className={styles.textField}>
-                                <InputLabel id="categoria-label">Categoría</InputLabel>
-                                <Select
-                                    name="id_categoria"
-                                    labelId="categoria-label"
-                                    value={product.id_categoria}
-                                    displayEmpty
-                                    onChange={handleChange}>
+                                <FormControl fullWidth className={styles.textField}>
+                                    <InputLabel id="categoria-label">Categoría</InputLabel>
+                                    <Select
+                                        name="id_categoria"
+                                        labelId="categoria-label"
+                                        value={product.id_categoria}
+                                        displayEmpty
+                                        onChange={handleChange}>
 
-                                    <MenuItem value="" disabled>
-                                        Elige una categoría
-                                    </MenuItem>
-                                    {categorias.map((cat) => (
-                                        <MenuItem key={cat.id_categoria} value={cat.id_categoria} >
-                                            {cat.nombre}
+                                        <MenuItem value="" disabled>
+                                            Elige una categoría
                                         </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
+                                        {categorias.map((cat) => (
+                                            <MenuItem key={cat.id_categoria} value={cat.id_categoria} >
+                                                {cat.nombre}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
 
-                        <Box className={styles.seccion}>
-                            <Typography className={styles.h6} variant="h6" gutterBottom>
-                                Subir Imágenes
-                            </Typography>
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Subir Imágenes
+                                </Typography>
 
-                            <Box >
-                                <Box className={styles.subirImg}>
-                                    <UploadFileIcon  className={styles.iconImg} fontSize="small" />
-                                    <Typography variant="body2" >
-                                        <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
-                                    </Typography>
-                                    <Typography variant="caption">
-                                        SVG, PNG, JPG o GIF (max. 3MB)
-                                    </Typography>
-                                    <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                                <Box >
+                                    <Box className={styles.subirImg}>
+                                        <UploadFileIcon  className={styles.iconImg} fontSize="small" />
+                                        <Typography variant="body2" >
+                                            <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
+                                        </Typography>
+                                        <Typography variant="caption">
+                                            SVG, PNG, JPG o GIF (max. 3MB)
+                                        </Typography>
+                                        <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+                                    </Box>
+
+                                    {product.imagen.length > 0 && (
+                                        <List className={styles.listaImg}>
+                                        {product.imagen.map((img, index) => (
+                                            <ListItem key={index} className={styles.listaItem}
+                                                secondaryAction={
+                                                    <IconButton edge="end" onClick={() => eliminarImagen(index)} >
+                                                        <DeleteIcon  fontSize="small"/>
+                                                    </IconButton>
+                                                }>
+                                                <UploadFileIcon className={styles.iconUpload} fontSize="small" />
+
+                                                <ListItemText  className={styles.listaItemText} primary={img.nombre} 
+                                                    secondary={
+                                                        <span className={styles.imgText}>
+                                                            <span >{Math.round(img.archivo.size / 1024)}kb • </span>
+                                                            <span>{img.status}</span>
+
+                                                            {img.status === "Cargando" && (
+                                                                <LinearProgress 
+                                                                    className={styles.barraProgreso}
+                                                                    variant="indeterminate" 
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    } 
+                                                />
+                                                
+                                            </ListItem>
+                                        ))}
+                                        </List>
+                                    )}
                                 </Box>
+                            </Box>
 
-                                {product.imagen.length > 0 && (
-                                    <List className={styles.listaImg}>
-                                    {product.imagen.map((img, index) => (
-                                        <ListItem key={index} className={styles.listaItem}
-                                            secondaryAction={
-                                                <IconButton edge="end" onClick={() => eliminarImagen(index)} >
-                                                    <DeleteIcon  fontSize="small"/>
-                                                </IconButton>
-                                            }>
-                                            <UploadFileIcon className={styles.iconUpload} fontSize="small" />
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Administrar caracteristicas
+                                </Typography>
+                                
+                                <TableContainer className={styles.tableContainer}>
+                                    <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonNuevaCarac}>
+                                        AÑADIR NUEVA
+                                    </Button>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell className={styles.tableHeader}>Características</TableCell>
+                                                <TableCell className={styles.tableHeader}>Acciones</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        
+                                        <TableBody>
+                                            {caracteristicas.map((carac) => (
+                                                <TableRow key={carac.id_car_prod} className={styles.tableRow}>
+                                                    <TableCell>{carac.nombre}</TableCell>
+                                                    <TableCell>
+                                                        <Button variant="outlined" className={styles.botonEliminar} onClick={() => handleEliminarCaracteristica(carac.id_car_prod)}>
+                                                            Eliminar
+                                                        </Button>
+                                                        <Button variant="outlined" className={styles.botonEditar}>
+                                                            Editar
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                <Dialog open={dialogCaracteristicas} onClose={handleCloseDialogCarac}>
+                                    <DialogTitle>Agregar Característica</DialogTitle>
+                                    <DialogContent>
+                                    <Select
+                                        fullWidth
+                                        value={caracteristicaSeleccionada}
+                                        onChange={(e) => setCaracteristicaSeleccionada(e.target.value)}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="" disabled>Selecciona una característica</MenuItem>
+                                        {caracteristicasDisponibles.map((car) => (
+                                        <MenuItem key={car.id_car} value={car.id_car}>{car.nombre}</MenuItem>
+                                        ))}
+                                    </Select>
 
-                                            <ListItemText  className={styles.listaItemText} primary={img.nombre} 
-                                                secondary={
-                                                    <span className={styles.imgText}>
-                                                        <span >{Math.round(img.archivo.size / 1024)}kb • </span>
-                                                        <span>{img.status}</span>
+                                    <Select
+                                        fullWidth
+                                        value={iconoSeleccionado}
+                                        onChange={(e) => setIconoSeleccionado(e.target.value)}
+                                        displayEmpty
+                                        style={{ marginTop: "10px" }}
+                                    >
+                                        <MenuItem value="" disabled>Selecciona un icono</MenuItem>
+                                        {Object.entries(iconosDisponibles).map(([id, Icono]) => (
+                                            <MenuItem key={id} value={id}>
+                                                <Icono style={{ fontSize: 24 }} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    </DialogContent>
 
-                                                        {img.status === "Cargando" && (
-                                                            <LinearProgress 
-                                                                className={styles.barraProgreso}
-                                                                variant="indeterminate" 
-                                                            />
-                                                        )}
-                                                    </span>
-                                                } 
-                                            />
-                                            
-                                        </ListItem>
-                                    ))}
-                                    </List>
-                                )}
+                                    <DialogActions>
+                                    <Button onClick={handleCloseDialogCarac} color="secondary">Cancelar</Button>
+                                    <Button onClick={handleGuardarCaracteristica} color="primary" variant="contained">Guardar</Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </Box>
+
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Disponibilidad del producto
+                                </Typography>
+
+                                <Stack spacing={2} direction="column">
+                                    <DatePicker
+                                        label="Fecha de inicio"
+                                        selected={startDate}
+                                        onChange={handleStartDateChange}
+                                        minDate={new Date()}
+                                        customInput={
+                                            <TextField
+                                            value={startDate ? startDate.toLocaleDateString("es-ES") : ""}
+                                            label="Fecha de inicio"
+                                            error={!!errores.fecha_inicio}
+                                            helperText={errores.fecha_inicio}
+                                            slotProps={{
+                                                input: {
+                                                    startAdornment: 
+                                                    <InputAdornment position="start">
+                                                        <CalendarToday/>
+                                                    </InputAdornment>,
+                                                },
+                                            }}
+                                            fullWidth />}
+                                    />
+                                    <DatePicker
+                                        label="Fecha fin"
+                                        selected={endDate}
+                                        onChange={handleEndDateChange}
+                                        disabled={!startDate}
+                                        minDate={startDate} 
+                                        customInput={
+                                            <TextField 
+                                            value={endDate ? endDate.toLocaleDateString("es-ES") : ""}
+                                            label="Fecha fin"
+                                            error={!!errores.fecha_fin}
+                                            helperText={errores.fecha_fin}
+                                            slotProps={{
+                                                input: {
+                                                    startAdornment: 
+                                                    <InputAdornment position="start">
+                                                        <CalendarToday/>
+                                                    </InputAdornment>,
+                                                },
+                                            }}
+                                            fullWidth />}
+                                    />
+                                </Stack>
+
+                            </Box>
+
+                            <Box className={styles.botones}>
+                                <Button className={styles.botonAgregar} type="submit" variant="contained">
+                                    Añadir Producto
+                                </Button>
+
+                                <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
+                                    Cancelar
+                                </Button>
+
+                                <Snackbar
+                                    open={openAlertExito}
+                                    autoHideDuration={3000}
+                                    onClose={handleCloseAlertExito}
+                                    anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                                >
+                                    <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
+                                        ¡Producto agregado con éxito!
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar
+                                    open={openAlertFracaso}
+                                    autoHideDuration={3000}
+                                    onClose={handleCloseAlertFracaso}
+                                    anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+                                >
+                                    <Alert onClose={handleCloseAlertFracaso} severity="error" className={styles.alertaFracaso}>
+                                        {erroresRequest}
+                                    </Alert>
+                                </Snackbar>
                             </Box>
                         </Box>
+                    </Container>
+                </Box>
 
-                        <Box className={styles.seccion}>
-                            <Typography className={styles.h6} variant="h6" gutterBottom>
-                                Administrar caracteristicas
-                            </Typography>
-                            
-                            <TableContainer className={styles.tableContainer}>
-                                <Button variant="contained" onClick={handleOpenDialogCarac} className={styles.botonNuevaCarac}>
-                                    AÑADIR NUEVA
-                                </Button>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell className={styles.tableHeader}>Características</TableCell>
-                                            <TableCell className={styles.tableHeader}>Acciones</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    
-                                    <TableBody>
-                                        {caracteristicas.map((carac) => (
-                                            <TableRow key={carac.id_car_prod} className={styles.tableRow}>
-                                                <TableCell>{carac.nombre}</TableCell>
-                                                <TableCell>
-                                                    <Button variant="outlined" className={styles.botonEliminar} onClick={() => handleEliminarCaracteristica(carac.id_car_prod)}>
-                                                        Eliminar
-                                                    </Button>
-                                                    <Button variant="outlined" className={styles.botonEditar}>
-                                                        Editar
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <Dialog open={dialogCaracteristicas} onClose={handleCloseDialogCarac}>
-                                <DialogTitle>Agregar Característica</DialogTitle>
-                                <DialogContent>
-                                <Select
-                                    fullWidth
-                                    value={caracteristicaSeleccionada}
-                                    onChange={(e) => setCaracteristicaSeleccionada(e.target.value)}
-                                    displayEmpty
-                                >
-                                    <MenuItem value="" disabled>Selecciona una característica</MenuItem>
-                                    {caracteristicasDisponibles.map((car) => (
-                                    <MenuItem key={car.id_car} value={car.id_car}>{car.nombre}</MenuItem>
-                                    ))}
-                                </Select>
-
-                                <Select
-                                    fullWidth
-                                    value={iconoSeleccionado}
-                                    onChange={(e) => setIconoSeleccionado(e.target.value)}
-                                    displayEmpty
-                                    style={{ marginTop: "10px" }}
-                                >
-                                    <MenuItem value="" disabled>Selecciona un icono</MenuItem>
-                                    {Object.entries(iconosDisponibles).map(([id, Icono]) => (
-                                        <MenuItem key={id} value={id}>
-                                            <Icono style={{ fontSize: 24 }} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                </DialogContent>
-
-                                <DialogActions>
-                                <Button onClick={handleCloseDialogCarac} color="secondary">Cancelar</Button>
-                                <Button onClick={handleGuardarCaracteristica} color="primary" variant="contained">Guardar</Button>
-                                </DialogActions>
-                            </Dialog>
-                        </Box>
-
-
-                        <Box className={styles.botones}>
-                            <Button className={styles.botonAgregar} type="submit" variant="contained">
-                                Añadir Producto
-                            </Button>
-
-                            <Button className={styles.botonCancelar} variant="outlined" color="secondary" onClick={() => resetState()}>
-                                Cancelar
-                            </Button>
-
-                            <Snackbar
-                                open={openAlertExito}
-                                autoHideDuration={3000}
-                                onClose={handleCloseAlertExito}
-                                anchorOrigin={{ vertical: "top", horizontal: "center" }} 
-                            >
-                                <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
-                                    ¡Producto agregado con éxito!
-                                </Alert>
-                            </Snackbar>
-                            <Snackbar
-                                open={openAlertFracaso}
-                                autoHideDuration={3000}
-                                onClose={handleCloseAlertFracaso}
-                                anchorOrigin={{ vertical: "top", horizontal: "center" }} 
-                            >
-                                <Alert onClose={handleCloseAlertFracaso} severity="error" className={styles.alertaFracaso}>
-                                    {erroresRequest}
-                                </Alert>
-                            </Snackbar>
-                        </Box>
-                    </Box>
-                </Container>
             </Box>
-
-        </Box>
+        </LocalizationProvider>
     </AdminLayout>  
     );
 };
