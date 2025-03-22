@@ -35,7 +35,7 @@ export const CategoryProvider = ({ children }) => {
 
 
     return (
-        <CategoryContext.Provider value={{ categorias, loading, error, addCategoria }}>
+        <CategoryContext.Provider value={{ categorias, loading, error, addCategoria, setCategorias }}>
             {children}
         </CategoryContext.Provider>
     );
