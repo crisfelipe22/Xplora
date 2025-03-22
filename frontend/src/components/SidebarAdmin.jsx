@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Box, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ListIcon from '@mui/icons-material/List';
+import ViewModuleIcon from '@mui/icons-material/ViewModule'; 
 import PeopleIcon from '@mui/icons-material/People';
-import CategoryIcon from "@mui/icons-material/Category";
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import styles from "../styles/AdminPanel.module.css";
 import { Link } from 'react-router-dom';
@@ -44,6 +44,18 @@ const SidebarAdmin = () => {
                 </ListItemButton>
               </Link>
 
+              <Link to="/admin/productos" style={{ textDecoration: "none" }}>
+                <ListItemButton className={styles.menuItem}>
+                  <ListItemIcon>
+                    <AssignmentOutlinedIcon className={styles.menuIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Lista de productos"
+                    className={styles.menuText}
+                  />
+                </ListItemButton>
+              </Link>
+
               <Link to="/admin/users" style={{ textDecoration: "none" }}>
                 <ListItemButton className={styles.menuItem}>
                   <ListItemIcon>
@@ -55,23 +67,11 @@ const SidebarAdmin = () => {
                   />
                 </ListItemButton>
               </Link>
-              
-              <Link to="/admin/productos" style={{ textDecoration: "none" }}>
-                <ListItemButton className={styles.menuItem}>
-                  <ListItemIcon>
-                    <ListIcon className={styles.menuIcon} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Lista de productos"
-                    className={styles.menuText}
-                  />
-                </ListItemButton>
-              </Link>
 
               <Link to="/admin/categoria" style={{ textDecoration: "none" }}>
                 <ListItemButton className={styles.menuItem}>
                   <ListItemIcon>
-                    <CategoryIcon className={styles.menuIcon} />
+                    <ViewModuleIcon className={styles.menuIcon} />
                   </ListItemIcon>
                   <ListItemText
                     primary="Lista de categorías"
