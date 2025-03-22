@@ -54,14 +54,20 @@ const Categorias = () => {
 
   const [errores, setErrores] = useState({})
   const [openAlertExito, setOpenAlertExito] = useState(false);
+  const [openAlertExitoEliminar, setOpenAlertExitoEliminar] = useState(false);
   const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
 
-  const { categorias, addCategoria } = useCategories();
+  const { categorias, addCategoria, setCategorias } = useCategories();
 
   const handleCloseAlertExito = (_, reason) => {
         if (reason === "clickaway") return;
         setOpenAlertExito(false);
     };
+
+    const handleCloseAlertExitoEliminar = (_, reason) => {
+      if (reason === "clickaway") return;
+      setOpenAlertExitoEliminar(false);
+  };
 
     const handleCloseAlertFracaso = (_, reason) => {
         if (reason === "clickaway") return;
@@ -183,21 +189,26 @@ const handleSubmit = async (e) => {
     setSelectedId(category.id_categoria);
     setEditMode(true);
     setOpenDialog(true);
-  };
+  };*/
 
   const handleDelete = async () => {
     try {
       await axios.delete(`/api/categoria/${CategoriasEliminar.id_categoria}`);
       setCategorias(
-        Categorias.filter(
+        categorias.filter(
           (c) => c.id_categoria !== CategoriasEliminar.id_categoria
         )
       );
+      setOpenAlertExitoEliminar(true)
+  
+      setTimeout(() => {
+          setOpenAlertExitoEliminar(false)
+      }, 3000);
     } catch (error) {
       console.error("Error deleting category:", error);
     }
     setOpenDialogDelete(false);
-  };*/
+  };
 
   const handleOpenDialog = () => {
     setEditMode(false);
@@ -460,11 +471,21 @@ const handleSubmit = async (e) => {
           <Button onClick={handleCloseDialogDelete} color="primary">
             Cancelar
           </Button>
-          {/*<Button {onClick={{handleDelete}}} color="error">
+          <Button onClick={handleDelete} color="error">
             Eliminar
-          </Button>*/}
+          </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+          open={openAlertExitoEliminar}
+          autoHideDuration={3000}
+          onClose={handleCloseAlertExitoEliminar}
+          anchorOrigin={{ vertical: "center", horizontal: "center" }} 
+        >
+          <Alert onClose={handleCloseAlertExitoEliminar} severity="success" className={styles.alertaExito}>
+            ¡Categoría eliminada con éxito!
+          </Alert>
+        </Snackbar>
     </AdminLayout>
   );
 };
