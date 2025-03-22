@@ -15,6 +15,7 @@ import {
     } from '@mui/icons-material';
 
 //
+import {useCategories} from '../contexts/CategoryContext';
 
 const AddProductForm = () => {
     const [product, setProduct] = useState({
@@ -31,6 +32,7 @@ const AddProductForm = () => {
     const [openAlertExito, setOpenAlertExito] = useState(false);
     const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
     let navigate = useNavigate();
+    const { categorias } = useCategories();
     
     const handleCloseAlertExito = (_, reason) => {
         if (reason === "clickaway") return;
@@ -42,7 +44,6 @@ const AddProductForm = () => {
         setOpenAlertFracaso(false);
     };
 
-    const [categorias, setCategorias] = useState([]);
 
     //CARACTERISTICAS///////
     const caracteristicasDisponibles = [
@@ -104,21 +105,6 @@ const AddProductForm = () => {
         setCaracteristicas(caracteristicas.filter((item) => item.id_car_prod !== id_car_prod));
     };
 
-/////////
-    useEffect(() => {
-        const obtenerCategorias = async () => {
-            try {
-                const response = await axios.get("/api/categoria");
-                setCategorias(response.data); 
-                console.log()
-            } catch (error) {
-                console.error("Error al obtener las categorías:", error);
-            }
-        };
-
-        obtenerCategorias();
-        
-    }, []);
 
     const handleChange = (e) => {
         const {name, value} = e.target
