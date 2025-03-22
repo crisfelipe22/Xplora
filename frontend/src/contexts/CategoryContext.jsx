@@ -29,9 +29,13 @@ export const CategoryProvider = ({ children }) => {
         
     }, []);
 
+    const addCategoria = (nuevaCategoria) => {
+        setCategorias((prevCategorias) => [...prevCategorias, nuevaCategoria]);
+    };
+
 
     return (
-        <CategoryContext.Provider value={{ categorias, loading, error }}>
+        <CategoryContext.Provider value={{ categorias, loading, error, addCategoria }}>
             {children}
         </CategoryContext.Provider>
     );

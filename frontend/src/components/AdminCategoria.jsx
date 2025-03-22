@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, React } from "react";
 import SidebarAdmin from "./SidebarAdmin";
 import { Link } from "react-router-dom";
@@ -22,7 +23,9 @@ import {
   DialogContent,
   DialogTitle,
   MenuItem,
+  IconButton, List, ListItem, ListItemText, Alert, LinearProgress
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import styles from "../styles/AdminProducts.module.css";
 import stylesCategoria from "../styles/CrearCategoria.module.css";
@@ -30,6 +33,8 @@ import AdminLayout from "./AdminLayout";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import usePaginacionDinamica from '../hooks/usePaginacionDinamica';
+import {useCategories} from '../contexts/CategoryContext';
 
 const Categorias = () => {
   const [categoria, setCategoria] = useState({
@@ -38,10 +43,8 @@ const Categorias = () => {
     imagen: "",
   });
   const [pag, setPag] = useState(0);
-  const [columnPorPag, setColumnPorPag] = useState(5);
+  const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
 
-  const [Categorias, setCategorias] = useState([]);
-  const [category, setCategory] = useState({ nombre: "", descripcion: "" });
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -49,44 +52,133 @@ const Categorias = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [CategoriasEliminar, setCategoriasEliminar] = useState([]);
 
-  useEffect(() => {
-    fetchCategorias();
-  }, []);
+  const [errores, setErrores] = useState({})
+  const [openAlertExito, setOpenAlertExito] = useState(false);
+  const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
 
-  const fetchCategorias = async () => {
-    try {
-      const response = await axios.get("/api/categoria");
-      setCategorias(response.data);
-    } catch (error) {
-      console.error("Error fetching Categorias:", error);
-    }
-  };
+  const { categorias, addCategoria } = useCategories();
+
+  const handleCloseAlertExito = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertExito(false);
+    };
+
+    const handleCloseAlertFracaso = (_, reason) => {
+        if (reason === "clickaway") return;
+        setOpenAlertFracaso(false);
+    };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCategory({ ...category, [name]: value });
+    setCategoria({ ...categoria, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validaciones = () =>{
+    let erroresObj = {}
+    if(categoria.nombre.trim().length<3){
+        erroresObj.nombre = 'El nombre de la categoría es obligatorio y debe tener mínimo 3 carácteres';
+    } if(categoria.descripcion.trim().length < 10){
+        erroresObj.descripcion = 'La descripción de la categoría es obligatoria y debe tener mínimo 10 carácteres';
+    } if(categoria.imagen === ''){
+        erroresObj.imagen = 'Se debe incluir una imagen del producto';
+    } 
+
+    setErrores(erroresObj)
+    return Object.keys(erroresObj).length === 0;
+}
+
+  const handleUploadImagenes = async(e) =>{
+    if (!e.target.files || e.target.files.length === 0) return;
+    const archivo = e.target.files[0]
+
+    const imagenSubir = {
+      archivo,
+      nombre: archivo.name,
+      status: "Cargando",
+      url: null,
+    };
+
+    setCategoria({...categoria, imagen:imagenSubir })
+    
+    const resultado = await subirImagenAlServidor(archivo);
+
+    setCategoria((prev) => ({
+        ...prev,
+        imagen: {
+            ...imagenSubir,
+            status: resultado.success ? "Completado" : "Fallido",
+            url: resultado.success ? resultado.url : null,
+        },
+    }));
+  }
+
+  const subirImagenAlServidor = async (archivo) => {
+    const formData = new FormData();
+    formData.append("image", archivo);
+    //para la API, la respuesta es response.data.data.url (no response.data.url)
+      try {
+          const response = await axios.post("https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2", formData, {
+              headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: undefined
+              },
+              withCredentials: false,
+          });
+
+          if (response.data && response.data.data.url) {
+              return { success: true, url: response.data.data.url };
+          } else {
+              throw new Error("No se recibió una URL válida del servidor");
+          }
+      } catch (error) {
+          console.error("Error al subir la imagen:", error);
+          return { success: false };
+      }
+  };
+
+  const eliminarImagen = () => {
+    setCategoria({ ...categoria, imagen: null }); 
+  };
+
+  const categoriaFormatoEnvio = {
+    ...categoria,
+    imagen: categoria.imagen?.status === "Completado" && categoria.imagen.url 
+    ? categoria.imagen.url 
+    : ""
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (validaciones()){
     try {
-      await axios.post("/api/categoria", categoria);
-      fetchCategorias();
-      handleCloseDialog();
+      const response = await axios.post('/api/categoria', categoriaFormatoEnvio, {
+          headers: {
+              "Content-Type": "application/json"
+          }
+      });
+  
+      console.log("Categoria agregada:", response.data);
+      addCategoria(response.data);
       setOpenSnackbar(true);
-    } catch (error) {
-      console.error("Error saving category:", error);
-    }
-  };
+      setOpenAlertExito(true)
+      handleCloseDialog();
+      
+  
+      setTimeout(() => {
+          setOpenAlertExito(false)
+      }, 3000);
+  } catch (error) {
+      console.error("Error al enviar la categoria:", error);
+      setOpenAlertFracaso(true)
+  }
+} else {
+  console.log("no se puede enviar el formulario",errores)
+  return;
+};  
+}
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setArchivo(file);
-    }
-  };
-
-  const handleEdit = (category) => {
+  
+  /*const handleEdit = (category) => {
     setCategory({ nombre: category.nombre, descripcion: category.descripcion });
     setSelectedId(category.id_categoria);
     setEditMode(true);
@@ -105,10 +197,9 @@ const Categorias = () => {
       console.error("Error deleting category:", error);
     }
     setOpenDialogDelete(false);
-  };
+  };*/
 
   const handleOpenDialog = () => {
-    setCategory({ nombre: "", descripcion: "" });
     setEditMode(false);
     setOpenDialog(true);
   };
@@ -123,64 +214,33 @@ const Categorias = () => {
   };
 
   const handleCloseDialog = () => {
+    resetState()
     setOpenDialog(false);
     setEditMode(false);
     setSelectedId(null);
   };
-  const subirImagenAlServidor = async (archivo) => {
-    const formData = new FormData();
-    formData.append("image", archivo);
-    //para la API, la respuesta es response.data.data.url (no response.data.url)
-    try {
-      const response = await axios.post(
-        "https://api.imgbb.com/1/upload?key=3a27a2eb2845f0a6d1f2712d0f5b0ca2",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: undefined,
-          },
-          withCredentials: false,
-        }
-      );
 
-      if (response.data && response.data.data.url) {
-        return { success: true, url: response.data.data.url };
-      } else {
-        throw new Error("No se recibió una URL válida del servidor");
-      }
-    } catch (error) {
-      console.error("Error al subir la imagen:", error);
-      return { success: false };
-    }
-  };
-
-  const handleUploadImagenes = async (e) => {
-    debugger;
-    if (!e.target.files || e.target.files.length === 0) return;
-    const archivo = e.target.files[0];
-    const resultado = await subirImagenAlServidor(archivo);
-    const imagenesSubir = {
-      nombre: archivo.name,
-      status: resultado.success ? "Completado" : "Fallido",
-      url: resultado.success ? resultado.url : null,
-    };
-    debugger;
-    setCategoria({ ...categoria, imagen: imagenesSubir.url });
-  };
+  const resetState = () =>{
+    setCategoria({ nombre: '', descripcion: "", imagen: ''})
+  }
+  
 
   return (
     <AdminLayout>
       <Box className={styles.container}>
         <SidebarAdmin />
         <Box className={styles.productContainer}>
+          <Box className={styles.titleLista}>
+            <Typography variant="h4" className={styles.titleListaProductos}>
+              Lista de Categorías
+            </Typography>
+          </Box>
           <Box className={styles.titleProduct}>
             <Typography variant="h4" className={styles.titleProducts}>
               Categorías
             </Typography>
           </Box>
           <Box className={styles.contenido}>
-            <Link to="">
               <Button
                 className={styles.botonAddProduct}
                 onClick={handleOpenDialog}
@@ -189,31 +249,27 @@ const Categorias = () => {
               >
                 AGREGAR CATEGORÍA
               </Button>
-            </Link>
+
             <TableContainer className={styles.tableContainer}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className={styles.tableHeader}>
-                      Id Categoria
-                    </TableCell>
+                    <TableCell className={styles.tableHeader}>ID Categoria</TableCell>
                     <TableCell className={styles.tableHeader}>Nombre</TableCell>
-                    <TableCell className={styles.tableHeader}>
-                      Descripción
-                    </TableCell>
-                    <TableCell className={styles.tableHeader}>
-                      Acciones
-                    </TableCell>
+                    <TableCell className={styles.tableHeader}>Descripción</TableCell>
+                    <TableCell className={styles.tableHeader}>Acciones</TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {Categorias.map((cat) => (
-                    <TableRow key={cat.id_categoria}>
-                      <TableCell>{cat.id_categoria}</TableCell>
-                      <TableCell>{cat.nombre}</TableCell>
-                      <TableCell>{cat.descripcion}</TableCell>
-                      <TableCell>
+                  {categorias.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)
+                  .map((cat) => (
+                    <TableRow key={cat.id_categoria} className={styles.tableRow}>
+                      <TableCell sx={{ width: "20%" }}>{cat.id_categoria}</TableCell>
+                      <TableCell sx={{ width: "25%" }}>{cat.nombre}</TableCell>
+                      <TableCell sx={{ maxWidth: "180px", minWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
+                        {cat.descripcion}</TableCell>
+                      <TableCell sx={{ width: "25%" }}>
                         <Button
                           variant="outlined"
                           className={styles.botonEliminar}
@@ -231,19 +287,22 @@ const Categorias = () => {
               </Table>
             </TableContainer>
             <TablePagination
-              component="div"
-              count={Categorias.length}
-              rowsPerPage={columnPorPag}
-              page={pag}
-              onPageChange={(event, newPage) => setPag(newPage)}
-              onRowsPerPageChange={(event) =>
-                setColumnPorPag(parseInt(event.target.value, 5))
-              }
-              labelRowsPerPage="Filas por página"
+                component="div"
+                count={categorias.length}
+                rowsPerPage={columnPorPag}
+                page={pag}
+                onPageChange={(event, newPage) => setPag(newPage)}
+                onRowsPerPageChange={(event) =>
+                  setColumnPorPag(parseInt(event.target.value, 5))
+                }
+                labelRowsPerPage="Filas por página"
+                sx={{ marginTop: "auto" }}
+                rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
             />
           </Box>
         </Box>
       </Box>
+      {/* Agregar la categoria*/}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -256,7 +315,7 @@ const Categorias = () => {
             overflow: "visible",
           }, // Evita scroll en el contenedor principal
         }}
-        className={styles.contenido}
+        className={styles.contenidoAgregar}
       >
         <DialogTitle>Nueva Categoría</DialogTitle>
         <DialogContent
@@ -314,32 +373,58 @@ const Categorias = () => {
           <Typography variant="caption" color="textSecondary">
             {categoria.descripcion.length}/100
           </Typography>
+
+
           <Box className={stylesCategoria.fileUpload} sx={{ marginBottom: 2 }}>
-            <label htmlFor="fileInput" className="file-label">
-              Imagen categoría
-            </label>
+            <Typography className={styles.h5} variant="h5" gutterBottom>
+              Imagen Categoría
+            </Typography>
           </Box>
 
-          <Box className={stylesCategoria.subirImg}>
-            <UploadFileIcon
-              className={stylesCategoria.iconImg}
-              fontSize="small"
-            />
-            <Typography variant="body2">
-              <label htmlFor="upload">Selecciona archivo</label> o arrastra para
-              subir
-            </Typography>
-            <Typography variant="caption">
-              SVG, PNG, JPG o GIF (max. 3MB)
-            </Typography>
-            <input
-              id="upload"
-              type="file"
-              multiple
-              hidden
-              onChange={handleUploadImagenes}
-            />
-          </Box>
+          <Box >
+            <Box className={stylesCategoria.subirImg}>
+              <UploadFileIcon  className={stylesCategoria.iconImg} fontSize="small" />
+                <Typography variant="body2" >
+                  <label htmlFor="upload">Selecciona archivo</label> o arrastra para subir
+                </Typography>
+                <Typography variant="caption">
+                  SVG, PNG, JPG o GIF (max. 3MB)
+                </Typography>
+                <input id="upload" type="file" multiple hidden onChange={handleUploadImagenes} />
+            </Box>
+
+              {categoria.imagen && (
+                <List className={stylesCategoria.listaImg}>
+                  <ListItem  className={stylesCategoria.listaItem}
+                    secondaryAction={
+                      <IconButton edge="end" onClick={eliminarImagen} >
+                        <DeleteIcon  fontSize="small"/>
+                      </IconButton>
+                    }>
+                  <UploadFileIcon className={stylesCategoria.iconUpload} fontSize="small" />
+
+                  <ListItemText  className={stylesCategoria.listaItemText} primary={categoria.imagen.nombre} 
+                      secondary={
+                        <span className={stylesCategoria.imgText}>
+                          <span >{Math.round(categoria.imagen.archivo.size / 1024)}kb • </span>
+                          <span>{categoria.imagen.status}</span>
+
+                            {categoria.imagen.status === "Cargando" && (
+                                <LinearProgress 
+                                  className={stylesCategoria.barraProgreso}
+                                  variant="indeterminate" 
+                                />
+                            )}
+                        </span>
+                      } 
+                  />
+                                                
+                </ListItem>
+                </List>
+              )}
+            </Box>
+
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
@@ -349,7 +434,19 @@ const Categorias = () => {
             Añadir Categoría
           </Button>
         </DialogActions>
+
+        
       </Dialog>
+      <Snackbar
+          open={openAlertExito}
+          autoHideDuration={3000}
+          onClose={handleCloseAlertExito}
+          anchorOrigin={{ vertical: "center", horizontal: "center" }} 
+        >
+          <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
+            ¡Categoría agregada con éxito!
+          </Alert>
+        </Snackbar>
 
       <Dialog open={openDialogDelete} onClose={handleCloseDialog}>
         <DialogTitle>¿Eliminar categoria?</DialogTitle>
@@ -363,9 +460,9 @@ const Categorias = () => {
           <Button onClick={handleCloseDialogDelete} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleDelete} color="error">
+          {/*<Button {onClick={{handleDelete}}} color="error">
             Eliminar
-          </Button>
+          </Button>*/}
         </DialogActions>
       </Dialog>
     </AdminLayout>
