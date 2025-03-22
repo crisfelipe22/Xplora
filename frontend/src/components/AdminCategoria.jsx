@@ -155,41 +155,79 @@ const Categorias = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  if (validaciones()){
-    try {
-      const response = await axios.post('/api/categoria', categoriaFormatoEnvio, {
-          headers: {
-              "Content-Type": "application/json"
-          }
-      });
-  
-      console.log("Categoria agregada:", response.data);
-      addCategoria(response.data);
-      setOpenSnackbar(true);
-      setOpenAlertExito(true)
-      handleCloseDialog();
-      
-  
-      setTimeout(() => {
-          setOpenAlertExito(false)
-      }, 3000);
-  } catch (error) {
-      console.error("Error al enviar la categoria:", error);
-      setOpenAlertFracaso(true)
+  if (editMode) {
+    handleUpdate(e); // Si es edición, actualizar la categoría
+  } else {
+    if (validaciones()){
+      try {
+        const response = await axios.post('/api/categoria', categoriaFormatoEnvio, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    
+        console.log("Categoria agregada:", response.data);
+        addCategoria(response.data);
+        setOpenSnackbar(true);
+        setOpenAlertExito(true)
+        handleCloseDialog();
+        
+    
+        setTimeout(() => {
+            setOpenAlertExito(false)
+        }, 3000);
+    } catch (error) {
+        console.error("Error al enviar la categoria:", error);
+        setOpenAlertFracaso(true)
+    }
+    } else {
+      console.log("no se puede enviar el formulario",errores)
+      return;
+    };  
   }
-} else {
-  console.log("no se puede enviar el formulario",errores)
-  return;
-};  
+  
 }
 
   
-  /*const handleEdit = (category) => {
-    setCategory({ nombre: category.nombre, descripcion: category.descripcion });
+  const handleEdit = (category) => {
+    setCategoria({ 
+      nombre: category.nombre, 
+      descripcion: category.descripcion,
+      imagen: category.imagen });
     setSelectedId(category.id_categoria);
     setEditMode(true);
     setOpenDialog(true);
-  };*/
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (validaciones()) {
+      try {
+        const response = await axios.put(`/api/categoria/${selectedId}`, categoriaFormatoEnvio, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        // Actualizar la lista de categorías en el estado global
+        setCategorias((prevCategorias) =>
+          prevCategorias.map((cat) =>
+            cat.id_categoria === selectedId ? response.data : cat
+          )
+        );
+  
+        setOpenAlertExito(true);
+        setTimeout(() => setOpenAlertExito(false), 3000);
+        handleCloseDialog();
+      } catch (error) {
+        console.error("Error al actualizar la categoría:", error);
+        setOpenAlertFracaso(true);
+      }
+    } else {
+      console.log("No se puede actualizar, hay errores:", errores);
+      return;
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -288,9 +326,9 @@ const handleSubmit = async (e) => {
                         >
                           Eliminar
                         </Button>
-                        {/* <Button color="primary" onClick={() => handleEdit(cat)}>
+                        <Button color="primary" onClick={() => handleEdit(cat)}>
                           Editar
-                        </Button> */}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
