@@ -4,13 +4,23 @@
 import {React, useState, useEffect} from "react";
 import { useNavigate } from "react-router";
 import { useParams } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar} from "@mui/material";
+import { Container, TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, Alert, LinearProgress, Select, MenuItem, FormControl, InputLabel, InputAdornment, Snackbar, Stack} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import styles from "../styles/AddProductForm.module.css"
 import SidebarAdmin from "./SidebarAdmin";
 import AdminLayout from "./AdminLayout";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
+import dayjs from "dayjs";
+import {
+    CalendarToday
+    } from '@mui/icons-material';
 
 const CardEditarProducto = () =>{
 
@@ -21,6 +31,9 @@ const CardEditarProducto = () =>{
     const [product, setProduct] = useState()
     const [categorias, setCategorias] = useState([]);
     let navigate = useNavigate();
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const [openAlertExito, setOpenAlertExito] = useState(false);
 
@@ -40,8 +53,10 @@ const CardEditarProducto = () =>{
                     const data = await response.json();
                     const imagenesArray = data.imagen ? data.imagen.split(",").map(url => ({ url, status: "Completado" })) : [];
                     const precioString = data.precio.toString();
+                    const fechaInicioFormat = data.fecha_inicio ? new Date(data.fecha_inicio) : null;
+                    const fechaFinFormat = data.fecha_fin ? new Date(data.fecha_fin) : null;
                 
-                    setProduct({ ...data, precio: precioString, imagen: imagenesArray }) 
+                    setProduct({ ...data, precio: precioString, imagen: imagenesArray, fecha_inicio: fechaInicioFormat, fecha_fin: fechaFinFormat }) 
                 } catch (error) {
                     console.error('Hubo un problema con la solicitud de la API:', error);
                 }
@@ -71,6 +86,23 @@ const CardEditarProducto = () =>{
         setProduct({...product, [name]: value})
     }
 
+    const handleStartDateChange = (date) => {
+            if (date) {
+                const formattedDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+                setStartDate(date);
+                setProduct((prev) => ({ ...prev, fecha_inicio: formattedDate }));
+                console.log('date: ' + date + 'date formato: ' + formattedDate)
+            }
+        };
+        
+        const handleEndDateChange = (date) => {
+            if (date) {
+                const formattedDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+                setEndDate(date);
+                setProduct((prev) => ({ ...prev, fecha_fin: formattedDate }));
+            }
+        };
+
     const validaciones = () =>{
         let erroresObj = {}
         if(product.nombre.trim().length<3){
@@ -91,6 +123,10 @@ const CardEditarProducto = () =>{
             erroresObj.imagen = 'Se debe incluir al menos una imagen del producto';
         } if (product.id_categoria === ''){
             erroresObj.id_categoria = 'Se debe escoger una categoría';
+        } if (product.fecha_inicio === null) {
+            erroresObj.fecha_inicio = 'Se debe seleccionar una fecha de inicio'
+        } if (product.fecha_fin === null) {
+            erroresObj.fecha_fin = 'Se debe seleccionar una fecha de fin'
         }
 
         setErrores(erroresObj)
@@ -163,7 +199,6 @@ const CardEditarProducto = () =>{
         imagen: product.imagen.filter((img) => img.status === "Completado" && img.url)
         .map((img) => img.url).join(','), 
         duracion: '30 min',
-        fecha_experiencia: "2026-02-19T12:00:00",
         id_categoria: Number(product.id_categoria)
     };
 
@@ -183,7 +218,6 @@ const CardEditarProducto = () =>{
                         setOpenAlertExito(false)
                         navigate("/admin/productos")
                     }, 3000);
-                    console.log( ' categoria ' + product.id_categoria )
             } catch (error) {
                 console.error("Error al actualizar el producto:", error);
             }    
@@ -337,6 +371,66 @@ const CardEditarProducto = () =>{
                                         </Box>
                                     )}
                                 </Box>
+                            </Box>
+
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Administrar caracteristicas
+                                </Typography>
+                                                            
+                            </Box>
+
+                            <Box className={styles.seccion}>
+                                <Typography className={styles.h6} variant="h6" gutterBottom>
+                                    Disponibilidad del producto
+                                </Typography>
+
+                                <Stack spacing={2} direction="column">
+                                    <DatePicker
+                                        label="Fecha de inicio"
+                                        selected={product.fecha_inicio}
+                                        onChange={handleStartDateChange}
+                                        minDate={new Date()}
+                                        customInput={
+                                            <TextField
+                                            value={startDate ? startDate.toLocaleDateString("es-ES") : ""}
+                                            label="Fecha de inicio"
+                                            error={!!errores.fecha_inicio}
+                                            helperText={errores.fecha_inicio}
+                                            slotProps={{
+                                                input: {
+                                                    startAdornment: 
+                                                    <InputAdornment position="start">
+                                                        <CalendarToday/>
+                                                    </InputAdornment>,
+                                                },
+                                            }}
+                                            fullWidth />}
+                                    />
+                                    <DatePicker
+                                        label="Fecha fin"
+                                        selected={product.fecha_fin}
+                                        onChange={handleEndDateChange}
+                                        disabled={!startDate}
+                                        minDate={startDate} 
+                                        customInput={
+                                            <TextField 
+                                            value={endDate ? endDate.toLocaleDateString("es-ES") : ""}
+                                            label="Fecha fin"
+                                            error={!!errores.fecha_fin}
+                                            helperText={errores.fecha_fin}
+                                            slotProps={{
+                                                input: {
+                                                    startAdornment: 
+                                                    <InputAdornment position="start">
+                                                        <CalendarToday/>
+                                                    </InputAdornment>,
+                                                },
+                                            }}
+                                            fullWidth />}
+                                    />
+                                </Stack>
+
                             </Box>
 
                             <Box className={styles.botones}>

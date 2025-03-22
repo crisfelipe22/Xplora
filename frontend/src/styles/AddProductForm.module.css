@@ -146,7 +146,7 @@
 .botones {
   display: flex;
   gap: 16px;
-  align-items: flex-start;
+  grid-column: 2;
 }
 
 .botonCancelar {
