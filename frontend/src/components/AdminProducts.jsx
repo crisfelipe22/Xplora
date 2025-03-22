@@ -103,14 +103,14 @@ const AdminProduct = () => {
                                 {products.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)                                
                                 .map((product) => (
                                     <TableRow key={product.id_paquete_experiencia} className={styles.tableRow}>
-                                        <TableCell>{product.id_paquete_experiencia}</TableCell>
-                                        <TableCell>{product.nombre}</TableCell>
-                                        <TableCell>{categorias.find(
+                                        <TableCell sx={{ width: "17%" }}>{product.id_paquete_experiencia}</TableCell>
+                                        <TableCell sx={{ width: "25%" }}>{product.nombre}</TableCell>
+                                        <TableCell sx={{ width: "25%" }}>{categorias.find(
                                                 (cat) => cat.id_categoria === product.id_categoria
                                                 )?.nombre || "Desconocido"} </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "33%" }}>
                                             <Link to={`/detalle-producto/${product.id_paquete_experiencia}`} underline="hover">
-                                                <Button variant="outlined" color="success">
+                                                <Button variant="outlined" color="success" className={styles.botonVer}>
                                                     Ver
                                                 </Button>
                                             </Link>
@@ -134,8 +134,9 @@ const AdminProduct = () => {
                         rowsPerPage={columnPorPag}
                         page={pag}
                         onPageChange={(event, newPage) => setPag(newPage)}
-                        onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 5))}
+                        onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
                         labelRowsPerPage="Filas por página"
+                        sx={{ marginTop: "auto" }}
                     />
 
                 </Box>
