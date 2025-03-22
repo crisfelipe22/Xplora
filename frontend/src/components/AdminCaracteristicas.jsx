@@ -29,7 +29,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  DialogTitle, TablePagination 
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -49,6 +49,7 @@ import {
   Brush,
 } from "@mui/icons-material";
 import { useIcons } from "../contexts/IconContext";
+import usePaginacionDinamica from '../hooks/usePaginacionDinamica';
 
 //
 
@@ -57,6 +58,9 @@ const AdminCaracteristicas = () => {
   const [nombreCaracteristica, setNombreCaracteristica] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [pag, setPag] = useState(0);
+  const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
+      
   // Replace your current Iconardo function with this:
   const Iconardo = ({ iconId }) => {
     const IconComponent =
@@ -268,7 +272,8 @@ const AdminCaracteristicas = () => {
                     </TableHead>
 
                     <TableBody>
-                      {caracteristicasDisponibles.map((carac, index) => (
+                      {caracteristicasDisponibles.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)
+                      .map((carac, index) => (
                         <TableRow key={index} className={styles.tableRow}>
                           <TableCell>
                             {/* Pass the icon ID to the Iconardo component */}
@@ -301,6 +306,19 @@ const AdminCaracteristicas = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+
+                <TablePagination
+                  component="div"
+                  count={caracteristicasDisponibles.length}
+                  rowsPerPage={columnPorPag}
+                  page={pag}
+                  onPageChange={(event, newPage) => setPag(newPage)}
+                  onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
+                  labelRowsPerPage="Filas por página"
+                  sx={{ marginTop: "auto" }}
+                  rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
+                />
+
                 <Dialog
                   open={dialogCaracteristicas}
                   onClose={handleCloseDialogCarac}
