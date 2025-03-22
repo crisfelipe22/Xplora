@@ -319,7 +319,7 @@ const handleSubmit = async (e) => {
                       <TableCell sx={{ width: "25%" }}>{cat.nombre}</TableCell>
                       <TableCell sx={{ maxWidth: "180px", minWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
                         {cat.descripcion}</TableCell>
-                      <TableCell sx={{ width: "25%" }}>
+                      <TableCell sx={{ width: "30%" }}>
                         <Button
                           variant="outlined"
                           className={styles.botonEliminar}
@@ -327,7 +327,7 @@ const handleSubmit = async (e) => {
                         >
                           Eliminar
                         </Button>
-                        <Button color="primary" onClick={() => handleEdit(cat)}>
+                        <Button className={styles.botonEditar} onClick={() => handleEdit(cat)}>
                           Editar
                         </Button>
                       </TableCell>
