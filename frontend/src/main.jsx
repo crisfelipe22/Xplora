@@ -7,16 +7,19 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
 import '@fontsource/roboto/latin.css';
 import { ProductProvider } from './contexts/ProductContext.jsx';
+import { CategoryProvider } from './contexts/CategoryContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ProductProvider>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
+      <CategoryProvider>
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </CategoryProvider>
     </ProductProvider>
   </StrictMode>
 )

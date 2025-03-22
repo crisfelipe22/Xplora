@@ -6,11 +6,17 @@ import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import { Link } from 'react-router-dom';
 import AdminLayout from "./AdminLayout";
+import {useCategories} from '../contexts/CategoryContext';
+import usePaginacionDinamica from '../hooks/usePaginacionDinamica';
 
 
 const AdminProduct = () => {
+    const { categorias } = useCategories();
+    
     const [pag, setPag] = useState(0);
-    const [columnPorPag, setColumnPorPag] = useState(5);
+    //const [columnPorPag, setColumnPorPag] = useState(5);
+    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
+    console.log("columnPorPag:", columnPorPag)
 
     //llamado GET
     const [openDialog, setOpenDialog] = useState(false);
@@ -88,6 +94,7 @@ const AdminProduct = () => {
                                 <TableRow>
                                     <TableCell className={styles.tableHeader}>ID Producto</TableCell>
                                     <TableCell className={styles.tableHeader}>Nombre</TableCell>
+                                    <TableCell className={styles.tableHeader}>Categoría</TableCell>
                                     <TableCell className={styles.tableHeader}>Acciones</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -98,6 +105,9 @@ const AdminProduct = () => {
                                     <TableRow key={product.id_paquete_experiencia} className={styles.tableRow}>
                                         <TableCell>{product.id_paquete_experiencia}</TableCell>
                                         <TableCell>{product.nombre}</TableCell>
+                                        <TableCell>{categorias.find(
+                                                (cat) => cat.id_categoria === product.id_categoria
+                                                )?.nombre || "Desconocido"} </TableCell>
                                         <TableCell>
                                             <Link to={`/detalle-producto/${product.id_paquete_experiencia}`} underline="hover">
                                                 <Button variant="outlined" color="success">
