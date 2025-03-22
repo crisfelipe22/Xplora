@@ -151,6 +151,27 @@
     color: #6239E6;
   }
 
+  .imgPrevisualizar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .imgPrevEditar{
+    max-width: 100px; /* Ajusta según tu diseño */
+    max-height: 100px; 
+    overflow: auto;
+  }
+
+  .imgPrevEditar img {
+    max-width: 10%;
+    max-height: 0%;
+    border-radius: 5px; /* Bordes redondeados opcionales */
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    display: block;
+  }
+
   .textField {
     border-radius: 4px !important;
     margin-top: 4% !important;

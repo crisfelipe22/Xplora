@@ -55,6 +55,7 @@ const Categorias = () => {
   const [errores, setErrores] = useState({})
   const [openAlertExito, setOpenAlertExito] = useState(false);
   const [openAlertExitoEliminar, setOpenAlertExitoEliminar] = useState(false);
+  const [openAlertExitoEditar, setOpenAlertExitoEditar] = useState(false);
   const [openAlertFracaso, setOpenAlertFracaso] = useState(false);
 
   const { categorias, addCategoria, setCategorias } = useCategories();
@@ -143,7 +144,7 @@ const Categorias = () => {
   };
 
   const eliminarImagen = () => {
-    setCategoria({ ...categoria, imagen: null }); 
+    setCategoria({ ...categoria, imagen: '' }); 
   };
 
   const categoriaFormatoEnvio = {
@@ -216,8 +217,8 @@ const handleSubmit = async (e) => {
           )
         );
   
-        setOpenAlertExito(true);
-        setTimeout(() => setOpenAlertExito(false), 3000);
+        setOpenAlertExitoEditar(true);
+        setTimeout(() => setOpenAlertExitoEditar(false), 3000);
         handleCloseDialog();
       } catch (error) {
         console.error("Error al actualizar la categoría:", error);
@@ -366,7 +367,7 @@ const handleSubmit = async (e) => {
         }}
         className={styles.contenidoAgregar}
       >
-        <DialogTitle>Nueva Categoría</DialogTitle>
+        <DialogTitle>{editMode ? "Editar Categoría" : "Nueva Categoría"}</DialogTitle>
         <DialogContent
           sx={{
             overflow: "hidden",
@@ -452,6 +453,20 @@ const handleSubmit = async (e) => {
                     }>
                   <UploadFileIcon className={stylesCategoria.iconUpload} fontSize="small" />
 
+
+                  {typeof categoria.imagen === "string" ? (
+                  // Si es una URL, solo muestra la imagen sin los datos de tamaño/status
+                  <ListItemText 
+                    className={stylesCategoria.imgPrevisualizar} 
+                    primary="Imagen subida" 
+                    secondary={
+                      <span className={stylesCategoria.imgPrevEditar}>
+                        <img src={categoria.imagen} alt="Imagen de la categoría" />
+                      </span>
+                    } 
+                  />
+                ) : (
+                  // Si es un objeto con información del archivo, muestra los datos normales  
                   <ListItemText  className={stylesCategoria.listaItemText} primary={categoria.imagen.nombre} 
                       secondary={
                         <span className={stylesCategoria.imgText}>
@@ -467,7 +482,7 @@ const handleSubmit = async (e) => {
                         </span>
                       } 
                   />
-                                                
+                )}                              
                 </ListItem>
                 </List>
               )}
@@ -480,7 +495,7 @@ const handleSubmit = async (e) => {
             Cancelar
           </Button>
           <Button onClick={handleSubmit} color="primary" variant="contained">
-            Añadir Categoría
+          {editMode ? "Actualizar Categoría" : "Añadir Categoría"}
           </Button>
         </DialogActions>
 
@@ -493,7 +508,17 @@ const handleSubmit = async (e) => {
           anchorOrigin={{ vertical: "center", horizontal: "center" }} 
         >
           <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
-            ¡Categoría agregada con éxito!
+          ¡Categoría agregada con éxito!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={openAlertExitoEditar}
+          autoHideDuration={3000}
+          onClose={handleCloseAlertExito}
+          anchorOrigin={{ vertical: "center", horizontal: "center" }} 
+        >
+          <Alert onClose={handleCloseAlertExito} severity="success" className={styles.alertaExito}>
+          ¡Categoría actualizada con éxito!
           </Alert>
         </Snackbar>
 
