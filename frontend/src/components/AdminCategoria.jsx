@@ -380,6 +380,8 @@ const handleSubmit = async (e) => {
             label="Título"
             placeholder="Ingresa un título para la categoría"
             variant="outlined"
+            error={!!errores.nombre}
+            helperText={errores.nombre}
             fullWidth
             value={categoria.nombre}
             onChange={(e) =>
@@ -406,6 +408,8 @@ const handleSubmit = async (e) => {
             multiline
             rows={3}
             value={categoria.descripcion}
+            error={!!errores.descripcion}
+            helperText={errores.descripcion}
             onChange={(e) =>
               setCategoria({ ...categoria, descripcion: e.target.value })
             }
@@ -431,7 +435,7 @@ const handleSubmit = async (e) => {
             </Typography>
           </Box>
 
-          <Box >
+          <Box className={stylesCategoria.boxImagenes}>
             <Box className={stylesCategoria.subirImg}>
               <UploadFileIcon  className={stylesCategoria.iconImg} fontSize="small" />
                 <Typography variant="body2" >
