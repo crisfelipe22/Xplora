@@ -6,14 +6,15 @@ import SidebarAdmin from "./SidebarAdmin";
 import styles from "../styles/AdminProducts.module.css";
 import axios from "axios";
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext"; // Asegúrate de poner la ruta correcta
+import { AuthContext } from "../contexts/AuthContext"; 
+import usePaginacionDinamica from '../hooks/usePaginacionDinamica';
 
 const CardAdminUsers = () =>{
   const { user } = useContext(AuthContext);
   const userRole = user.rol
     
     const [pag, setPag] = useState(0);
-    const [columnPorPag, setColumnPorPag] = useState(5);
+    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
 
     const [openDialog, setOpenDialog] = useState(false);
     const [cambioRol, setCambioRol] = useState('');
@@ -23,7 +24,7 @@ const CardAdminUsers = () =>{
     const [roles, setRoles] = useState([])
 
     //EL TOKEN SE OBTIENE DEL LOCAL STORAGE
-    const token = localStorage.getItem("token")/* "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhQHhwbG9yYS5jb20iLCJpYXQiOjE3NDExMzgzNzYsImV4cCI6MTc0MTIyNDc3Nn0.uv-wD1PTkvbNBgH7-LzMcs8adD6WrOizuDJ8v-TPYtM";*/
+    const token = localStorage.getItem("token")
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -163,6 +164,8 @@ const CardAdminUsers = () =>{
                         onPageChange={(event, newPage) => setPag(newPage)}
                         onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 5))}
                         labelRowsPerPage="Filas por página"
+                        sx={{ marginTop: "auto" }}
+                        rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
                     />
 
                 </Box>

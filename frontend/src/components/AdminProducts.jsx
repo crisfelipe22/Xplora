@@ -16,7 +16,7 @@ const AdminProduct = () => {
     const [pag, setPag] = useState(0);
     //const [columnPorPag, setColumnPorPag] = useState(5);
     const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
-    console.log("columnPorPag:", columnPorPag)
+    
 
     //llamado GET
     const [openDialog, setOpenDialog] = useState(false);
@@ -137,6 +137,7 @@ const AdminProduct = () => {
                         onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
                         labelRowsPerPage="Filas por página"
                         sx={{ marginTop: "auto" }}
+                        rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
                     />
 
                 </Box>
