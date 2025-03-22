@@ -208,7 +208,8 @@ const AddProductForm = () => {
     }
 
     const resetState = () =>{
-        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', id_categoria: '', imagen: [], fecha_inicio: null, fecha_fin: null })
+        setProduct({ nombre: '', descripcion: "", precio: '', ubicacion: '', id_categoria: '', imagen: [], fecha_inicio: '', fecha_fin: '' })
+        navigate("/admin/productos")
     }
 
     const productFormatoEnvio = {
