@@ -101,6 +101,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
 
   const navigate = useNavigate();
+  const [error, setError] = useState({});
   const [openGallery, setOpenGallery] = useState(false);
   const [openPolitica, setOpenPolitica] = useState(false);
   const [scroll, setScroll] = useState("paper");
@@ -225,12 +226,47 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
   //reserva
   const handleReserva = () =>{
+    if(!fechaInicioReserva || !fechaFinReserva){
+      setError({ fechaReserva: "Selecciona una fecha de reserva" }); 
+      return;
+    }
+
+    setError({ fechaReserva: "" });
+
     if(isAuthenticated){
+      
       navigate(`/reserva/${product.id_paquete_experiencia}`)
     } else {
-      navigate("/login", { state: { from: locationURL.pathname } })
+      localStorage.setItem(
+        "preReserva",
+        JSON.stringify({
+          from: locationURL.pathname,
+          fechaInicio: fechaInicioReserva,
+          fechaFin: fechaFinReserva,
+        })
+      );
+      setSnackbarMessage(
+        "Debes iniciar sesión para reservar una experiencia."
+      );
+      setOpenSnackbar(true);
+      setTimeout(() => {
+        navigate("/login", { state: { from: locationURL.pathname } })
+      }, 1000);
+      
     }
   }
+
+  useEffect(() => {
+    const preReserva = localStorage.getItem("preReserva");
+  
+    if (preReserva) {
+      const { fechaInicio, fechaFin } = JSON.parse(preReserva);
+  
+      setDateRange([new Date(fechaInicio), new Date(fechaFin)])
+  
+      localStorage.removeItem("preReserva");
+    }
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -389,6 +425,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
               size="small"
               fullWidth
               variant="outlined"
+              error={!!error.fechaReserva}
+              helperText={error.fechaReserva}
               className={styles.datePicker}
               value={
                 fechaInicioReserva && fechaFinReserva
@@ -435,7 +473,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 />
               </Box>
             )}
-            <Button variant="contained" className={styles.botonComprar} onClick={handleReserva}>
+            <Button variant="contained" className={styles.botonComprar} 
+            onClick={handleReserva}>
               COMPRAR EXPERIENCIA
             </Button>
             <Typography variant="h5" className={styles.preguntaRegalo}>
