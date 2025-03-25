@@ -17,7 +17,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
    // List<Reserva> findByUsuarioId(Long usuarioId);
    @Query(value = """
-    WITH recursive fechas_disponibles AS (
+    WITH RECURSIVE fechas_disponibles AS (
         SELECT fecha_inicio AS fecha
         FROM paquete_experiencia
         WHERE id_paquete_experiencia = :idPaqueteExperiencia
@@ -33,15 +33,14 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     SELECT DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha
     FROM fechas_disponibles
     WHERE fecha NOT IN (
-        SELECT CAST(fecha_inicio AS DATE)
+        SELECT fecha_inicio
         FROM reserva
         WHERE id_paquete_experiencia = :idPaqueteExperiencia
     )
     """, nativeQuery = true)
-   List<String> findAvailableDates(@Param("idPaqueteExperiencia") Long idPaqueteExperiencia);
+    List<String> findAvailableDates(@Param("idPaqueteExperiencia") Long idPaqueteExperiencia);
 
     List<Reserva> findByPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia);
     List<Reserva> findByUsuario(Usuario usuario);
     List<Reserva> findByUsuarioAndPaqueteExperiencia(Usuario usuario, PaqueteExperiencia paqueteExperiencia);
-
 }
