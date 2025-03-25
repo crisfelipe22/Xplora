@@ -27,7 +27,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from "./GaleriaImgProducto";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { CalendarToday } from "@mui/icons-material";
 import DatePicker from "react-datepicker";
@@ -75,7 +75,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   
-
+  const locationURL = useLocation();
   const { icons: iconosDisponibles } = useIcons();
 
   const [allCaracteristicas, setCaracteristicas] = useState([""]);
@@ -222,6 +222,15 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
   //simulando raiting
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
+
+  //reserva
+  const handleReserva = () =>{
+    if(isAuthenticated){
+      navigate(`/reserva/${product.id_paquete_experiencia}`)
+    } else {
+      navigate("/login", { state: { from: locationURL.pathname } })
+    }
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -426,7 +435,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 />
               </Box>
             )}
-            <Button variant="contained" className={styles.botonComprar}>
+            <Button variant="contained" className={styles.botonComprar} onClick={handleReserva}>
               COMPRAR EXPERIENCIA
             </Button>
             <Typography variant="h5" className={styles.preguntaRegalo}>
@@ -500,4 +509,4 @@ const CardDetalleProducto = ({ product, categorias }) => {
   );
 };
 
-export default CardDetalleProducto;
+export default CardDetalleProducto
