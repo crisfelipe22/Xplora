@@ -22,6 +22,7 @@ import EditarProductoAdmin from "./pages/EditarProductoAdmin";
 import AdminUsers from "./pages/AdminUsers";
 import ResultadoBusqueda from './pages/ResultadoBusqueda';
 import Categoria from './pages/AdminCategoria';
+import Reserva from './pages/Reserva';
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,10 @@ function App() {
           element={<ProtectedRoute  ><Perfil /></ProtectedRoute>} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/resultados" element={<ResultadoBusqueda />} />
+        <Route
+          path="/reserva/:id_paquete_experiencia"
+          element={<ProtectedRoute> <Reserva /> </ProtectedRoute>}
+        />
       </Routes>
       {!esRutaAdmin && <Footer />}
       </IconProvider>
