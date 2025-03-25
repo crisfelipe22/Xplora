@@ -70,6 +70,12 @@ import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const CardDetalleProducto = ({ product, categorias }) => {
+
+  //mensajes
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  
+
   const { icons: iconosDisponibles } = useIcons();
 
   const [allCaracteristicas, setCaracteristicas] = useState([""]);
@@ -93,9 +99,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const navigate = useNavigate();
   const [openGallery, setOpenGallery] = useState(false);
@@ -207,7 +210,10 @@ const CardDetalleProducto = ({ product, categorias }) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
     if (!isAuthenticated) {
-      alert("Debes iniciar sesión para agregar favoritos.");
+      setSnackbarMessage(
+        "Debes iniciar sesión para agregar favoritos."
+      );
+      setOpenSnackbar(true);
       return;
     }
 
@@ -474,7 +480,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "center", horizontal: "center" }}
+        anchorOrigin={{ vertical: "center", horizontal: "right" }}
         sx={{
           "&.MuiSnackbar-root": {
             top: "50%",
@@ -485,7 +491,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
         <Alert
           onClose={() => setOpenSnackbar(false)}
           severity="error"
-          sx={{ width: "100%" }}
+          sx={{ width: "50%" }}
         >
           {snackbarMessage}
         </Alert>

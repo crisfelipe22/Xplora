@@ -9,6 +9,8 @@ import {
   Rating,
   Chip,
   IconButton,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import styles from "../styles/ProductoAleatorio.module.css";
@@ -17,6 +19,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 
 const CardProductoAleatorio = ({ product, categorias }) => {
+
+  //mensajes
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
@@ -42,8 +49,10 @@ const CardProductoAleatorio = ({ product, categorias }) => {
 
 
     if (!isAuthenticated) {
-      alert("Debes iniciar sesión para agregar favoritos.");
-      return;
+      setSnackbarMessage(
+        "Debes iniciar sesión para agregar favoritos."
+      );
+      setOpenSnackbar(true);
     }
     toggleFavorite(product.id_paquete_experiencia);
   };
@@ -106,6 +115,26 @@ const CardProductoAleatorio = ({ product, categorias }) => {
           />
         </CardContent>
       </Link>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "center", horizontal: "right" }}
+        sx={{
+          "&.MuiSnackbar-root": {
+          top: "50%",
+          transform: "translateY(-50%)",
+          },
+        }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          sx={{ width: "50%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 };
