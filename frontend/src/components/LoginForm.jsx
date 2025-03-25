@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { 
   Box, 
@@ -19,6 +20,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
 const LoginForm = () => {
+  const locationURL = useLocation();
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("desktop"));
   const imagenFondo = "/imagen_24.jpeg"; 
@@ -56,7 +58,8 @@ const LoginForm = () => {
       });
       
       // Redirect to dashboard or home page
-      navigate('/');
+      const redirectTo = locationURL.state?.from || "/";
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       console.error('Login error:', err);
       
