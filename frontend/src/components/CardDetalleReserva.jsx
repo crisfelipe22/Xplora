@@ -18,14 +18,27 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import styles from '../styles/CardDetalleReserva.module.css'
 
-const CardDetalleReserva = ({product, fecha_inicio, fecha_fin}) =>{
+const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}) =>{
     const navigate = useNavigate();
     const theme = useTheme();
+    const { user } = useAuth();
+
     const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
+
+    const formatearFecha = (fechaISO) => {
+        const fecha = new Date(fechaISO);
+        return fecha.toLocaleDateString("es-ES", {
+            weekday: "long",  
+            day: "numeric",    
+            month: "long",     
+            year: "numeric"    
+        });
+    };
 
     
     return(
@@ -65,15 +78,15 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin}) =>{
                 <Typography variant="subtitle1" className={styles.sectionTitle}>
                     Datos usuario
                 </Typography>
-                <Typography>usuario.nombre</Typography>
-                <Typography>usuario.email</Typography>
+                <Typography>{user.nombre}</Typography>
+                <Typography>{user.email}</Typography>
             </Box>
 
             <Box className={styles.infoSection}>
                 <Typography variant="subtitle1" className={styles.sectionTitle}>
                     Datos reserva experiencia
                 </Typography>
-                <Typography>{fecha_inicio} - {fecha_fin}</Typography>
+                <Typography>{formatearFecha(fecha_inicio)} - {formatearFecha(fecha_fin)}</Typography>
                 <Box className={styles.totalSection}>
                     <Typography variant="h6">Total a pagar</Typography>
                     <Typography variant="h6" className={styles.totalPrice}>
@@ -81,7 +94,8 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin}) =>{
                     </Typography>
                 </Box>
 
-                <Button className={styles.confirmButton} variant="contained" color="primary">
+                <Button className={styles.confirmButton} variant="contained" color="primary"
+                onClick={confirmarReserva}>
                     CONFIRMAR RESERVA
                 </Button>
             </Box>
