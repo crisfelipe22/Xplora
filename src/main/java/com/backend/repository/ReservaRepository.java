@@ -18,14 +18,14 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
    // List<Reserva> findByUsuarioId(Long usuarioId);
    @Query(value = """
     WITH RECURSIVE fechas_disponibles AS (
-        SELECT fecha_inicio AS fecha
+        SELECT DATE(fecha_inicio) AS fecha
         FROM paquete_experiencia
         WHERE id_paquete_experiencia = :idPaqueteExperiencia
         UNION ALL
         SELECT DATE_ADD(fecha, INTERVAL 1 DAY)
         FROM fechas_disponibles
         WHERE fecha < (
-            SELECT fecha_fin
+            SELECT DATE(fecha_fin)
             FROM paquete_experiencia
             WHERE id_paquete_experiencia = :idPaqueteExperiencia
         )
@@ -33,7 +33,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     SELECT DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha
     FROM fechas_disponibles
     WHERE fecha NOT IN (
-        SELECT fecha_inicio
+        SELECT DATE(fecha_inicio)
         FROM reserva
         WHERE id_paquete_experiencia = :idPaqueteExperiencia
     )
