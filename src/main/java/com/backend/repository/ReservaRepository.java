@@ -15,32 +15,57 @@ import java.util.List;
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
-   // List<Reserva> findByUsuarioId(Long usuarioId);
-   @Query(value = """
-    WITH RECURSIVE fechas_disponibles AS (
-        SELECT DATE(fecha_inicio) AS fecha
-        FROM paquete_experiencia
-        WHERE id_paquete_experiencia = :idPaqueteExperiencia
-        UNION ALL
-        SELECT DATE_ADD(fecha, INTERVAL 1 DAY)
-        FROM fechas_disponibles
-        WHERE fecha < (
-            SELECT DATE(fecha_fin)
-            FROM paquete_experiencia
-            WHERE id_paquete_experiencia = :idPaqueteExperiencia
-        )
-    )
-    SELECT DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha
-    FROM fechas_disponibles
-    WHERE fecha NOT IN (
-        SELECT DATE(fecha_inicio)
-        FROM reserva
-        WHERE id_paquete_experiencia = :idPaqueteExperiencia
-    )
-    """, nativeQuery = true)
-    List<String> findAvailableDates(@Param("idPaqueteExperiencia") Long idPaqueteExperiencia);
+  // List<Reserva> findByUsuarioId(Long usuarioId);
+  @Query(value = """
+      WITH RECURSIVE fechas_disponibles AS (
+          SELECT DATE(fecha_inicio) AS fecha
+          FROM paquete_experiencia
+          WHERE id_paquete_experiencia = :idPaqueteExperiencia
+          UNION ALL
+          SELECT DATE_ADD(fecha, INTERVAL 1 DAY)
+          FROM fechas_disponibles
+          WHERE fecha < (
+              SELECT DATE(fecha_fin)
+              FROM paquete_experiencia
+              WHERE id_paquete_experiencia = :idPaqueteExperiencia
+          )
+      ),
+      reservas_expandidas AS (
+          SELECT
+              DATE(fecha_inicio) AS fecha_inicio_reserva,
+              DATE(fecha_fin) AS fecha_fin_reserva
+          FROM reserva
+          WHERE id_paquete_experiencia = :idPaqueteExperiencia
+      ),
+      fechas_reservadas AS (
+          SELECT
+              fecha_inicio_reserva AS fecha
+          FROM reservas_expandidas
+          UNION ALL
+          SELECT
+              DATE_ADD(fecha, INTERVAL 1 DAY)
+          FROM fechas_reservadas
+          WHERE fecha < (
+              SELECT fecha_fin_reserva
+              FROM reservas_expandidas
+              WHERE fecha_inicio_reserva = (
+                  SELECT MIN(fecha_inicio_reserva)
+                  FROM reservas_expandidas
+              )
+          )
+      )
+      SELECT DISTINCT DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha
+      FROM fechas_disponibles
+      WHERE fecha NOT IN (
+          SELECT fecha
+          FROM fechas_reservadas
+      )
+      """, nativeQuery = true)
+  List<String> findAvailableDates(@Param("idPaqueteExperiencia") Long idPaqueteExperiencia);
 
-    List<Reserva> findByPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia);
-    List<Reserva> findByUsuario(Usuario usuario);
-    List<Reserva> findByUsuarioAndPaqueteExperiencia(Usuario usuario, PaqueteExperiencia paqueteExperiencia);
+  List<Reserva> findByPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia);
+
+  List<Reserva> findByUsuario(Usuario usuario);
+
+  List<Reserva> findByUsuarioAndPaqueteExperiencia(Usuario usuario, PaqueteExperiencia paqueteExperiencia);
 }
