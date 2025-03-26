@@ -234,15 +234,21 @@ const CardDetalleProducto = ({ product, categorias }) => {
     setError({ fechaReserva: "" });
 
     if(isAuthenticated){
-      
+      localStorage.setItem(
+        "preReserva",
+        JSON.stringify({
+          fecha_inicio: fechaInicioReserva,
+          fecha_fin: fechaFinReserva,
+        })
+      );
       navigate(`/reserva/${product.id_paquete_experiencia}`)
     } else {
       localStorage.setItem(
         "preReserva",
         JSON.stringify({
           from: locationURL.pathname,
-          fechaInicio: fechaInicioReserva,
-          fechaFin: fechaFinReserva,
+          fecha_inicio: fechaInicioReserva,
+          fecha_fin: fechaFinReserva,
         })
       );
       setSnackbarMessage(
@@ -260,9 +266,9 @@ const CardDetalleProducto = ({ product, categorias }) => {
     const preReserva = localStorage.getItem("preReserva");
   
     if (preReserva) {
-      const { fechaInicio, fechaFin } = JSON.parse(preReserva);
+      const { fecha_inicio, fecha_fin } = JSON.parse(preReserva);
   
-      setDateRange([new Date(fechaInicio), new Date(fechaFin)])
+      setDateRange([new Date(fecha_inicio), new Date(fecha_fin)])
   
       localStorage.removeItem("preReserva");
     }
