@@ -29,8 +29,6 @@ const Reserva = () =>{
         obtenerProducto();
     }, [id_paquete_experiencia]);
 
-    console.log(fechas)
-    //console.log('product' + product)
 
     if (!product) {
         return <div>Cargando...</div>;

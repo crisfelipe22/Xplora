@@ -1,3 +1,72 @@
-.tituloReserva{
-    color: beige;
+.tituloVolver{
+    margin-top: 64px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    
+}
+
+.backButton{
+    color: #6b6b6b;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.productTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.productImage {
+    width: 150px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+}
+
+.productDescription {
+    flex: 1;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.infoSection {
+    margin-top: 20px;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.sectionTitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.totalSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.totalPrice {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6b6b6b;
+}
+
+.confirmButton {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #673ab7;
+    color: white;
+    font-weight: bold;
+}
+
+.confirmButton:hover {
+    background-color: #5e35b1;
 }
