@@ -469,7 +469,10 @@ const CardDetalleProducto = ({ product, categorias }) => {
                   endDate={fechaFinReserva}
                   onChange={handleDateChange}
                   onCalendarClose={() => setOpenCalendar(false)}
-                  minDate={fechaInicioDisponible}
+                  minDate={new Date(Math.max(
+                    new Date().setHours(0, 0, 0, 0), // Fecha actual (hoy) a medianoche
+                    new Date(fechaInicioDisponible).getTime() // Fecha mínima disponible
+                  ))}
                   maxDate={fechaFinDisponible}
                   excludeDates={fechasReservadas}
                   inline
