@@ -1037,4 +1037,22 @@ CopyAuthorization: Bearer {token}
   "2025-04-01"
 ]
 ```
+#### Obtener los detalles de la reserva, el paquete de experiencia y el usuario
+
+- **Método:** GET
+- **Endpoint:** `/reservas/detalle/{reservaId}`
+- **Descripción:** Devuelve los detalles de la reserva.
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "idReserva": 2,
+  "nombreUsuario": "Xplora Superadmin",
+  "nombrePaquete": "Paseo en kayak",
+  "descripcionPaquete": "Navega en kayak frente a uno de los glaciares más famosos. Embárcate en una aventura inolvidable con nuestro paseo en kayak, donde la serenidad del agua se fusiona con la emoción de la exploración. Deslízate suavemente por paisajes impresionantes, ya sea un tranquilo lago rodeado de montañas, un río serpenteante a través de exuberante vegetación o la costa marina con vistas espectaculares. Siente la libertad de remar a tu propio ritmo, descubriendo rincones ocultos y conectando con la naturaleza de una manera única. Nuestros guías expertos te acompañarán, asegurando una experiencia segura y enriquecedora, mientras compartes la belleza del entorno con amigos, familiares o en solitario.",
+  "duracionPaquete": "3 horas",
+  "precioPaquete": 120.0,
+  "ubicacionPaquete": "Buenos Aires, Argentina"
+}
+```
 
