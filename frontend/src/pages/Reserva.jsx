@@ -2,7 +2,14 @@
 const Reserva = () =>{
 
     return(
-        <h1>PAGINA DE RESERVAS</h1>
+        <div>
+            <h1>PAGINA DE RESERVAS</h1>
+            <h1>PAGINA DE RESERVAS</h1>
+
+
+
+            <h1>PAGINA DE RESERVAS</h1>
+        </div>
     )
 };
 
