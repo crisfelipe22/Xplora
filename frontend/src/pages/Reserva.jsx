@@ -3,9 +3,12 @@ import CardDetalleReserva from "../components/CardDetalleReserva";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Reserva = () =>{
     const { id_paquete_experiencia } = useParams();
+    const navigate = useNavigate();
+
     const [product, setProduct] = useState();
     const [fechas, setFechas] = useState({ fecha_inicio: "", fecha_fin: "" });
 
@@ -14,7 +17,7 @@ const Reserva = () =>{
         const preReserva = localStorage.getItem("preReserva");
         if (preReserva) {
             setFechas(JSON.parse(preReserva));
-            localStorage.removeItem("preReserva"); 
+            
         }
 
         const obtenerProducto = async () => {
@@ -34,8 +37,18 @@ const Reserva = () =>{
         return <div>Cargando...</div>;
     }
 
+    const confirmarReserva = () => {
+        localStorage.removeItem("preReserva");
+        alert("Reserva confirmada");
+        navigate("/");
+    };
+
     return(
-        <CardDetalleReserva product={product} fecha_inicio={fechas.fecha_inicio} fecha_fin={fechas.fecha_fin}  />
+        <CardDetalleReserva 
+        product={product} 
+        fecha_inicio={fechas.fecha_inicio} 
+        fecha_fin={fechas.fecha_fin}
+        confirmarReserva={confirmarReserva}  />
     )
 };
 
