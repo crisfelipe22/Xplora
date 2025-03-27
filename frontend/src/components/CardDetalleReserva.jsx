@@ -42,7 +42,7 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}
 
     
     return(
-        <Box>
+        <Box className={styles.container} >
             <Box className={styles.tituloVolver}>
                 <IconButton
                 component={RouterLink}
@@ -60,7 +60,7 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}
                     <Typography variant="h6" className={styles.productTitle}>
                         {product.nombre}
                     </Typography>
-                    <Box>
+                    <Box className={styles.productContenido} >
                         <img
                             src={imagenArray[0]}
                             alt={product.nombre}
@@ -86,10 +86,10 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}
                 <Typography variant="subtitle1" className={styles.sectionTitle}>
                     Datos reserva experiencia
                 </Typography>
-                <Typography>{formatearFecha(fecha_inicio)} - {formatearFecha(fecha_fin)}</Typography>
+                <Typography>{formatearFecha(fecha_inicio)} --- {formatearFecha(fecha_fin)}</Typography>
                 <Box className={styles.totalSection}>
                     <Typography variant="h6">Total a pagar</Typography>
-                    <Typography variant="h6" className={styles.totalPrice}>
+                    <Typography variant="h6" >
                     ${product.precio}
                     </Typography>
                 </Box>
