@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 const Reserva = () =>{
     const { id_paquete_experiencia } = useParams();
     const navigate = useNavigate();
 
+    const [openDialog, setOpenDialog] = useState(false);
     const [product, setProduct] = useState();
     const [fechas, setFechas] = useState({ fecha_inicio: "", fecha_fin: "" });
 
@@ -39,16 +41,23 @@ const Reserva = () =>{
 
     const confirmarReserva = () => {
         localStorage.removeItem("preReserva");
-        alert("Reserva confirmada");
-        navigate("/");
+        setOpenDialog(true);
+
+        setTimeout(() => {
+            setOpenDialog(false);
+            navigate("/");
+        }, 6000);
     };
 
     return(
         <CardDetalleReserva 
-        product={product} 
-        fecha_inicio={fechas.fecha_inicio} 
-        fecha_fin={fechas.fecha_fin}
-        confirmarReserva={confirmarReserva}  />
+            product={product} 
+            fecha_inicio={fechas.fecha_inicio} 
+            fecha_fin={fechas.fecha_fin}
+            confirmarReserva={confirmarReserva}
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+        />
     )
 };
 
