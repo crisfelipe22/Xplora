@@ -13,7 +13,7 @@ import {
     Snackbar,
     Alert,
     IconButton,
-    CardContent,
+    CardContent, Dialog, DialogTitle, DialogContent, DialogActions
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -21,7 +21,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from '../styles/CardDetalleReserva.module.css'
 
-const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}) =>{
+const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva, open, onClose}) =>{
     const navigate = useNavigate();
     const theme = useTheme();
     const { user } = useAuth();
@@ -38,6 +38,11 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}
             month: "long",     
             year: "numeric"    
         });
+    };
+
+    const handleVerReservas = () => {
+        onClose();
+        navigate("/perfil"); // Ajusta la ruta
     };
 
     
@@ -100,6 +105,21 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva}
                 </Button>
             </Box>
 
+            <Dialog open={open} onClose={onClose} className={styles.dialogContent} 
+            maxWidth={false}
+            PaperProps={{
+                className: styles.dialogContent 
+            }}>
+                <DialogTitle className={styles.tituloDialogo} >¡Felicidades! </DialogTitle>
+                <DialogContent  >
+                    <Typography className={styles.contenidoDialogo}>Ya tienes tu reserva a la experiencia: <strong>{product.nombre}</strong></Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleVerReservas} color="primary" variant="contained" className={styles.botonVerReservas}>
+                        Ver mis reservas
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

@@ -41,6 +41,7 @@
     flex: 1;
     font-size: 16px !important;
     color: #5C5B5E;
+    text-align: justify;
 }
 
 .infoSection {
@@ -74,4 +75,29 @@
 
 .confirmButton:hover {
     background-color: #125a9e;
+}
+
+.dialogContent{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 800px;
+    max-width: 90vw;
+    height: 310px;
+    max-height: 80vh;
+    gap: 10%;
+}
+
+.tituloDialogo{
+    font-size: 34px !important;
+    font-weight: 400 !important;
+}
+
+.contenidoDialogo{
+    font-size: 24px !important;
+}
+
+.botonVerReservas{
+    font-size: 15px !important;
 }
