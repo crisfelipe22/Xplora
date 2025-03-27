@@ -1,26 +1,28 @@
 /* eslint-disable no-unused-vars */
-import { Grid2, Box, Pagination, Typography, Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-import { useState, useEffect } from 'react';
-import axios from 'axios'; 
+import { Grid2, Box, Pagination, Typography, Button, Checkbox, FormControlLabel, FormGroup, Drawer, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import CardProductoAleatorio from './CardProductoAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
+import { Padding, SystemSecurityUpdateWarningTwoTone } from '@mui/icons-material';
 
 const ProductoAleatorio = () => {
     const [pag, setPag] = useState(1);
     const [itemPorPag, setItemPorPag] = useState(6);
-
     const [productosAleatorios, setProductosAleatorios] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
     const [usuario, setUsuario] = useState(null);
+    const [filtroAbierto, setFiltroAbierto] = useState(false);
 
-    // Obtener usuario del localStorage
+    const filtroRef = useRef(null);
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("usuario"));
         setUsuario(user);
     }, []);
 
-    // Obtener datos de productos y categorías
     useEffect(() => {
         const obtenerDatos = async () => {
             try {
@@ -28,18 +30,33 @@ const ProductoAleatorio = () => {
                     axios.get("/api/paquete-experiencia/aleatorios?cantidad=30"),
                     axios.get("/api/categoria")
                 ]);
-
                 setProductosAleatorios(productosResponse.data);
                 setCategorias(categoriasResponse.data);
             } catch (error) {
                 console.error("Error obteniendo datos:", error);
             }
         };
-
         obtenerDatos();
     }, []);
 
-    // Manejo de selección de categorías
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (filtroRef.current && !filtroRef.current.contains(event.target)) {
+                setFiltroAbierto(false);
+            }
+        };
+
+        if (filtroAbierto) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [filtroAbierto]);
+
     const handleCategoriaChange = (categoriaId) => {
         setCategoriasSeleccionadas((prevCategorias) =>
             prevCategorias.includes(categoriaId)
@@ -48,38 +65,43 @@ const ProductoAleatorio = () => {
         );
     };
 
-// Depuración para ver si los productos tienen categorías correctas
-console.log("Productos:", productosAleatorios);
-console.log("Categorías seleccionadas:", categoriasSeleccionadas);
+    const productosFiltrados = productosAleatorios.filter((producto) => {
+        if (categoriasSeleccionadas.length === 0) return true;
+        return categoriasSeleccionadas.includes(producto.id_categoria);
+    });
 
-const productosFiltrados = productosAleatorios.filter((producto) => {
-  if (categoriasSeleccionadas.length === 0) return true; 
-  return categoriasSeleccionadas.includes(producto.id_categoria); // ✅ Usando id_categoria directamente
-});
-
-    // Resetear filtros
     const limpiarFiltros = () => {
         setCategoriasSeleccionadas([]);
     };
 
-    // Paginación
     const startIndex = (pag - 1) * itemPorPag;
     const endIndex = startIndex + itemPorPag;
     const paginatedProducts = productosFiltrados.slice(startIndex, endIndex);
 
     return (
-        <Box className={styles.gridContainer}>
-            <Grid2 container spacing={4} columns={12}>
-                {/* 📌 Filtro en la izquierda */}
-                <Grid2 size={{ mobile: 12, tablet: 3, desktop: 3 }}>
-                    <Box className={styles.filterContainer}>
-                        <Typography variant="h6">Filtrar</Typography>
-                        <Typography variant="body2">{productosFiltrados.length} Experiencias</Typography>
+        <>
+            <Box
+                sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+            >
+                <Typography variant="h5" className="titulo-recomendados">
+                    Lo que nuestros Xplorers recomiendan
+                </Typography>
+
+                <IconButton className={styles.menuButton} onClick={() => setFiltroAbierto(true)}>
+                    <MenuIcon />
+                </IconButton>
+            </Box>
+            <Box sx={{Padding:1}} className={styles.gridContainer}>
+                <Grid2 container spacing={4} columns={12}>
+
+                    {/* Filtro en desktop (siempre visible) */}
+                    <Box item xs={12} md={3} className={styles.desktopFilter}>
+                        <Typography variant="h6" sx={{ marginY:2 }}>Filtrar</Typography>
+                        <Typography variant="body2" sx={{ marginY:2 }}>{productosFiltrados.length} Experiencias</Typography>
                         <Button variant="contained" color="primary" onClick={limpiarFiltros}>
                             LIMPIAR FILTROS
                         </Button>
-
-                        <Typography variant="subtitle2">Categorías</Typography>
+                        <Typography variant="body2">Categorías</Typography>
                         <FormGroup>
                             {categorias.map((categoria) => (
                                 <FormControlLabel
@@ -95,37 +117,52 @@ const productosFiltrados = productosAleatorios.filter((producto) => {
                             ))}
                         </FormGroup>
                     </Box>
-                </Grid2>
 
-                {/* 📌 Productos en la derecha */}
-                <Grid2 size={{ mobile: 12, tablet: 9, desktop: 9 }} container spacing={4}>
-                    {paginatedProducts.length > 0 ? (
-                        paginatedProducts.map((product) => (
-                            <Grid2 size={{ mobile: 12, tablet: 6, desktop: 4 }} key={product.id_paquete_experiencia}>
-                                <CardProductoAleatorio product={product} categorias={categorias} usuario={usuario} />
-                            </Grid2>
-                        ))
-                    ) : (
-                        <Typography variant="h6" sx={{ marginTop: 2, textAlign: "center", width: "100%" }}>
-                            No hay productos disponibles.
-                        </Typography>
+                    {/* Productos */}
+                    <Grid2 size={{ mobile: 12, tablet: 12, desktop: 10 }} container spacing={4}>
+                        {paginatedProducts.length > 0 ? (
+                            paginatedProducts.map((product) => (
+                                <Grid2 size={{ mobile: 12, tablet: 6, desktop: 4 }} key={product.id_paquete_experiencia}>
+                                    <CardProductoAleatorio product={product} categorias={categorias} usuario={usuario} />
+                                </Grid2>
+                            ))
+                        ) : (
+                            <Typography variant="h6" sx={{ marginTop: 2, textAlign: "center", width: "100%" }}>
+                                No hay productos disponibles.
+                            </Typography>
+                        )}
+                    </Grid2>
+
+                    {/* Drawer para filtros en tablet/móvil */}
+                    {filtroAbierto && (
+                        <div className={styles.movileFilter} ref={filtroRef}>
+                            <Box>
+                                <Typography variant="h6">Filtrar</Typography>
+                                <Typography variant="body2">{productosFiltrados.length} Experiencias</Typography>
+                                <Button variant="contained" color="primary" onClick={limpiarFiltros}>
+                                    LIMPIAR FILTROS
+                                </Button>
+                                <Typography variant="subtitle2">Categorías</Typography>
+                                <FormGroup>
+                                    {categorias.map((categoria) => (
+                                        <FormControlLabel
+                                            key={categoria.id_categoria}
+                                            control={
+                                                <Checkbox
+                                                    checked={categoriasSeleccionadas.includes(categoria.id_categoria)}
+                                                    onChange={() => handleCategoriaChange(categoria.id_categoria)}
+                                                />
+                                            }
+                                            label={categoria.nombre}
+                                        />
+                                    ))}
+                                </FormGroup>
+                            </Box>
+                        </div>
                     )}
                 </Grid2>
-            </Grid2>
-
-            {/* Paginación */}
-            {productosFiltrados.length > itemPorPag && (
-                <Pagination
-                    count={Math.ceil(productosFiltrados.length / itemPorPag)}
-                    page={pag}
-                    onChange={(event, newPage) => setPag(newPage)}
-                    className={styles.pagination}
-                    shape="rounded"
-                    siblingCount={5}
-                    boundaryCount={1}
-                />
-            )}
-        </Box>
+            </Box>
+        </>
     );
 };
 
