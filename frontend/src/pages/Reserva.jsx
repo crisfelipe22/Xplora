@@ -4,11 +4,15 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useReserva } from "../contexts/ReservaContext";
+import { useAuth } from "../contexts/AuthContext";
 
 
 const Reserva = () =>{
     const { id_paquete_experiencia } = useParams();
     const navigate = useNavigate();
+    const { confirmarReserva } = useReserva();
+    const { user } = useAuth();
 
     const [openDialog, setOpenDialog] = useState(false);
     const [product, setProduct] = useState();
@@ -39,14 +43,17 @@ const Reserva = () =>{
         return <div>Cargando...</div>;
     }
 
-    const confirmarReserva = () => {
-        localStorage.removeItem("preReserva");
-        setOpenDialog(true);
-
-        setTimeout(() => {
-            setOpenDialog(false);
-            navigate("/");
-        }, 6000);
+    const handleConfirmarReserva = () => {
+        confirmarReserva(
+            {
+                idUsuario: user.id,
+                idPaqueteExperiencia: product.id_paquete_experiencia,
+                fecha_inicio: fechas.fecha_inicio,
+                fecha_fin: fechas.fecha_fin
+            },
+            setOpenDialog,  
+            navigate
+        );
     };
 
     return(
@@ -54,7 +61,7 @@ const Reserva = () =>{
             product={product} 
             fecha_inicio={fechas.fecha_inicio} 
             fecha_fin={fechas.fecha_fin}
-            confirmarReserva={confirmarReserva}
+            confirmarReserva={handleConfirmarReserva}
             open={openDialog}
             onClose={() => setOpenDialog(false)}
         />
