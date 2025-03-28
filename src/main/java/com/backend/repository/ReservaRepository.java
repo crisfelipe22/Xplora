@@ -38,21 +38,22 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
           WHERE id_paquete_experiencia = :idPaqueteExperiencia
       ),
       fechas_reservadas AS (
-          SELECT
-              fecha_inicio_reserva AS fecha
+          SELECT fecha_inicio_reserva AS fecha
+          FROM reservas_expandidas
+          UNION
+          SELECT fecha_fin_reserva AS fecha
           FROM reservas_expandidas
           UNION ALL
           SELECT
-              DATE_ADD(fecha, INTERVAL 1 DAY)
-          FROM fechas_reservadas
-          WHERE fecha < (
-              SELECT fecha_fin_reserva
-              FROM reservas_expandidas
-              WHERE fecha_inicio_reserva = (
-                  SELECT MIN(fecha_inicio_reserva)
-                  FROM reservas_expandidas
-              )
-          )
+              DATE_ADD(r.fecha_inicio_reserva, INTERVAL t.n DAY) AS fecha
+          FROM
+              reservas_expandidas r
+          JOIN (
+              SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3
+              UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7
+              UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11
+              UNION SELECT 12 UNION SELECT 13 UNION SELECT 14
+          ) t ON t.n <= DATEDIFF(r.fecha_fin_reserva, r.fecha_inicio_reserva)
       )
       SELECT DISTINCT DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha
       FROM fechas_disponibles
@@ -60,6 +61,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
           SELECT fecha
           FROM fechas_reservadas
       )
+      ORDER BY fecha
       """, nativeQuery = true)
   List<String> findAvailableDates(@Param("idPaqueteExperiencia") Long idPaqueteExperiencia);
 
