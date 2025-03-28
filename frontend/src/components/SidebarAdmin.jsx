@@ -34,7 +34,7 @@ const SidebarAdmin = () => {
               },
             }}
           >
-            <List className={styles.menuList}>
+            <List className={styles.menuList} sx={{position: "fixed", top: "65px"}}>
               <Link to="/admin" style={{ textDecoration: "none" }}>
                 <ListItemButton className={styles.menuItem}>
                   <ListItemIcon>
@@ -79,7 +79,10 @@ const SidebarAdmin = () => {
                   />
                 </ListItemButton>
               </Link>
-              <Link to="/admin/caracteristicas" style={{ textDecoration: "none" }}>
+              <Link
+                to="/admin/caracteristicas"
+                style={{ textDecoration: "none" }}
+              >
                 <ListItemButton className={styles.menuItem}>
                   <ListItemIcon>
                     <ChecklistIcon className={styles.menuIcon} />
