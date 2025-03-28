@@ -42,9 +42,9 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva,
 
     const handleVerReservas = () => {
         onClose();
-        navigate("/perfil"); // Ajusta la ruta
+        navigate("/perfil"); // Ajusta la ruta a MIS RESERVAS
     };
-
+    
     
     return(
         <Box className={styles.container} >
