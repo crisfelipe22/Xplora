@@ -93,7 +93,7 @@ const ProductoAleatorio = () => {
                 </Typography>
 
                 <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
-                    <FilterList sx={{ marginX: 1 }} />
+                    <FilterList />
                     FILTRAR
                 </Button>
             </Box>
@@ -107,7 +107,7 @@ const ProductoAleatorio = () => {
                         <Button variant="contained" color="primary" onClick={limpiarFiltros}>
                             LIMPIAR FILTROS
                         </Button>
-                        <Typography variant="body2">Categorías</Typography>
+                        <Typography variant="body2" sx={{ marginY: 2 }}>Categorías</Typography>
                         <FormGroup>
                             {categorias.map((categoria) => (
                                 <FormControlLabel
@@ -143,9 +143,9 @@ const ProductoAleatorio = () => {
                     {filtroAbierto && (
                         <div className={styles.movileFilter} ref={filtroRef}>
                             <Box sx={{ padding: 2 }}>
-                                <IconButton onClick={cerrarFiltro} sx={{ display: "flex", alignItems: "center", color: "black", gap: 0.5, }}>
-                                    <CloseIcon fontSize="small" sx={{ padding:0}} />
-                                    <Typography variant="body2" fontWeight="bold">
+                                <IconButton onClick={cerrarFiltro} sx={{ display: "flex", alignItems: "center", color: "black", padding: 0 }}>
+                                    <CloseIcon sx={{ fontSize: "0.5em", padding: 0 }} />
+                                    <Typography variant="caption">
                                         CERRAR
                                     </Typography>
                                 </IconButton>
