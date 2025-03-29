@@ -71,8 +71,7 @@ const ProductoAleatorio = () => {
         return categoriasSeleccionadas.includes(producto.id_categoria);
     });
 
-    const cerrarFiltro =() =>
-    {
+    const cerrarFiltro = () => {
         setFiltroAbierto(false);
     }
 
@@ -94,17 +93,17 @@ const ProductoAleatorio = () => {
                 </Typography>
 
                 <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
+                    <FilterList sx={{ marginX: 1 }} />
                     FILTRAR
-                    <FilterList />
                 </Button>
             </Box>
-            <Box sx={{Padding:1}} className={styles.gridContainer}>
+            <Box sx={{ Padding: 1 }} className={styles.gridContainer}>
                 <Grid2 container spacing={4} columns={12}>
 
-                    {/* Filtro en desktop (siempre visible) */}
+                    {/* Filtro en desktop */}
                     <Box item xs={12} md={3} className={styles.desktopFilter}>
-                        <Typography variant="h6" sx={{ marginY:2 }}>Filtrar</Typography>
-                        <Typography variant="body2" sx={{ marginY:2 }}>{productosFiltrados.length} Experiencias</Typography>
+                        <Typography variant="h6" sx={{ marginY: 2 }}>Filtrar</Typography>
+                        <Typography variant="body2" sx={{ marginY: 2 }}>{productosFiltrados.length} Experiencias</Typography>
                         <Button variant="contained" color="primary" onClick={limpiarFiltros}>
                             LIMPIAR FILTROS
                         </Button>
@@ -140,23 +139,23 @@ const ProductoAleatorio = () => {
                         )}
                     </Grid2>
 
-                    {/* Drawer para filtros en tablet/móvil */}
+                    {/*Filtros en tablet/móvil */}
                     {filtroAbierto && (
                         <div className={styles.movileFilter} ref={filtroRef}>
-                            <Box sx={{padding:2}}>
-                            <IconButton onClick={cerrarFiltro} sx={{display: "flex", alignItems: "center", color: "black",gap: 0.5,}}>
-                                <CloseIcon fontSize="small" />
-                                <Typography variant="body2" fontWeight="bold">
-                                    CERRAR
+                            <Box sx={{ padding: 2 }}>
+                                <IconButton onClick={cerrarFiltro} sx={{ display: "flex", alignItems: "center", color: "black", gap: 0.5, }}>
+                                    <CloseIcon fontSize="small" sx={{ padding:0}} />
+                                    <Typography variant="body2" fontWeight="bold">
+                                        CERRAR
                                     </Typography>
-                            </IconButton>
+                                </IconButton>
                                 <Typography variant="h6">Filtrar</Typography>
-                                <Typography variant="body2" sx={{marginY:2}}>{productosFiltrados.length} Experiencias</Typography>
+                                <Typography variant="body2" sx={{ marginY: 2 }}>{productosFiltrados.length} Experiencias</Typography>
                                 <Button variant="contained" color="primary" onClick={limpiarFiltros}>
                                     LIMPIAR FILTROS
                                 </Button>
-                                <Typography variant="subtitle2" sx={{marginY:2}}>Categorías</Typography>
-                                
+                                <Typography variant="subtitle2" sx={{ marginY: 2 }}>Categorías</Typography>
+
                                 <FormGroup >
                                     {categorias.map((categoria) => (
                                         <FormControlLabel
