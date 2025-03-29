@@ -39,6 +39,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PaqueteExperienciaFavorito> favoritos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Reserva> reservas  = new ArrayList<>();
+
     // Constructor vacío
     public Usuario() {
     }

@@ -27,6 +27,9 @@ public class PaqueteExperiencia {
     private Date fecha_inicio;
     private Date fecha_fin;
 
+    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL)
+    private List<Reserva> reservas =  new ArrayList<>();
+
     @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaracteristicaPaqueteExperiencia> detalles_productos = new ArrayList<>();
 
