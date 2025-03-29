@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, IconButton, Button, Typography, Box } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, IconButton, Button, Typography, Box, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ShareIcon from "@mui/icons-material/Share";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -11,9 +11,42 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const ModalCompartir = ({ nombre, imagen }) => {
     const [open, setOpen] = useState(false);
-    
+    const productUrl = window.location.href;
+    const [mensaje, setMensaje] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const handleShare = (platform) => {
+      let url = "";
+      const fullMessage = `${mensaje ? mensaje + " " : ""}${nombre} ${productUrl}`;
+      switch (platform) {
+        case "facebook":
+          //Facebook no admite compartir enlaces locales (http://localhost) ni un mensaje persanalizado. Tenemos que tener deplegada la app
+          // o crear un nuevo enlace corto en https://tinyurl.com y hardcodearlo
+          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
+          break;
+        case "twitter":
+          url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(fullMessage)}`;
+          break;
+        case "whatsapp":
+          url = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+          break;
+        case "instagram":
+          navigator.clipboard.writeText(fullMessage);
+          alert("Enlace copiado. Ábrelo manualmente en Instagram.");
+          return;
+        case "email":
+          url = `mailto:?subject=${encodeURIComponent("Quieres vivir esta experiencia de Xplora?")}&body=${encodeURIComponent(fullMessage)}`;
+          break;
+        case "copy":
+          navigator.clipboard.writeText(fullMessage);
+          alert("Enlace copiado al portapapeles.");
+          return;
+        default:
+          return;
+      }
+      window.open(url, "_blank");
+    };
 
     return (
       <>
@@ -36,27 +69,36 @@ const ModalCompartir = ({ nombre, imagen }) => {
               <img
                 src={imagen}
                 alt={nombre}
-                style={{ width: 50, height: 50, borderRadius: 8 }}
+                style={{ width: 100, height: 75, borderRadius: 8 }}
               />
               <Typography fontWeight="bold">{nombre}</Typography>
             </Box>
+            <TextField
+              label="Agrega un mensaje"
+              fullWidth
+              multiline
+              minRows={2}
+              value={mensaje}
+              onChange={(e) => setMensaje(e.target.value)}
+              sx={{ mt: 2 }}
+            />
             <Box mt={2} display="grid" gap={1}>
-              <Button variant="outlined" startIcon={<ContentCopyIcon />}>
+              <Button variant="outlined" startIcon={<ContentCopyIcon />}  onClick={() => handleShare("copy")}>
                 COPIAR ENLACE
               </Button>
-              <Button variant="outlined" startIcon={<FacebookIcon />}>
+              <Button variant="outlined" startIcon={<FacebookIcon />} onClick={() => handleShare("facebook")}>
                 FACEBOOK
               </Button>
-              <Button variant="outlined" startIcon={<TwitterIcon />}>
+              <Button variant="outlined" startIcon={<TwitterIcon />} onClick={() => handleShare("twitter")}>
                 TWITTER
               </Button>
-              <Button variant="outlined" startIcon={<InstagramIcon />}>
+              <Button variant="outlined" startIcon={<InstagramIcon />} onClick={() => handleShare("instagram")}>
                 INSTAGRAM
               </Button>
-              <Button variant="outlined" startIcon={<WhatsAppIcon />}>
+              <Button variant="outlined" startIcon={<WhatsAppIcon />} onClick={() => handleShare("whatsapp")}>
                 WHATSAPP
               </Button>
-              <Button variant="outlined" startIcon={<MailOutlineIcon />}>
+              <Button variant="outlined" startIcon={<MailOutlineIcon />} onClick={() => handleShare("email")}>
                 CORREO ELECTRÓNICO
               </Button>
             </Box>
