@@ -3,6 +3,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useFavorites } from "./FavoritesContext";
 
 // Create the context
 export const AuthContext = createContext();
@@ -115,6 +116,9 @@ useEffect(() => {
     setUserRole(null);
     setIsAuthenticated(false);
     setCurrentToken(null); // Clear token state to trigger interceptor removal
+    // Limpiar favoritos al cerrar sesión
+    const { dispatch } = useFavorites(); 
+    dispatch({ type: "SET_FAVORITES", payload: [] });
   };
 
   // Only render children when loading is complete
