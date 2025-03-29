@@ -132,6 +132,16 @@
     background-color: white;
 }
 
+.FilterButton {
+    color: #7B3FF6 !important;
+    background: transparent !important;
+    border: 1px solid #7B3FF6 !important;
+    font-size: x-small !important;
+    font-weight: bold !important;
+    width: auto !important;
+    padding: 6px 12px !important;
+    margin-left: auto !important;
+  }
 
 .menuButton {
     position: absolute !important;

@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import CardProductoAleatorio from './CardProductoAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
-import { Padding, SystemSecurityUpdateWarningTwoTone } from '@mui/icons-material';
+import { Padding, SystemSecurityUpdateWarningTwoTone, FilterList } from '@mui/icons-material';
+import CloseIcon from "@mui/icons-material/Close";
 
 const ProductoAleatorio = () => {
     const [pag, setPag] = useState(1);
@@ -70,6 +71,11 @@ const ProductoAleatorio = () => {
         return categoriasSeleccionadas.includes(producto.id_categoria);
     });
 
+    const cerrarFiltro =() =>
+    {
+        setFiltroAbierto(false);
+    }
+
     const limpiarFiltros = () => {
         setCategoriasSeleccionadas([]);
     };
@@ -87,9 +93,10 @@ const ProductoAleatorio = () => {
                     Lo que nuestros Xplorers recomiendan
                 </Typography>
 
-                <IconButton className={styles.menuButton} onClick={() => setFiltroAbierto(true)}>
-                    <MenuIcon />
-                </IconButton>
+                <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
+                    FILTRAR
+                    <FilterList />
+                </Button>
             </Box>
             <Box sx={{Padding:1}} className={styles.gridContainer}>
                 <Grid2 container spacing={4} columns={12}>
@@ -136,14 +143,21 @@ const ProductoAleatorio = () => {
                     {/* Drawer para filtros en tablet/móvil */}
                     {filtroAbierto && (
                         <div className={styles.movileFilter} ref={filtroRef}>
-                            <Box>
+                            <Box sx={{padding:2}}>
+                            <IconButton onClick={cerrarFiltro} sx={{display: "flex", alignItems: "center", color: "black",gap: 0.5,}}>
+                                <CloseIcon fontSize="small" />
+                                <Typography variant="body2" fontWeight="bold">
+                                    CERRAR
+                                    </Typography>
+                            </IconButton>
                                 <Typography variant="h6">Filtrar</Typography>
-                                <Typography variant="body2">{productosFiltrados.length} Experiencias</Typography>
+                                <Typography variant="body2" sx={{marginY:2}}>{productosFiltrados.length} Experiencias</Typography>
                                 <Button variant="contained" color="primary" onClick={limpiarFiltros}>
                                     LIMPIAR FILTROS
                                 </Button>
-                                <Typography variant="subtitle2">Categorías</Typography>
-                                <FormGroup>
+                                <Typography variant="subtitle2" sx={{marginY:2}}>Categorías</Typography>
+                                
+                                <FormGroup >
                                     {categorias.map((categoria) => (
                                         <FormControlLabel
                                             key={categoria.id_categoria}
