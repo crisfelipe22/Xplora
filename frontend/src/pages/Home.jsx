@@ -265,7 +265,6 @@ const Home = () => {
         </Container>
 
           <Container sx={{padding:"0px"}}>
-
             <ProductoAleatorio />
           </Container>
       </Box>
