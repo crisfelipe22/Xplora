@@ -175,4 +175,8 @@ Grid3{
     .movileFilter{
         display: none;
     }
+    .FilterButton
+    {
+        display: none !important;
+    }
 }
