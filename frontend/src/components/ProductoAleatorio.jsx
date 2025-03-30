@@ -64,6 +64,7 @@ const ProductoAleatorio = () => {
                 ? prevCategorias.filter((id) => id !== categoriaId)
                 : [...prevCategorias, categoriaId]
         );
+        setPag(1);
     };
 
     const productosFiltrados = productosAleatorios.filter((producto) => {
@@ -175,8 +176,8 @@ const ProductoAleatorio = () => {
                     )}
                 </Grid2>
             </Box>
-             {/* Paginación */}
-             {productosFiltrados.length > itemPorPag && (
+            {/* Paginación */}
+            {productosFiltrados.length > itemPorPag && (
                 <Pagination
                     count={Math.ceil(productosFiltrados.length / itemPorPag)}
                     page={pag}
