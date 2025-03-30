@@ -175,6 +175,18 @@ const ProductoAleatorio = () => {
                     )}
                 </Grid2>
             </Box>
+             {/* Paginación */}
+             {productosFiltrados.length > itemPorPag && (
+                <Pagination
+                    count={Math.ceil(productosFiltrados.length / itemPorPag)}
+                    page={pag}
+                    onChange={(event, newPage) => setPag(newPage)}
+                    className={styles.pagination}
+                    shape="rounded"
+                    siblingCount={5}
+                    boundaryCount={1}
+                />
+            )}
         </>
     );
 };
