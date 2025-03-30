@@ -54,6 +54,9 @@ public class AuthService {
     @Autowired
     private final PaqueteExperienciaFavoritoRepository paqueteExperienciaFavoritoRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
@@ -117,6 +120,7 @@ public class AuthService {
         // Guardar en la base de datos
         try {
           usuarioRepository.save(usuario);
+          emailService.sendHtmlRegistrationConfirmationEmail(usuario.getEmail(), usuario.getNombre());
         } catch (Exception e) {
           logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}",
               usuario.getNombre(), e.getMessage(), e);
