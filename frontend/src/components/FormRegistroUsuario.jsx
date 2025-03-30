@@ -16,8 +16,9 @@ import {
   Typography,
   Box,
   Link,
+  CircularProgress,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMediaQuery, useTheme } from "@mui/material";
 
 const FormRegistroUsuario = () => {
@@ -32,15 +33,16 @@ const FormRegistroUsuario = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const imagenFondo = "/imagen_20.png"; // Correct way to reference public files
-   const [openAlertExito, setOpenAlertExito] = useState(false);
-   let navigate = useNavigate();
-   const handleCloseAlertExito = (_, reason) => {
+  const [openAlertExito, setOpenAlertExito] = useState(false);
+  const handleCloseAlertExito = (_, reason) => {
     if (reason === "clickaway") return;
     setOpenAlertExito(false);
   };
@@ -95,48 +97,22 @@ const FormRegistroUsuario = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataToSend = {
-      nombre: form.nombre,
-      direccion: form.direccion,
-      email: form.email,
-      contrasena: form.contrasena,
-      telefono: 123456,
-      id_rol: 3,
-    };
-    
-    if (validate()) {
-      try {
-        const response = await axios.post(
-          "/api/auth/registro",
-          dataToSend,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log("Usuario registrado:", dataToSend);
-        setOpenAlertExito(true);
-        setTimeout(() => {
-          setOpenAlertExito(false)
-          navigate("/login")
-        }, 3000);;
+    if (!validate()) return;
+    setLoading(true);
 
-        setForm({
-          nombre: "",
-          direccion: "",
-          email: "",
-          contrasena: "",
-          terms: false,
-        });
-        setErrors({});
-      } catch (error) {
-        console.error("Error al registrar usuario:", error);
-        alert(
-          "Hubo un problema con el registro: " +
-            ((Object.values(error.response?.data)[0]) || "Error desconocido")
-        );
-      }
+    try {
+      await axios.post("/api/auth/registro", form, {
+        headers: { "Content-Type": "application/json" },
+      });
+      navigate("/registro-exitoso", { state: { email: form.email } });
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      alert(
+        "Hubo un problema con el registro: " +
+          (error.response?.data?.message || "Error desconocido")
+      );
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -161,7 +137,7 @@ const FormRegistroUsuario = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          width: {mobile: "100%", tablet: "75%", desktop: "50%"},
+          width: { mobile: "100%", tablet: "75%", desktop: "50%" },
           padding: { mobile: "0", tablet: "5%" },
 
           margin: "0",
@@ -239,7 +215,7 @@ const FormRegistroUsuario = () => {
             <TextField
               fullWidth
               label="Contraseña"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="contrasena"
               value={form.contrasena}
               onChange={handleChange}
@@ -286,8 +262,9 @@ const FormRegistroUsuario = () => {
               color="primary"
               sx={{ mt: 2, fontWeight: "bold" }}
               type="submit"
+              disabled={loading}
             >
-              CREAR CUENTA
+              {loading ? <CircularProgress size={24} /> : "CREAR CUENTA"}
             </Button>
           </form>
         </Box>
@@ -324,11 +301,14 @@ const FormRegistroUsuario = () => {
         onClose={handleCloseAlertExito}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseAlertExito} severity="success" 
-        sx={{
-          marginTop: '85px',
-          fontSize: '16px',
-          }}>
+        <Alert
+          onClose={handleCloseAlertExito}
+          severity="success"
+          sx={{
+            marginTop: "85px",
+            fontSize: "16px",
+          }}
+        >
           ¡Usuario registrado con éxito!
         </Alert>
       </Snackbar>
