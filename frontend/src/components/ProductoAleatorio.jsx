@@ -65,6 +65,7 @@ const ProductoAleatorio = () => {
                 ? prevCategorias.filter((id) => id !== categoriaId)
                 : [...prevCategorias, categoriaId]
         );
+        setPag(1);
     };
 
     const productosFiltrados = productosAleatorios.filter((producto) => {
