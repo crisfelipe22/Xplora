@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import CardProductoAleatorio from './CardProductoAleatorio';
+import CardCategoriaAleatorio from './CardCategoriaAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
 import { Padding, SystemSecurityUpdateWarningTwoTone, FilterList } from '@mui/icons-material';
 import CloseIcon from "@mui/icons-material/Close";
@@ -88,8 +89,29 @@ const ProductoAleatorio = () => {
             <Box
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
             >
-                <Typography variant="h5" className="titulo-recomendados">
-                    Lo que nuestros Xplorers recomiendan
+        {/* Título y categorías */}
+        <Typography variant="h5" className="titulo-recomendados">
+            Encuentra la experiencia ideal para ti
+        </Typography>
+
+        <Grid2 container spacing={4} columns={12}>
+            {categorias.length > 0 ? (
+                categorias.slice(0, 4).map((categoria) => (
+                    <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
+                        <CardCategoriaAleatorio categoria={categoria} />
+                    </Grid2>
+                ))
+            ) : (
+                <Typography variant="h6" sx={{ marginTop: 2, textAlign: "center", width: "100%" }}>
+                    No hay categorías disponibles.
+                </Typography>
+            )}
+        </Grid2>
+
+        {/* Nueva fila para "Lo que nuestros Xplorers recomiendan" */}
+        <Typography variant="h5" className="titulo-recomendados" sx={{ marginTop: 4 }}>
+            Lo que nuestros Xplorers recomiendan
+
                 </Typography>
 
                 <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
