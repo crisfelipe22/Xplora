@@ -12,11 +12,11 @@
   background-color: #f8f9fa !important;
 }
 
-.container{
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.container {
+  /* margin: auto; */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .titleListaProductos {
@@ -54,7 +54,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: stretch;
-  width: 90%;
+  /* width: 90%; */
 }
 
 .seccion {
@@ -283,6 +283,10 @@ form input.textField {
   color: black;
 }
 
-.alertaFracaso {
-  
+.alertaFracaso {}
+
+td>svg {
+  color: #6239E6;
+  margin-right: 20px;
+  vertical-align: middle;
 }
