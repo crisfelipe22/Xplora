@@ -86,39 +86,37 @@ const ProductoAleatorio = () => {
 
     return (
         <>
-            <Box
-                sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-            >
-        {/* Título y categorías */}
-        <Typography variant="h5" className="titulo-recomendados">
-            Encuentra la experiencia ideal para ti
-        </Typography>
-
-        <Grid2 container spacing={4} columns={12}>
-            {categorias.length > 0 ? (
-                categorias.slice(0, 4).map((categoria) => (
-                    <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
-                        <CardCategoriaAleatorio categoria={categoria} />
-                    </Grid2>
-                ))
-            ) : (
-                <Typography variant="h6" sx={{ marginTop: 2, textAlign: "center", width: "100%" }}>
-                    No hay categorías disponibles.
-                </Typography>
-            )}
-        </Grid2>
-
-        {/* Nueva fila para "Lo que nuestros Xplorers recomiendan" */}
-        <Typography variant="h5" className="titulo-recomendados" sx={{ marginTop: 4 }}>
-            Lo que nuestros Xplorers recomiendan
-
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {/* Título */}
+                <Typography variant="h5" className="titulo-recomendados" sx={{ width: "100%" }}>
+                    Encuentra la experiencia ideal para ti
                 </Typography>
 
+                {/* Categorías */}
+                <Grid2 container spacing={4} columns={12}>
+                    {categorias.length > 0 ? (
+                        categorias.slice(0, 4).map((categoria) => (
+                            <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
+                                <CardCategoriaAleatorio categoria={categoria} />
+                            </Grid2>
+                        ))
+                    ) : (
+                        <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
+                            No hay categorías disponibles.
+                        </Typography>
+                    )}
+                </Grid2>
+
+                {/* Título de recomendaciones */}
+                <Typography variant="h5" className="titulo-recomendados" sx={{ marginTop: 4 }}>
+                    Lo que nuestros Xplorers recomiendan
+                </Typography>
                 <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
                     <FilterList />
                     FILTRAR
                 </Button>
             </Box>
+
             <Box sx={{ Padding: 1 }} className={styles.gridContainer}>
                 <Grid2 container spacing={4} columns={12}>
 
@@ -197,8 +195,8 @@ const ProductoAleatorio = () => {
                     )}
                 </Grid2>
             </Box>
-             {/* Paginación */}
-             {productosFiltrados.length > itemPorPag && (
+            {/* Paginación */}
+            {productosFiltrados.length > itemPorPag && (
                 <Pagination
                     count={Math.ceil(productosFiltrados.length / itemPorPag)}
                     page={pag}
