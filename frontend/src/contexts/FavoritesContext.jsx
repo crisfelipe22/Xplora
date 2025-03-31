@@ -18,6 +18,8 @@ const favoritesReducer = (state, action) => {
       return state.filter((id) => id !== action.payload);
     case "SET_FAVORITES":
       return action.payload; // Set the favorites directly
+    case "CLEAR_FAVORITES": 
+      return [];  
     default:
       return state;
   }
@@ -141,6 +143,12 @@ export const FavoritesProvider = ({ children }) => {
       addFavorite(productId);
     }
   };
+
+  useEffect(() => {
+    if (!usuario) {
+      dispatch({ type: "CLEAR_FAVORITES" }); // Limpia los favoritos cuando el usuario es null
+    }
+  }, [usuario]);
 
   return (
     <FavoritesContext.Provider

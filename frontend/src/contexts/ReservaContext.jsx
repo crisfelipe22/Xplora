@@ -10,21 +10,21 @@ const ReservaContext = createContext();
 export const useReserva = () => useContext(ReservaContext);
 
 export const ReservaProvider = ({ children }) => {
-    const [fechasReservadas, setFechasReservadas] = useState([]);
+    const [fechasDisponibles, setFechasDisponibles] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [errorReserva, setErrorReserva] = useState(null);
     const [reserva, setReserva] = useState(null);
 
     
-        const obtenerFechasReservadas = async (id_paquete_experiencia) => {
+        const obtenerFechasDisponibles = async (id_paquete_experiencia) => {
             setLoading(true);
             try {
-                const response = await axios.get(`/api/reservas/paquete/${id_paquete_experiencia}`);
-                setFechasReservadas(response.data); // Suponiendo que devuelve un array de fechas
-                setError(null);
+                const response = await axios.get(`/api/reservas/fechas-disponibles/${id_paquete_experiencia}`);
+                setFechasDisponibles(response.data); 
+                setErrorReserva(null);
             } catch (err) {
                 console.error("Error obteniendo las fechas reservadas", err);
-                setError("No se pudieron cargar las fechas reservadas.");
+                setErrorReserva("No se pudieron cargar las fechas reservadas.");
             } finally {
                 setLoading(false);
             }
@@ -54,7 +54,7 @@ export const ReservaProvider = ({ children }) => {
     };
 
     return (
-        <ReservaContext.Provider value={{ fechasReservadas, obtenerFechasReservadas, confirmarReserva, loading, error }}>
+        <ReservaContext.Provider value={{ fechasDisponibles, obtenerFechasDisponibles, confirmarReserva, loading, errorReserva }}>
             {children}
         </ReservaContext.Provider>
     );
