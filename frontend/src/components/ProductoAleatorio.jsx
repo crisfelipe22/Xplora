@@ -8,6 +8,8 @@ import CardCategoriaAleatorio from './CardCategoriaAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
 import { Padding, SystemSecurityUpdateWarningTwoTone, FilterList } from '@mui/icons-material';
 import CloseIcon from "@mui/icons-material/Close";
+import { useMediaQuery, useTheme } from "@mui/material";
+
 
 const ProductoAleatorio = () => {
     const [pag, setPag] = useState(1);
@@ -19,6 +21,17 @@ const ProductoAleatorio = () => {
     const [filtroAbierto, setFiltroAbierto] = useState(false);
 
     const filtroRef = useRef(null);
+    const theme = useTheme();
+    const getScreenSize = () => {
+        const width = window.innerWidth;
+        if (width < 600) return "mobile"; // Móviles
+        if (width >= 600 && width < 960) return "tablet"; // Tablets
+        return "desktop"; // Desktop
+    };
+
+    const [screenSize, setScreenSize] = useState(getScreenSize());
+    const cantidadCategorias = screenSize === "mobile" ? 1 : screenSize === "tablet" ? 2 : 4;
+    const categoriasFiltradas = categorias.slice(0, cantidadCategorias);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("usuario"));
@@ -58,6 +71,12 @@ const ProductoAleatorio = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [filtroAbierto]);
+   
+    useEffect(() => {
+        const handleResize = () => setScreenSize(getScreenSize());
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const handleCategoriaChange = (categoriaId) => {
         setCategoriasSeleccionadas((prevCategorias) =>
@@ -80,6 +99,7 @@ const ProductoAleatorio = () => {
     const limpiarFiltros = () => {
         setCategoriasSeleccionadas([]);
     };
+    
 
     const startIndex = (pag - 1) * itemPorPag;
     const endIndex = startIndex + itemPorPag;
@@ -95,18 +115,18 @@ const ProductoAleatorio = () => {
 
                 {/* Categorías */}
                 <Grid2 container spacing={4} columns={12}>
-                    {categorias.length > 0 ? (
-                        categorias.slice(0, 4).map((categoria) => (
-                            <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
-                                <CardCategoriaAleatorio categoria={categoria} />
-                            </Grid2>
-                        ))
-                    ) : (
-                        <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
-                            No hay categorías disponibles.
-                        </Typography>
-                    )}
-                </Grid2>
+            {categoriasFiltradas.length > 0 ? (
+                categoriasFiltradas.map((categoria) => (
+                    <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
+                        <CardCategoriaAleatorio categoria={categoria} />
+                    </Grid2>
+                ))
+            ) : (
+                <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
+                    No hay categorías disponibles.
+                </Typography>
+            )}
+        </Grid2>
 
                 {/* Título de recomendaciones */}
                 <Typography variant="h5" className="titulo-recomendados" sx={{ marginTop: 4 }}>
