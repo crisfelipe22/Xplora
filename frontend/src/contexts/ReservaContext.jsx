@@ -32,8 +32,23 @@ export const ReservaProvider = ({ children }) => {
     
     
 //CAMBIAR LOS NOMBRES DE LAS VARIABLES id_usuario y id_paquete_experiencia AQUI Y EN RESERVA!!!!!!!
-    const confirmarReserva = async ({ idUsuario, idPaqueteExperiencia, fecha_inicio, fecha_fin }, setOpenDialog, navigate) => {
+    const confirmarReserva = async ({ idUsuario, idPaqueteExperiencia, fecha_inicio, fecha_fin, nombrePaquete }, setOpenDialog, setDialogContent, navigate) => {
         try {
+            // Verificar disponibilidad antes de confirmar la reserva
+            const response = await axios.get(`/api/reservas/fechas-disponibles/${idPaqueteExperiencia}`);
+            
+            const fechasDisponibles = response.data
+    
+            const inicio = new Date(fecha_inicio).toISOString().split("T")[0];
+            const fin = new Date(fecha_fin).toISOString().split("T")[0];
+
+            // Validamos si alguna de las fechas seleccionadas está ya ocupada
+            if (!fechasDisponibles.includes(inicio) || !fechasDisponibles.includes(fin)) {
+                alert("⚠️ Las fechas seleccionadas ya han sido reservadas. Intenta con otro rango.");
+                return;
+            }
+    
+        
             await axios.post("/api/reservas", {
                 idUsuario,
                 idPaqueteExperiencia,
@@ -41,13 +56,21 @@ export const ReservaProvider = ({ children }) => {
                 fecha_fin
             });
             localStorage.removeItem("preReserva"); 
+
+            setDialogContent({
+                title: "¡Felicidades!",
+                message: `Ya tienes tu reserva a la experiencia: ${nombrePaquete}`,
+                buttonText: "Ver mis reservas",
+                onButtonClick: () => navigate("/perfil") /*Ajusta la ruta a MIS RESERVAS*/
+            });
+
             if (typeof setOpenDialog === "function") {
                 setOpenDialog(true);
             } 
 
             setTimeout(() => {
                 navigate("/");
-            }, 6000);
+            }, 9000);
         } catch (error) {
             console.error("Error al confirmar la reserva", error);
         }
