@@ -44,7 +44,17 @@ export const ReservaProvider = ({ children }) => {
 
             // Validamos si alguna de las fechas seleccionadas está ya ocupada
             if (!fechasDisponibles.includes(inicio) || !fechasDisponibles.includes(fin)) {
-                alert("⚠️ Las fechas seleccionadas ya han sido reservadas. Intenta con otro rango.");
+                setDialogContent({
+                    title: "¡Algo salió mal!",
+                    message: "Por favor, revisa tus datos y vuelve a intentarlo.",
+                    buttonText: "Volver a los detalles",
+                    onButtonClick: () =>{
+                        localStorage.removeItem("preReserva");
+                        navigate(`/detalle-producto/${idPaqueteExperiencia}`)
+                    } 
+                });
+    
+                setOpenDialog(true);
                 return;
             }
     
@@ -68,9 +78,6 @@ export const ReservaProvider = ({ children }) => {
                 setOpenDialog(true);
             } 
 
-            setTimeout(() => {
-                navigate("/");
-            }, 9000);
         } catch (error) {
             console.error("Error al confirmar la reserva", error);
         }
