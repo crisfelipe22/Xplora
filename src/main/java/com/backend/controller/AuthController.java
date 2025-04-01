@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.dto.salida.AuthResponseDTO;
+import com.backend.dto.entada.ConfirmationResendRequestDTO;
 import com.backend.dto.entada.LoginRequestDTO;
 import com.backend.dto.entada.PaqueteExperienciaFavoritoEntradaDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
@@ -131,4 +132,10 @@ public class AuthController {
         return new ResponseEntity<>(favorito, HttpStatus.OK);
     }
 
+
+    @PostMapping("/resend-confirmation")
+    public ResponseEntity<MensajeResponseDTO> reenviarCorreo(@RequestBody ConfirmationResendRequestDTO confirmationResendRequestDTO) throws ResourceNotFoundException {
+      MensajeResponseDTO mensaje = authService.reenviarCorreo(confirmationResendRequestDTO);
+      return new ResponseEntity<>(mensaje, HttpStatus.OK);
+    }
 }
