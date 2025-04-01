@@ -39,7 +39,7 @@ const CardCategoriaAleatorio = ({ categoria }) => {
 
   return (
     <Card className={styles.card}>
-      <Link to={`/detalle-producto/${categoria.id_categoria}`} style={{ textDecoration: "none" }}>
+      <Link style={{ textDecoration: "none" }}>
         <CardMedia
           component="img"
           image={imagenUrl || "nada"}
