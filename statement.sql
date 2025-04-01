@@ -1,14 +1,14 @@
 use xplora_db;
 
-INSERT INTO categoria (nombre) VALUES
-    ('Aventuras y deportes'),
-    ('Gastronomia'),
-    ('Estadias'),
-    ('Bienestar y relajación'),
-    ('Cultura y entretenimiento'),
-    ('Naturaleza y ecoturismo'),
-    ('Experiencias urbanas'),
-    ('Romanticismo y arte');
+INSERT INTO categoria (nombre, imagen) VALUES
+    ('Aventuras y deportes', '/imagen_25.jpeg'),
+    ('Gastronomia', '/imagen_26.jpeg'),
+    ('Estadias', '/imagen_27.jpeg'),
+    ('Bienestar y relajación', '/imagen_28.jpeg'),
+    ('Cultura y entretenimiento', '/imagen_29.jpeg'),
+    ('Naturaleza y ecoturismo', '/imagen_30.jpeg'),
+    ('Experiencias urbanas', '/imagen_31.jpeg'),
+    ('Romanticismo y arte', '/imagen_32.jpeg');
 
 INSERT INTO rol (id_rol, nombre) VALUES
     (1, 'SuperAdministrador'),

@@ -30,7 +30,7 @@ const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mos
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
   const imagenUrl =
-    imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
+    imagenArray.length > 0 ? imagenArray[0] : "/logo.svg";
   //suponiendo raiting por ahora
   function stringToNumber(str) {
     let hash = 0;
