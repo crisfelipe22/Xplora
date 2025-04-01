@@ -68,12 +68,16 @@ import {
 import axios from "axios";
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useReserva } from "../contexts/ReservaContext";
+
 
 const CardDetalleProducto = ({ product, categorias }) => {
 
   //mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const { fechasDisponibles, obtenerFechasDisponibles, loading, errorReserva } = useReserva();
   
   const locationURL = useLocation();
   const { icons: iconosDisponibles } = useIcons();
@@ -83,7 +87,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
     const fetchCaracteristicas = async () => {
       try {
         const response = await axios.get("/api/caracteristica");
-        console.log("response.data: ", response.data);
+
         setCaracteristicas(response.data);
       } catch (error) {
         console.error("Error al cargar características:", error);
@@ -92,10 +96,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
     fetchCaracteristicas();
   }, []);
-  console.log(
-    "product.caracteristicas_paquete_experiencia: ",
-    product.caracteristicas_paquete_experiencia
-  );
+  
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
@@ -111,12 +112,11 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const fechaInicioReserva = dateRange[0] || null;
   const fechaFinReserva = dateRange[1] || null;
-  const fechaInicioDisponible = product.fecha_inicio
-    ? new Date(product.fecha_inicio)
-    : null;
-  const fechaFinDisponible = product.fecha_fin
-    ? new Date(product.fecha_fin)
-    : null;
+  const fechasDisponiblesSet = new Set(fechasDisponibles.map(fecha => new Date(fecha).toISOString().split("T")[0]));
+  const fechaInicioDisponible = fechasDisponibles.length > 0 
+    ? new Date(`${fechasDisponibles[0]}T00:00:00`) : null;
+  const fechaFinDisponible = fechasDisponibles.length > 0 
+    ? new Date(`${fechasDisponibles[fechasDisponibles.length - 1]}T00:00:00`) : null;
 
   const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
   const handleOpenGallery = () => setOpenGallery(true);
@@ -140,9 +140,19 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const caracteristicas = product.caracteristicas_paquete_experiencia;
 
   //fechas reservadas
-  const fechasReservadas = [
-    
-  ];
+  const todasLasFechas = [];
+  if (fechaInicioDisponible && fechaFinDisponible) {
+    let fecha = new Date(fechaInicioDisponible);
+    while (fecha <= fechaFinDisponible) {
+      todasLasFechas.push(new Date(fecha).toISOString().split("T")[0]);
+      fecha.setDate(fecha.getDate() + 1);
+    }
+  }
+  const fechasReservadas = todasLasFechas
+    .filter(fecha => !fechasDisponiblesSet.has(fecha)) 
+    .map(fecha => new Date(`${fecha}T00:00:00`));
+
+
   //validacion que no hayan fechas reservadas en el rango que se seleccione
   const tieneFechasReservadas = (startDate, endDate, fechasReservadas) => {
     if (!startDate || !endDate) return false;
@@ -265,6 +275,12 @@ const CardDetalleProducto = ({ product, categorias }) => {
       localStorage.removeItem("preReserva");
     }
   }, []);
+
+  useEffect(() => {
+    if (product.id_paquete_experiencia) {
+        obtenerFechasDisponibles(product.id_paquete_experiencia);
+    }
+}, [product.id_paquete_experiencia]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -396,7 +412,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
                   (carac) =>
                     parseInt(carac.id, 10) === parseInt(id_caracteristica, 10)
                 )?.nombre;
-                console.log("nombre: ", nombre);
                 const NeededIcon = iconosDisponibles.find(
                   (icon) => icon.id === parseInt(id_caracteristica, 10)
                 ).component;

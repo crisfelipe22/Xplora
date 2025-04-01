@@ -15,6 +15,12 @@ const Reserva = () =>{
     const { user } = useAuth();
 
     const [openDialog, setOpenDialog] = useState(false);
+    const [dialogContent, setDialogContent] = useState({
+        title: "",
+        message: "",
+        buttonText: "",
+        /*onButtonClick: () => {}*/
+    });
     const [product, setProduct] = useState();
     const [fechas, setFechas] = useState({ fecha_inicio: "", fecha_fin: "" });
 
@@ -49,9 +55,11 @@ const Reserva = () =>{
                 idUsuario: user.id,
                 idPaqueteExperiencia: product.id_paquete_experiencia,
                 fecha_inicio: fechas.fecha_inicio,
-                fecha_fin: fechas.fecha_fin
+                fecha_fin: fechas.fecha_fin,
+                nombrePaquete: product.nombre
             },
-            setOpenDialog,  
+            setOpenDialog, 
+            setDialogContent, 
             navigate
         );
     };
@@ -64,6 +72,7 @@ const Reserva = () =>{
             confirmarReserva={handleConfirmarReserva}
             open={openDialog}
             onClose={() => setOpenDialog(false)}
+            dialogContent={dialogContent}
         />
     )
 };
