@@ -16,6 +16,18 @@ const WhatsAppButton = () => {
   }, []);
 
   return (
+    // <SpeedDial
+    //   ariaLabel="Opciones"
+    //   sx={{ position: "fixed", bottom: 16, right: 16 }}
+    //   icon={<SpeedDialIcon />}
+    // >
+    //     <SpeedDialAction
+    //       key="Whatsapp"
+    //       icon={<WhatsAppIcon />}
+    //       tooltipTitle="WhatsApp"
+    //       onClick={() => window.open(whatsappUrl, "_blank")}
+    //     />
+    // </SpeedDial>
     <Fab
       size="medium"
       color="secondary"
