@@ -18,7 +18,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 
-const CardProductoAleatorio = ({ product, categorias }) => {
+const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mostrarFechas = false}) => {
+  console.log("Categorías recibidas:", categorias);
+  console.log("ID Categoría del producto:", product?.id_categoria);
 
   //mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -70,6 +72,10 @@ const CardProductoAleatorio = ({ product, categorias }) => {
     "."
   );
 
+  if (!product) {
+    return null; // No renderiza nada si product es undefined
+  }
+
   return (
     <Card className={styles.card}>
       <div className={styles.favoriteIcon}>
@@ -113,6 +119,12 @@ const CardProductoAleatorio = ({ product, categorias }) => {
             }
             className={styles.categoriaProducto}
           />
+          {/* Mostrar fechas solo si mostrarFechas es true */}
+          {mostrarFechas && (
+            <Typography variant="body2" color="primary">
+              {`Fecha reservada: ${new Date(fechaInicio).toLocaleDateString()} - ${new Date(fechaFin).toLocaleDateString()}`}
+            </Typography>
+          )}
         </CardContent>
       </Link>
       <Snackbar

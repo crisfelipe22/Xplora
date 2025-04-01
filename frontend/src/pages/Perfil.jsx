@@ -17,6 +17,7 @@ import {
   IconButton,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -26,6 +27,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { AuthContext } from "../contexts/AuthContext";
 import ListaFavoritos from "../components/ListaFavoritos";
 import InformacionUsuario from "../components/InformacionUsuario";
+import HistorialReservas from "../components/HistorialReservas";
 
 const obtenerRolTexto = (idRol) => {
   switch (idRol) {
@@ -181,6 +183,7 @@ const PerfilUsuario = () => {
             >
               <Tab icon={<AccountCircleIcon />} label="PERFIL" />
               <Tab icon={<FavoriteIcon />} label="LISTA DE FAVORITOS" />
+              <Tab icon={<ShoppingCartIcon />} label="HISTORIAL DE EXPERIENCIAS" />
             </Tabs>
             {tabValue === 0 && (
               <InformacionUsuario
@@ -195,7 +198,13 @@ const PerfilUsuario = () => {
                   <ListaFavoritos />
                 </Box>
               </Box>
-              // ))
+            )}
+            {tabValue === 2 && (
+              <Box p={3}>
+                <Box>
+                  <HistorialReservas />
+                </Box>
+              </Box>
             )}
           </Box>
           {/* )}
