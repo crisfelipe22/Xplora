@@ -4,9 +4,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import CardProductoAleatorio from './CardProductoAleatorio';
+import CardCategoriaAleatorio from './CardCategoriaAleatorio';
 import styles from "../styles/ProductoAleatorio.module.css";
 import { Padding, SystemSecurityUpdateWarningTwoTone, FilterList } from '@mui/icons-material';
 import CloseIcon from "@mui/icons-material/Close";
+import { useMediaQuery, useTheme } from "@mui/material";
+
 
 const ProductoAleatorio = () => {
     const [pag, setPag] = useState(1);
@@ -18,6 +21,17 @@ const ProductoAleatorio = () => {
     const [filtroAbierto, setFiltroAbierto] = useState(false);
 
     const filtroRef = useRef(null);
+    const theme = useTheme();
+    const getScreenSize = () => {
+        const width = window.innerWidth;
+        if (width < 600) return "mobile"; // Móviles
+        if (width >= 600 && width < 960) return "tablet"; // Tablets
+        return "desktop"; // Desktop
+    };
+
+    const [screenSize, setScreenSize] = useState(getScreenSize());
+    const cantidadCategorias = screenSize === "mobile" ? 1 : screenSize === "tablet" ? 2 : 4;
+    const categoriasFiltradas = categorias.slice(0, cantidadCategorias);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("usuario"));
@@ -58,6 +72,12 @@ const ProductoAleatorio = () => {
         };
     }, [filtroAbierto]);
 
+    useEffect(() => {
+        const handleResize = () => setScreenSize(getScreenSize());
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     const handleCategoriaChange = (categoriaId) => {
         setCategoriasSeleccionadas((prevCategorias) =>
             prevCategorias.includes(categoriaId)
@@ -80,24 +100,50 @@ const ProductoAleatorio = () => {
         setCategoriasSeleccionadas([]);
     };
 
+
     const startIndex = (pag - 1) * itemPorPag;
     const endIndex = startIndex + itemPorPag;
     const paginatedProducts = productosFiltrados.slice(startIndex, endIndex);
 
     return (
         <>
-            <Box
-                sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-            >
-                <Typography variant="h5" className="titulo-recomendados">
-                    Lo que nuestros Xplorers recomiendan
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {/* Título */}
+                <Typography variant="h5" className="titulo-recomendados" sx={{ width: "100%" }}>
+                    Encuentra la experiencia ideal para ti
                 </Typography>
 
-                <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
-                    <FilterList />
-                    FILTRAR
-                </Button>
+                {/* Categorías */}
+                <Grid2 container spacing={4} columns={12}>
+                    {categoriasFiltradas.length > 0 ? (
+                        categoriasFiltradas.map((categoria) => (
+                            <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
+                                <CardCategoriaAleatorio categoria={categoria} />
+                            </Grid2>
+                        ))
+                    ) : (
+                        <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
+                            No hay categorías disponibles.
+                        </Typography>
+                    )}
+                </Grid2>
+
+                {/* Título de recomendaciones */}
+                <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ marginTop: 4 }}>
+                    <Typography variant="h5" className="titulo-recomendados">
+                        Lo que nuestros Xplorers recomiendan
+                    </Typography>
+                    <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
+                        <FilterList />
+                        FILTRAR
+                    </Button>
+                </Box>
+
+                {screenSize === "mobile" || screenSize === "tablet" ? (
+                    <Typography variant="body2" sx={{ marginY: 2 }}>{productosFiltrados.length} Experiencias</Typography>
+                ) : (<></>)}
             </Box>
+
             <Box sx={{ Padding: 1 }} className={styles.gridContainer}>
                 <Grid2 container spacing={4} columns={12}>
 
