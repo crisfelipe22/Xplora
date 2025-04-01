@@ -21,7 +21,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from '../styles/CardDetalleReserva.module.css'
 
-const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva, open, onClose}) =>{
+const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva, open, onClose, dialogContent}) =>{
     const navigate = useNavigate();
     const theme = useTheme();
     const { user } = useAuth();
@@ -38,11 +38,6 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva,
             month: "long",     
             year: "numeric"    
         });
-    };
-
-    const handleVerReservas = () => {
-        onClose();
-        navigate("/perfil"); // Ajusta la ruta a MIS RESERVAS
     };
     
     
@@ -110,13 +105,13 @@ const CardDetalleReserva = ({product, fecha_inicio, fecha_fin, confirmarReserva,
             PaperProps={{
                 className: styles.dialogContent 
             }}>
-                <DialogTitle className={styles.tituloDialogo} >¡Felicidades! </DialogTitle>
+                <DialogTitle className={styles.tituloDialogo} >{dialogContent.title} </DialogTitle>
                 <DialogContent  >
-                    <Typography className={styles.contenidoDialogo}>Ya tienes tu reserva a la experiencia: <strong>{product.nombre}</strong></Typography>
+                    <Typography className={styles.contenidoDialogo}>{dialogContent.message}</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleVerReservas} color="primary" variant="contained" className={styles.botonVerReservas}>
-                        Ver mis reservas
+                    <Button onClick={dialogContent.onButtonClick} color="primary" variant="contained" className={styles.botonVerReservas}>
+                        {dialogContent.buttonText}
                     </Button>
                 </DialogActions>
             </Dialog>
