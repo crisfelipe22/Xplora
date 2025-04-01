@@ -71,7 +71,7 @@ const ProductoAleatorio = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [filtroAbierto]);
-   
+
     useEffect(() => {
         const handleResize = () => setScreenSize(getScreenSize());
         window.addEventListener("resize", handleResize);
@@ -99,7 +99,7 @@ const ProductoAleatorio = () => {
     const limpiarFiltros = () => {
         setCategoriasSeleccionadas([]);
     };
-    
+
 
     const startIndex = (pag - 1) * itemPorPag;
     const endIndex = startIndex + itemPorPag;
@@ -115,27 +115,33 @@ const ProductoAleatorio = () => {
 
                 {/* Categorías */}
                 <Grid2 container spacing={4} columns={12}>
-            {categoriasFiltradas.length > 0 ? (
-                categoriasFiltradas.map((categoria) => (
-                    <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
-                        <CardCategoriaAleatorio categoria={categoria} />
-                    </Grid2>
-                ))
-            ) : (
-                <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
-                    No hay categorías disponibles.
-                </Typography>
-            )}
-        </Grid2>
+                    {categoriasFiltradas.length > 0 ? (
+                        categoriasFiltradas.map((categoria) => (
+                            <Grid2 size={{ mobile: 12, tablet: 6, desktop: 3 }} key={categoria.id_categoria}>
+                                <CardCategoriaAleatorio categoria={categoria} />
+                            </Grid2>
+                        ))
+                    ) : (
+                        <Typography variant="h6" sx={{ marginTop: 2, width: "100%" }}>
+                            No hay categorías disponibles.
+                        </Typography>
+                    )}
+                </Grid2>
 
                 {/* Título de recomendaciones */}
-                <Typography variant="h5" className="titulo-recomendados" sx={{ marginTop: 4 }}>
-                    Lo que nuestros Xplorers recomiendan
-                </Typography>
-                <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
-                    <FilterList />
-                    FILTRAR
-                </Button>
+                <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ marginTop: 4 }}>
+                    <Typography variant="h5" className="titulo-recomendados">
+                        Lo que nuestros Xplorers recomiendan
+                    </Typography>
+                    <Button className={styles.FilterButton} onClick={() => setFiltroAbierto(true)}>
+                        <FilterList />
+                        FILTRAR
+                    </Button>
+                </Box>
+
+                {screenSize === "mobile" || screenSize === "tablet" ? (
+                    <Typography variant="body2" sx={{ marginY: 2 }}>{productosFiltrados.length} Experiencias</Typography>
+                ) : (<></>)}
             </Box>
 
             <Box sx={{ Padding: 1 }} className={styles.gridContainer}>
