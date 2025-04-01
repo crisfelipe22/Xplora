@@ -886,3 +886,173 @@ Spring Validation generaría errores de validación
 - Para acceder a recursos protegidos, se debe incluir el token en el header de autorización:
 CopyAuthorization: Bearer {token}
 - La seguridad está implementada mediante Spring Security y JWT.
+
+### Reserva
+
+#### Crear una Reserva
+
+- **Método:** POST
+- **Endpoint:** `/reservas`
+- **Descripción:** Permite crear una nueva reseva.
+- **Request Body:**
+
+```json
+{
+  "idUsuario": 2,
+  "idPaqueteExperiencia": 3,
+  "fecha_inicio": "2025-04-04T10:00:00",
+  "fecha_fin": "2025-04-05T10:00:00"
+}
+```
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+  "idReserva": 8,
+  "idUsuario": 2,
+  "idPaqueteExperiencia": 3,
+  "fecha_inicio": "2025-04-04T10:00:00.000+00:00",
+  "fecha_fin": "2025-04-05T10:00:00.000+00:00"
+}
+```
+
+#### Obtener Todas las reservas 
+
+- **Método:** GET
+- **Endpoint:** `/reservas`
+- **Descripción:** Devuelve todas las reservas.
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  {
+    "idReserva": 1,
+    "idUsuario": 2,
+    "idPaqueteExperiencia": 1,
+    "fecha_inicio": "2025-03-27T10:00:00.000+00:00",
+    "fecha_fin": "2025-03-28T10:00:00.000+00:00"
+  },
+  {
+    "idReserva": 2,
+    "idUsuario": 3,
+    "idPaqueteExperiencia": 1,
+    "fecha_inicio": "2025-03-29T10:00:00.000+00:00",
+    "fecha_fin": "2025-03-30T10:00:00.000+00:00"
+  },
+  {
+    "idReserva": 3,
+    "idUsuario": 3,
+    "idPaqueteExperiencia": 1,
+    "fecha_inicio": "2025-03-29T10:00:00.000+00:00",
+    "fecha_fin": "2025-03-30T10:00:00.000+00:00"
+  },
+  {
+    "idReserva": 4,
+    "idUsuario": 2,
+    "idPaqueteExperiencia": 2,
+    "fecha_inicio": "2025-03-28T10:00:00.000+00:00",
+    "fecha_fin": "2025-03-30T10:00:00.000+00:00"
+  }
+]
+```
+
+#### Obtener la reservas por id
+
+- **Método:** GET
+- **Endpoint:** `/reservas/{id}`
+- **Descripción:** Devuelve la reserva con ese id.
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "idReserva": 3,
+  "idUsuario": 3,
+  "idPaqueteExperiencia": 1,
+  "fecha_inicio": "2025-03-29T10:00:00.000+00:00",
+  "fecha_fin": "2025-03-30T10:00:00.000+00:00"
+}
+```
+#### Obtener la reservas por usuario
+
+- **Método:** GET
+- **Endpoint:** `/reservas/usuario/{usuarioId}`
+- **Descripción:** Devuelve la reserva de ese usuario.
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  {
+    "idReserva": 9,
+    "idUsuario": 1,
+    "idPaqueteExperiencia": 3,
+    "fecha_inicio": "2025-04-04T10:00:00.000+00:00",
+    "fecha_fin": "2025-04-05T10:00:00.000+00:00"
+  },
+  {
+    "idReserva": 10,
+    "idUsuario": 1,
+    "idPaqueteExperiencia": 2,
+    "fecha_inicio": "2025-04-04T10:00:00.000+00:00",
+    "fecha_fin": "2025-04-05T10:00:00.000+00:00"
+  }
+]
+```
+
+#### Obtener la reservas por paquete 
+
+- **Método:** GET
+- **Endpoint:** `/reservas/paquete/{paqueteId}`
+- **Descripción:** Devuelve la reserva de ese paquete.
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  {
+    "idReserva": 4,
+    "idUsuario": 2,
+    "idPaqueteExperiencia": 2,
+    "fecha_inicio": "2025-03-28T10:00:00.000+00:00",
+    "fecha_fin": "2025-03-30T10:00:00.000+00:00"
+  },
+  {
+    "idReserva": 10,
+    "idUsuario": 1,
+    "idPaqueteExperiencia": 2,
+    "fecha_inicio": "2025-04-04T10:00:00.000+00:00",
+    "fecha_fin": "2025-04-05T10:00:00.000+00:00"
+  }
+]
+```
+
+#### Obtener la disponibilidad de paquete de experiencia (Aun no funciona del todo bien)
+
+- **Método:** GET
+- **Endpoint:** `/reservas/fechas-disponibles/{paqueteId}`
+- **Descripción:** Devuelve una lista de sring con las fechas disponibles.
+
+**Respuesta Exitosa (200 OK):**
+```json
+[
+  "2025-03-31",
+  "2025-04-01"
+]
+```
+#### Obtener los detalles de la reserva, el paquete de experiencia y el usuario
+
+- **Método:** GET
+- **Endpoint:** `/reservas/detalle/{reservaId}`
+- **Descripción:** Devuelve los detalles de la reserva.
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "idReserva": 2,
+  "nombreUsuario": "Xplora Superadmin",
+  "nombrePaquete": "Paseo en kayak",
+  "descripcionPaquete": "Navega en kayak frente a uno de los glaciares más famosos. Embárcate en una aventura inolvidable con nuestro paseo en kayak, donde la serenidad del agua se fusiona con la emoción de la exploración. Deslízate suavemente por paisajes impresionantes, ya sea un tranquilo lago rodeado de montañas, un río serpenteante a través de exuberante vegetación o la costa marina con vistas espectaculares. Siente la libertad de remar a tu propio ritmo, descubriendo rincones ocultos y conectando con la naturaleza de una manera única. Nuestros guías expertos te acompañarán, asegurando una experiencia segura y enriquecedora, mientras compartes la belleza del entorno con amigos, familiares o en solitario.",
+  "duracionPaquete": "3 horas",
+  "precioPaquete": 120.0,
+  "ubicacionPaquete": "Buenos Aires, Argentina"
+}
+```
+

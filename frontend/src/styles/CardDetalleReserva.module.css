@@ -1,0 +1,103 @@
+
+.container{
+    padding: 10px 400px 30px 50px;
+}
+
+.tituloVolver{
+    margin-top: 85px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    
+}
+
+.backButton{
+    color: #6239E6 !important;
+}
+
+.title {
+    font-size: 24px !important;
+}
+
+.productContenido{
+    display: flex;
+    gap: 2%;
+}
+
+.productTitle {
+    font-size: 20px !important;
+    margin-bottom: 10px !important;
+}
+
+.productImage {
+    width: 315px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.productDescription {
+    flex: 1;
+    font-size: 16px !important;
+    color: #5C5B5E;
+    text-align: justify;
+}
+
+.infoSection {
+    margin-top: 20px;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    color: #5C5B5E;
+}
+
+.sectionTitle {
+    font-weight: 500 !important;
+    margin-bottom: 1% !important;
+    font-size: 20px !important;
+    color: #05030D;
+}
+
+.totalSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4% 0;
+    color: #05030D;
+    width: 50%;
+}
+
+.confirmButton {
+    width: 50%;
+    padding: 8px 22px !important;
+    font-size: 15px !important;
+}
+
+.confirmButton:hover {
+    background-color: #125a9e;
+}
+
+.dialogContent{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 800px;
+    max-width: 90vw;
+    height: 310px;
+    max-height: 80vh;
+    gap: 10%;
+}
+
+.tituloDialogo{
+    font-size: 34px !important;
+    font-weight: 400 !important;
+}
+
+.contenidoDialogo{
+    font-size: 24px !important;
+}
+
+.botonVerReservas{
+    font-size: 15px !important;
+}

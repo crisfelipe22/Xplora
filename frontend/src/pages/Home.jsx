@@ -265,9 +265,6 @@ const Home = () => {
         </Container>
 
           <Container sx={{padding:"0px"}}>
-            <Typography variant="h5" className="titulo-recomendados" >
-              Lo que nuestros Xplorers recomiendan
-            </Typography>
             <ProductoAleatorio />
           </Container>
       </Box>

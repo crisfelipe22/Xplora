@@ -29,27 +29,15 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, TablePagination 
+  DialogTitle,
+  TablePagination,
 } from "@mui/material";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import styles from "../styles/AddCaracteristicaForm.module.css";
 import SidebarAdmin from "./SidebarAdmin";
 import AdminLayout from "./AdminLayout";
-//iconos//
-import {
-  LocalParking,
-  CalendarToday,
-  Landscape,
-  FreeBreakfast,
-  Pets,
-  OutdoorGrill,
-  Wifi,
-  Brush,
-} from "@mui/icons-material";
 import { useIcons } from "../contexts/IconContext";
-import usePaginacionDinamica from '../hooks/usePaginacionDinamica';
+import usePaginacionDinamica from "../hooks/usePaginacionDinamica";
 
 //
 
@@ -57,12 +45,10 @@ const AdminCaracteristicas = () => {
   const { icons: iconosDisponibles } = useIcons();
   const [nombreCaracteristica, setNombreCaracteristica] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [pag, setPag] = useState(0);
-  const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
-      
-  // Replace your current Iconardo function with this:
-  const Iconardo = ({ iconId }) => {
+  const { columnPorPag, setColumnPorPag } = usePaginacionDinamica(48, 3);
+
+  const IconoCaracteristica = ({ iconId }) => {
     const IconComponent =
       iconosDisponibles.find((icon) => icon.id === iconId)?.component ||
       iconosDisponibles[0].component;
@@ -101,19 +87,6 @@ const AdminCaracteristicas = () => {
   };
 
   const [categorias, setCategorias] = useState([]);
-
-  //CARACTERISTICAS///////
-  // const caracteristicasDisponibles = [
-  //   { id_car: 1, nombre: "Estacionamiento gratuito" },
-  //   { id_car: 2, nombre: "Fechas flexibles" },
-  //   { id_car: 3, nombre: "Vista a las montañas" },
-  //   { id_car: 4, nombre: "Desayuno incluido" },
-  //   { id_car: 5, nombre: "Se permiten mascotas" },
-  //   { id_car: 6, nombre: "Zona de comida al aire libre" },
-  //   { id_car: 7, nombre: "Servicio de Wi-Fi" },
-  //   { id_car: 8, nombre: "Servicio de decoración" },
-  // ];
-
   const [caracteristicas, setCaracteristicas] = useState([]);
   const [dialogCaracteristicas, setDialogCaracteristicas] = useState(false);
   const [caracteristicaSeleccionada, setCaracteristicaSeleccionada] =
@@ -128,6 +101,8 @@ const AdminCaracteristicas = () => {
     setDialogCaracteristicas(false);
     setNombreCaracteristica("");
     setIconoSeleccionado("");
+    setEditMode(false);
+    setCaracteristicaEditando(null);
   };
 
   const handleGuardarCaracteristica = async () => {
@@ -138,7 +113,7 @@ const AdminCaracteristicas = () => {
         // Prepare data according to your DTO format
         const caracteristicaData = {
           nombre: nombreCaracteristica,
-          logo: (parseInt(iconoSeleccionado, 10)).toString(),
+          logo: parseInt(iconoSeleccionado, 10).toString(),
         };
 
         // Make POST request
@@ -176,13 +151,95 @@ const AdminCaracteristicas = () => {
       }
     }
   };
-  const handleEliminarCaracteristica = (id_car_prod) => {
-    setCaracteristicas(
-      caracteristicas.filter((item) => item.id_car_prod !== id_car_prod)
-    );
+  const handleEliminarCaracteristica = async (id) => {
+    if (
+      window.confirm(
+        "¿Estás seguro de que deseas eliminar esta característica?"
+      )
+    ) {
+      try {
+        const response = await axios.delete(`/api/caracteristica/${id}`);
+        console.log("Característica eliminada:", response.data);
+
+        // Refresh the list of characteristics
+        const updatedCaracteristicas = await axios.get("/api/caracteristica");
+        setAllCaracteristicas(updatedCaracteristicas.data);
+
+        // Show success message
+        setOpenAlertExito(true);
+        setTimeout(() => setOpenAlertExito(false), 3000);
+      } catch (error) {
+        console.error("Error al eliminar la característica:", error);
+        setErroresRequest(
+          error?.response?.data?.mensaje ||
+            "Error al eliminar la característica"
+        );
+        setOpenAlertFracaso(true);
+      }
+    }
   };
 
-  /////////
+  // Add these state variables for editing
+  const [editMode, setEditMode] = useState(false);
+  const [caracteristicaEditando, setCaracteristicaEditando] = useState(null);
+
+  // Add this function to handle opening the edit dialog
+  const handleOpenEditDialog = (carac) => {
+    setEditMode(true);
+    setCaracteristicaEditando(carac);
+    setNombreCaracteristica(carac.nombre);
+    setIconoSeleccionado(carac.logo);
+    setDialogCaracteristicas(true);
+  };
+
+  // Update handleCloseDialogCarac to also reset edit mode
+
+  const handleActualizarCaracteristica = async () => {
+    if (nombreCaracteristica && iconoSeleccionado && caracteristicaEditando) {
+      setIsSubmitting(true);
+
+      try {
+        // Prepare data according to your DTO format
+        const caracteristicaData = {
+          nombre: nombreCaracteristica,
+          logo: parseInt(iconoSeleccionado, 10).toString(),
+        };
+
+        // Make PUT request
+        const response = await axios.put(
+          `/api/caracteristica/${caracteristicaEditando.id}`,
+          caracteristicaData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Característica actualizada:", response.data);
+
+        // Refresh the list of available characteristics
+        const updatedCaracteristicas = await axios.get("/api/caracteristica");
+        setAllCaracteristicas(updatedCaracteristicas.data);
+
+        // Show success message
+        setOpenAlertExito(true);
+
+        // Close dialog and reset form
+        handleCloseDialogCarac();
+      } catch (error) {
+        console.error("Error al actualizar la característica:", error);
+        setOpenAlertFracaso(true);
+        setErroresRequest(
+          error?.response?.data?.mensaje ||
+            "Error al actualizar la característica"
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const obtenerCategorias = async () => {
       try {
@@ -237,18 +294,23 @@ const AdminCaracteristicas = () => {
         <SidebarAdmin />
 
         <Box className={styles.contenido}>
-          <Container className={styles.container}>
+          <Container className={styles.botonNuevaCarac}>
             <Box
               component="form"
               className={styles.form}
               onSubmit={handleSubmit}
             >
               <Box className={styles.seccion}>
-                <Typography className={styles.h6} variant="h6" gutterBottom>
-                  Administrar características
-                </Typography>
-
-                <TableContainer className={styles.tableContainer}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <Typography className={styles.h6} variant="h6" gutterBottom>
+                    Administrar características
+                  </Typography>
                   <Button
                     variant="contained"
                     onClick={handleOpenDialogCarac}
@@ -256,7 +318,9 @@ const AdminCaracteristicas = () => {
                   >
                     AÑADIR NUEVA
                   </Button>
-                  <Table>
+                </Box>
+                <TableContainer className={styles.tableContainer}>
+                  <Table size="small">
                     <TableHead>
                       <TableRow>
                         <TableCell className={styles.tableHeader}>
@@ -272,51 +336,60 @@ const AdminCaracteristicas = () => {
                     </TableHead>
 
                     <TableBody>
-                      {caracteristicasDisponibles.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)
-                      .map((carac, index) => (
-                        <TableRow key={index} className={styles.tableRow}>
-                          <TableCell>
-                            {/* Pass the icon ID to the Iconardo component */}
-                            <Iconardo
-                              iconId={
-                                parseInt(carac.logo, 10) || carac.id_icono
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>{carac.nombre}</TableCell>
-                          <TableCell>
-                            <Button
-                              variant="outlined"
-                              className={styles.botonEliminar}
-                              onClick={() =>
-                                handleEliminarCaracteristica(carac.id_car_prod)
-                              }
-                            >
-                              Eliminar
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              className={styles.botonEditar}
-                            >
-                              Editar
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {caracteristicasDisponibles
+                        .slice(
+                          pag * columnPorPag,
+                          pag * columnPorPag + columnPorPag
+                        )
+                        .map((carac, index) => (
+                          <TableRow key={index} className={styles.tableRow}>
+                            <TableCell>
+                              {/* Pass the icon ID to the IconoCaracteristica component */}
+                              <IconoCaracteristica
+                                iconId={
+                                  parseInt(carac.logo, 10) || carac.id_icono
+                                }
+                              />
+                            </TableCell>
+                            <TableCell>{carac.nombre}</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="outlined"
+                                className={styles.botonEliminar}
+                                onClick={() =>
+                                  handleEliminarCaracteristica(carac.id)
+                                }
+                              >
+                                Eliminar
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                className={styles.botonEditar}
+                                onClick={() => handleOpenEditDialog(carac)}
+                              >
+                                Editar
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
-
                 <TablePagination
                   component="div"
                   count={caracteristicasDisponibles.length}
                   rowsPerPage={columnPorPag}
                   page={pag}
                   onPageChange={(event, newPage) => setPag(newPage)}
-                  onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
+                  onRowsPerPageChange={(event) =>
+                    setColumnPorPag(parseInt(event.target.value, 10))
+                  }
                   labelRowsPerPage="Filas por página"
                   sx={{ marginTop: "auto" }}
-                  rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
+                  rowsPerPageOptions={Array.from(
+                    { length: 5 },
+                    (_, i) => (i + 1) * 10
+                  )}
                 />
 
                 <Dialog
@@ -325,7 +398,11 @@ const AdminCaracteristicas = () => {
                   maxWidth="sm"
                   fullWidth
                 >
-                  <DialogTitle>Agregar Característica</DialogTitle>
+                  <DialogTitle>
+                    {editMode
+                      ? "Editar Característica"
+                      : "Agregar Característica"}
+                  </DialogTitle>
                   <DialogContent>
                     <TextField
                       autoFocus
@@ -367,7 +444,11 @@ const AdminCaracteristicas = () => {
                       Cancelar
                     </Button>
                     <Button
-                      onClick={handleGuardarCaracteristica}
+                      onClick={
+                        editMode
+                          ? handleActualizarCaracteristica
+                          : handleGuardarCaracteristica
+                      }
                       color="primary"
                       variant="contained"
                       disabled={
@@ -376,42 +457,45 @@ const AdminCaracteristicas = () => {
                         isSubmitting
                       }
                     >
-                      {isSubmitting ? "Guardando..." : "Guardar"}
+                      {isSubmitting
+                        ? "Guardando..."
+                        : editMode
+                        ? "Actualizar"
+                        : "Guardar"}
                     </Button>
                   </DialogActions>
                 </Dialog>
               </Box>
 
-              {/* <Box className={styles.botones}>
-                <Snackbar
-                  open={openAlertExito}
-                  autoHideDuration={3000}
+              {/* Add this at the end of your component, right before the closing tags */}
+              <Snackbar
+                open={openAlertExito}
+                autoHideDuration={3000}
+                onClose={handleCloseAlertExito}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
                   onClose={handleCloseAlertExito}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  severity="success"
+                  className={styles.alertaExito}
                 >
-                  <Alert
-                    onClose={handleCloseAlertExito}
-                    severity="success"
-                    className={styles.alertaExito}
-                  >
-                    ¡Producto agregado con éxito!
-                  </Alert>
-                </Snackbar>
-                <Snackbar
-                  open={openAlertFracaso}
-                  autoHideDuration={3000}
+                  {"¡Los cambios fueron aplicados!"}
+                </Alert>
+              </Snackbar>
+              <Snackbar
+                open={openAlertFracaso}
+                autoHideDuration={3000}
+                onClose={handleCloseAlertFracaso}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
                   onClose={handleCloseAlertFracaso}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  severity="error"
+                  className={styles.alertaFracaso}
                 >
-                  <Alert
-                    onClose={handleCloseAlertFracaso}
-                    severity="error"
-                    className={styles.alertaFracaso}
-                  >
-                    {erroresRequest}
-                  </Alert>
-                </Snackbar>
-              </Box> */}
+                  {erroresRequest}
+                </Alert>
+              </Snackbar>
             </Box>
           </Container>
         </Box>
