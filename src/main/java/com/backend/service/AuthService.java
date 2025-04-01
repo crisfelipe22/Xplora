@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.dto.salida.AuthResponseDTO;
+import com.backend.dto.entada.ConfirmationResendRequestDTO;
 import com.backend.dto.entada.LoginRequestDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.salida.PaqueteExperienciaFavoritoSalidaDTO;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,9 @@ public class AuthService {
 
     @Autowired
     private final PaqueteExperienciaFavoritoRepository paqueteExperienciaFavoritoRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -117,12 +122,27 @@ public class AuthService {
         // Guardar en la base de datos
         try {
           usuarioRepository.save(usuario);
+          emailService.sendHtmlRegistrationConfirmationEmail(usuario.getEmail(), usuario.getNombre());
         } catch (Exception e) {
           logger.error("Error inesperado al guardar el paquete de experiencia '{}': {}",
               usuario.getNombre(), e.getMessage(), e);
         }
 
         return new MensajeResponseDTO("Usuario registrado exitosamente", true);
+    }
+
+    public MensajeResponseDTO reenviarCorreo(ConfirmationResendRequestDTO confirmationResendRequestDTO) throws ResourceNotFoundException {
+      String email = confirmationResendRequestDTO.getEmail();
+      if (usuarioRepository.existsByEmail(email)) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> {
+              logger.error("Usuario con correo '{}' no existe", email);
+              return new ResourceNotFoundException("Usuario no encontrado");
+            });
+        emailService.sendHtmlRegistrationConfirmationEmail(usuario.getEmail(), usuario.getNombre());
+
+      }
+      return new MensajeResponseDTO("El correo de confirmación de registro se envió nuevamente", true);
     }
 
     public AuthResponseDTO autenticarUsuario(LoginRequestDTO loginDTO) {
