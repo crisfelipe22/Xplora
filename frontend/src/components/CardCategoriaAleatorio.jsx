@@ -21,7 +21,7 @@ const CardCategoriaAleatorio = ({ categoria }) => {
     ? categoria.imagen.split(",").map((url) => url.trim())
     : [];
   const imagenUrl =
-    imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
+    imagenArray.length > 0 ? imagenArray[0] : "/imagen_1.jpeg";
 
   const getDescripcionCortaExperiencia = (str, char) => {
     const index = str.indexOf(char);

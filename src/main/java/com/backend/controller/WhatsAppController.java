@@ -1,3 +1,5 @@
+package com.backend.controller;
+
 import org.springframework.web.bind.annotation.*; 
 import org.springframework.http.ResponseEntity;  
 import java.util.HashMap;  
@@ -9,15 +11,10 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/api/whatsapp")
 public class WhatsAppController {
 
-@GetMapping("/link")
-public ResponseEntity<Map<String, String>> getWhatsAppLink() {
-    String phoneNumber = "56949745196";
-    String message = "Hola, quiero más información"; // Mensaje opcional
-    String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
-
-    Map<String, String> response = new HashMap<>();
-    response.put("whatsappUrl", "https://wa.me/" + phoneNumber + "?text=" + encodedMessage);
-
-    return ResponseEntity.ok(response);
-}
+    @GetMapping("/link")
+    public ResponseEntity<Map<String, String>> getWhatsAppLink() {
+        Map<String, String> response = new HashMap<>();
+        response.put("link", "https://wa.me/56949745196?text=Hola,%20quiero%20mas%20información%20gracias"); // Cambia al número real
+        return ResponseEntity.ok(response);
+    }
 }

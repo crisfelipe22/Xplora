@@ -89,7 +89,8 @@ public class SecurityConfig {
                             auth.requestMatchers(HttpMethod.GET, "/api/rol/**").permitAll();
                             auth.requestMatchers(HttpMethod.PUT, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");
-                            auth.requestMatchers(HttpMethod.GET, "/api/whatsapp/link").permitAll();
+                            // auth.requestMatchers(HttpMethod.GET, "/api/whatsapp/link").permitAll();
+                            
                             auth.requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated();
                         }
