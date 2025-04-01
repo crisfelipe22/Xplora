@@ -21,7 +21,7 @@ const CardCategoriaAleatorio = ({ categoria }) => {
     ? categoria.imagen.split(",").map((url) => url.trim())
     : [];
   const imagenUrl =
-    imagenArray.length > 0 ? imagenArray[0] : "/imagen_1.jpeg";
+    imagenArray.length > 0 ? imagenArray[0] : "/logo.svg";
 
     const getDescripcionCortaExperiencia = (str, char) => {
       if (typeof str !== "string") {
