@@ -49,3 +49,4 @@ public class CategoriaController {
         return new ResponseEntity<>(categoriaEliminada, HttpStatus.OK);
     }
 }
+   

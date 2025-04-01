@@ -148,7 +148,7 @@ const ProductoAleatorio = () => {
                 <Grid2 container spacing={4} columns={12}>
 
                     {/* Filtro en desktop */}
-                    <Box item xs={12} md={3} className={styles.desktopFilter}>
+                    <Box xs={12} md={3} className={styles.desktopFilter}>
                         <Typography variant="h6" sx={{ marginY: 2 }}>Filtrar</Typography>
                         <Typography variant="body2" sx={{ marginY: 2 }}>{productosFiltrados.length} Experiencias</Typography>
                         <Button variant="contained" color="primary" onClick={limpiarFiltros}>

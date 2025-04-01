@@ -14,6 +14,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
 import { format } from "date-fns";
 import { useProducts } from '../contexts/ProductContext';
+import WhatsAppButton from "../components/WhatsAppButton"; 
 
 const Home = () => {
   const theme = useTheme();
@@ -260,15 +261,17 @@ const Home = () => {
               >
                 BUSCAR
               </Button>
-          
-          </Box>
+              
+              </Box>
         </Container>
 
           <Container sx={{padding:"0px"}}>
             <ProductoAleatorio />
           </Container>
       </Box>
+          
     </LocalizationProvider>
+    
   );
 };
 
