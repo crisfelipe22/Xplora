@@ -6,15 +6,20 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import axios from "axios";
 
 const WhatsAppButton = () => {
-  const [whatsappUrl, setWhatsappUrl] = useState("");
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado inicial en true
 
   useEffect(() => {
     axios.get("/api/whatsapp/link")
-  .then((response) => {
-    console.log(response.data); // Verifica la respuesta del backend
-    setWhatsappUrl(response.data.whatsappUrl);
-  })
-  .catch((error) => console.error("Error al obtener enlace de WhatsApp:", error))
+      .then((response) => {
+        if (response.data && response.data.whatsappUrl) {
+          setWhatsappUrl(response.data.whatsappUrl);
+        } else {
+          console.error("Respuesta inválida del backend:", response.data);
+        }
+      })
+      .catch((error) => console.error("Error al obtener enlace de WhatsApp:", error))
+      .finally(() => setLoading(false)); // 🟢 Asegura que loading se actualice
   }, []);
 
   return (
@@ -23,15 +28,16 @@ const WhatsAppButton = () => {
       sx={{ position: "fixed", bottom: 16, right: 16 }}
       icon={<SpeedDialIcon />}
     >
-      {whatsappUrl && (
+      {!loading && whatsappUrl ? (
         <SpeedDialAction
-          icon={<WhatsAppIcon />}
+          icon={<WhatsAppIcon style={{ color: "green" }} />}
           tooltipTitle="WhatsApp"
           onClick={() => window.open(whatsappUrl, "_blank")}
         />
-      )}
+      ) : null}
     </SpeedDial>
   );
 };
 
 export default WhatsAppButton;
+
