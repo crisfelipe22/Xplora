@@ -23,6 +23,7 @@ import AdminUsers from "./pages/AdminUsers";
 import ResultadoBusqueda from './pages/ResultadoBusqueda';
 import Categoria from './pages/AdminCategoria';
 import Reserva from './pages/Reserva';
+import WhatsAppButton from "./components/WhatsAppButton";
 
 function App() {
   const location = useLocation();
@@ -31,40 +32,34 @@ function App() {
   return (
     <>
       <AuthProvider>
-      <FavoritesProvider>
-      <IconProvider>
-      <CssBaseline />
-      {!esRutaAdmin && <Header />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/admin" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><Admin /></ProtectedRoute>} />
-        <Route path="/admin/productos" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Products /></ProtectedRoute>} />
-        <Route
-          path="/admin/productos/nuevo-producto"
-          element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AddProduct /></ProtectedRoute>} />
-        <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><EditarProductoAdmin /></ProtectedRoute>} />
-        <Route path="/admin/users" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AdminUsers /></ProtectedRoute>} />
-        <Route path="/admin/categoria" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Categoria /></ProtectedRoute>} />
-        <Route path="/admin/caracteristicas" element={<ProtectedRoute  requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Caracteristicas /></ProtectedRoute>} />
-        <Route
-          path="/detalle-producto/:id_paquete_experiencia"
-          element={<DetalleProducto />}
-        />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/perfil" 
-          element={<ProtectedRoute  ><Perfil /></ProtectedRoute>} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/resultados" element={<ResultadoBusqueda />} />
-        <Route
-          path="/reserva/:id_paquete_experiencia"
-          element={<ProtectedRoute> <Reserva /> </ProtectedRoute>}
-        />
-      </Routes>
-      {!esRutaAdmin && <Footer />}
-      </IconProvider>
-      </FavoritesProvider>
+        <FavoritesProvider>
+          <IconProvider>
+            <CssBaseline />
+            {!esRutaAdmin && <Header />}
+            
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/admin" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><Admin /></ProtectedRoute>} />
+              <Route path="/admin/productos" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Products /></ProtectedRoute>} />
+              <Route path="/admin/productos/nuevo-producto" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AddProduct /></ProtectedRoute>} />
+              <Route path="/admin/productos/editar/:id_paquete_experiencia" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><EditarProductoAdmin /></ProtectedRoute>} />
+              <Route path="/admin/users" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']}><AdminUsers /></ProtectedRoute>} />
+              <Route path="/admin/categoria" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Categoria /></ProtectedRoute>} />
+              <Route path="/admin/caracteristicas" element={<ProtectedRoute requiredRoles={['ROLE_Administrador', 'ROLE_SuperAdministrador']} ><Caracteristicas /></ProtectedRoute>} />
+              <Route path="/detalle-producto/:id_paquete_experiencia" element={<DetalleProducto />} />
+              <Route path="/registro" element={<Registro />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="/resultados" element={<ResultadoBusqueda />} />
+              <Route path="/reserva/:id_paquete_experiencia" element={<ProtectedRoute> <Reserva /> </ProtectedRoute>} />
+            </Routes>
+
+            {!esRutaAdmin && <WhatsAppButton />}
+            {!esRutaAdmin && <Footer />}
+          </IconProvider>
+        </FavoritesProvider>
       </AuthProvider>
     </>
   );
