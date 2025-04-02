@@ -21,21 +21,21 @@ const CardCategoriaAleatorio = ({ categoria }) => {
     ? categoria.imagen.split(",").map((url) => url.trim())
     : [];
   const imagenUrl =
-    imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
+    imagenArray.length > 0 ? imagenArray[0] : "/logo.svg";
 
-  const getDescripcionCortaExperiencia = (str, char) => {
-    const index = str.indexOf(char);
-    if (index === -1) {
-      return str;
-    }
-    return str.substring(0, index);
-  };
-
-  const descripcionExperiencia = categoria.descripcion;
-  const descripcionCortaExperiencia = getDescripcionCortaExperiencia(
-    descripcionExperiencia,
-    "."
-  );
+    const getDescripcionCortaExperiencia = (str, char) => {
+      if (typeof str !== "string") {
+        return ""; // Devuelve una cadena vacía si str no es un string
+      }
+      const index = str.indexOf(char);
+      return index === -1 ? str : str.substring(0, index);
+    };
+    
+    const descripcionExperiencia = categoria.descripcion || ""; // Evita que sea null o undefined
+    const descripcionCortaExperiencia = getDescripcionCortaExperiencia(
+      descripcionExperiencia,
+      "."
+    );
 
   return (
     <Card className={styles.card}>

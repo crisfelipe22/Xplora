@@ -90,9 +90,9 @@ export const FavoritesProvider = ({ children }) => {
     if (productos.length > 0) {
       setProductosDisponibles(productos);
     } else {
-      console.warn(
-        "⚠️ `productos` está vacío o no definido en FavoritesContext."
-      );
+      // console.warn(
+      //   "⚠️ `productos` está vacío o no definido en FavoritesContext."
+      // );
     }
   }, [productos]);
 

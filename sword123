@@ -1,0 +1,13 @@
+[1mdiff --git a/src/main/java/com/backend/security/config/SecurityConfig.java b/src/main/java/com/backend/security/config/SecurityConfig.java[m
+[1mindex 75f5c61..2735128 100644[m
+[1m--- a/src/main/java/com/backend/security/config/SecurityConfig.java[m
+[1m+++ b/src/main/java/com/backend/security/config/SecurityConfig.java[m
+[36m@@ -88,7 +88,7 @@[m [mpublic class SecurityConfig {[m
+                             auth.requestMatchers(HttpMethod.GET, "/api/auth/**/calificaciones").permitAll();[m
+                             auth.requestMatchers(HttpMethod.GET, "/api/auth/**/calificaciones/**").permitAll();[m
+                             auth.requestMatchers(HttpMethod.PUT, "/api/auth/**/calificaciones/**").authenticated();[m
+[31m-                            auth.requestMatchers(HttpMethod.DELETE, "/api/auth/**/calificaciones/**").authenticated();[m
+[32m+[m[32m                            auth.requestMatchers(HttpMethod.DELETE, "/api/auth/**/calificaciones/**").permitAll();[m
+                             auth.requestMatchers(HttpMethod.POST, "/api/rol").hasAnyRole("Administrador", "SuperAdministrador");[m
+                             auth.requestMatchers(HttpMethod.GET, "/api/rol").permitAll();[m
+                             auth.requestMatchers(HttpMethod.GET, "/api/rol/**").permitAll();[m

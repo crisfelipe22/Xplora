@@ -18,7 +18,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 
-const CardProductoAleatorio = ({ product, categorias }) => {
+const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mostrarFechas = false}) => {
+  // console.log("Categorías recibidas:", categorias);
+  // console.log("ID Categoría del producto:", product?.id_categoria);
 
   //mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -28,7 +30,7 @@ const CardProductoAleatorio = ({ product, categorias }) => {
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
   const imagenUrl =
-    imagenArray.length > 0 ? imagenArray[0] : "https://via.placeholder.com/300";
+    imagenArray.length > 0 ? imagenArray[0] : "/logo.svg";
   //suponiendo raiting por ahora
   function stringToNumber(str) {
     let hash = 0;
@@ -69,6 +71,10 @@ const CardProductoAleatorio = ({ product, categorias }) => {
     descripcionExperiencia,
     "."
   );
+
+  if (!product) {
+    return null; // No renderiza nada si product es undefined
+  }
 
   return (
     <Card className={styles.card}>
@@ -113,6 +119,12 @@ const CardProductoAleatorio = ({ product, categorias }) => {
             }
             className={styles.categoriaProducto}
           />
+          {/* Mostrar fechas solo si mostrarFechas es true */}
+          {mostrarFechas && (
+            <Typography variant="body2" color="primary">
+              {`Fecha reservada: ${new Date(fechaInicio).toLocaleDateString()} - ${new Date(fechaFin).toLocaleDateString()}`}
+            </Typography>
+          )}
         </CardContent>
       </Link>
       <Snackbar

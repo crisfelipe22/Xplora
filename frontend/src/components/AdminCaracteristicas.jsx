@@ -320,7 +320,7 @@ const AdminCaracteristicas = () => {
                   </Button>
                 </Box>
                 <TableContainer className={styles.tableContainer}>
-                  <Table size="small">
+                  <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell className={styles.tableHeader}>
@@ -343,7 +343,7 @@ const AdminCaracteristicas = () => {
                         )
                         .map((carac, index) => (
                           <TableRow key={index} className={styles.tableRow}>
-                            <TableCell>
+                            <TableCell sx={{width: "10%", padding: "0 16px"}}>
                               {/* Pass the icon ID to the IconoCaracteristica component */}
                               <IconoCaracteristica
                                 iconId={
@@ -351,8 +351,8 @@ const AdminCaracteristicas = () => {
                                 }
                               />
                             </TableCell>
-                            <TableCell>{carac.nombre}</TableCell>
-                            <TableCell>
+                            <TableCell sx={{width: "30%", padding: "0 16px"}}>{carac.nombre}</TableCell>
+                            <TableCell sx={{width: "25%", padding: "0 16px"}}>
                               <Button
                                 variant="outlined"
                                 className={styles.botonEliminar}

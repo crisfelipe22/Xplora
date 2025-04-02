@@ -23,6 +23,7 @@ import AdminUsers from "./pages/AdminUsers";
 import ResultadoBusqueda from './pages/ResultadoBusqueda';
 import Categoria from './pages/AdminCategoria';
 import Reserva from './pages/Reserva';
+import WhatsAppButton from "./components/WhatsAppButton";
 import RegistroExitoso from './pages/RegistroExitoso';
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           element={<ProtectedRoute> <Reserva /> </ProtectedRoute>}
         />
       </Routes>
+      {!esRutaAdmin && <WhatsAppButton />}
       {!esRutaAdmin && <Footer />}
       </IconProvider>
       </FavoritesProvider>

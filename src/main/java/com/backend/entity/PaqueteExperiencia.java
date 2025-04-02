@@ -27,6 +27,9 @@ public class PaqueteExperiencia {
     private Date fecha_inicio;
     private Date fecha_fin;
 
+    @Column(nullable = false)
+    private double puntuacion_promedio = 0.0;
+
     @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL)
     private List<Reserva> reservas =  new ArrayList<>();
 
@@ -136,6 +139,29 @@ public class PaqueteExperiencia {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
+    }
+
+    public void actualizarPuntuacion_promedio() {
+        if (reservas.isEmpty()) {
+            this.puntuacion_promedio = 0.0;
+            return;
+        }
+        
+        double suma = 0;
+        int totalCalificaciones = 0;
+    
+        for (Reserva reserva : reservas) {
+            if (reserva.getCalificacion() != null) {
+                suma += reserva.getCalificacion().getPuntuacion();
+                totalCalificaciones++;
+            }
+        }
+    
+        this.puntuacion_promedio = totalCalificaciones > 0 ? suma / totalCalificaciones : 0.0;
+    }
+    
+    public double getPuntuacion_promedio() {
+        return puntuacion_promedio;
     }
 }
 

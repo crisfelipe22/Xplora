@@ -1,19 +1,17 @@
 /* eslint-disable no-unused-vars */
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"; // Import styles
 import { Box, Button, Container, ImageList, ImageListItem, InputAdornment, TextField, Typography, useMediaQuery, useTheme, Autocomplete } from '@mui/material';
 import ProductoAleatorio from "../components/ProductoAleatorio";
 import { BeachAccess, CalendarToday } from "@mui/icons-material";
-/*import { DateRangePicker } from "@mui/x-date-pickers";*/
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import es from "date-fns/locale/es";
 import { format } from "date-fns";
-import { useProducts } from '../contexts/ProductContext';
+import { useProducts } from '../contexts/ProductContext'; 
 
 const Home = () => {
   const theme = useTheme();
@@ -260,15 +258,17 @@ const Home = () => {
               >
                 BUSCAR
               </Button>
-          
-          </Box>
+              
+              </Box>
         </Container>
 
           <Container sx={{padding:"0px"}}>
             <ProductoAleatorio />
           </Container>
       </Box>
+          
     </LocalizationProvider>
+    
   );
 };
 
