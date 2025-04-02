@@ -15,7 +15,7 @@ const AdminProduct = () => {
     
     const [pag, setPag] = useState(0);
     //const [columnPorPag, setColumnPorPag] = useState(5);
-    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
+    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(48, 3)
     
 
     //llamado GET
@@ -103,12 +103,12 @@ const AdminProduct = () => {
                                 {products.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)                                
                                 .map((product) => (
                                     <TableRow key={product.id_paquete_experiencia} className={styles.tableRow}>
-                                        <TableCell sx={{ width: "17%" }}>{product.id_paquete_experiencia}</TableCell>
-                                        <TableCell sx={{ width: "25%" }}>{product.nombre}</TableCell>
-                                        <TableCell sx={{ width: "25%" }}>{categorias.find(
+                                        <TableCell sx={{ padding: "0 16px", width: "17%" }}>{product.id_paquete_experiencia}</TableCell>
+                                        <TableCell sx={{ padding: "0 16px", width: "25%" }}>{product.nombre}</TableCell>
+                                        <TableCell sx={{ padding: "0 16px", width: "25%" }}>{categorias.find(
                                                 (cat) => cat.id_categoria === product.id_categoria
                                                 )?.nombre || "Desconocido"} </TableCell>
-                                        <TableCell sx={{ width: "33%" }}>
+                                        <TableCell sx={{ padding: "0 16px", width: "33%" }}>
                                             <Link to={`/detalle-producto/${product.id_paquete_experiencia}`} underline="hover">
                                                 <Button variant="outlined" color="success" className={styles.botonVer}>
                                                     Ver
@@ -137,7 +137,10 @@ const AdminProduct = () => {
                         onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 10))}
                         labelRowsPerPage="Filas por página"
                         sx={{ marginTop: "auto" }}
-                        rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
+                        rowsPerPageOptions={Array.from(
+                    { length: 5 },
+                    (_, i) => (i + 1) * 10
+                  )}
                     />
 
                 </Box>
