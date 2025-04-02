@@ -72,8 +72,6 @@ public class CalificacionService {
             throw new IllegalArgumentException("La reserva ya está calificada.");
         }
 
-        
-        
         PaqueteExperiencia paqueteExperiencia = reserva.getPaqueteExperiencia();
         paqueteExperiencia.actualizarPuntuacion_promedio();
 
