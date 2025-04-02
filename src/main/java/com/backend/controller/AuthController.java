@@ -2,13 +2,16 @@ package com.backend.controller;
 
 import com.backend.dto.salida.AuthResponseDTO;
 import com.backend.dto.entada.ConfirmationResendRequestDTO;
+import com.backend.dto.salida.CalificacionSalidaDTO;
+import com.backend.dto.entada.CalificacionEntradaDTO;
 import com.backend.dto.entada.LoginRequestDTO;
-import com.backend.dto.entada.PaqueteExperienciaFavoritoEntradaDTO;
 import com.backend.dto.salida.MensajeResponseDTO;
 import com.backend.dto.salida.PaqueteExperienciaFavoritoSalidaDTO;
 import com.backend.dto.entada.RegistroRequestDTO;
 import com.backend.dto.salida.UsuarioSalidaDTO;
 import com.backend.service.AuthService;
+import com.backend.service.CalificacionService;
+
 import jakarta.validation.Valid;
 
 import com.backend.exceptions.ResourceNotFoundException;
@@ -30,6 +33,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private CalificacionService calificacionService;
 
     @PostMapping("/registro") public ResponseEntity<MensajeResponseDTO> registrarUsuario(@RequestBody @Valid RegistroRequestDTO registroDTO) throws ResourceNotFoundException {
       MensajeResponseDTO mensaje = authService.registrarUsuario(registroDTO);
@@ -132,10 +138,46 @@ public class AuthController {
         return new ResponseEntity<>(favorito, HttpStatus.OK);
     }
 
-
     @PostMapping("/resend-confirmation")
     public ResponseEntity<MensajeResponseDTO> reenviarCorreo(@RequestBody ConfirmationResendRequestDTO confirmationResendRequestDTO) throws ResourceNotFoundException {
       MensajeResponseDTO mensaje = authService.reenviarCorreo(confirmationResendRequestDTO);
       return new ResponseEntity<>(mensaje, HttpStatus.OK);
     }
+    @PostMapping("/{id_usuario}/reservas/{id_reserva}/calificaciones")
+    public ResponseEntity<CalificacionSalidaDTO> crearCalificacion(
+            @PathVariable Long id_usuario,
+            @PathVariable Long id_reserva,
+            @RequestBody CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
+        return new ResponseEntity<>(
+                calificacionService.crearCalificacion(id_usuario, id_reserva, calificacionDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id_usuario}/calificaciones/{id_calificacion}")
+    public ResponseEntity<CalificacionSalidaDTO> obtenerCalificacionPorId(
+            @PathVariable Long id_usuario, 
+            @PathVariable Long id_calificacion) throws ResourceNotFoundException {
+        return ResponseEntity.ok(calificacionService.obtenerCalificacionPorId(id_usuario, id_calificacion));
+    }
+
+    @GetMapping("/{id_usuario}/calificaciones")
+    public ResponseEntity<List<CalificacionSalidaDTO>> obtenerTodasLasCalificaciones(
+            @PathVariable Long id_usuario) {
+        return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificaciones(id_usuario));
+    }
+
+    @PutMapping("/{id_usuario}/calificaciones/{id_calificacion}")
+    public ResponseEntity<CalificacionSalidaDTO> actualizarCalificacion(
+            @PathVariable Long id_usuario,
+            @PathVariable Long id_calificacion,
+            @RequestBody CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
+        return ResponseEntity.ok(calificacionService.actualizarCalificacion(id_usuario, id_calificacion, calificacionDTO));
+    }
+
+    @DeleteMapping("/{id_usuario}/calificaciones/{id_calificacion}")
+    public ResponseEntity<CalificacionSalidaDTO> eliminarCalificacion(
+            @PathVariable Long id_usuario,
+            @PathVariable Long id_calificacion) throws ResourceNotFoundException, AccessDeniedException {
+        return ResponseEntity.ok(calificacionService.eliminarCalificacion(id_usuario, id_calificacion));
+    }
+
 }

@@ -881,6 +881,119 @@ Spring Validation generaría errores de validación
 - 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
 - 500 Internal Server Error: Error en el servidor.
 
+#### Obtener todos las calificaciones de un usuario
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/calificaciones`
+- **Descripción:** Permite obtener datos de todos las calificaciones de un usuario
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+
+[
+    {
+        "id": 1,
+        "puntuacion": 5,
+        "comentario": "Super experiencia",
+        "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+        "id_reserva": 1,
+        "id_usuario": 2
+    },
+    {
+        "id": 2,
+        "puntuacion": 5,
+        "comentario": "Super experiencia",
+        "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+        "id_reserva": 3,
+        "id_usuario": 2
+    },
+    {
+        "id": 3,
+        "puntuacion": 5,
+        "comentario": "Super experiencia",
+        "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+        "id_reserva": 1,
+        "id_usuario": 2
+    }
+]
+```
+**Errores Posibles:**
+
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener la calificación de un usuario apartir de la calificación
+- **Método:** GET
+- **Endpoint:** `/auth/{id_usuario}/favoritos/{id_calificacion}`
+- **Descripción:** Permite obtener los datos de una calificación
+
+**Respuesta Exitosa (200 OK):**
+```json
+{
+  "id": 3,
+  "puntuacion": 5,
+  "comentario": "Super experiencia",
+  "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+  "id_reserva": 1,
+  "id_usuario": 2
+}
+```
+**Errores Posibles:**
+
+- 404 No Found: "mensaje": "Recurso no encontrado:  Usuario no encontrado"
+- 500 Internal Server Error: Error en el servidor.
+
+#### Agregar una calificación
+- **Método:** Post
+- **Endpoint:** `/auth/{id_usuario}/reservas/{id_paquete_experiencia}/calificaciones`
+- **Descripción:** Permite agregar una calificación de un usuario y paquete de experiencia
+
+- **Request Body:**
+
+```json
+{
+  "puntuacion": 5,
+  "comentario": "Super experiencia",
+  "fecha_calificacion": "2025-04-03T10:00:00"
+}
+```
+
+**Respuesta Exitosa (201 Created):**
+```json
+{
+  "id": 4,
+  "puntuacion": 5,
+  "comentario": "Super experiencia",
+  "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+  "id_reserva": 4,
+  "id_usuario": 2
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- 500 Internal Server Error: Error en el servidor.
+
+#### Remover una calificación
+- **Método:** Delete
+- **Endpoint:** `/auth/{id_usuario}/calificaciones/{id_calificacion}`
+- **Descripción:** Permite eliminar una calificación a un usuario y paquete de experiencia
+
+**Respuesta Exitosa (200 ok):**
+```json
+{
+  "id": 4,
+  "puntuacion": 5,
+  "comentario": "Super experiencia",
+  "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
+  "id_reserva": 4,
+  "id_usuario": 2
+}
+```
+
+**Errores Posibles:**
+- 400 Bad Request: Error: El email ya está en uso. / Error: El rol es requerido
+- 500 Internal Server Error: Error en el servidor.
+
   **Notas:**
 - El token JWT generado tiene un tiempo de expiración.
 - Para acceder a recursos protegidos, se debe incluir el token en el header de autorización:
