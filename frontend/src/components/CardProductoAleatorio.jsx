@@ -19,8 +19,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 
 const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mostrarFechas = false}) => {
-  console.log("Categorías recibidas:", categorias);
-  console.log("ID Categoría del producto:", product?.id_categoria);
+  // console.log("Categorías recibidas:", categorias);
+  // console.log("ID Categoría del producto:", product?.id_categoria);
 
   //mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
