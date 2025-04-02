@@ -14,7 +14,7 @@ const CardAdminUsers = () =>{
   const userRole = user.rol
     
     const [pag, setPag] = useState(0);
-    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
+    const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(48, 3)
 
     const [openDialog, setOpenDialog] = useState(false);
     const [cambioRol, setCambioRol] = useState('');
@@ -165,7 +165,10 @@ const CardAdminUsers = () =>{
                         onRowsPerPageChange={(event) => setColumnPorPag(parseInt(event.target.value, 5))}
                         labelRowsPerPage="Filas por página"
                         sx={{ marginTop: "auto" }}
-                        rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
+                        rowsPerPageOptions={Array.from(
+                    { length: 5 },
+                    (_, i) => (i + 1) * 10
+                  )}
                     />
 
                 </Box>

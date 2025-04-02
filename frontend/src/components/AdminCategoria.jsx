@@ -43,7 +43,7 @@ const Categorias = () => {
     imagen: "",
   });
   const [pag, setPag] = useState(0);
-  const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(98, 3)
+  const {columnPorPag, setColumnPorPag } = usePaginacionDinamica(48, 3)
 
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
@@ -315,11 +315,11 @@ const handleSubmit = async (e) => {
                   {categorias.slice(pag * columnPorPag, pag * columnPorPag + columnPorPag)
                   .map((cat) => (
                     <TableRow key={cat.id_categoria} className={styles.tableRow}>
-                      <TableCell sx={{ width: "20%" }}>{cat.id_categoria}</TableCell>
-                      <TableCell sx={{ width: "25%" }}>{cat.nombre}</TableCell>
-                      <TableCell sx={{ maxWidth: "180px", minWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
+                      <TableCell sx={{padding: "0 16px", width: "20%" }}>{cat.id_categoria}</TableCell>
+                      <TableCell sx={{padding: "0 16px", width: "25%" }}>{cat.nombre}</TableCell>
+                      <TableCell sx={{padding: "0 16px", maxWidth: "180px", minWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
                         {cat.descripcion}</TableCell>
-                      <TableCell sx={{ width: "30%" }}>
+                      <TableCell sx={{padding: "0 16px", width: "30%" }}>
                         <Button
                           variant="outlined"
                           className={styles.botonEliminar}
@@ -347,7 +347,10 @@ const handleSubmit = async (e) => {
                 }
                 labelRowsPerPage="Filas por página"
                 sx={{ marginTop: "auto" }}
-                rowsPerPageOptions={Array.from({ length: 100 }, (_, i) => i + 1)}
+                rowsPerPageOptions={Array.from(
+                    { length: 5 },
+                    (_, i) => (i + 1) * 10
+                  )}
             />
           </Box>
         </Box>
