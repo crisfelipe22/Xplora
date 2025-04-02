@@ -1,0 +1,49 @@
+.cardCalificacion {
+    display: flex;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1)  !important;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: transparent !important;
+    max-width: 700px;
+}
+
+.cardContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #cccccc;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+}
+
+.username {
+    font-weight: 600;
+}
+
+.rating {
+    margin-top: 4px;
+}
+
+.comment {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+}

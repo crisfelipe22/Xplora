@@ -69,6 +69,7 @@ import axios from "axios";
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useReserva } from "../contexts/ReservaContext";
+import Calificaciones from "../pages/Calificaciones";
 
 
 const CardDetalleProducto = ({ product, categorias }) => {
@@ -538,6 +539,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
             scroll={scroll}
           />
         )}
+
+        <Calificaciones />
       </Container>
 
       <Snackbar
