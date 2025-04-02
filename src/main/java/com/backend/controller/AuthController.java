@@ -145,8 +145,8 @@ public class AuthController {
     }
     @PostMapping("/{id_usuario}/reservas/{id_reserva}/calificaciones")
     public ResponseEntity<CalificacionSalidaDTO> crearCalificacion(
-            @PathVariable Long id_usuario,
-            @PathVariable Long id_reserva,
+            @PathVariable(name = "id_usuario") Long id_usuario,
+            @PathVariable(name = "id_reserva") Long id_reserva,
             @RequestBody CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
         return new ResponseEntity<>(
                 calificacionService.crearCalificacion(id_usuario, id_reserva, calificacionDTO), HttpStatus.CREATED);
@@ -154,29 +154,29 @@ public class AuthController {
 
     @GetMapping("/{id_usuario}/calificaciones/{id_calificacion}")
     public ResponseEntity<CalificacionSalidaDTO> obtenerCalificacionPorId(
-            @PathVariable Long id_usuario, 
-            @PathVariable Long id_calificacion) throws ResourceNotFoundException {
+            @PathVariable(name = "id_usuario") Long id_usuario, 
+            @PathVariable(name = "id_calificacion") Long id_calificacion) throws ResourceNotFoundException {
         return ResponseEntity.ok(calificacionService.obtenerCalificacionPorId(id_usuario, id_calificacion));
     }
 
     @GetMapping("/{id_usuario}/calificaciones")
     public ResponseEntity<List<CalificacionSalidaDTO>> obtenerTodasLasCalificaciones(
-            @PathVariable Long id_usuario) {
+            @PathVariable(name = "id_usuario") Long id_usuario) {
         return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificaciones(id_usuario));
     }
 
     @PutMapping("/{id_usuario}/calificaciones/{id_calificacion}")
     public ResponseEntity<CalificacionSalidaDTO> actualizarCalificacion(
-            @PathVariable Long id_usuario,
-            @PathVariable Long id_calificacion,
+            @PathVariable(name = "id_usuario") Long id_usuario,
+            @PathVariable(name = "id_calificacion") Long id_calificacion,
             @RequestBody CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
         return ResponseEntity.ok(calificacionService.actualizarCalificacion(id_usuario, id_calificacion, calificacionDTO));
     }
 
     @DeleteMapping("/{id_usuario}/calificaciones/{id_calificacion}")
     public ResponseEntity<CalificacionSalidaDTO> eliminarCalificacion(
-            @PathVariable Long id_usuario,
-            @PathVariable Long id_calificacion) throws ResourceNotFoundException, AccessDeniedException {
+            @PathVariable(name = "id_usuario") Long id_usuario,
+            @PathVariable(name = "id_calificacion") Long id_calificacion) throws ResourceNotFoundException, AccessDeniedException {
         return ResponseEntity.ok(calificacionService.eliminarCalificacion(id_usuario, id_calificacion));
     }
 
