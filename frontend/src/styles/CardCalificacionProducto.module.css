@@ -79,3 +79,7 @@
     margin: 1% 0 3% 0 !important;
     cursor: pointer !important;
 }
+
+.dialog{
+    width: 100%;
+}

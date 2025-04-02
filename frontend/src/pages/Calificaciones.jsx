@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-
 import { Typography, Box, Button} from "@mui/material";
 import CardCalificacionProducto from "../components/CardCalificacionProducto";
 import styles from "../styles/CardCalificacionProducto.module.css";
 import StarIcon from "@mui/icons-material/Star";
 import { useState } from "react";
+import EscribirCalificacionDialog from "../components/EscribirCalificacionDialog";
 
 const Calificaciones = () => {
 
@@ -43,6 +43,8 @@ const Calificaciones = () => {
     const handleVerMas = () => {
         setMostrarTodas(!mostrarTodas); 
     };
+
+    const [dialogoAbierto, setDialogoAbierto] = useState(false);
     
     return (
         <Box className={styles.calificacionesBox}>
@@ -54,7 +56,10 @@ const Calificaciones = () => {
                         {promedioCalificacion} • {calificaciones.length} reseñas
                     </Typography>
                 </Box>
-                <Button className={styles.botonEscribir}>Escribe tu reseña</Button>
+                <Button className={styles.botonEscribir}
+                    onClick={() => setDialogoAbierto(true)}>
+                        Escribe tu reseña
+                </Button>
             </Box>
 
             {calificaciones.length > 0 ? (
@@ -72,6 +77,12 @@ const Calificaciones = () => {
             ) : (
                 <Typography variant="body1">Aún no hay reseñas.</Typography>
             )}
+
+            <EscribirCalificacionDialog 
+                openDialog={dialogoAbierto} 
+                handleCloseDialog={() => setDialogoAbierto(false)}
+                usuario="Victoria Ancalaf"
+            />
 
     </Box>
     );
