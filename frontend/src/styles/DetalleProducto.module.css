@@ -1,5 +1,5 @@
-div.container {
-  padding-top: 5px !important;
+.container {
+  padding-top: 20px;
   padding-left: 60px;
   padding-right: 60px;
   margin-top: 65px;
@@ -72,9 +72,6 @@ div.container {
 }
 
 .seeAllImages {
-  color: #7B3FF6 !important;
-  background: transparent !important;
-  border: 1px solid #7B3FF6 !important;
   font-size: x-small !important;
   font-weight: bold !important;
   width: auto !important;
@@ -167,8 +164,6 @@ div.container {
 .gridCaracteristicas {
   display: grid;
   grid-template-columns: repeat(3, minmax(170px, 1fr));
-  /* gap: 15px; */
-  margin-top: 20px;
 }
 
 .listItem {
@@ -224,8 +219,6 @@ div.container {
   .gridCaracteristicas {
     display: grid;
     grid-template-columns: repeat(3, minmax(170px, 1fr));
-    /* gap: 15px; */
-    margin-top: 20px;
   }
 
   .tituloVolver {
@@ -239,6 +232,7 @@ div.container {
     order: 0;
     padding-top: 0;
     margin-top: 0;
+    font-size: 36px;
   }
 
   a.backButton {
@@ -311,8 +305,6 @@ div.container {
   .gridCaracteristicas {
     display: grid;
     grid-template-columns: repeat(2, minmax(170px, 1fr));
-    /* gap: 15px; */
-    margin-top: 20px;
   }
 
   .contenedorDetalles {
@@ -348,6 +340,7 @@ div.container {
 
   .tituloVolver .title {
     order: 1;
+    font-size: 20px;
   }
 
   .detalleSuperior {
