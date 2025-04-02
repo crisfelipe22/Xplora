@@ -1,3 +1,33 @@
+
+.calificacionesBox{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 750px;
+    border-top: 1px solid #ddd;
+}
+
+.titulo{
+    margin-top: 3% !important; 
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 1% 0;
+}
+
+.botonEscribir{
+    background-color:  #7B3FF6 !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 5px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
 .cardCalificacion {
     display: flex;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1)  !important;
@@ -38,12 +68,14 @@
     font-weight: 600;
 }
 
-.rating {
-    margin-top: 4px;
-}
 
 .comment {
     margin-top: 8px;
     font-size: 14px;
     color: #555;
+}
+
+.botonVerTodas{
+    margin: 1% 0 3% 0 !important;
+    cursor: pointer !important;
 }
