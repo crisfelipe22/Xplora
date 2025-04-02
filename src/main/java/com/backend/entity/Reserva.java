@@ -22,6 +22,8 @@ public class Reserva {
     private Date fecha_inicio;
     private Date fecha_fin;
 
+    @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Calificacion calificacion;
 
     public Reserva() {
     }
@@ -70,6 +72,14 @@ public class Reserva {
     }
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
+    }
+
+    public Calificacion getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Calificacion calificacion) {
+        this.calificacion = calificacion;
     }
 
 }
