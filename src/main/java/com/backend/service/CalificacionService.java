@@ -61,7 +61,7 @@ public class CalificacionService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
         
-        if (!usuarioAutenticado.getEmail().equals(emailActual)) {
+        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
             throw new AccessDeniedException("No tienes permisos para modificar la calificación de este usuario.");
         }
         
@@ -116,11 +116,14 @@ public class CalificacionService {
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
                 .orElseThrow(() -> new ResourceNotFoundException("Calificación no encontrada"));
 
+        Usuario usuario = usuarioRepository.findById(id_usuario)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuarioAutenticado.getEmail().equals(emailActual)) {
+        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
             throw new AccessDeniedException("No tienes permisos para modificar la calificación de este usuario.");
         }
 
@@ -148,11 +151,14 @@ public class CalificacionService {
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
                 .orElseThrow(() -> new ResourceNotFoundException("Calificación no encontrada"));
 
+        Usuario usuario = usuarioRepository.findById(id_usuario)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuarioAutenticado.getEmail().equals(emailActual)) {
+        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
             throw new AccessDeniedException("No tienes permisos para eliminar la calificación de este usuario.");
         }
 
@@ -162,7 +168,7 @@ public class CalificacionService {
 
         PaqueteExperiencia paqueteExperiencia = calificacion.getReserva().getPaqueteExperiencia();
 
-        calificacionRepository.delete(calificacion);
+        calificacionRepository.deleteById(id_calificacion);
 
         paqueteExperiencia.actualizarPuntuacion_promedio();
 
