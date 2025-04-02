@@ -13,8 +13,6 @@ import {
   IconButton,
   Box,
   Divider,
-  Link,
-  Modal,
   InputAdornment,
   useTheme,
   useMediaQuery,
@@ -23,7 +21,6 @@ import {
 } from "@mui/material";
 import styles from "../styles/DetalleProducto.module.css";
 import { useIcons } from "../contexts/IconContext";
-import CheckIcon from "@mui/icons-material/Check";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useState, useRef, useEffect } from "react";
 import GaleriaImgProducto from "./GaleriaImgProducto";
@@ -40,45 +37,20 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoritesContext";
-import CloseIcon from "@mui/icons-material/Close";
 import ModalCompartir from "./ModalCompartir";
-import {
-  DirectionsBoat, // Kayak
-  Landscape, // Montañas
-  Waves, // Agua
-  SafetyDivider, // Seguridad
-  Timer, // Duración
-  Groups, // Grupo
-  LocalOffer, // Incluido
-  Wc, // Sanitarios
-  Restaurant, // Comida
-  Hiking, // Trekking
-  CameraAlt, // Fotografía
-  NaturePeople, // Naturaleza
-  WaterDrop, // Cascadas
-  Terrain, // Terreno
-  DarkMode, // Noche
-  Brightness5, // Día
-  Emergency, // Emergencia
-  Flag, // Punto encuentro
-  Map, // Mapa
-  AcUnit, // Clima frío
-  AccessTime, // Horarios
-} from "@mui/icons-material";
 import axios from "axios";
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useReserva } from "../contexts/ReservaContext";
 
-
 const CardDetalleProducto = ({ product, categorias }) => {
-
   //mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const { fechasDisponibles, obtenerFechasDisponibles, loading, errorReserva } = useReserva();
-  
+  const { fechasDisponibles, obtenerFechasDisponibles, loading, errorReserva } =
+    useReserva();
+
   const locationURL = useLocation();
   const { icons: iconosDisponibles } = useIcons();
 
@@ -96,7 +68,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
     fetchCaracteristicas();
   }, []);
-  
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
@@ -112,11 +84,19 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const fechaInicioReserva = dateRange[0] || null;
   const fechaFinReserva = dateRange[1] || null;
-  const fechasDisponiblesSet = new Set(fechasDisponibles.map(fecha => new Date(fecha).toISOString().split("T")[0]));
-  const fechaInicioDisponible = fechasDisponibles.length > 0 
-    ? new Date(`${fechasDisponibles[0]}T00:00:00`) : null;
-  const fechaFinDisponible = fechasDisponibles.length > 0 
-    ? new Date(`${fechasDisponibles[fechasDisponibles.length - 1]}T00:00:00`) : null;
+  const fechasDisponiblesSet = new Set(
+    fechasDisponibles.map(
+      (fecha) => new Date(fecha).toISOString().split("T")[0]
+    )
+  );
+  const fechaInicioDisponible =
+    fechasDisponibles.length > 0
+      ? new Date(`${fechasDisponibles[0]}T00:00:00`)
+      : null;
+  const fechaFinDisponible =
+    fechasDisponibles.length > 0
+      ? new Date(`${fechasDisponibles[fechasDisponibles.length - 1]}T00:00:00`)
+      : null;
 
   const [openModal, setOpenModal] = useState(false); // Estado para el modal de compartir
   const handleOpenGallery = () => setOpenGallery(true);
@@ -132,7 +112,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const handleClosePolitica = () => setOpenPolitica(false);
 
   const numImages = isMobile ? 1 : isTablet ? 3 : 5;
-  // console.log(numImages);
+
   const imagenArray = product.imagen
     ? product.imagen.split(",").map((url) => url.trim())
     : [];
@@ -149,9 +129,8 @@ const CardDetalleProducto = ({ product, categorias }) => {
     }
   }
   const fechasReservadas = todasLasFechas
-    .filter(fecha => !fechasDisponiblesSet.has(fecha)) 
-    .map(fecha => new Date(`${fecha}T00:00:00`));
-
+    .filter((fecha) => !fechasDisponiblesSet.has(fecha))
+    .map((fecha) => new Date(`${fecha}T00:00:00`));
 
   //validacion que no hayan fechas reservadas en el rango que se seleccione
   const tieneFechasReservadas = (startDate, endDate, fechasReservadas) => {
@@ -213,9 +192,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
     e.preventDefault(); // Evitar que se active el Link al hacer clic en el corazón
 
     if (!isAuthenticated) {
-      setSnackbarMessage(
-        "Debes iniciar sesión para agregar favoritos."
-      );
+      setSnackbarMessage("Debes iniciar sesión para agregar favoritos.");
       setOpenSnackbar(true);
       return;
     }
@@ -227,15 +204,15 @@ const CardDetalleProducto = ({ product, categorias }) => {
   const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
 
   //reserva
-  const handleReserva = () =>{
-    if(!fechaInicioReserva || !fechaFinReserva){
-      setError({ fechaReserva: "Selecciona una fecha de reserva" }); 
+  const handleReserva = () => {
+    if (!fechaInicioReserva || !fechaFinReserva) {
+      setError({ fechaReserva: "Selecciona una fecha de reserva" });
       return;
     }
 
     setError({ fechaReserva: "" });
 
-    if(isAuthenticated){
+    if (isAuthenticated) {
       localStorage.setItem(
         "preReserva",
         JSON.stringify({
@@ -243,7 +220,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
           fecha_fin: fechaFinReserva,
         })
       );
-      navigate(`/reserva/${product.id_paquete_experiencia}`)
+      navigate(`/reserva/${product.id_paquete_experiencia}`);
     } else {
       localStorage.setItem(
         "preReserva",
@@ -253,34 +230,31 @@ const CardDetalleProducto = ({ product, categorias }) => {
           fecha_fin: fechaFinReserva,
         })
       );
-      setSnackbarMessage(
-        "Debes iniciar sesión para reservar una experiencia."
-      );
+      setSnackbarMessage("Debes iniciar sesión para reservar una experiencia.");
       setOpenSnackbar(true);
       setTimeout(() => {
-        navigate("/login", { state: { from: locationURL.pathname } })
+        navigate("/login", { state: { from: locationURL.pathname } });
       }, 1000);
-      
     }
-  }
+  };
 
   useEffect(() => {
     const preReserva = localStorage.getItem("preReserva");
-  
+
     if (preReserva) {
       const { fecha_inicio, fecha_fin } = JSON.parse(preReserva);
-  
-      setDateRange([new Date(fecha_inicio), new Date(fecha_fin)])
-  
+
+      setDateRange([new Date(fecha_inicio), new Date(fecha_fin)]);
+
       localStorage.removeItem("preReserva");
     }
   }, []);
 
   useEffect(() => {
     if (product.id_paquete_experiencia) {
-        obtenerFechasDisponibles(product.id_paquete_experiencia);
+      obtenerFechasDisponibles(product.id_paquete_experiencia);
     }
-}, [product.id_paquete_experiencia]);
+  }, [product.id_paquete_experiencia]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -294,7 +268,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
             >
               <ArrowBackIcon /> VOLVER ATRÁS
             </IconButton>
-            <Typography variant="h3" className={styles.title}>
+            <Typography variant="h4" className={styles.title}>
               {product.nombre}
             </Typography>
 
@@ -339,9 +313,10 @@ const CardDetalleProducto = ({ product, categorias }) => {
             </div>
             {notMobile && (
               <Button
-                variant="contained"
+                variant="outlined"
                 onClick={handleOpenGallery}
                 className={styles.seeAllImages}
+                color="primary"
               >
                 VER TODAS LAS IMÁGENES
               </Button>
@@ -404,7 +379,12 @@ const CardDetalleProducto = ({ product, categorias }) => {
               Duración: {product.duracion}
             </Typography>
             <Divider />
-            <Typography variant="h6">Características</Typography>
+            <Typography
+              gutterBottom
+              sx={{ typography: { mobile: "h6", tablet: "h5" }, mt: 3 }}
+            >
+              Características
+            </Typography>
             <Box className={styles.gridCaracteristicas}>
               {caracteristicas.map((item, index) => {
                 const id_caracteristica = item.id_caracteristica;
@@ -476,10 +456,14 @@ const CardDetalleProducto = ({ product, categorias }) => {
                   endDate={fechaFinReserva}
                   onChange={handleDateChange}
                   onCalendarClose={() => setOpenCalendar(false)}
-                  minDate={new Date(Math.max(
-                    new Date().setHours(0, 0, 0, 0), // Fecha actual (hoy) a medianoche
-                    new Date(fechaInicioDisponible).getTime() // Fecha mínima disponible
-                  ))}
+                  minDate={
+                    new Date(
+                      Math.max(
+                        new Date().setHours(0, 0, 0, 0), // Fecha actual (hoy) a medianoche
+                        new Date(fechaInicioDisponible).getTime() // Fecha mínima disponible
+                      )
+                    )
+                  }
                   maxDate={fechaFinDisponible}
                   excludeDates={fechasReservadas}
                   inline
@@ -489,8 +473,11 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 />
               </Box>
             )}
-            <Button variant="contained" className={styles.botonComprar} 
-            onClick={handleReserva}>
+            <Button
+              variant="contained"
+              className={styles.botonComprar}
+              onClick={handleReserva}
+            >
               COMPRAR EXPERIENCIA
             </Button>
             <Typography variant="h5" className={styles.preguntaRegalo}>
@@ -506,7 +493,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
 
         {/* 🔹 Sección de Política de Uso */}
         <Divider sx={{ marginTop: 2 }} />
-        <Box>
+        <Box sx={{ pb: 4 }}>
           <Typography
             gutterBottom
             sx={{ typography: { mobile: "h6", tablet: "h5" }, mt: 3 }}
@@ -564,4 +551,4 @@ const CardDetalleProducto = ({ product, categorias }) => {
   );
 };
 
-export default CardDetalleProducto
+export default CardDetalleProducto;
