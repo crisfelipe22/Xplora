@@ -3,7 +3,8 @@
 import { Typography, Box, Button} from "@mui/material";
 import CardCalificacionProducto from "../components/CardCalificacionProducto";
 import styles from "../styles/CardCalificacionProducto.module.css";
-import StarIcon from "@mui/icons-material/Star"
+import StarIcon from "@mui/icons-material/Star";
+import { useState } from "react";
 
 const Calificaciones = () => {
 
@@ -37,6 +38,11 @@ const Calificaciones = () => {
 
     const promedioCalificacion = 3
 
+    const [mostrarTodas, setMostrarTodas] = useState(false);
+
+    const handleVerMas = () => {
+        setMostrarTodas(!mostrarTodas); 
+    };
     
     return (
         <Box className={styles.calificacionesBox}>
@@ -52,12 +58,21 @@ const Calificaciones = () => {
             </Box>
 
             {calificaciones.length > 0 ? (
-                calificaciones.map((cal, index) => <CardCalificacionProducto key={index} calificacion={cal} />)
+                <>
+                    {calificaciones.slice(0, mostrarTodas ? calificaciones.length : 2).map((cal, index) => (
+                        <CardCalificacionProducto key={index} calificacion={cal} />
+                    ))}
+
+                    {calificaciones.length > 2 && (
+                        <Button variant="outlined" onClick={handleVerMas} className={styles.botonVerTodas}>
+                            {mostrarTodas ? "Ver menos" : "Ver todas las reseñas"}
+                        </Button>
+                    )}
+                </>
             ) : (
                 <Typography variant="body1">Aún no hay reseñas.</Typography>
             )}
 
-            <Button variant="outlined" className={styles.botonVerTodas}>Ver todas las reseñas</Button>
     </Box>
     );
 };

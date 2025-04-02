@@ -19,7 +19,7 @@ const CardCalificacionProducto = ({calificacion}) => {
             <CardContent className={styles.cardContent}>
                 <Avatar className={styles.avatar}>{getInitials(calificacion.usuario)}</Avatar>
                 <Box className={styles.textContainer}>
-                    <Rating value={calificacion.calificacion} readOnly className={styles.rating}/>
+                    <Rating value={calificacion.calificacion} precision={0.5} readOnly className={styles.rating}/>
                     <Box className={styles.userInfo}>
                         <Typography variant="subtitle1" className={styles.username}>{calificacion.usuario} - </Typography>
                         <Typography variant="subtitle2" >
