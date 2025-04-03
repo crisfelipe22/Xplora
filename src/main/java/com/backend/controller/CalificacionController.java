@@ -31,7 +31,7 @@ public class CalificacionController {
     @Autowired
     private CalificacionService calificacionService;
 
-    @PostMapping("/reservas/{id_reserva}/calificaciones")
+    @PostMapping("/reservas/{id_reserva}")
     public ResponseEntity<CalificacionSalidaDTO> crearCalificacion(
             @PathVariable(name = "id_reserva") Long id_reserva,
             @RequestBody @Valid CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
@@ -46,10 +46,16 @@ public class CalificacionController {
         return ResponseEntity.ok(calificacionService.obtenerCalificacionPorId(id_usuario, id_calificacion));
     }
 
-    @GetMapping("/{id_usuario}/calificaciones")
+    @GetMapping("/usuarios/{id_usuario}")
     public ResponseEntity<List<CalificacionSalidaDTO>> obtenerTodasLasCalificaciones(
             @PathVariable(name = "id_usuario") Long id_usuario) {
-        return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificaciones(id_usuario));
+        return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificacionesPorUsuario(id_usuario));
+    }
+
+    @GetMapping("/usuarios/{id_paquete_experiencia}")
+    public ResponseEntity<List<CalificacionSalidaDTO>> obtenerTodasLasCalificacionesPorPaqueteExperiencia(
+            @PathVariable(name = "id_paquete_experiencia") Long id_paquete_experiencia) {
+        return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificacionesPorPaqueteExperiencia(id_paquete_experiencia));
     }
 
     @PutMapping("/{id_usuario}/calificaciones/{id_calificacion}")

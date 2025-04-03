@@ -100,12 +100,23 @@ public class CalificacionService {
         return calificacionSalidaDTO;
     }
 
-    public List<CalificacionSalidaDTO> obtenerTodasLasCalificaciones(Long id_usuario) {
+    public List<CalificacionSalidaDTO> obtenerTodasLasCalificacionesPorUsuario(Long id_usuario) {
         return calificacionRepository.findByUsuarioId(id_usuario).stream()
                 .map(calificacion -> {
                     CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
                     calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
                     calificacionSalidaDTO.setId_usuario(id_usuario);
+                    return calificacionSalidaDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<CalificacionSalidaDTO> obtenerTodasLasCalificacionesPorPaqueteExperiencia(Long id_paquete_experiencia) {
+        return calificacionRepository.findByPaqueteExperienciaId(id_paquete_experiencia).stream()
+                .map(calificacion -> {
+                    CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
+                    calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
+                    calificacionSalidaDTO.setId_usuario(calificacion.getUsuario().getId_usuario());
                     return calificacionSalidaDTO;
                 })
                 .collect(Collectors.toList());
