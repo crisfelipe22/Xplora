@@ -24,6 +24,9 @@ public class ReservaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private PaqueteExperienciaRepository paqueteExperienciaRepository;
@@ -40,6 +43,7 @@ public class ReservaService {
 
         Reserva reserva = new Reserva(usuario, paqueteExperiencia, reservaEntradaDto.getFecha_inicio(), reservaEntradaDto.getFecha_fin());
         Reserva nuevaReserva = reservaRepository.save(reserva);
+        emailService.sendHtmlReservationConfirmationEmail(convertirAReservaSalidaDTO(nuevaReserva));
 
         return convertirAReservaSalidaDTO(nuevaReserva);
     }
