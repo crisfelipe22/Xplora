@@ -9,8 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.backend.repository.PaqueteExperienciaRepository;
-import com.backend.repository.UsuarioRepository;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ServiceConfigurationError;
@@ -25,12 +23,6 @@ public class EmailService {
 
   @Autowired
   private JavaMailSender mailSender;
-
-  @Autowired
-  private UsuarioRepository usuarioRepository;
-
-  @Autowired
-  private PaqueteExperienciaRepository paqueteExperienciaRepository;
 
   @Value("${app.url}")
   private String appUrl;
