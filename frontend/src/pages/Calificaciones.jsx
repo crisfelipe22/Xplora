@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Typography, Box, Button} from "@mui/material";
 import CardCalificacionProducto from "../components/CardCalificacionProducto";
@@ -5,9 +6,11 @@ import styles from "../styles/CardCalificacionProducto.module.css";
 import StarIcon from "@mui/icons-material/Star";
 import { useState } from "react";
 import EscribirCalificacionDialog from "../components/EscribirCalificacionDialog";
+import { useAuth } from "../contexts/AuthContext";
 
-const Calificaciones = () => {
+const Calificaciones = ({product}) => {
 
+    const { isAuthenticated } = useAuth();
     //APPI, POR AHORA CODEADO
     const calificaciones = [
         {
@@ -39,12 +42,15 @@ const Calificaciones = () => {
     const promedioCalificacion = 3
 
     const [mostrarTodas, setMostrarTodas] = useState(false);
+    const [puedeReservar, setPuedeReservar] = useState(false)
 
     const handleVerMas = () => {
         setMostrarTodas(!mostrarTodas); 
     };
 
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
+
+    
     
     return (
         <Box className={styles.calificacionesBox}>
@@ -82,6 +88,7 @@ const Calificaciones = () => {
                 openDialog={dialogoAbierto} 
                 handleCloseDialog={() => setDialogoAbierto(false)}
                 usuario="Victoria Ancalaf"
+                product={product}
             />
 
     </Box>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Rating, Avatar, Typography, Box } from "@mui/material";
 import styles from "../styles/CardCalificacionProducto.module.css";
 
-const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, usuario }) => {
+const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, usuario, product}) => {
     const [calificacion, setCalificacion] = useState(0);
     const [comentario, setComentario] = useState("");
 
@@ -33,7 +33,7 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, usuario }) 
         maxWidth={false}
         PaperProps={{
             sx: {
-                width: "60vw", 
+                width: "50vw", 
                 height: "50vh", 
                 borderRadius: 3, 
                 padding: 2,
@@ -41,7 +41,7 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, usuario }) 
         }}
         >
             <DialogTitle align="center">
-                Salto Ángel - Parque Nacional Canaima
+                {product.nombre}
             </DialogTitle>
             <DialogContent>
                 <Box display="flex" alignItems="center" gap={2} mb={2}>

@@ -527,7 +527,9 @@ const CardDetalleProducto = ({ product, categorias }) => {
           />
         )}
 
-        <Calificaciones />
+        <Calificaciones 
+          product={product}
+        />
       </Container>
 
       <Snackbar
