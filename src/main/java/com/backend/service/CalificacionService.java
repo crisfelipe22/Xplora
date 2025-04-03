@@ -9,6 +9,7 @@ import com.backend.entity.PaqueteExperiencia;
 import com.backend.entity.PaqueteExperienciaFavorito;
 import com.backend.entity.Reserva;
 import com.backend.entity.Usuario;
+import com.backend.exceptions.BadRequestException;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.CalificacionRepository;
 import com.backend.repository.PaqueteExperienciaRepository;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.AccessDeniedException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,12 +59,16 @@ public class CalificacionService {
     
     @Transactional
     public CalificacionSalidaDTO crearCalificacion(Long id_reserva, CalificacionEntradaDTO calificacionDTO) 
-            throws ResourceNotFoundException, AccessDeniedException {
+            throws ResourceNotFoundException, AccessDeniedException, BadRequestException {
         
         logger.info("Agregando calificación a la reserva '{}'", id_reserva);
 
         Reserva reserva = reservaRepository.findById(id_reserva)
             .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
+
+        if (reserva.getFecha_fin().after(new Date())) {
+            throw new BadRequestException("No puedes calificar una reserva que aún no ha finalizado.");
+        }
 
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)

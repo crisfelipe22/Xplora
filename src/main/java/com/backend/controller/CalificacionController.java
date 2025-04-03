@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dto.entada.CalificacionEntradaDTO;
 import com.backend.dto.salida.CalificacionSalidaDTO;
+import com.backend.exceptions.BadRequestException;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.service.CalificacionService;
 
@@ -34,7 +35,7 @@ public class CalificacionController {
     @PostMapping("/reservas/{id_reserva}")
     public ResponseEntity<CalificacionSalidaDTO> crearCalificacion(
             @PathVariable(name = "id_reserva") Long id_reserva,
-            @RequestBody @Valid CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
+            @RequestBody @Valid CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException, BadRequestException {
         return new ResponseEntity<>(
                 calificacionService.crearCalificacion(id_reserva, calificacionDTO), HttpStatus.CREATED);
     }
