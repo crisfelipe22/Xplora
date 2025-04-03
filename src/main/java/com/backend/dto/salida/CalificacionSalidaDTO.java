@@ -12,13 +12,16 @@ public class CalificacionSalidaDTO {
     private Long id_reserva;
     private Long id_usuario;
 
-    public CalificacionSalidaDTO(Long id, int puntuacion, String comentario, Date fecha_calificacion, Long id_reserva, Long id_usuario) {
+    private Long id_paquete_experiencia;
+
+    public CalificacionSalidaDTO(Long id, int puntuacion, String comentario, Date fecha_calificacion, Long id_reserva, Long id_usuario, Long id_paquete_experiencia) {
         this.id = id;
         this.puntuacion = puntuacion;
         this.comentario = comentario;
         this.fecha_calificacion = fecha_calificacion;
         this.id_reserva = id_reserva;
         this.id_usuario = id_usuario;
+        this.id_paquete_experiencia = id_paquete_experiencia;
     }
 
     public CalificacionSalidaDTO() {
@@ -70,5 +73,13 @@ public class CalificacionSalidaDTO {
 
     public void setId_usuario(Long id_usuario) {
         this.id_usuario = id_usuario;
+    }
+
+    public Long getId_paquete_experiencia() {
+        return id_paquete_experiencia;
+    }
+
+    public void setId_paquete_experiencia(Long id_paquete_experiencia) {
+        this.id_paquete_experiencia = id_paquete_experiencia;
     }
 }

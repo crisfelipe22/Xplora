@@ -39,11 +39,11 @@ public class CalificacionController {
                 calificacionService.crearCalificacion(id_reserva, calificacionDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id_usuario}/calificaciones/{id_calificacion}")
+    @GetMapping("/{id_calificacion}/usuarios/{id_usuario}")
     public ResponseEntity<CalificacionSalidaDTO> obtenerCalificacionPorId(
             @PathVariable(name = "id_usuario") Long id_usuario, 
             @PathVariable(name = "id_calificacion") Long id_calificacion) throws ResourceNotFoundException {
-        return ResponseEntity.ok(calificacionService.obtenerCalificacionPorId(id_usuario, id_calificacion));
+        return ResponseEntity.ok(calificacionService.obtenerCalificacionPorIdCalificacion(id_usuario, id_calificacion));
     }
 
     @GetMapping("/usuarios/{id_usuario}")
@@ -52,7 +52,7 @@ public class CalificacionController {
         return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificacionesPorUsuario(id_usuario));
     }
 
-    @GetMapping("/usuarios/{id_paquete_experiencia}")
+    @GetMapping("/paquete_experiencia/{id_paquete_experiencia}")
     public ResponseEntity<List<CalificacionSalidaDTO>> obtenerTodasLasCalificacionesPorPaqueteExperiencia(
             @PathVariable(name = "id_paquete_experiencia") Long id_paquete_experiencia) {
         return ResponseEntity.ok(calificacionService.obtenerTodasLasCalificacionesPorPaqueteExperiencia(id_paquete_experiencia));
