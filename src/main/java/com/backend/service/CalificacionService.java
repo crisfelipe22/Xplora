@@ -75,6 +75,7 @@ public class CalificacionService {
         Calificacion calificacion = modelMapper.map(calificacionDTO, Calificacion.class);
         calificacion.setUsuario(reserva.getUsuario());
         calificacion.setReserva(reserva);
+        calificacion.setPaqueteExperiencia(reserva.getPaqueteExperiencia());
 
         calificacion = calificacionRepository.save(calificacion);
 
