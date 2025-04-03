@@ -31,13 +31,12 @@ public class CalificacionController {
     @Autowired
     private CalificacionService calificacionService;
 
-    @PostMapping("/{id_usuario}/reservas/{id_reserva}/calificaciones")
+    @PostMapping("/reservas/{id_reserva}/calificaciones")
     public ResponseEntity<CalificacionSalidaDTO> crearCalificacion(
-            @PathVariable(name = "id_usuario") Long id_usuario,
             @PathVariable(name = "id_reserva") Long id_reserva,
             @RequestBody @Valid CalificacionEntradaDTO calificacionDTO) throws ResourceNotFoundException, AccessDeniedException {
         return new ResponseEntity<>(
-                calificacionService.crearCalificacion(id_usuario, id_reserva, calificacionDTO), HttpStatus.CREATED);
+                calificacionService.crearCalificacion(id_reserva, calificacionDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id_usuario}/calificaciones/{id_calificacion}")

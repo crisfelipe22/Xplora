@@ -46,13 +46,10 @@ public class CalificacionService {
     }
     
     @Transactional
-    public CalificacionSalidaDTO crearCalificacion(Long id_usuario, Long id_reserva, CalificacionEntradaDTO calificacionDTO) 
+    public CalificacionSalidaDTO crearCalificacion(Long id_reserva, CalificacionEntradaDTO calificacionDTO) 
             throws ResourceNotFoundException, AccessDeniedException {
         
-        logger.info("Agregando calificacion de la reserva '{}' al usuario '{}'", id_reserva, id_usuario);
-
-        Usuario usuario = usuarioRepository.findById(id_usuario)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        logger.info("Agregando calificacion de la reserva '{}' al usuario '{}'", id_reserva);
 
         Reserva reserva = reservaRepository.findById(id_reserva)
             .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
@@ -61,7 +58,7 @@ public class CalificacionService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
         
-        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
+        if (!usuarioAutenticado.getEmail().equals(reserva.getUsuario().getEmail())) {
             throw new AccessDeniedException("No tienes permisos para modificar la calificación de este usuario.");
         }
         
@@ -76,7 +73,7 @@ public class CalificacionService {
         paqueteExperiencia.actualizarPuntuacion_promedio();
 
         Calificacion calificacion = modelMapper.map(calificacionDTO, Calificacion.class);
-        calificacion.setUsuario(usuario);
+        calificacion.setUsuario(reserva.getUsuario());
         calificacion.setReserva(reserva);
 
         calificacion = calificacionRepository.save(calificacion);
@@ -85,7 +82,7 @@ public class CalificacionService {
         
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(reserva.getId_reserva());
-        calificacionSalidaDTO.setId_usuario(id_usuario);
+        calificacionSalidaDTO.setId_usuario(reserva.getUsuario().getId_usuario());
 
         return calificacionSalidaDTO;
     }
