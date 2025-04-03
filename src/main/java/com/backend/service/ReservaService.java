@@ -43,7 +43,13 @@ public class ReservaService {
 
         Reserva reserva = new Reserva(usuario, paqueteExperiencia, reservaEntradaDto.getFecha_inicio(), reservaEntradaDto.getFecha_fin());
         Reserva nuevaReserva = reservaRepository.save(reserva);
-        emailService.sendHtmlReservationConfirmationEmail(convertirAReservaSalidaDTO(nuevaReserva));
+        emailService.sendHtmlReservationConfirmationEmail(
+            usuario.getEmail(),
+            usuario.getNombre(),
+            paqueteExperiencia.getNombre(),
+            nuevaReserva.getFecha_inicio(),
+            nuevaReserva.getFecha_fin()
+        );
 
         return convertirAReservaSalidaDTO(nuevaReserva);
     }
