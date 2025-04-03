@@ -1,29 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Container,
-  Paper,
-  Typography,
-  Box,
-  Grid,
-  Avatar,
-  Divider,
-  Card,
-  CardContent,
-  useTheme,
-  useMediaQuery,
-  Tabs,
-  Tab,
-  IconButton,
-} from "@mui/material";
+import { Container, Paper, Typography, Box, Tabs, Tab } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import HomeIcon from "@mui/icons-material/Home";
-import PhoneIcon from "@mui/icons-material/Phone";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { AuthContext } from "../contexts/AuthContext";
 import ListaFavoritos from "../components/ListaFavoritos";
 import InformacionUsuario from "../components/InformacionUsuario";
@@ -140,7 +120,10 @@ const PerfilUsuario = () => {
 
   return (
     <div>
-      <Container maxWidth="md" sx={{ marginTop: "75px" }}>
+      <Container
+        maxWidth="md"
+        sx={{ marginTop: "75px", height: "calc(100vh - 80px)", mb: 4 }}
+      >
         <Paper
           elevation={3}
           sx={{
@@ -151,7 +134,6 @@ const PerfilUsuario = () => {
         >
           <Box
             sx={{
-              // bgcolor: "primary.main",
               p: 3,
               mb: 4,
               borderRadius: "8px 8px 0 0",
@@ -160,12 +142,10 @@ const PerfilUsuario = () => {
             }}
           >
             <Typography
-              variant="h4"
-              component="h1"
               sx={{
                 color: "gray",
-                fontWeight: "bold",
                 textAlign: "center",
+                typography: { mobile: "h5", tablet: "h4" },
               }}
             >
               Mi Cuenta
@@ -183,7 +163,10 @@ const PerfilUsuario = () => {
             >
               <Tab icon={<AccountCircleIcon />} label="PERFIL" />
               <Tab icon={<FavoriteIcon />} label="LISTA DE FAVORITOS" />
-              <Tab icon={<ShoppingCartIcon />} label="HISTORIAL DE EXPERIENCIAS" />
+              <Tab
+                icon={<ShoppingCartIcon />}
+                label="HISTORIAL DE EXPERIENCIAS"
+              />
             </Tabs>
             {tabValue === 0 && (
               <InformacionUsuario
@@ -207,8 +190,6 @@ const PerfilUsuario = () => {
               </Box>
             )}
           </Box>
-          {/* )}
-    </Box> */}
         </Paper>
       </Container>
     </div>

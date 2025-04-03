@@ -11,8 +11,7 @@
     background-color: #f5f0ff !important;
     display: flex;
     flex-direction: column;
-    height: 405px;
-    /* width: 300px; */
+    min-height: 405px;
     margin: 0 auto;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
