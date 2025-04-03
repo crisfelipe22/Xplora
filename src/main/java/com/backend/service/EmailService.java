@@ -9,16 +9,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.backend.dto.salida.ReservaSalidaDTO;
 import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.UsuarioRepository;
-import com.backend.entity.PaqueteExperiencia;
-import com.backend.entity.Usuario;
-import com.backend.exceptions.ResourceNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ServiceConfigurationError;
-import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,25 +50,21 @@ public class EmailService {
     mailSender.send(message);
   }
 
-  public void sendHtmlReservationConfirmationEmail(ReservaSalidaDTO reservaSalidaDTO) {
+  public void sendHtmlReservationConfirmationEmail(
+      String to,
+      String username,
+      String nombrePaquete,
+      Date startDate,
+      Date endDate) {
     try {
       MimeMessage mimeMessage = mailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-      Usuario usuario = usuarioRepository.findById(reservaSalidaDTO.getIdUsuario())
-          .orElseThrow(
-              () -> new ResourceNotFoundException("Usuario no encontrado con ID: " + reservaSalidaDTO.getIdUsuario()));
-      PaqueteExperiencia paqueteExperiencia = paqueteExperienciaRepository
-          .findById(reservaSalidaDTO.getIdPaqueteExperiencia())
-          .orElseThrow(() -> new ResourceNotFoundException(
-              "Paquete no encontrado con ID: " + reservaSalidaDTO.getIdPaqueteExperiencia()));
-      String to = usuario.getEmail();
-      String username = usuario.getNombre();
-      String nombrePaquete = paqueteExperiencia.getNombre();
       SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-      String fechaFin = reservaSalidaDTO.getFecha_fin() != null ? formatter.format(reservaSalidaDTO.getFecha_fin())
+      String fechaInicio = startDate != null
+          ? formatter.format(
+              startDate)
           : "fecha no disponible";
-      String fechaInicio = reservaSalidaDTO.getFecha_inicio() != null
-          ? formatter.format(reservaSalidaDTO.getFecha_inicio())
+      String fechaFin = endDate != null ? formatter.format(endDate)
           : "fecha no disponible";
 
       helper.setFrom(fromAddress, "Reservas - XPLORA");
@@ -100,30 +91,29 @@ public class EmailService {
     } catch (UnsupportedEncodingException e) {
       logger.error("Encoding error while preparing email: {}", e.getMessage(), e);
       throw new UnsupportedOperationException("Email encoding failed: " + e.getMessage(), e);
-    } catch (ResourceNotFoundException e) {
-      logger.error("Resource not found: {}", e.getMessage());
     }
   }
 
   public void sendHtmlRegistrationConfirmationEmail(String to, String username) {
-      try {
-          MimeMessage mimeMessage = mailSender.createMimeMessage();
-          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-          
-          helper.setFrom("luis.f.cerda.p@gmail.com", "Registro - XPLORA");
-          helper.setTo(to);
-          helper.setSubject("Todo listo para Xplorar 😎🏝");
-          
-          String htmlContent = "<h3>" + username + ",</h3>"
-                            + "<h2>bienvenid@ a Xplora!</h2>"
-                            + "<p>Tu registro con la dirección de correo "+ to +" se realizó correctamente</p>"
-                            + "<br>"
-                            + "<a href='" + appUrl + "/login'><button style='background-color: #6239E6; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;'>Iniciar sesión</button></a>";
-          
-          helper.setText(htmlContent, true);
-          mailSender.send(mimeMessage);
-      } catch (MessagingException | UnsupportedEncodingException e) {
-          // Handle exception
-      }
+    try {
+      MimeMessage mimeMessage = mailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+
+      helper.setFrom("luis.f.cerda.p@gmail.com", "Registro - XPLORA");
+      helper.setTo(to);
+      helper.setSubject("Todo listo para Xplorar 😎🏝");
+
+      String htmlContent = "<h3>" + username + ",</h3>"
+          + "<h2>bienvenid@ a Xplora!</h2>"
+          + "<p>Tu registro con la dirección de correo " + to + " se realizó correctamente</p>"
+          + "<br>"
+          + "<a href='" + appUrl
+          + "/login'><button style='background-color: #6239E6; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;'>Iniciar sesión</button></a>";
+
+      helper.setText(htmlContent, true);
+      mailSender.send(mimeMessage);
+    } catch (MessagingException | UnsupportedEncodingException e) {
+      // Handle exception
+    }
   }
 }
