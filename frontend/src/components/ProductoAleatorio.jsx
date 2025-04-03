@@ -111,6 +111,14 @@ const ProductoAleatorio = () => {
     setCategoriasSeleccionadas([]);
   };
 
+  const handleCategoriaClick = (idCategoria) => {
+    setCategoriasSeleccionadas((prevSeleccionadas) =>
+        prevSeleccionadas.includes(idCategoria)
+            ? prevSeleccionadas.filter((id) => id !== idCategoria)
+            : [...prevSeleccionadas, idCategoria]
+    );
+};
+
   const startIndex = (pag - 1) * itemPorPag;
   const endIndex = startIndex + itemPorPag;
   const paginatedProducts = productosFiltrados.slice(startIndex, endIndex);
@@ -135,7 +143,9 @@ const ProductoAleatorio = () => {
                 size={{ mobile: 12, tablet: 6, desktop: 3 }}
                 key={categoria.id_categoria}
               >
-                <CardCategoriaAleatorio categoria={categoria} />
+                <CardCategoriaAleatorio 
+                categoria={categoria} 
+                onClick={handleCategoriaClick} />
               </Grid2>
             ))
           ) : (
