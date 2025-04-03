@@ -66,10 +66,9 @@ public class CalificacionController {
         return ResponseEntity.ok(calificacionService.actualizarCalificacion(id_usuario, id_calificacion, calificacionDTO));
     }
 
-    @DeleteMapping("/{id_usuario}/calificaciones/{id_calificacion}")
+    @DeleteMapping("/{id_calificacion}")
     public ResponseEntity<CalificacionSalidaDTO> eliminarCalificacion(
-            @PathVariable(name = "id_usuario") Long id_usuario,
             @PathVariable(name = "id_calificacion") Long id_calificacion) throws ResourceNotFoundException, AccessDeniedException {
-        return ResponseEntity.ok(calificacionService.eliminarCalificacion(id_usuario, id_calificacion));
+        return ResponseEntity.ok(calificacionService.eliminarCalificacion(id_calificacion));
     }
 }
