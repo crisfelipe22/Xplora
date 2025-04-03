@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Typography, Box, Button} from "@mui/material";
+import { Typography, Box, Button, Snackbar, Alert} from "@mui/material";
 import CardCalificacionProducto from "../components/CardCalificacionProducto";
 import styles from "../styles/CardCalificacionProducto.module.css";
 import StarIcon from "@mui/icons-material/Star";
@@ -47,9 +47,14 @@ const Calificaciones = ({product}) => {
     const [tieneReserva, setTieneReserva] = useState(false);
     const [reservas, setReservas] = useState([])
     const [reservaParaCalificar, setReservaParaCalificar] = useState(null);
+    const [alerta, setAlerta] = useState({ open: false, mensaje: "", tipo: "success" });
 
     const handleVerMas = () => {
         setMostrarTodas(!mostrarTodas); 
+    };
+
+    const mostrarAlerta = (mensaje, tipo = "success") => {
+        setAlerta({ open: true, mensaje, tipo });
     };
 
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
@@ -118,9 +123,21 @@ const Calificaciones = ({product}) => {
                     user={user}
                     product={product}
                     reserva={reservaParaCalificar}
+                    mostrarAlerta={mostrarAlerta}
                 />
             )}
 
+            <Snackbar
+                open={alerta.open}
+                autoHideDuration={3000}
+                onClose={() => setAlerta({ ...alerta, open: false })}
+                anchorOrigin={{ vertical: "center", horizontal: "right" }}
+            >
+                <Alert onClose={() => setAlerta({ ...alerta, open: false })} severity={alerta.tipo}>
+                    {alerta.mensaje}
+                </Alert>
+            </Snackbar>
+            
     </Box>
     );
 };

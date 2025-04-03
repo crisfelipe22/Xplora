@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Rating, Avatar, Typography, Box } from "@mui/material";
 import styles from "../styles/CardCalificacionProducto.module.css";
 
-const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user, reserva }) => {
+const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user, reserva, mostrarAlerta }) => {
     const [calificacion, setCalificacion] = useState(0);
     const [comentario, setComentario] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const token = localStorage.getItem("token")
-    console.log(reserva)
+
     const getInitials = (name) => {
         return name
             .split(" ")
@@ -45,14 +45,17 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, us
             }
 
             console.log("Reseña publicada con éxito!", nuevaResena);
+            mostrarAlerta("¡Reseña enviada con éxito!");
             handleCloseDialog(); 
         } catch (error) {
             setError("Hubo un problema al publicar tu reseña.");
             console.error("Error:", error);
+            mostrarAlerta("Error al enviar la calificación", "Ya calificada");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <Dialog open={openDialog} onClose={handleCloseDialog} 
@@ -103,7 +106,10 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, us
                     {loading ? "Publicando..." : "Publicar"}
                 </Button>
             </DialogActions>
+            
         </Dialog>
+
+        
     );
 };
 
