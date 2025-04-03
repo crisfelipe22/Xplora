@@ -887,9 +887,11 @@ Spring Validation generaría errores de validación
 CopyAuthorization: Bearer {token}
 - La seguridad está implementada mediante Spring Security y JWT.
 
+### Calificaciones
+
 #### Obtener todos las calificaciones de un usuario
 - **Método:** GET
-- **Endpoint:** `/auth/{id_usuario}/calificaciones`
+- **Endpoint:** `/api/calificaciones/usuarios/{id_usuario}`
 - **Descripción:** Permite obtener datos de todos las calificaciones de un usuario
 - **Request Body:**
 
@@ -903,7 +905,8 @@ CopyAuthorization: Bearer {token}
         "comentario": "Super experiencia",
         "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
         "id_reserva": 1,
-        "id_usuario": 2
+        "id_usuario": 2,
+        "id_paquete_experiencia": 1
     },
     {
         "id": 2,
@@ -911,7 +914,8 @@ CopyAuthorization: Bearer {token}
         "comentario": "Super experiencia",
         "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
         "id_reserva": 3,
-        "id_usuario": 2
+        "id_usuario": 2,
+        "id_paquete_experiencia": 5
     },
     {
         "id": 3,
@@ -919,7 +923,42 @@ CopyAuthorization: Bearer {token}
         "comentario": "Super experiencia",
         "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
         "id_reserva": 1,
-        "id_usuario": 2
+        "id_usuario": 2,
+        "id_paquete_experiencia": 1
+    }
+]
+```
+**Errores Posibles:**
+
+- 500 Internal Server Error: Error en el servidor.
+
+#### Obtener todos las calificaciones de un paquete de experiencia
+- **Método:** GET
+- **Endpoint:** `/api/calificaciones/paquete_experiencia/{id_paquete_experiencia}`
+- **Descripción:** Permite obtener datos de todos las calificaciones de un paquete de experiencia
+- **Request Body:**
+
+**Respuesta Exitosa (200 OK):**
+```json
+
+[
+    {
+        "id": 12,
+        "puntuacion": 5,
+        "comentario": "Super experiencia",
+        "fecha_calificacion": "2025-04-03T10:00:00.000+00:00",
+        "id_reserva": 6,
+        "id_usuario": 2,
+        "id_paquete_experiencia": 5
+    },
+    {
+        "id": 13,
+        "puntuacion": 5,
+        "comentario": "Super experiencia",
+        "fecha_calificacion": "2025-04-03T10:00:00.000+00:00",
+        "id_reserva": 7,
+        "id_usuario": 2,
+        "id_paquete_experiencia": 5
     }
 ]
 ```
@@ -929,7 +968,7 @@ CopyAuthorization: Bearer {token}
 
 #### Obtener la calificación de un usuario apartir de la calificación
 - **Método:** GET
-- **Endpoint:** `/auth/{id_usuario}/calificaciones/{id_calificacion}`
+- **Endpoint:** `/api/calificaciones/{id_calificacion}/usuarios/{id_usuario}`
 - **Descripción:** Permite obtener los datos de una calificación
 
 **Respuesta Exitosa (200 OK):**
@@ -940,7 +979,8 @@ CopyAuthorization: Bearer {token}
   "comentario": "Super experiencia",
   "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
   "id_reserva": 1,
-  "id_usuario": 2
+  "id_usuario": 2,
+  "id_paquete_experiencia": 1
 }
 ```
 **Errores Posibles:**
@@ -950,7 +990,7 @@ CopyAuthorization: Bearer {token}
 
 #### Agregar una calificación
 - **Método:** Post
-- **Endpoint:** `/auth/{id_usuario}/reservas/{id_paquete_experiencia}/calificaciones`
+- **Endpoint:** `/api/calificaciones/reservas/{id_reserva}`
 - **Descripción:** Permite agregar una calificación de un usuario y paquete de experiencia
 
 - **Request Body:**
@@ -971,7 +1011,8 @@ CopyAuthorization: Bearer {token}
   "comentario": "Super experiencia",
   "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
   "id_reserva": 4,
-  "id_usuario": 2
+  "id_usuario": 2,
+  "id_paquete_experiencia": 1
 }
 ```
 
@@ -992,7 +1033,8 @@ CopyAuthorization: Bearer {token}
   "comentario": "Super experiencia",
   "fecha_calificacion": "2025-03-30T10:00:00.000+00:00",
   "id_reserva": 4,
-  "id_usuario": 2
+  "id_usuario": 2,
+  "id_paquete_experiencia": 1
 }
 ```
 

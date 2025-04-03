@@ -1,5 +1,6 @@
 package com.backend.entity;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,8 +31,8 @@ public class PaqueteExperiencia {
     @Column(nullable = false)
     private double puntuacion_promedio = 0.0;
 
-    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL)
-    private List<Reserva> reservas =  new ArrayList<>();
+    @OneToMany(mappedBy = "paqueteExperiencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reserva> reservas = new ArrayList<>();
 
     @OneToMany(mappedBy = "paquete_experiencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaracteristicaPaqueteExperiencia> detalles_productos = new ArrayList<>();
@@ -140,26 +141,28 @@ public class PaqueteExperiencia {
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
     }
+    
 
+    @Transactional
     public void actualizarPuntuacion_promedio() {
-        if (reservas.isEmpty()) {
-            this.puntuacion_promedio = 0.0;
-            return;
-        }
-        
-        double suma = 0;
-        int totalCalificaciones = 0;
-    
-        for (Reserva reserva : reservas) {
-            if (reserva.getCalificacion() != null) {
-                suma += reserva.getCalificacion().getPuntuacion();
-                totalCalificaciones++;
-            }
-        }
-    
-        this.puntuacion_promedio = totalCalificaciones > 0 ? suma / totalCalificaciones : 0.0;
+        double suma = reservas.stream()
+            .map(Reserva::getCalificacion)
+            .filter(calificacion -> calificacion != null)
+            .mapToDouble(Calificacion::getPuntuacion)
+            .sum();
+
+        int totalCalificaciones = (int) reservas.stream()
+            .map(Reserva::getCalificacion)
+            .filter(calificacion -> calificacion != null)
+            .count();
+
+        this.setPuntuacion_promedio(totalCalificaciones > 0 ? suma / totalCalificaciones : 0.0);
     }
-    
+
+    public void setPuntuacion_promedio(double puntuacion_promedio) {
+        this.puntuacion_promedio = puntuacion_promedio;
+    }
+
     public double getPuntuacion_promedio() {
         return puntuacion_promedio;
     }
