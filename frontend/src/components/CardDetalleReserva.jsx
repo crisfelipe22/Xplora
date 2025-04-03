@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -27,6 +28,7 @@ const CardDetalleReserva = ({
   open,
   onClose,
   dialogContent,
+  isLoading,
 }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -157,8 +159,16 @@ const CardDetalleReserva = ({
           variant="contained"
           color="primary"
           onClick={confirmarReserva}
+          disabled={isLoading}
         >
-          CONFIRMAR RESERVA
+          {isLoading ? (
+            <>
+              <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+              PROCESANDO...
+            </>
+          ) : (
+            "CONFIRMAR RESERVA"
+          )}
         </Button>
       </Box>
 
