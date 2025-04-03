@@ -10,7 +10,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 const Calificaciones = ({product}) => {
 
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    console.log(user)
     //APPI, POR AHORA CODEADO
     const calificaciones = [
         {
@@ -49,7 +50,6 @@ const Calificaciones = ({product}) => {
     };
 
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
-
     
     
     return (
@@ -62,10 +62,14 @@ const Calificaciones = ({product}) => {
                         {promedioCalificacion} • {calificaciones.length} reseñas
                     </Typography>
                 </Box>
-                <Button className={styles.botonEscribir}
-                    onClick={() => setDialogoAbierto(true)}>
+                {isAuthenticated && (
+                    <Button 
+                        className={styles.botonEscribir}
+                        onClick={() => setDialogoAbierto(true)}
+                    >
                         Escribe tu reseña
-                </Button>
+                    </Button>
+                )}
             </Box>
 
             {calificaciones.length > 0 ? (
@@ -84,12 +88,14 @@ const Calificaciones = ({product}) => {
                 <Typography variant="body1">Aún no hay reseñas.</Typography>
             )}
 
-            <EscribirCalificacionDialog 
-                openDialog={dialogoAbierto} 
-                handleCloseDialog={() => setDialogoAbierto(false)}
-                usuario="Victoria Ancalaf"
-                product={product}
-            />
+            {isAuthenticated && (
+                <EscribirCalificacionDialog 
+                    openDialog={dialogoAbierto} 
+                    handleCloseDialog={() => setDialogoAbierto(false)}
+                    user={user}
+                    product={product}
+                />
+            )}
 
     </Box>
     );
