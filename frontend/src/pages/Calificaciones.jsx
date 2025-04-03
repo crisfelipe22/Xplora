@@ -12,36 +12,10 @@ import axios from "axios";
 const Calificaciones = ({product}) => {
 
     const { isAuthenticated, user } = useAuth();
-  
-    //APPI, POR AHORA CODEADO
-    const calificaciones = [
-        {
-            usuario: 'Sara Mendoza',
-            fecha_calificacion: '2025-03-14',
-            calificacion: 4.5,
-            descripcion: 'Simplemente mágico, empiezas el recorrido caminando, conoces dos cascadas increíbles, un poco de historia y pasas a conectarte con: La paz, la naturaleza, la conservación y la vida.'
-        },
-        {
-            usuario: 'Solymar Quiaro',
-            fecha_calificacion: '2024-11-01',
-            calificacion: 3.0,
-            descripcion: 'Simplemente mágico, empiezas el recorrido caminando, conoces dos cascadas increíbles, un poco de historia y pasas a conectarte con: La paz, la naturaleza, la conservación y la vida.'
-        },
-        {
-            usuario: 'Sara Mendoza',
-            fecha_calificacion: '2025-03-14',
-            calificacion: 4.5,
-            descripcion: 'Simplemente mágico, empiezas el recorrido caminando, conoces dos cascadas increíbles, un poco de historia y pasas a conectarte con: La paz, la naturaleza, la conservación y la vida.'
-        },
-        {
-            usuario: 'Solymar Quiaro',
-            fecha_calificacion: '2024-11-01',
-            calificacion: 3.0,
-            descripcion: 'Simplemente mágico, empiezas el recorrido caminando, conoces dos cascadas increíbles, un poco de historia y pasas a conectarte con: La paz, la naturaleza, la conservación y la vida.'
-        }
-    ]
+    const [calificaciones, setCalificaciones] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const promedioCalificacion = 3
+    const promedioCalificacion = product.puntuacion_promedio
 
     const [mostrarTodas, setMostrarTodas] = useState(false);
     const [tieneReserva, setTieneReserva] = useState(false);
@@ -60,17 +34,28 @@ const Calificaciones = ({product}) => {
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
     
     useEffect(() => {
+        obtenerCalificaciones();
         if (isAuthenticated && user) {
             verificarReserva();
         }
     }, [isAuthenticated, user]);
-
+    
+    const obtenerCalificaciones = async () => {
+        try {
+            const response = await axios.get(`/api/calificaciones/paquete_experiencia/${product.id_paquete_experiencia}`);
+            setCalificaciones(response.data);
+        } catch (error) {
+            console.error("Error al obtener las calificaciones:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     const verificarReserva = async () => {
         try {
             const response = await axios.get(`/api/reservas/usuario/${user.id}`);
-            setReservas(response.data) ;
+            setReservas(response.data);
             const reservasUsuario = response.data;
-            // Verificar si alguna reserva tiene el mismo idPaqueteExperiencia
             const haReservado = reservasUsuario.some(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
             setTieneReserva(haReservado);
             const reservaEncontrada = reservasUsuario.find(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
@@ -79,6 +64,8 @@ const Calificaciones = ({product}) => {
             console.error("Error al verificar la reserva:", error);
         }
     };
+    
+    console.log('calificaciones', calificaciones)
 
     return (
         <Box className={styles.calificacionesBox}>
