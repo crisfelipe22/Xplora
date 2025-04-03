@@ -17,11 +17,11 @@ const CardCalificacionProducto = ({calificacion}) => {
     return (
         <Card className={styles.cardCalificacion}>
             <CardContent className={styles.cardContent}>
-                {/*<Avatar className={styles.avatar}>{getInitials(calificacion.usuario)}</Avatar>*/}
+                <Avatar className={styles.avatar}>{getInitials(calificacion.nombre_usuario)}</Avatar>
                 <Box className={styles.textContainer}>
                     <Rating value={calificacion.puntuacion} precision={0.5} readOnly className={styles.rating}/>
                     <Box className={styles.userInfo}>
-                        {/*<Typography variant="subtitle1" className={styles.username}>{calificacion.usuario} - </Typography>*/}
+                        <Typography variant="subtitle1" className={styles.username}>{calificacion.nombre_usuario} - </Typography>
                         <Typography variant="subtitle2" >
                             {new Date(calificacion.fecha_calificacion).toLocaleDateString("es-ES", { month: "long", year: "numeric" })}
                         </Typography>

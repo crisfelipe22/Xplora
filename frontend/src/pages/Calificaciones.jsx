@@ -74,7 +74,7 @@ const Calificaciones = ({product}) => {
                 <Box display="flex" alignItems="center">
                     <StarIcon style={{ color: "#FFC107", fontSize: "24px" }} /> 
                     <Typography variant="body1" style={{ marginLeft: 8 }}>
-                        {promedioCalificacion} • {calificaciones.length} reseñas
+                        {promedioCalificacion} • {calificaciones.length} {calificaciones.length === 1 ? "reseña" : "reseñas"}
                     </Typography>
                 </Box>
                 {isAuthenticated && tieneReserva && (
