@@ -11,8 +11,12 @@ import com.backend.entity.Reserva;
 import com.backend.entity.Usuario;
 import com.backend.exceptions.ResourceNotFoundException;
 import com.backend.repository.CalificacionRepository;
+import com.backend.repository.PaqueteExperienciaRepository;
 import com.backend.repository.ReservaRepository;
 import com.backend.repository.UsuarioRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -37,6 +41,9 @@ public class CalificacionService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PaqueteExperienciaRepository paqueteExperienciaRepository;
+
     private final ModelMapper modelMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
@@ -44,12 +51,15 @@ public class CalificacionService {
     public CalificacionService(ModelMapper modelMapper){
         this.modelMapper = modelMapper;
     }
+
+    @PersistenceContext
+    private EntityManager entityManager;
     
     @Transactional
     public CalificacionSalidaDTO crearCalificacion(Long id_reserva, CalificacionEntradaDTO calificacionDTO) 
             throws ResourceNotFoundException, AccessDeniedException {
         
-        logger.info("Agregando calificacion de la reserva '{}'", id_reserva);
+        logger.info("Agregando calificación a la reserva '{}'", id_reserva);
 
         Reserva reserva = reservaRepository.findById(id_reserva)
             .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
@@ -62,15 +72,11 @@ public class CalificacionService {
             throw new AccessDeniedException("No tienes permisos para modificar la calificación de este usuario.");
         }
         
-        boolean existeCalificacion = calificacionRepository.findByReservaId(id_reserva)
-            .isPresent();
+        boolean existeCalificacion = calificacionRepository.findByReservaId(id_reserva).isPresent();
         logger.info("existeCalificacion {}", existeCalificacion);
         if (existeCalificacion) {
             throw new IllegalArgumentException("La reserva ya está calificada.");
         }
-
-        PaqueteExperiencia paqueteExperiencia = reserva.getPaqueteExperiencia();
-        paqueteExperiencia.actualizarPuntuacion_promedio();
 
         Calificacion calificacion = modelMapper.map(calificacionDTO, Calificacion.class);
         calificacion.setUsuario(reserva.getUsuario());
@@ -79,8 +85,15 @@ public class CalificacionService {
 
         calificacion = calificacionRepository.save(calificacion);
 
+        entityManager.flush();
+        entityManager.refresh(reserva);
+
+        PaqueteExperiencia paqueteExperiencia = reserva.getPaqueteExperiencia();
+        paqueteExperiencia.actualizarPuntuacion_promedio();
+        paqueteExperienciaRepository.save(paqueteExperiencia);
+
         logger.info("Calificación agregada exitosamente con id '{}'", calificacion.getId_calificacion());
-        
+
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(reserva.getId_reserva());
         calificacionSalidaDTO.setId_usuario(reserva.getUsuario().getId_usuario());
@@ -89,6 +102,7 @@ public class CalificacionService {
 
         return calificacionSalidaDTO;
     }
+
 
     public CalificacionSalidaDTO obtenerCalificacionPorIdCalificacion(Long id_usuario, Long id_calificacion) 
             throws ResourceNotFoundException {
@@ -132,22 +146,19 @@ public class CalificacionService {
     }
 
     @Transactional
-    public CalificacionSalidaDTO actualizarCalificacion(Long id_usuario, Long id_calificacion, CalificacionEntradaDTO calificacionDTO) 
+    public CalificacionSalidaDTO actualizarCalificacion(Long id_calificacion, CalificacionEntradaDTO calificacionDTO) 
             throws ResourceNotFoundException, AccessDeniedException {
 
-        logger.info("Actualizando calificación '{}' del usuario '{}'", id_calificacion, id_usuario);
+        logger.info("Actualizando calificación '{}'", id_calificacion);
 
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
                 .orElseThrow(() -> new ResourceNotFoundException("Calificación no encontrada"));
-
-        Usuario usuario = usuarioRepository.findById(id_usuario)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
+        if (!usuarioAutenticado.getEmail().equals(calificacion.getUsuario().getEmail())) {
             throw new AccessDeniedException("No tienes permisos para modificar la calificación de este usuario.");
         }
 
@@ -161,7 +172,7 @@ public class CalificacionService {
 
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
-        calificacionSalidaDTO.setId_usuario(id_usuario);
+        calificacionSalidaDTO.setId_usuario(calificacion.getUsuario().getId_usuario());
         calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
 
         return calificacionSalidaDTO;
