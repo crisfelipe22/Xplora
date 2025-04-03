@@ -42,6 +42,7 @@ import axios from "axios";
 import PoliticaDialog from "./PoliticaDialog";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useReserva } from "../contexts/ReservaContext";
+import Calificaciones from "../pages/Calificaciones";
 
 const CardDetalleProducto = ({ product, categorias }) => {
   //mensajes
@@ -200,9 +201,6 @@ const CardDetalleProducto = ({ product, categorias }) => {
     toggleFavorite(product.id_paquete_experiencia);
   };
 
-  //simulando raiting
-  const rating = product.rating ?? Math.floor(Math.random() * 3) + 3;
-
   //reserva
   const handleReserva = () => {
     if (!fechaInicioReserva || !fechaFinReserva) {
@@ -336,7 +334,7 @@ const CardDetalleProducto = ({ product, categorias }) => {
                 className={styles.chip}
               />
               <Rating
-                value={rating}
+                value={product.puntuacion_promedio}
                 precision={0.5}
                 readOnly
                 className={styles.rating}
@@ -525,6 +523,10 @@ const CardDetalleProducto = ({ product, categorias }) => {
             scroll={scroll}
           />
         )}
+
+        <Calificaciones 
+          product={product}
+        />
       </Container>
 
       <Snackbar

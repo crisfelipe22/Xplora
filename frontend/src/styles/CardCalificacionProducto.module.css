@@ -1,0 +1,86 @@
+
+.calificacionesBox{
+    display: flex;
+    flex-direction: column;
+    max-width: 750px;
+    border-top: 1px solid #ddd;
+    align-items: flex-start;
+}
+
+.titulo{
+    margin-top: 3% !important; 
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 1% 0;
+}
+
+.botonEscribir{
+    background-color:  #7B3FF6 !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 5px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
+.cardCalificacion {
+    display: flex;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1)  !important;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: transparent !important;
+    max-width: 700px;
+    width: 100%;
+}
+
+.cardContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #cccccc;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+}
+
+.username {
+    font-weight: 600;
+}
+
+
+.comment {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.botonVerTodas{
+    margin: 1% 0 3% 0 !important;
+    cursor: pointer !important;
+}
+
+.dialog{
+    width: 100%;
+}

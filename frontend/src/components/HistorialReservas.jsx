@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { 
@@ -5,7 +6,7 @@ import {
   obtenerPaqueteExperienciaPorId, 
   obtenerCategoriaPorId 
 } from "../services/reservasService";
-import { Grid, CircularProgress, Box, Typography } from "@mui/material";
+import { Grid2, CircularProgress, Box, Typography } from "@mui/material";
 import CardProductoAleatorio from "./CardProductoAleatorio";
 
 const HistorialReservas = () => {
@@ -56,29 +57,43 @@ const HistorialReservas = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ padding: 3 }}>
       {reservas.length === 0 ? (
-        <Typography>No tienes reservas aún.</Typography>
+        <Typography 
+          sx={{ textAlign: "center", fontSize: 18, fontWeight: "bold", marginTop: 4 }}
+        >
+          No tienes reservas aún.
+        </Typography>
       ) : (
-        <Grid container spacing={3}>
-            {reservas.map((reserva) => (
-                <Grid item xs={12} sm={6} md={4} key={reserva.idReserva}>
-                {reserva.paquete ? (
-                    <CardProductoAleatorio
-                      product={reserva.paquete}
-                      categorias={reserva.categoria ? [reserva.categoria] : []}
-                      fechaInicio={reserva.fecha_inicio}
-                      fechaFin={reserva.fecha_fin}
-                      mostrarFechas={true}
-                    />
-                ) : (
-                    <Typography variant="body2">Cargando datos...</Typography>
-                )}
-                </Grid>
-            ))}
-        </Grid>
+        <Grid2 
+          container 
+          spacing={4} 
+          sx={{ maxWidth: "1200px", margin: "0 auto" }}
+        >
+          {reservas.map((reserva) => (
+            <Grid2
+              size={{ mobile: 12, tablet: 6, desktop: 4 }}  
+              key={reserva.idReserva}
+            >
+              {reserva.paquete ? (
+                <CardProductoAleatorio
+                  product={reserva.paquete}
+                  categorias={reserva.categoria ? [reserva.categoria] : []}
+                  fechaInicio={reserva.fecha_inicio}
+                  fechaFin={reserva.fecha_fin}
+                  mostrarFechas={true}
+                />
+              ) : (
+                <Typography variant="body2" sx={{ textAlign: "center" }}>
+                  Cargando datos...
+                </Typography>
+              )}
+            </Grid2>
+          ))}
+        </Grid2>
       )}
     </Box>
+    
   );
 };
 

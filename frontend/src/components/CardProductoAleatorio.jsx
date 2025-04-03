@@ -31,15 +31,6 @@ const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mos
     : [];
   const imagenUrl =
     imagenArray.length > 0 ? imagenArray[0] : "/logo.svg";
-  //suponiendo raiting por ahora
-  function stringToNumber(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = (hash * 31 + str.charCodeAt(i)) >>> 0; // Simple hash function
-    }
-    return hash % 3; // Maps to 0, 1, or 2
-  }
-  const rating = stringToNumber(product.nombre) + 3;
 
   // Estado para manejar favoritos (usamos localStorage para persistencia)
   const { isAuthenticated } = useAuth();
@@ -95,7 +86,7 @@ const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mos
         />
         <CardContent className={styles.cardContent}>
           <Rating
-            value={rating}
+            value={product.puntuacion_promedio}
             precision={0.5}
             readOnly
             className={styles.rating}
