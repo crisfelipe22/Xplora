@@ -30,4 +30,9 @@ public interface CalificacionRepository extends JpaRepository<Calificacion, Long
         nativeQuery = true)
     Optional<Calificacion> findByReservaId(@Param("id_reserva") Long id_reserva);
 
+    @Transactional
+    @Query(value = "SELECT * FROM calificacion WHERE id_paquete_experiencia = :id_paquete_experiencia", 
+        nativeQuery = true)
+    List<Calificacion> findByPaqueteExperienciaId(@Param("id_paquete_experiencia") Long id_paquete_experiencia);
+
 }
