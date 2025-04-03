@@ -20,6 +20,10 @@ public class Calificacion {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "id_paquete_experiencia", nullable = false)
+    private PaqueteExperiencia paqueteExperiencia;
+
     @Column(nullable = false)
     private int puntuacion;
 
@@ -29,15 +33,25 @@ public class Calificacion {
     @Column(nullable = false)
     private Date fecha_calificacion;
 
-    public Calificacion() {
-    }
-
-    public Calificacion(Reserva reserva, Usuario usuario,int puntuacion, String comentario, Date fecha_calificacion) {
+    public Calificacion(Long id_calificacion, Reserva reserva, Usuario usuario, PaqueteExperiencia paqueteExperiencia, int puntuacion, String comentario, Date fecha_calificacion) {
+        this.id_calificacion = id_calificacion;
         this.reserva = reserva;
         this.usuario = usuario;
+        this.paqueteExperiencia = paqueteExperiencia;
         this.puntuacion = puntuacion;
         this.comentario = comentario;
         this.fecha_calificacion = fecha_calificacion;
+    }
+
+    public PaqueteExperiencia getPaqueteExperiencia() {
+        return paqueteExperiencia;
+    }
+
+    public void setPaqueteExperiencia(PaqueteExperiencia paqueteExperiencia) {
+        this.paqueteExperiencia = paqueteExperiencia;
+    }
+
+    public Calificacion() {
     }
 
     public Long getId_calificacion() {
@@ -87,4 +101,6 @@ public class Calificacion {
     public void setFecha_calificacion(Date fecha_calificacion) {
         this.fecha_calificacion = fecha_calificacion;
     }
+
+
 }

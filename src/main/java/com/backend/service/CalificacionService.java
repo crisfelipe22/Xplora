@@ -83,11 +83,12 @@ public class CalificacionService {
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(reserva.getId_reserva());
         calificacionSalidaDTO.setId_usuario(reserva.getUsuario().getId_usuario());
+        calificacionSalidaDTO.setId_paquete_experiencia(reserva.getPaqueteExperiencia().getId_paquete_experiencia());
 
         return calificacionSalidaDTO;
     }
 
-    public CalificacionSalidaDTO obtenerCalificacionPorId(Long id_usuario, Long id_calificacion) 
+    public CalificacionSalidaDTO obtenerCalificacionPorIdCalificacion(Long id_usuario, Long id_calificacion) 
             throws ResourceNotFoundException {
 
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
@@ -96,6 +97,7 @@ public class CalificacionService {
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(id_calificacion);
         calificacionSalidaDTO.setId_usuario(id_usuario);
+        calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
 
         return calificacionSalidaDTO;
     }
@@ -106,6 +108,7 @@ public class CalificacionService {
                     CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
                     calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
                     calificacionSalidaDTO.setId_usuario(id_usuario);
+                    calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
                     return calificacionSalidaDTO;
                 })
                 .collect(Collectors.toList());
@@ -117,6 +120,7 @@ public class CalificacionService {
                     CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
                     calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
                     calificacionSalidaDTO.setId_usuario(calificacion.getUsuario().getId_usuario());
+                    calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
                     return calificacionSalidaDTO;
                 })
                 .collect(Collectors.toList());
