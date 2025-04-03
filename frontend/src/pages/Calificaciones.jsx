@@ -31,6 +31,10 @@ const Calificaciones = ({product}) => {
         setAlerta({ open: true, mensaje, tipo });
     };
 
+    const agregarResena = (nuevaResena) => {
+        setCalificaciones(prev => [...prev, nuevaResena]);
+    };
+
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
     
     useEffect(() => {
@@ -92,7 +96,7 @@ const Calificaciones = ({product}) => {
                 <Box display="flex" alignItems="center">
                     <StarIcon style={{ color: "#FFC107", fontSize: "24px" }} /> 
                     <Typography variant="body1" style={{ marginLeft: 8 }}>
-                        {promedioCalificacion} • {calificaciones.length} {calificaciones.length === 1 ? "reseña" : "reseñas"}
+                    {Math.round(promedioCalificacion * 2) / 2} • {calificaciones.length} {calificaciones.length === 1 ? "reseña" : "reseñas"}
                     </Typography>
                 </Box>
                 {isAuthenticated && tieneReserva && (
@@ -129,6 +133,7 @@ const Calificaciones = ({product}) => {
                     product={product}
                     reserva={reservaParaCalificar}
                     mostrarAlerta={mostrarAlerta}
+                    agregarResena={agregarResena}
                 />
             )}
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Rating, Avatar, Typography, Box } from "@mui/material";
 import styles from "../styles/CardCalificacionProducto.module.css";
 
-const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user, reserva, mostrarAlerta }) => {
+const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user, reserva, mostrarAlerta, agregarResena }) => {
     const [calificacion, setCalificacion] = useState(0);
     const [comentario, setComentario] = useState("");
     const [loading, setLoading] = useState(false);
@@ -44,6 +44,7 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, us
                 throw new Error("Error al enviar la reseña");
             }
 
+            agregarResena(await response.json())
             console.log("Reseña publicada con éxito!", nuevaResena);
             mostrarAlerta("¡Reseña enviada con éxito!");
             handleCloseDialog(); 
