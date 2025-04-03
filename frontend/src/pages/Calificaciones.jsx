@@ -54,18 +54,36 @@ const Calificaciones = ({product}) => {
     const verificarReserva = async () => {
         try {
             const response = await axios.get(`/api/reservas/usuario/${user.id}`);
-            setReservas(response.data);
             const reservasUsuario = response.data;
-            const haReservado = reservasUsuario.some(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
-            setTieneReserva(haReservado);
-            const reservaEncontrada = reservasUsuario.find(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
-            setReservaParaCalificar(reservaEncontrada || null);
+            setReservas(reservasUsuario);
+    
+            // Filtrar reservas del mismo paquete
+            const reservasDelPaquete = reservasUsuario.filter(reserva => 
+                Number(reserva.idPaqueteExperiencia) === Number(product.id_paquete_experiencia)
+            );
+    
+            // Obtener IDs de reservas ya reseñadas
+            const responseCalificaciones = await axios.get(`/api/calificaciones/paquete_experiencia/${product.id_paquete_experiencia}`);
+            const idsReservasReseñadas = responseCalificaciones.data.map(cali => cali.id_reserva);
+            
+            // Obtener la fecha actual
+            const hoy = new Date();
+    
+            // Filtrar reservas que no han sido reseñadas y que no sean futuras
+            const reservaParaCalificar = reservasDelPaquete.find(reserva => 
+                !idsReservasReseñadas.includes(reserva.idReserva) && new Date(reserva.fecha_fin) <= hoy
+            );
+            
+    
+            // Determinar si tiene al menos una reserva válida para calificar
+            setTieneReserva(!!reservaParaCalificar);
+            setReservaParaCalificar(reservaParaCalificar || null);
+    
         } catch (error) {
             console.error("Error al verificar la reserva:", error);
         }
     };
     
-    console.log('calificaciones', calificaciones)
 
     return (
         <Box className={styles.calificacionesBox}>
