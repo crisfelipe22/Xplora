@@ -4,14 +4,15 @@ import { Typography, Box, Button} from "@mui/material";
 import CardCalificacionProducto from "../components/CardCalificacionProducto";
 import styles from "../styles/CardCalificacionProducto.module.css";
 import StarIcon from "@mui/icons-material/Star";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import EscribirCalificacionDialog from "../components/EscribirCalificacionDialog";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
 
 const Calificaciones = ({product}) => {
 
     const { isAuthenticated, user } = useAuth();
-    console.log(user)
+  
     //APPI, POR AHORA CODEADO
     const calificaciones = [
         {
@@ -43,7 +44,9 @@ const Calificaciones = ({product}) => {
     const promedioCalificacion = 3
 
     const [mostrarTodas, setMostrarTodas] = useState(false);
-    const [puedeReservar, setPuedeReservar] = useState(false)
+    const [tieneReserva, setTieneReserva] = useState(false);
+    const [reservas, setReservas] = useState([])
+    const [reservaParaCalificar, setReservaParaCalificar] = useState(null);
 
     const handleVerMas = () => {
         setMostrarTodas(!mostrarTodas); 
@@ -51,7 +54,27 @@ const Calificaciones = ({product}) => {
 
     const [dialogoAbierto, setDialogoAbierto] = useState(false);
     
-    
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            verificarReserva();
+        }
+    }, [isAuthenticated, user]);
+
+    const verificarReserva = async () => {
+        try {
+            const response = await axios.get(`/api/reservas/usuario/${user.id}`);
+            setReservas(response.data) ;
+            const reservasUsuario = response.data;
+            // Verificar si alguna reserva tiene el mismo idPaqueteExperiencia
+            const haReservado = reservasUsuario.some(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
+            setTieneReserva(haReservado);
+            const reservaEncontrada = reservasUsuario.find(reserva => reserva.idPaqueteExperiencia === product.id_paquete_experiencia);
+            setReservaParaCalificar(reservaEncontrada || null);
+        } catch (error) {
+            console.error("Error al verificar la reserva:", error);
+        }
+    };
+
     return (
         <Box className={styles.calificacionesBox}>
             <Typography variant="h5" className={styles.titulo} >Reseñas</Typography>
@@ -62,7 +85,7 @@ const Calificaciones = ({product}) => {
                         {promedioCalificacion} • {calificaciones.length} reseñas
                     </Typography>
                 </Box>
-                {isAuthenticated && (
+                {isAuthenticated && tieneReserva && (
                     <Button 
                         className={styles.botonEscribir}
                         onClick={() => setDialogoAbierto(true)}
@@ -94,6 +117,7 @@ const Calificaciones = ({product}) => {
                     handleCloseDialog={() => setDialogoAbierto(false)}
                     user={user}
                     product={product}
+                    reserva={reservaParaCalificar}
                 />
             )}
 

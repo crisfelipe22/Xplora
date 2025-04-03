@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Rating, Avatar, Typography, Box } from "@mui/material";
 import styles from "../styles/CardCalificacionProducto.module.css";
 
-const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user }) => {
+const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, user, reserva }) => {
     const [calificacion, setCalificacion] = useState(0);
     const [comentario, setComentario] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const token = localStorage.getItem("token")
-
+    console.log(reserva)
     const getInitials = (name) => {
         return name
             .split(" ")
@@ -31,7 +31,7 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, us
         };
 
         try {
-            const response = await fetch(`http://localhost:8080/api/auth/${user.id}/reservas/${product.id_paquete_experiencia}/calificaciones`, {
+            const response = await fetch(`/api/calificaciones/reservas/${reserva.id}/calificaciones`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
