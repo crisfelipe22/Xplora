@@ -49,7 +49,7 @@ public class CalificacionService {
     public CalificacionSalidaDTO crearCalificacion(Long id_reserva, CalificacionEntradaDTO calificacionDTO) 
             throws ResourceNotFoundException, AccessDeniedException {
         
-        logger.info("Agregando calificacion de la reserva '{}' al usuario '{}'", id_reserva);
+        logger.info("Agregando calificacion de la reserva '{}'", id_reserva);
 
         Reserva reserva = reservaRepository.findById(id_reserva)
             .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
@@ -85,6 +85,7 @@ public class CalificacionService {
         calificacionSalidaDTO.setId_reserva(reserva.getId_reserva());
         calificacionSalidaDTO.setId_usuario(reserva.getUsuario().getId_usuario());
         calificacionSalidaDTO.setId_paquete_experiencia(reserva.getPaqueteExperiencia().getId_paquete_experiencia());
+        calificacionSalidaDTO.setNombre_usuario(reserva.getUsuario().getNombre());
 
         return calificacionSalidaDTO;
     }
@@ -99,6 +100,7 @@ public class CalificacionService {
         calificacionSalidaDTO.setId_reserva(id_calificacion);
         calificacionSalidaDTO.setId_usuario(id_usuario);
         calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
+        calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
 
         return calificacionSalidaDTO;
     }
@@ -110,6 +112,7 @@ public class CalificacionService {
                     calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
                     calificacionSalidaDTO.setId_usuario(id_usuario);
                     calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
+                    calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
                     return calificacionSalidaDTO;
                 })
                 .collect(Collectors.toList());
@@ -122,6 +125,7 @@ public class CalificacionService {
                     calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
                     calificacionSalidaDTO.setId_usuario(calificacion.getUsuario().getId_usuario());
                     calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
+                    calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
                     return calificacionSalidaDTO;
                 })
                 .collect(Collectors.toList());
@@ -158,37 +162,38 @@ public class CalificacionService {
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
         calificacionSalidaDTO.setId_usuario(id_usuario);
+        calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
 
         return calificacionSalidaDTO;
     }
 
     @Transactional
-    public CalificacionSalidaDTO eliminarCalificacion(Long id_usuario, Long id_calificacion) 
+    public CalificacionSalidaDTO eliminarCalificacion(Long id_calificacion) 
             throws ResourceNotFoundException, AccessDeniedException {
 
-        logger.info("Eliminando calificación '{}' del usuario '{}'", id_calificacion, id_usuario);
+        logger.info("Eliminando calificación '{}''", id_calificacion);
 
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
                 .orElseThrow(() -> new ResourceNotFoundException("Calificación no encontrada"));
-
-        Usuario usuario = usuarioRepository.findById(id_usuario)
-            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
         String emailActual = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailActual)
                 .orElseThrow(() -> new AccessDeniedException("No se encontró el usuario autenticado"));
 
-        if (!usuarioAutenticado.getEmail().equals(usuario.getEmail())) {
+        if (!usuarioAutenticado.getEmail().equals(calificacion.getUsuario().getEmail())) {
             throw new AccessDeniedException("No tienes permisos para eliminar la calificación de este usuario.");
         }
 
         CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
         calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
-        calificacionSalidaDTO.setId_usuario(id_usuario);
+        calificacionSalidaDTO.setId_usuario(calificacion.getUsuario().getId_usuario());
+        calificacionSalidaDTO.setId_paquete_experiencia(calificacion.getPaqueteExperiencia().getId_paquete_experiencia());
+        calificacionSalidaDTO.setNombre_usuario(calificacion.getUsuario().getNombre());
 
         PaqueteExperiencia paqueteExperiencia = calificacion.getReserva().getPaqueteExperiencia();
 
-        calificacionRepository.deleteById(id_calificacion);
+        calificacionRepository.delete(calificacion);
+        calificacionRepository.flush();
 
         paqueteExperiencia.actualizarPuntuacion_promedio();
 
