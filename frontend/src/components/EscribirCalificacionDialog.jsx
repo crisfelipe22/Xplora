@@ -31,7 +31,7 @@ const EscribirCalificacionDialog = ({ openDialog, handleCloseDialog, product, us
         };
 
         try {
-            const response = await fetch(`/api/calificaciones/reservas/${reserva.id}/calificaciones`, {
+            const response = await fetch(`/api/calificaciones/reservas/${reserva.idReserva}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
