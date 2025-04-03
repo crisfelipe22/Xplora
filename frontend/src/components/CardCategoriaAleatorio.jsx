@@ -12,7 +12,7 @@ import {
 import styles from "../styles/ProductoAleatorio.module.css";
 import { Link } from "react-router-dom";
 
-const CardCategoriaAleatorio = ({ categoria }) => {
+const CardCategoriaAleatorio = ({ categoria, onClick }) => {
   // Mensajes
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -38,7 +38,7 @@ const CardCategoriaAleatorio = ({ categoria }) => {
   );
 
   return (
-    <Card className={styles.card}>
+    <Card onClick={() => onClick(categoria.id_categoria)} className={styles.card}>
       <Link style={{ textDecoration: "none" }}>
         <CardMedia
           component="img"
