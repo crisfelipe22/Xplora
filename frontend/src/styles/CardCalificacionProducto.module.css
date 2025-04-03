@@ -4,6 +4,7 @@
     flex-direction: column;
     max-width: 750px;
     border-top: 1px solid #ddd;
+    align-items: flex-start;
 }
 
 .titulo{
@@ -34,6 +35,7 @@
     padding: 10px;
     background-color: transparent !important;
     max-width: 700px;
+    width: 100%;
 }
 
 .cardContent {
