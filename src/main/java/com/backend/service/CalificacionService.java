@@ -72,8 +72,6 @@ public class CalificacionService {
             throw new IllegalArgumentException("La reserva ya está calificada.");
         }
 
-        
-        
         PaqueteExperiencia paqueteExperiencia = reserva.getPaqueteExperiencia();
         paqueteExperiencia.actualizarPuntuacion_promedio();
 
@@ -97,13 +95,22 @@ public class CalificacionService {
 
         Calificacion calificacion = calificacionRepository.findById(id_calificacion)
                 .orElseThrow(() -> new ResourceNotFoundException("Calificación no encontrada"));
+        
+        CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
+        calificacionSalidaDTO.setId_reserva(id_calificacion);
+        calificacionSalidaDTO.setId_usuario(id_usuario);
 
-        return modelMapper.map(calificacion, CalificacionSalidaDTO.class);
+        return calificacionSalidaDTO;
     }
 
     public List<CalificacionSalidaDTO> obtenerTodasLasCalificaciones(Long id_usuario) {
         return calificacionRepository.findByUsuarioId(id_usuario).stream()
-                .map(calificacion -> modelMapper.map(calificacion, CalificacionSalidaDTO.class))
+                .map(calificacion -> {
+                    CalificacionSalidaDTO calificacionSalidaDTO = modelMapper.map(calificacion, CalificacionSalidaDTO.class);
+                    calificacionSalidaDTO.setId_reserva(calificacion.getReserva().getId_reserva());
+                    calificacionSalidaDTO.setId_usuario(id_usuario);
+                    return calificacionSalidaDTO;
+                })
                 .collect(Collectors.toList());
     }
 

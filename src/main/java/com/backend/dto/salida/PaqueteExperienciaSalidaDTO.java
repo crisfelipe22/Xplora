@@ -26,7 +26,9 @@ public class PaqueteExperienciaSalidaDTO {
 
     private List<CaracteristicaPaqueteExperienciaSalidaDTO> caracteristicas_paquete_experiencia;
 
-    public PaqueteExperienciaSalidaDTO(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Date fecha_inicio, Date fecha_fin, Long id_categoria, List<CaracteristicaPaqueteExperienciaSalidaDTO> caracteristicas_paquete_experiencia) {
+    private double puntuacion_promedio;
+
+    public PaqueteExperienciaSalidaDTO(Long id_paquete_experiencia, String nombre, String descripcion, double precio, String ubicacion, String imagen, String duracion, Long id_categoria, Date fecha_inicio, Date fecha_fin, List<CaracteristicaPaqueteExperienciaSalidaDTO> caracteristicas_paquete_experiencia, Float puntuacion_promedio) {
         this.id_paquete_experiencia = id_paquete_experiencia;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -35,7 +37,10 @@ public class PaqueteExperienciaSalidaDTO {
         this.imagen = imagen;
         this.duracion = duracion;
         this.id_categoria = id_categoria;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
         this.caracteristicas_paquete_experiencia = caracteristicas_paquete_experiencia;
+        this.puntuacion_promedio = puntuacion_promedio;
     }
 
     public PaqueteExperienciaSalidaDTO() {
@@ -127,5 +132,13 @@ public class PaqueteExperienciaSalidaDTO {
 
     public void setCaracteristicas_paquete_experiencia(List<CaracteristicaPaqueteExperienciaSalidaDTO> caracteristicas_paquete_experiencia) {
         this.caracteristicas_paquete_experiencia = caracteristicas_paquete_experiencia;
+    }
+
+    public double getPuntuacion_promedio() {
+        return puntuacion_promedio;
+    }
+
+    public void setPuntuacion_promedio(double puntuacion_promedio) {
+        this.puntuacion_promedio = puntuacion_promedio;
     }
 }
