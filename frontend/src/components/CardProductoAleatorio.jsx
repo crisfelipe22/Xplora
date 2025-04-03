@@ -121,7 +121,7 @@ const CardProductoAleatorio = ({ product, categorias, fechaInicio, fechaFin, mos
           />
           {/* Mostrar fechas solo si mostrarFechas es true */}
           {mostrarFechas && (
-            <Typography variant="body2" color="primary">
+            <Typography variant="body2" color="primary" sx={{pt: 2}}>
               {`Fecha reservada: ${new Date(fechaInicio).toLocaleDateString()} - ${new Date(fechaFin).toLocaleDateString()}`}
             </Typography>
           )}
