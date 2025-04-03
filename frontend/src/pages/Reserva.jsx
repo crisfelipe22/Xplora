@@ -11,7 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 const Reserva = () =>{
     const { id_paquete_experiencia } = useParams();
     const navigate = useNavigate();
-    const { confirmarReserva } = useReserva();
+    const { confirmarReserva, confirmingReserva } = useReserva();
     const { user } = useAuth();
 
     const [openDialog, setOpenDialog] = useState(false);
@@ -73,6 +73,7 @@ const Reserva = () =>{
             open={openDialog}
             onClose={() => setOpenDialog(false)}
             dialogContent={dialogContent}
+            isLoading={confirmingReserva}
         />
     )
 };

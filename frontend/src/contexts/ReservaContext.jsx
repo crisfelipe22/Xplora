@@ -12,6 +12,7 @@ export const useReserva = () => useContext(ReservaContext);
 export const ReservaProvider = ({ children }) => {
     const [fechasDisponibles, setFechasDisponibles] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [confirmingReserva, setConfirmingReserva] = useState(false);
     const [errorReserva, setErrorReserva] = useState(null);
     const [reserva, setReserva] = useState(null);
 
@@ -32,8 +33,9 @@ export const ReservaProvider = ({ children }) => {
     
     
 //CAMBIAR LOS NOMBRES DE LAS VARIABLES id_usuario y id_paquete_experiencia AQUI Y EN RESERVA!!!!!!!
-    const confirmarReserva = async ({ idUsuario, idPaqueteExperiencia, fecha_inicio, fecha_fin, nombrePaquete }, setOpenDialog, setDialogContent, navigate) => {
-        try {
+    const confirmarReserva = async ({ idUsuario, idPaqueteExperiencia, fecha_inicio, fecha_fin, nombrePaquete }, setOpenDialog, setDialogContent, navigate) => {  
+      setConfirmingReserva(true);
+      try {
             // Verificar disponibilidad antes de confirmar la reserva
             const response = await axios.get(`/api/reservas/fechas-disponibles/${idPaqueteExperiencia}`);
             
@@ -80,11 +82,27 @@ export const ReservaProvider = ({ children }) => {
 
         } catch (error) {
             console.error("Error al confirmar la reserva", error);
+            setDialogContent({
+                title: "¡Error!",
+                message: "Hubo un problema al procesar tu reserva. Por favor, intenta nuevamente.",
+                buttonText: "Cerrar",
+                onButtonClick: () => setOpenDialog(false)
+            });
+            setOpenDialog(true);
+        } finally {
+            setConfirmingReserva(false);
         }
     };
 
-    return (
-        <ReservaContext.Provider value={{ fechasDisponibles, obtenerFechasDisponibles, confirmarReserva, loading, errorReserva }}>
+return (
+        <ReservaContext.Provider value={{ 
+            fechasDisponibles, 
+            obtenerFechasDisponibles, 
+            confirmarReserva, 
+            loading, 
+            confirmingReserva, 
+            errorReserva 
+        }}>
             {children}
         </ReservaContext.Provider>
     );
